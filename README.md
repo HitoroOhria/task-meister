@@ -34,15 +34,54 @@ TaskMeister is a task management application for all business person.
                     - 番号付きJSON: 番号の書き換え
 
 - folder
-    - id
-    - name
+    - id: bigint
+    - parent_folder_id: bigint
+    - name: varchar(2000)
 - mind_map
-    - id
-    - name
+    - id: bigint
+    - folder_id: bigint
+    - name: varchar(2000)
+- root_node
+    - id: bigint
+    - mind_map_id:bigint
+    - nodes: json
+        - [node1, node2, ...]
 - node
-    - id
-    - name
--
+    - id: int
+    - text: string
+    - estimate_minute: int
+    - checked: boolean
+    - children: array
+        - [node3, node4, ...]
+
+below is json of node.
+
+```json
+[
+  {
+    "id": "random_id1",
+    "text": "目的",
+    "estimate_minute": null,
+    "checked": false,
+    "children": [
+      {
+        "id": "random_id1_child1",
+        "text": "ゴールは何か？",
+        "estimate_minute": 20,
+        "checked": false,
+        "children": null
+      }
+    ]
+  },
+  {
+    "id": "random_id2",
+    "text": "やること",
+    "estimate_minute": 20,
+    "checked": false,
+    "children": null
+  }
+]
+```
 
 # Infrastructure
 
