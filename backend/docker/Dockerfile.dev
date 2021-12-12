@@ -1,0 +1,15 @@
+FROM golang:1.17.5-alpine3.15
+
+# Don't use go get because /go mounted volume and hide behind.
+
+# Will attach local_root/backend/src/.
+WORKDIR /work
+
+RUN apk update && \
+  apk add curl
+
+# See https://github.com/cosmtrek/air#prefer-installsh
+RUN cd /usr/local && \
+  curl -sSfL https://raw.githubusercontent.com/cosmtrek/air/master/install.sh | sh -s
+
+CMD ["air"]

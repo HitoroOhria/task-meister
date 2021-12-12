@@ -1,0 +1,39 @@
+# See https://docs.docker.com/compose/compose-file/compose-file-v3/
+version: "3.9"
+
+services:
+  back:
+    container_name: tm-back
+    build:
+      context: ./backend
+      dockerfile: ./docker/Dockerfile.dev
+    ports:
+      - "8000:8000"
+    volumes:
+      - go-packages:/go
+      - ./backend/src:/work
+  db:
+    container_name: tm-db
+    # Production version is 8.0.18.(see https://cloud.google.com/sql/docs/db-versions)
+    # But 8.0.18 docker image is not working on apple M1 systems.
+    # So, use 8.0.26 on local because it can build on Apple M1 systems.(see macOS of https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-26.html#mysqld-8-0-26-compiling)
+    image: mysql:8.0.26
+    # Specified for Apple M1 systems.
+    platform: linux/x86_64
+    ports:
+      # Set 4306 for avoid conflict with local mysql server.
+      - "4306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      #      MYSQL_DATABASE: test_database
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+      TZ: "Asia/Tokyo"
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  go-packages:
+  mysql-data:
