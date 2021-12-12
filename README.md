@@ -54,7 +54,7 @@ TaskMeister is a task management application for all business person.
     - children: array
         - [node3, node4, ...]
 
-below is json of node.
+below is sample json of node.
 
 ```json
 [
