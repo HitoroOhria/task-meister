@@ -7,6 +7,8 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
+const port = ":8000"
+
 func main() {
 	// Echo instance
 	e := echo.New()
@@ -19,10 +21,10 @@ func main() {
 	e.GET("/", hello)
 
 	// Start server
-	e.Logger.Fatal(e.Start(":1323"))
+	e.Logger.Fatal(e.Start(port))
 }
 
 // Handler
 func hello(c echo.Context) error {
-	return c.String(http.StatusOK, "Hello, World!, foo")
+	return c.String(http.StatusOK, "Hello, World!")
 }
