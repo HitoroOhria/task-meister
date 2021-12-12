@@ -2,6 +2,7 @@
 version: "3.9"
 
 services:
+  # Backend Service
   back:
     container_name: tm-back
     build:
@@ -10,8 +11,11 @@ services:
     ports:
       - "8000:8000"
     volumes:
+      # Bind package directory with volume because speeding up.
+      # So, run go get ./... at local if run go get in container.
       - go-packages:/go
       - ./backend/src:/work
+  # DB Service
   db:
     container_name: tm-db
     # Production version is 8.0.18.(see https://cloud.google.com/sql/docs/db-versions)
@@ -28,7 +32,7 @@ services:
       - ./docker/db/my.cnf:/etc/mysql/conf.d/my.cnf
     environment:
       MYSQL_ROOT_PASSWORD: root
-      #      MYSQL_DATABASE: test_database
+      MYSQL_DATABASE: main
       MYSQL_USER: docker
       MYSQL_PASSWORD: docker
       TZ: "Asia/Tokyo"
