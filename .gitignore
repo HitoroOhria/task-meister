@@ -3,3 +3,7 @@
 
 # version controll system
 .go-version
+
+# Echo
+bin/
+pkg/
