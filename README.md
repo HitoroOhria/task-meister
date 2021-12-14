@@ -85,9 +85,16 @@ below is sample json of node.
 
 # Infrastructure
 
-# Application structure
+# Application Structure
 
 # Setup Development Environment
 
+## Install Software
+
+```shell
+$ go install golang.org/x/tools/cmd/goimports@latest
+
+$ go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
+```
 
 
