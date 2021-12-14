@@ -55,7 +55,7 @@ func hello(c echo.Context) error {
 func generateGormClient() (*gorm.DB, error) {
 	return gorm.Open(mysql.New(mysql.Config{
 		// Host is container name then local development.
-		// "user:pasword@rcp(host:port)/table"
+		// "user:pasword@tcp(host:port)/table"
 		DSN: "docker:docker@tcp(tm-db:3306)/main?charset=utf8&parseTime=True&loc=Asia%2FTokyo",
 	}), &gorm.Config{})
 }

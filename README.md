@@ -87,7 +87,7 @@ below is sample json of node.
 
 # Application structure
 
-# Setup development environment
+# Setup Development Environment
 
 
 
