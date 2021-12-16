@@ -12,7 +12,6 @@ services:
       - "8000:8000"
     volumes:
       # Bind package directory with volume because speeding up.
-      # So, run go get ./... at local if run go get in container.
       - go-packages:/go
       - ./backend/src:/work
   # DB Service
