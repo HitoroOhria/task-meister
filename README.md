@@ -33,21 +33,25 @@ TaskMeister is a task management application for all business person.
                     - 配列: 削除 & 途中に挿入
                     - 番号付きJSON: 番号の書き換え
 
+- user
+    - id: auto generate
+    - name: string
+    - email: string
+    -
 - folder
-    - id: bigint
-    - parent_folder_id: bigint
-    - name: varchar(2000)
+    - id: auto generate
+    - parent_folder_id: string
+    - name: string
 - mind_map
-    - id: bigint
-    - folder_id: bigint
-    - name: varchar(2000)
+    - id: auto generate
+    - folder_id: string
+    - name: string
 - root_node
-    - id: bigint
-    - mind_map_id:bigint
-    - nodes: json
+    - id: auto generate
+    - mind_map_id: string
+    - nodes: map
         - [node1, node2, ...]
 - node
-    - id: int
     - text: string
     - estimate_minute: int
     - checked: boolean
