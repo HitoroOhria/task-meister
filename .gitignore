@@ -1,10 +1,13 @@
-# common
+# Common
 tmp/
+
+# Dtoenv
+.env
 
 # IDE
 .idea/
 
-# version controll system
+# Version Controll System
 .go-version
 
 # Echo

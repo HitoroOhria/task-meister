@@ -89,7 +89,7 @@ below is sample json of node.
 
 # Setup Development Environment
 
-## Install Software
+### Install Software
 
 ```shell
 $ go install golang.org/x/tools/cmd/goimports@latest
@@ -97,4 +97,13 @@ $ go install golang.org/x/tools/cmd/goimports@latest
 $ go install -tags 'mysql' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 ```
 
+### Set GCP DEV Credentials
+
+- get service account key for dev.
+- place it in `~/.gcp/service_account_keys/`.
+
+### Set Environment
+
+- get `.env` for backend.
+- place it in `path_to_project_root/backencd/`.
 
