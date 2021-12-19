@@ -4,11 +4,14 @@ module taskmeister.com/backend
 
 go 1.17
 
-require github.com/labstack/echo/v4 v4.6.1
+require (
+	cloud.google.com/go/firestore v1.6.1
+	github.com/labstack/echo/v4 v4.6.1
+	google.golang.org/grpc v1.40.0
+)
 
 require (
 	cloud.google.com/go v0.97.0 // indirect
-	cloud.google.com/go/firestore v1.6.1 // indirect
 	github.com/golang-jwt/jwt v3.2.2+incompatible // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
@@ -30,6 +33,5 @@ require (
 	google.golang.org/api v0.59.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/genproto v0.0.0-20211028162531-8db9c33dc351 // indirect
-	google.golang.org/grpc v1.40.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 )
