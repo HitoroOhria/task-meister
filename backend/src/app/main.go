@@ -38,6 +38,8 @@ func initLog() {
 }
 
 func main() {
+	log.Print("Run: main.main()")
+
 	// Echo instance
 	e := echo.New()
 

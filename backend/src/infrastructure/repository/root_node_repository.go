@@ -32,6 +32,8 @@ func (r *RootNodeRepository) Add(rootNode *entity.RootNode) error {
 	}
 	rootNode.Id = doc.ID
 
+	log.Printf("generated RooNode ID: %+v", doc.ID)
+
 	return nil
 }
 
