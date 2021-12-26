@@ -13,12 +13,12 @@ func (i *GetRootNodeInput) Validate() error {
 }
 
 type GetRootNodeOutput struct {
-	RootNode *entity.RootNode `json:"root_node"`
+	RootNode *entity.RootNode `json:"rootNode"`
 }
 
 type CreateRootNodeInput struct {
-	MindMapId string `json:"mind_map_id" validate:"required"`
-	NodeJson  string `json:"node_json" validate:"required"`
+	MindMapId string `json:"mindMapId" validate:"required"`
+	NodeJson  string `json:"nodeJson" validate:"required"`
 }
 
 func (i *CreateRootNodeInput) Validate() error {

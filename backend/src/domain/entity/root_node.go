@@ -9,7 +9,7 @@ import (
 
 type RootNode struct {
 	Id        string `firestore:"-"`
-	MindMapId string `firestore:"mind_map_id"`
+	MindMapId string `firestore:"mindMapId"`
 	NodesJson string `firestore:"nodesJson"`
 }
 
