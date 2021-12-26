@@ -1,6 +1,6 @@
 # see https://github.com/GoogleContainerTools/distroless/blob/main/examples/go/Dockerfile
 # TODO fixup for this app
-FROM golang:1.17.5-alpine3.15 as build-env
+FROM golang:1.17 as build-env
 
 WORKDIR /go/src/app
 COPY *.go .
