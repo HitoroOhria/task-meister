@@ -26,8 +26,7 @@ func (h *RootNodeHandler) GetRootNode(c echo.Context) error {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 
-	err = input.Validate()
-	if err != nil {
+	if err = input.Validate(); err != nil {
 		log.Printf("input is invalid.\nerr = %+v", err)
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
@@ -42,6 +41,35 @@ func (h *RootNodeHandler) GetRootNode(c echo.Context) error {
 
 func bindGetRootNodeInput(c echo.Context) (*api_io.GetRootNodeInput, error) {
 	var input api_io.GetRootNodeInput
+	if err := c.Bind(&input); err != nil {
+		log.Printf("binding input failed.\nerr = %+v", err)
+		return nil, err
+	}
+
+	return &input, nil
+}
+
+func (h *RootNodeHandler) CreateRootNode(c echo.Context) error {
+	input, err := bindCreateRootNodeInput(c)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	if err = input.Validate(); err != nil {
+		log.Printf("input is invalid.\nerr = %+v", err)
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	output, err := h.RootNodeUsecase.CreateRootNode(input)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.JSON(http.StatusOK, output)
+}
+
+func bindCreateRootNodeInput(c echo.Context) (*api_io.CreateRootNodeInput, error) {
+	var input api_io.CreateRootNodeInput
 	if err := c.Bind(&input); err != nil {
 		log.Printf("binding input failed.\nerr = %+v", err)
 		return nil, err

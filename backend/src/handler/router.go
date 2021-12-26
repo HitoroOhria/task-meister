@@ -17,4 +17,5 @@ func RouteV1Api(e *echo.Echo) {
 
 	rootNodeHandler := injector.InjectRootNodeHandler(ctx)
 	g.GET("/route-nodes/:id", rootNodeHandler.GetRootNode)
+	g.POST("/route-nodes", rootNodeHandler.CreateRootNode)
 }

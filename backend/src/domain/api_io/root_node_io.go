@@ -1,7 +1,6 @@
 package api_io
 
 import (
-	"github.com/go-playground/validator/v10"
 	"taskmeister.com/backend/domain/entity"
 )
 
@@ -10,9 +9,22 @@ type GetRootNodeInput struct {
 }
 
 func (i *GetRootNodeInput) Validate() error {
-	return validator.New().Struct(i)
+	return validatorClient.Struct(i)
 }
 
 type GetRootNodeOutput struct {
 	RootNode *entity.RootNode `json:"root_node"`
+}
+
+type CreateRootNodeInput struct {
+	MindMapId string `json:"mind_map_id" validate:"required"`
+	NodeJson  string `json:"node_json" validate:"required"`
+}
+
+func (i *CreateRootNodeInput) Validate() error {
+	return validatorClient.Struct(i)
+}
+
+type CreateRootNodeOutput struct {
+	Id string `json:"id"`
 }
