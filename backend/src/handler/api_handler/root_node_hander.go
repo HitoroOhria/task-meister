@@ -1,6 +1,8 @@
 package api_handler
 
 import (
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"log"
 	"net/http"
 
@@ -37,7 +39,9 @@ func (h *RootNodeHandler) GetRootNode(c echo.Context) error {
 	}
 
 	output, err := h.RootNodeUsecase.GetRootNode(input)
-	if err != nil {
+	if status.Code(err) == codes.NotFound {
+		return c.String(http.StatusNotFound, err.Error())
+	} else if err != nil {
 		return c.String(http.StatusInternalServerError, err.Error())
 	}
 

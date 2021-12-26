@@ -24,6 +24,7 @@ func NewRootNodeRepository(ctx context.Context, handler *client.FirestoreClient)
 	}
 }
 
+// Add create or update RootNode.
 func (r *RootNodeRepository) Add(rootNode *entity.RootNode) error {
 	doc, _, err := r.collection.Add(r.ctx, &rootNode)
 	if err != nil {
@@ -37,6 +38,7 @@ func (r *RootNodeRepository) Add(rootNode *entity.RootNode) error {
 	return nil
 }
 
+// GetById get RootNode from id.
 func (r *RootNodeRepository) GetById(id string) (*entity.RootNode, error) {
 	dataSnap, err := r.collection.Doc(id).Get(r.ctx)
 	if status.Code(err) == codes.NotFound {

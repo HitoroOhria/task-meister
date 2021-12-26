@@ -4,6 +4,8 @@ import (
 	"taskmeister.com/backend/domain/entity"
 )
 
+// ---------- GetRootNode ----------
+
 type GetRootNodeInput struct {
 	Id string `param:"id" validate:"required"`
 }
@@ -15,6 +17,8 @@ func (i *GetRootNodeInput) Validate() error {
 type GetRootNodeOutput struct {
 	RootNode *entity.RootNode `json:"rootNode"`
 }
+
+// ---------- CreateRootNode ----------
 
 type CreateRootNodeInput struct {
 	MindMapId string `json:"mindMapId" validate:"required"`
