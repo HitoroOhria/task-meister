@@ -16,6 +16,6 @@ func RouteV1Api(e *echo.Echo) {
 	g.GET("/health-check", healthCheckHandler.Ok)
 
 	rootNodeHandler := injector.InjectRootNodeHandler(ctx)
-	g.GET("/route-nodes/:id", rootNodeHandler.GetRootNode)
-	g.POST("/route-nodes", rootNodeHandler.CreateRootNode)
+	g.GET("/root-nodes/:id", rootNodeHandler.GetRootNode)
+	g.POST("/root-nodes", rootNodeHandler.CreateRootNode)
 }
