@@ -20,6 +20,11 @@ func NewRootNodeHandler(rootNodeUsecase *usecase.RootNodeUsecase) *RootNodeHandl
 	}
 }
 
+// GetRootNode is handler of getting RootNode.
+// @Accept html
+// @Produce json
+// @Param id path string true "RootNode ID"
+// @Router /v1/root-nodes/{id} [get]
 func (h *RootNodeHandler) GetRootNode(c echo.Context) error {
 	input, err := bindGetRootNodeInput(c)
 	if err != nil {
@@ -49,6 +54,12 @@ func bindGetRootNodeInput(c echo.Context) (*api_io.GetRootNodeInput, error) {
 	return &input, nil
 }
 
+// CreateRootNode is handler of creating RootNode.
+// @Accept json
+// @Produce json
+// @Param mindMapId body string true "MindMap ID"
+// @Param nodeJson body string true "NodeJson"
+// @Router /v1/root-nodes [post]
 func (h *RootNodeHandler) CreateRootNode(c echo.Context) error {
 	input, err := bindCreateRootNodeInput(c)
 	if err != nil {
