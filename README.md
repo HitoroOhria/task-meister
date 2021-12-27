@@ -1,5 +1,17 @@
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Overview](#overview)
+- [Database](#database)
+- [Infrastructure](#infrastructure)
+- [Application Structure](#application-structure)
+- [Setup Development Environment](#setup-development-environment)
+    - [Install Software](#install-software)
+    - [Set GCP DEV Credentials](#set-gcp-dev-credentials)
+    - [Set Environment](#set-environment)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 # Overview
 
