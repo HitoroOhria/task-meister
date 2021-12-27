@@ -18,4 +18,5 @@ func RouteV1Api(e *echo.Echo) {
 	rootNodeHandler := injector.InjectRootNodeHandler(ctx)
 	g.GET("/root-nodes/:id", rootNodeHandler.GetRootNode)
 	g.POST("/root-nodes", rootNodeHandler.CreateRootNode)
+	g.DELETE("/root-nodes/:id", rootNodeHandler.DeleteRootNode)
 }

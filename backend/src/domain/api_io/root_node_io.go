@@ -32,3 +32,13 @@ func (i *CreateRootNodeInput) Validate() error {
 type CreateRootNodeOutput struct {
 	Id string `json:"id"`
 }
+
+// ---------- DeleteRootNode ----------
+
+type DeleteRootNodeInput struct {
+	Id string `param:"id" validate:"required"`
+}
+
+func (i *DeleteRootNodeInput) Validate() error {
+	return validatorClient.Struct(i)
+}

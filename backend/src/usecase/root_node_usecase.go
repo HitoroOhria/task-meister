@@ -41,3 +41,7 @@ func (u *RootNodeUsecase) CreateRootNode(input *api_io.CreateRootNodeInput) (*ap
 		Id: rootNode.Id,
 	}, nil
 }
+
+func (u *RootNodeUsecase) DeleteRootNode(input *api_io.DeleteRootNodeInput) error {
+	return u.RootNodeRepository.DeleteById(input.Id)
+}

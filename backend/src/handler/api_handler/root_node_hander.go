@@ -92,3 +92,37 @@ func bindCreateRootNodeInput(c echo.Context) (*api_io.CreateRootNodeInput, error
 
 	return &input, nil
 }
+
+// DeleteRootNode is handler of deleting RootNode.
+// @Accept html
+// @Produce html
+// @Param id path string true "RootNode ID"
+// @Router /v1/root-nodes/{id} [delete]
+func (h *RootNodeHandler) DeleteRootNode(c echo.Context) error {
+	input, err := bindDeleteRootNodeInput(c)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	if err = input.Validate(); err != nil {
+		log.Printf("input is invalid.\nerr = %+v", err)
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	err = h.RootNodeUsecase.DeleteRootNode(input)
+	if err != nil {
+		return c.String(http.StatusInternalServerError, err.Error())
+	}
+
+	return c.String(http.StatusOK, "ok")
+}
+
+func bindDeleteRootNodeInput(c echo.Context) (*api_io.DeleteRootNodeInput, error) {
+	var input api_io.DeleteRootNodeInput
+	if err := c.Bind(&input); err != nil {
+		log.Printf("binding input failed.\nerr = %+v", err)
+		return nil, err
+	}
+
+	return &input, nil
+}

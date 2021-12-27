@@ -57,3 +57,14 @@ func (r *RootNodeRepository) GetById(id string) (*entity.RootNode, error) {
 
 	return &rootNode, nil
 }
+
+// DeleteById delete RootNode by id.
+func (r *RootNodeRepository) DeleteById(id string) error {
+	_, err := r.collection.Doc(id).Delete(r.ctx)
+	if err != nil {
+		log.Printf("can not delete RootNode. Id is %+v\nerr = %+v", id, err)
+		return err
+	}
+
+	return nil
+}
