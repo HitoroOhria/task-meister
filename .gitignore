@@ -13,3 +13,6 @@ tmp/
 # Echo
 bin/
 pkg/
+
+# npm
+node_modules/
