@@ -3,7 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+
+    <!-- For MUI -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+
+    <!-- For jsMind -->
+    <link type="text/css" rel="stylesheet" href="style/jsmind.css" />
+    <script type="text/javascript" src="js/jsmind.js"></script>
+    <script type="text/javascript" src="js/jsmind.draggable.js"></script>
+
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -40,5 +48,21 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <div id="jsmind_container"></div>
+    <script type="text/javascript">
+      let options = {
+        container: 'jsmind_container',
+        editable: true,
+        theme: 'orange',
+        shortcut: {
+          mapping: {
+            addchild: 9, // tab
+            editnode: 69 // e
+          }
+        }
+      };
+      var jm = new jsMind(options);
+      jm.show();
+    </script>
   </body>
 </html>
