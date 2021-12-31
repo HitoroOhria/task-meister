@@ -17,6 +17,19 @@
 
 TaskMeister is a task management application for all business person.
 
+# View
+
+- キャンバス
+- ノード
+    - position: absolute ?
+- 関連線
+    - 3次ベジュ曲線
+- ショートカットキー
+    - 全体管理？
+    - 個別管理？ 
+- ノード選択
+- ノード移動
+
 # Database
 
 - ノードをどのように保持するか？
