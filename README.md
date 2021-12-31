@@ -3,6 +3,7 @@
 **Table of Contents**
 
 - [Overview](#overview)
+- [View](#view)
 - [Database](#database)
 - [Infrastructure](#infrastructure)
 - [Application Structure](#application-structure)
