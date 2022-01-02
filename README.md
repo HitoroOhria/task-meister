@@ -20,6 +20,17 @@ TaskMeister is a task management application for all business person.
 
 # View
 
+### Theme
+
+- モノクロ
+- アニメ調
+- iOS
+- グラスモーフィズム
+- 3D
+- 遊び心
+
+### Implement
+
 - キャンバス
 - ノード
     - position: absolute ?
