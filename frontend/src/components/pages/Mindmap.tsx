@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { styled } from "@linaria/react";
 import RootNode from "../organisms/RootNode";
 
@@ -14,6 +14,8 @@ const PositionWrapper = styled.div<PositionWrapperProps>`
 `;
 
 const Mindmap: FC = () => {
+  const [rootNodeText, setRootNodeText] = useState<string>("this is root node text.");
+
   const windowWidth: number = window.innerWidth;
   const windowHeight: number = window.innerHeight;
 
@@ -23,7 +25,7 @@ const Mindmap: FC = () => {
       windowWidth={windowWidth}
       windowHeight={windowHeight}
     >
-      <RootNode />
+      <RootNode text={rootNodeText} />
     </PositionWrapper>
   );
 };

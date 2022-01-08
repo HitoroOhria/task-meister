@@ -1,20 +1,23 @@
-import React from "react";
+import React, { FC } from "react";
 import { styled } from "@linaria/react";
 
-const Textarea = styled.textarea`
-  border: none;
+type RootNodeProps = {
+  text: string;
+};
+
+const TextDisplayer = styled.span`
+  border: solid blue;
   border-radius: 10px;
   padding: 20px;
   background-color: yellow;
-  resize: none;
 `;
 
-function RootNode() {
+const RootNode: FC<RootNodeProps> = (props) => {
   return (
     <div>
-      <Textarea cols={30} rows={2} />
+      <TextDisplayer>{props.text}</TextDisplayer>
     </div>
   );
-}
+};
 
 export default RootNode;
