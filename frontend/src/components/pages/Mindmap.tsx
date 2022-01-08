@@ -9,8 +9,8 @@ type PositionWrapperProps = {
 
 const PositionWrapper = styled.div<PositionWrapperProps>`
   position: absolute;
-  top: ${(props) => props.windowHeight / 2};
-  left: ${(props) => props.windowWidth / 2};
+  top: ${(props) => props.windowHeight / 2}px;
+  left: ${(props) => props.windowWidth / 2}px;
 `;
 
 const Mindmap: FC = () => {
