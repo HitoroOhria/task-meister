@@ -14,7 +14,12 @@ const PositionWrapper = styled.div<PositionWrapperProps>`
 `;
 
 const Mindmap: FC = () => {
-  const [rootNodeText, setRootNodeText] = useState<string>("this is root node text.");
+  const [rootNodeIsInput, setRootNodeIsInput] = useState<boolean>(false);
+  const [rootNodeText, setRootNodeText] = useState<string>("");
+
+  const handleRootNodeTextChange = (text: string) => {
+    setRootNodeText(text);
+  };
 
   const windowWidth: number = window.innerWidth;
   const windowHeight: number = window.innerHeight;
@@ -25,7 +30,11 @@ const Mindmap: FC = () => {
       windowWidth={windowWidth}
       windowHeight={windowHeight}
     >
-      <RootNode text={rootNodeText} />
+      <RootNode
+        isInput={rootNodeIsInput}
+        text={rootNodeText}
+        handleTextChange={handleRootNodeTextChange}
+      />
     </PositionWrapper>
   );
 };
