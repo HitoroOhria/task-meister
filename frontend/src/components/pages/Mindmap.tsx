@@ -7,6 +7,8 @@ type PositionWrapperProps = {
   windowHeight: number;
 };
 
+type inputtingRootNodeIdType = string | null;
+
 const PositionWrapper = styled.div<PositionWrapperProps>`
   position: absolute;
   top: ${(props) => props.windowHeight / 2}px;
@@ -16,9 +18,39 @@ const PositionWrapper = styled.div<PositionWrapperProps>`
 const Mindmap: FC = () => {
   const [rootNodeIsInput, setRootNodeIsInput] = useState<boolean>(false);
   const [rootNodeText, setRootNodeText] = useState<string>("");
+  const [inputtingRootNodeId, setInputtingRootNodeId] =
+    useState<inputtingRootNodeIdType>(null);
+
+  const id = "PositionWrapper";
+  let clickListener: () => void;
 
   const handleRootNodeTextChange = (text: string) => {
     setRootNodeText(text);
+  };
+  const handleRooNodeDoubleClick = (targetId: string) => {
+    setRootNodeIsInput(!rootNodeIsInput);
+    setInputtingRootNodeId(targetId);
+    clickListener = () => handleRooNode(targetId);
+    document.addEventListener("click", clickListener);
+  };
+
+  const handleRooNodeClick = () => {
+    console.log("called handleRooNodeClick");
+  };
+
+  const handleRooNode = (inputtingRootNodeId: inputtingRootNodeIdType) => {
+    if (inputtingRootNodeId === null) {
+      return;
+    }
+
+    const isInputtingRootNodeClick: boolean = !!document
+      .getElementById(inputtingRootNodeId)!
+      .closest<HTMLElementTagNameMap["textarea"]>("#" + inputtingRootNodeId);
+    if (!isInputtingRootNodeClick) {
+      setRootNodeIsInput(false);
+      setInputtingRootNodeId(null);
+      document.removeEventListener("click", clickListener);
+    }
   };
 
   const windowWidth: number = window.innerWidth;
@@ -26,7 +58,7 @@ const Mindmap: FC = () => {
 
   return (
     <PositionWrapper
-      id="PositionWrapper"
+      id={id}
       windowWidth={windowWidth}
       windowHeight={windowHeight}
     >
@@ -34,6 +66,8 @@ const Mindmap: FC = () => {
         isInput={rootNodeIsInput}
         text={rootNodeText}
         handleTextChange={handleRootNodeTextChange}
+        handleDoubleClick={handleRooNodeDoubleClick}
+        handleClick={handleRooNodeClick}
       />
     </PositionWrapper>
   );

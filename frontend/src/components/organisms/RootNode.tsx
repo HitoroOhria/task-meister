@@ -1,10 +1,13 @@
 import React, { FC } from "react";
 import { styled } from "@linaria/react";
+import _ from "lodash";
 
 type RootNodeProps = {
   isInput: boolean;
   text: string;
   handleTextChange: (text: string) => void;
+  handleDoubleClick: (targetId: string) => void;
+  handleClick: () => void;
 };
 
 const TextDisplayer = styled.span`
@@ -24,6 +27,8 @@ const TextInputer = styled.textarea`
 `;
 
 const RootNode: FC<RootNodeProps> = (props) => {
+  const id: string = _.uniqueId("TextDisplayer");
+
   return (
     <div>
       {props.isInput ? (
@@ -31,7 +36,12 @@ const RootNode: FC<RootNodeProps> = (props) => {
           {props.text}
         </TextInputer>
       ) : (
-        <TextDisplayer>{props.text}</TextDisplayer>
+        <TextDisplayer
+          id={id}
+          onDoubleClick={() => props.handleDoubleClick(id)}
+        >
+          {props.text}
+        </TextDisplayer>
       )}
     </div>
   );
