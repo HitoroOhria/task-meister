@@ -59,6 +59,7 @@ const RootNode: FC<RootNodeProps> = () => {
   };
 
   return (
+    // TODO Eliminate range selection after double-clicking
     <TextInputer
       ref={textInputerElement}
       readOnly={!isInputting}
