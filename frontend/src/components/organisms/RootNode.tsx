@@ -1,14 +1,8 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { styled } from "@linaria/react";
 import _ from "lodash";
 
-type RootNodeProps = {
-  isInput: boolean;
-  text: string;
-  handleTextChange: (text: string) => void;
-  handleDoubleClick: (targetId: string) => void;
-  handleClick: () => void;
-};
+type RootNodeProps = {};
 
 const TextDisplayer = styled.span`
   border: solid blue;
@@ -26,24 +20,47 @@ const TextInputer = styled.textarea`
   resize: none;
 `;
 
-const RootNode: FC<RootNodeProps> = (props) => {
-  const id: string = _.uniqueId("TextDisplayer");
+const RootNode: FC<RootNodeProps> = () => {
+  const [id] = useState<string>(_.uniqueId("TextDisplayer"));
+  const [isInput, setIsInput] = useState<boolean>(false);
+  const [text, setText] = useState<string>("");
+
+  const processInInputting = () => {
+    setIsInput(true);
+    document.addEventListener("click", inputtingClickListener);
+  };
+
+  const processOutInputting = () => {
+    setIsInput(false);
+    document.removeEventListener("click", inputtingClickListener);
+  };
+
+  const inputtingClickListener = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (!isInRootNodeArea(target)) {
+      processOutInputting();
+    }
+  };
+
+  const isInRootNodeArea = (target: HTMLElement): boolean => {
+    return !!target.closest<HTMLElementTagNameMap["textarea"]>("#" + id);
+  };
+
+  const handleDoubleClick = () => {
+    processInInputting();
+  };
 
   return (
-    <div>
-      {props.isInput ? (
-        <TextInputer onChange={(e) => props.handleTextChange(e.target.value)}>
-          {props.text}
-        </TextInputer>
+    <TextDisplayer id={id} onDoubleClick={handleDoubleClick}>
+      {isInput ? (
+        <TextInputer
+          defaultValue={text}
+          onChange={(e) => setText(e.target.value)}
+        />
       ) : (
-        <TextDisplayer
-          id={id}
-          onDoubleClick={() => props.handleDoubleClick(id)}
-        >
-          {props.text}
-        </TextDisplayer>
+        text
       )}
-    </div>
+    </TextDisplayer>
   );
 };
 
