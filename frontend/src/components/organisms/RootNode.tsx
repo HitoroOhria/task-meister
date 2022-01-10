@@ -28,43 +28,15 @@ const RootNode: FC<RootNodeProps> = () => {
 
   useEffect(changeTextInputerHeight, [text]);
 
-  const processInInputting = () => {
-    setIsInputting(true);
-    document.addEventListener("click", inputtingClickListener);
-  };
-
-  const processOutInputting = () => {
-    setIsInputting(false);
-    document.removeEventListener("click", inputtingClickListener);
-  };
-
-  const inputtingClickListener = (e: MouseEvent) => {
-    const target = e.target as HTMLElement;
-    if (!isInRootNodeArea(target)) {
-      processOutInputting();
-    }
-  };
-
-  const isInRootNodeArea = (target: HTMLElement): boolean => {
-    return target.className === textInputerElement.current!.className;
-  };
-
-  const handleChange = (text: string) => {
-    setText(text);
-  };
-
-  const handleDoubleClick = () => {
-    processInInputting();
-  };
-
   return (
     // TODO Eliminate range selection after double-clicking
     <TextInputer
       ref={textInputerElement}
       readOnly={!isInputting}
       defaultValue={text}
-      onChange={(e) => handleChange(e.target.value)}
-      onDoubleClick={handleDoubleClick}
+      onChange={(e) => setText(e.target.value)}
+      onDoubleClick={() => setIsInputting(true)}
+      onBlur={() => setIsInputting(false)}
     />
   );
 };
