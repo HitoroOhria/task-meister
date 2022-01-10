@@ -18,6 +18,7 @@ const Mindmap: FC = () => {
   const [windowHeight] = useState<number>(window.innerHeight);
 
   return (
+    // TODO Resize when window size changes
     <PositionWrapper
       id="PositionWrapper"
       windowWidth={windowWidth}
