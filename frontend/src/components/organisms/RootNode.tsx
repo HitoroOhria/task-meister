@@ -19,14 +19,14 @@ const RootNode: FC<RootNodeProps> = () => {
   const [isInputting, setIsInputting] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
 
-  const changeTextareaHeight = () => {
+  const changeTextInputerHeight = () => {
     const numberOfLines = text.split("\n").length;
     const height = numberOfLines * lineHeightEm + "em";
 
     textInputerElement.current!.style.height = height;
   };
 
-  useEffect(changeTextareaHeight, [text]);
+  useEffect(changeTextInputerHeight, [text]);
 
   const processInInputting = () => {
     setIsInputting(true);
@@ -49,9 +49,8 @@ const RootNode: FC<RootNodeProps> = () => {
     return target.className === textInputerElement.current!.className;
   };
 
-  const handleOnChange = (text: string) => {
+  const handleChange = (text: string) => {
     setText(text);
-    changeTextareaHeight();
   };
 
   const handleDoubleClick = () => {
@@ -64,7 +63,7 @@ const RootNode: FC<RootNodeProps> = () => {
       ref={textInputerElement}
       readOnly={!isInputting}
       defaultValue={text}
-      onChange={(e) => handleOnChange(e.target.value)}
+      onChange={(e) => handleChange(e.target.value)}
       onDoubleClick={handleDoubleClick}
     />
   );
