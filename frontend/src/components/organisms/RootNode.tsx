@@ -1,6 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import { styled } from "@linaria/react";
-import _ from "lodash";
 
 type RootNodeProps = {};
 
@@ -17,7 +16,6 @@ const TextInputer = styled.textarea`
 
 const RootNode: FC<RootNodeProps> = () => {
   const textInputerElement = useRef<HTMLTextAreaElement>(null);
-  const [id] = useState<string>(_.uniqueId("TextDisplayer"));
   const [isInputting, setIsInputting] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
 
@@ -48,7 +46,7 @@ const RootNode: FC<RootNodeProps> = () => {
   };
 
   const isInRootNodeArea = (target: HTMLElement): boolean => {
-    return !!target.closest<HTMLElementTagNameMap["textarea"]>("#" + id);
+    return target.className === textInputerElement.current!.className;
   };
 
   const handleOnChange = (text: string) => {
@@ -62,7 +60,6 @@ const RootNode: FC<RootNodeProps> = () => {
 
   return (
     <TextInputer
-      id={id}
       ref={textInputerElement}
       readOnly={!isInputting}
       defaultValue={text}
