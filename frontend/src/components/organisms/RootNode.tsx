@@ -1,37 +1,42 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { styled } from "@linaria/react";
 import _ from "lodash";
 
 type RootNodeProps = {};
 
-const TextDisplayer = styled.span`
-  border: solid blue;
-  border-radius: 10px;
-  background-color: yellow;
-  display: block;
-  padding: 20px;
-`;
+const lineHeightEm = 1;
 
 const TextInputer = styled.textarea`
   border: solid blue;
   border-radius: 10px;
-  padding: 20px;
   background-color: gray;
+  line-height: ${lineHeightEm}em
+  padding: 20px;
   resize: none;
 `;
 
 const RootNode: FC<RootNodeProps> = () => {
+  const textInputerElement = useRef<HTMLTextAreaElement>(null);
   const [id] = useState<string>(_.uniqueId("TextDisplayer"));
-  const [isInput, setIsInput] = useState<boolean>(false);
+  const [isInputting, setIsInputting] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
 
+  const changeTextareaHeight = () => {
+    const numberOfLines = text.split("\n").length;
+    const height = numberOfLines * lineHeightEm + "em";
+
+    textInputerElement.current!.style.height = height;
+  };
+
+  useEffect(changeTextareaHeight, [text]);
+
   const processInInputting = () => {
-    setIsInput(true);
+    setIsInputting(true);
     document.addEventListener("click", inputtingClickListener);
   };
 
   const processOutInputting = () => {
-    setIsInput(false);
+    setIsInputting(false);
     document.removeEventListener("click", inputtingClickListener);
   };
 
@@ -46,21 +51,24 @@ const RootNode: FC<RootNodeProps> = () => {
     return !!target.closest<HTMLElementTagNameMap["textarea"]>("#" + id);
   };
 
+  const handleOnChange = (text: string) => {
+    setText(text);
+    changeTextareaHeight();
+  };
+
   const handleDoubleClick = () => {
     processInInputting();
   };
 
   return (
-    <TextDisplayer id={id} onDoubleClick={handleDoubleClick}>
-      {isInput ? (
-        <TextInputer
-          defaultValue={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-      ) : (
-        text
-      )}
-    </TextDisplayer>
+    <TextInputer
+      id={id}
+      ref={textInputerElement}
+      readOnly={!isInputting}
+      defaultValue={text}
+      onChange={(e) => handleOnChange(e.target.value)}
+      onDoubleClick={handleDoubleClick}
+    />
   );
 };
 
