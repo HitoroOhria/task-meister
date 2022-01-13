@@ -24,7 +24,7 @@ const Mindmap: FC = () => {
       windowWidth={windowWidth}
       windowHeight={windowHeight}
     >
-      {[...Array(1)].map(() => (
+      {[...Array(3)].map(() => (
         <Node />
       ))}
     </PositionWrapper>
