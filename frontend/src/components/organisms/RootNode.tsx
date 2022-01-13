@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import { styled } from "@linaria/react";
-import CanvasOperator from "../../domain/model/canvas_operator";
+import ElementSizeCalculator from "../../domain/model/element_size_calculator";
 
 type RootNodeProps = {};
 
@@ -8,7 +8,7 @@ const minWidthPx = 50;
 const lineHeightEm = 1;
 const font = "13px monospace";
 // For measure text width
-const canvasOperator = new CanvasOperator(font);
+const elementSizeCalculator = new ElementSizeCalculator(font);
 
 const TextInputer = styled.textarea`
   min-width: ${minWidthPx}px;
@@ -34,8 +34,8 @@ const RootNode: FC<RootNodeProps> = () => {
   };
 
   const changeTextInputerWidth = () => {
-    const longestLine = canvasOperator.findLongestLine(text);
-    const textWidth = Math.ceil(canvasOperator.measureWidth(longestLine));
+    const longestLine = elementSizeCalculator.findLongestLine(text);
+    const textWidth = Math.ceil(elementSizeCalculator.measureWidth(longestLine));
     const textareaWidth = textWidth > minWidthPx ? textWidth : minWidthPx;
 
     textInputerElement.current!.style.width = textareaWidth + "px";

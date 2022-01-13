@@ -1,4 +1,4 @@
-class CanvasOperator {
+class ElementSizeCalculator {
   private canvasCtx: CanvasRenderingContext2D;
 
   constructor(font: string) {
@@ -31,4 +31,4 @@ class CanvasOperator {
   }
 }
 
-export default CanvasOperator;
+export default ElementSizeCalculator;
