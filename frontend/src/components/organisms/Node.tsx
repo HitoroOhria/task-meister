@@ -4,9 +4,14 @@ import ElementSizeCalculator from "../../domain/model/element_size_calculator";
 
 type NodeProps = {};
 
+// CSS
 const minWidthPx = 50;
 const lineHeightEm = 1;
 const font = "13px monospace";
+
+// const
+const initialWidth = 96;
+const initialHeight = 59;
 // For measure text width
 const elementSizeCalculator = new ElementSizeCalculator(font);
 
@@ -25,7 +30,8 @@ const Node: FC<NodeProps> = () => {
   const textInputerElement = useRef<HTMLTextAreaElement>(null);
   const [isInputting, setIsInputting] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
-  const [height, setHeight] = useState<number>(0);
+  const [width, setWidth] = useState<number>(initialWidth);
+  const [height, setHeight] = useState<number>(initialHeight);
 
   const changeTextInputerHeight = () => {
     if (textInputerElement.current === null) {
@@ -52,6 +58,11 @@ const Node: FC<NodeProps> = () => {
     textInputerElement.current.style.width = textareaWidth + "px";
   };
 
+  const updateWidth = () => {
+    textInputerElement.current !== null &&
+      setWidth(textInputerElement.current.offsetWidth);
+  };
+
   const updateHeight = () => {
     textInputerElement.current !== null &&
       setHeight(textInputerElement.current.offsetHeight);
@@ -59,6 +70,7 @@ const Node: FC<NodeProps> = () => {
 
   useEffect(changeTextInputerHeight, [text]);
   useEffect(changeTextInputerWidth, [text]);
+  useEffect(updateWidth, [text]);
   useEffect(updateHeight, [text]);
 
   return (
