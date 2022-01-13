@@ -1,6 +1,6 @@
 import React, { FC, useState } from "react";
 import { styled } from "@linaria/react";
-import RootNode from "../organisms/RootNode";
+import Node from "../organisms/Node";
 
 type PositionWrapperStyleProps = {
   windowWidth: number;
@@ -25,7 +25,7 @@ const Mindmap: FC = () => {
       windowHeight={windowHeight}
     >
       {[...Array(1)].map(() => (
-        <RootNode />
+        <Node />
       ))}
     </PositionWrapper>
   );

@@ -2,7 +2,7 @@ import React, { FC, useEffect, useRef, useState } from "react";
 import { styled } from "@linaria/react";
 import ElementSizeCalculator from "../../domain/model/element_size_calculator";
 
-type RootNodeProps = {};
+type NodeProps = {};
 
 const minWidthPx = 50;
 const lineHeightEm = 1;
@@ -21,7 +21,7 @@ const TextInputer = styled.textarea`
   resize: none;
 `;
 
-const RootNode: FC<RootNodeProps> = () => {
+const Node: FC<NodeProps> = () => {
   const textInputerElement = useRef<HTMLTextAreaElement>(null);
   const [isInputting, setIsInputting] = useState<boolean>(false);
   const [text, setText] = useState<string>("");
@@ -57,4 +57,4 @@ const RootNode: FC<RootNodeProps> = () => {
   );
 };
 
-export default RootNode;
+export default Node;

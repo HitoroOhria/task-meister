@@ -24,11 +24,11 @@ func NewRootNodeRepository(ctx context.Context, handler *client.FirestoreClient)
 	}
 }
 
-// Add create or update RootNode.
+// Add create or update Node.
 func (r *RootNodeRepository) Add(rootNode *entity.RootNode) error {
 	doc, _, err := r.collection.Add(r.ctx, &rootNode)
 	if err != nil {
-		log.Printf("adding Collection to RootNode failed.\nerr = %+v\n", err)
+		log.Printf("adding Collection to Node failed.\nerr = %+v\n", err)
 		return err
 	}
 	rootNode.Id = doc.ID
@@ -38,19 +38,19 @@ func (r *RootNodeRepository) Add(rootNode *entity.RootNode) error {
 	return nil
 }
 
-// GetById get RootNode from id.
+// GetById get Node from id.
 func (r *RootNodeRepository) GetById(id string) (*entity.RootNode, error) {
 	dataSnap, err := r.collection.Doc(id).Get(r.ctx)
 	if status.Code(err) == codes.NotFound {
-		log.Printf("not found RootNode Doc. Id is %+v\nerr = %+v", id, err)
+		log.Printf("not found Node Doc. Id is %+v\nerr = %+v", id, err)
 		return nil, err
 	} else if err != nil {
-		log.Printf("getting RootNode Doc failed.\nerr = %+v", err)
+		log.Printf("getting Node Doc failed.\nerr = %+v", err)
 	}
 
 	var rootNode entity.RootNode
 	if err = dataSnap.DataTo(&rootNode); err != nil {
-		log.Printf("can not convert RootNode Doc.\nerr=%+v", err)
+		log.Printf("can not convert Node Doc.\nerr=%+v", err)
 		return nil, err
 	}
 	rootNode.Id = id
@@ -58,11 +58,11 @@ func (r *RootNodeRepository) GetById(id string) (*entity.RootNode, error) {
 	return &rootNode, nil
 }
 
-// DeleteById delete RootNode by id.
+// DeleteById delete Node by id.
 func (r *RootNodeRepository) DeleteById(id string) error {
 	_, err := r.collection.Doc(id).Delete(r.ctx)
 	if err != nil {
-		log.Printf("can not delete RootNode. Id is %+v\nerr = %+v", id, err)
+		log.Printf("can not delete Node. Id is %+v\nerr = %+v", id, err)
 		return err
 	}
 
