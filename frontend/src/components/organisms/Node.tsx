@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import { styled } from "@linaria/react";
-import ElementSizeCalculator from "../../domain/model/element_size_calculator";
+import ElementSizeCalculator from "../../domain/model/ElementSizeCalculator";
 
 type NodeProps = {};
 
