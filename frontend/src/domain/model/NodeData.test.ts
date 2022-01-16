@@ -67,3 +67,64 @@ describe("updateGroupWidth", () => {
     expect(sutTwoNestedNodeData.groupWidth).toBe(3600);
   });
 });
+
+describe("updateChildrenTop", () => {
+  test("Do nothing when there are zero child", () => {
+    const nodeData = new NodeData("id", []);
+    nodeData.updateChildrenTop();
+
+    expect(nodeData.top).toBe(0);
+  });
+
+  test("Top of child is set to top of node when there is one child", () => {
+    const childNodeData = new NodeData("child", []);
+    childNodeData.nodeHeight = 100;
+    const parentNodeData = new NodeData("sut", [childNodeData]);
+    parentNodeData.setTopFromRootNode(200);
+
+    parentNodeData.updateChildrenTop();
+    expect(parentNodeData.top).toBe(200);
+    expect(parentNodeData.children[0].top).toBe(200);
+  });
+
+  test("Top of children is set to height of node minus total height of previous children when there are two or more children", () => {
+    // Preparation
+    const childNodeData1 = new NodeData("child1", []);
+    const childNodeData2 = new NodeData("child2", []);
+    const childNodeData3 = new NodeData("child3", []);
+    childNodeData1.nodeHeight = 100;
+    childNodeData2.nodeHeight = 200;
+    childNodeData3.nodeHeight = 300;
+
+    // There are two children
+    const twoChildren = [childNodeData1, childNodeData2];
+    const havingTwoChildrenNodeData = new NodeData(
+      "havingTwoChildren",
+      twoChildren
+    );
+    havingTwoChildrenNodeData.nodeHeight = 400;
+    havingTwoChildrenNodeData.updateGroupHeight();
+    havingTwoChildrenNodeData.setTopFromRootNode(500);
+    havingTwoChildrenNodeData.updateChildrenTop();
+
+    expect(havingTwoChildrenNodeData.top).toBe(500);
+    expect(havingTwoChildrenNodeData.children[0].top).toBe(500);
+    expect(havingTwoChildrenNodeData.children[1].top).toBe(600);
+
+    // There are three children
+    const threeChildren = [childNodeData1, childNodeData2, childNodeData3];
+    const havingThreeChildrenNodeData = new NodeData(
+      "havingThreeChildren",
+      threeChildren
+    );
+    havingThreeChildrenNodeData.nodeHeight = 600;
+    havingThreeChildrenNodeData.updateGroupHeight();
+    havingThreeChildrenNodeData.setTopFromRootNode(-200);
+    havingThreeChildrenNodeData.updateChildrenTop();
+
+    expect(havingThreeChildrenNodeData.top).toBe(-200);
+    expect(havingThreeChildrenNodeData.children[0].top).toBe(-200);
+    expect(havingThreeChildrenNodeData.children[1].top).toBe(-100);
+    expect(havingThreeChildrenNodeData.children[2].top).toBe(100);
+  });
+});
