@@ -1,16 +1,41 @@
-import { pickBiggerNumber, sum } from "~/util/NumberUtil";
+import {pickBiggerNumber, sum} from "~/util/NumberUtil";
 
+// Data of node to be placed on Mindmap.
+// NodeData consists of a node and children's nodes.
+// Whole group is called a group.
+// NodeData is not group, but holds value of group to calculate placement.
 class NodeData {
+  // an id for identify when updating node
   public readonly id: string;
+
+  // width including margin
   public nodeWidth: number;
+
+  // height including height
   public nodeHeight: number;
+
+  // node top value of style
   public nodeTop: number;
+
+  // node left value of style
   public nodeLeft: number;
+
+  // total width of node and children
   public groupWidth: number;
+
+  // total height of node and children
   public groupHeight: number;
+
+  // group top value of style
   public groupTop: number;
+
+  // group left value of style
   public groupLeft: number;
+
+  // children nodes of this node
   public children: NodeData[];
+
+  // total height of children node
   public childrenHeight: number;
 
   constructor(id: string, children: NodeData[]) {
