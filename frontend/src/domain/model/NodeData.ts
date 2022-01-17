@@ -1,80 +1,108 @@
 import { pickBiggerNumber, sum } from "~/util/NumberUtil";
 
 class NodeData {
-  private readonly id: string;
-
+  public readonly id: string;
   public nodeWidth: number;
   public nodeHeight: number;
+  public nodeTop: number;
+  public nodeLeft: number;
+  public groupWidth: number;
+  public groupHeight: number;
+  public groupTop: number;
+  public groupLeft: number;
   public children: NodeData[];
-
-  // Only getter, no setter
-  private mTop: number;
-  private mLeft: number;
-  private mGroupWidth: number;
-  private mGroupHeight: number;
+  public childrenHeight: number;
 
   constructor(id: string, children: NodeData[]) {
     this.id = id;
     this.nodeWidth = 0;
     this.nodeHeight = 0;
+    this.nodeTop = 0;
+    this.nodeLeft = 0;
+    this.groupWidth = 0;
+    this.groupHeight = 0;
+    this.groupTop = 0;
+    this.groupLeft = 0;
     this.children = children;
-
-    // Only getter, no setter
-    this.mTop = 0;
-    this.mLeft = 0;
-    this.mGroupWidth = 0;
-    this.mGroupHeight = 0;
+    this.childrenHeight = 0;
   }
 
-  // top is relative top from origin of Mindmap
-  get top() {
-    return this.mTop;
+  // Update children height of self
+  public updateChildrenHeight() {
+    this.children.forEach((nodeData) => nodeData.updateChildrenHeight());
+
+    this.childrenHeight = this.children
+      .map((nodeData) => nodeData.groupHeight)
+      .reduce(sum, 0);
   }
 
-  // left is relative left from origin of Mindmap
-  get left() {
-    return this.mLeft;
+  // Recursively update group width of self and children
+  public recursivelyUpdateGroupWidth() {
+    this.children.forEach((nodeData) => nodeData.recursivelyUpdateGroupWidth());
+    this.updateGroupWidth();
   }
 
-  // groupWidth is sum width of node and children
-  get groupWidth() {
-    return this.mGroupWidth;
-  }
-
-  // groupHeight is sum height of node and children
-  get groupHeight() {
-    return this.mGroupHeight;
-  }
-
+  // Update group width of self
   public updateGroupWidth() {
-    this.children.forEach((nodeData) => nodeData.updateGroupWidth());
     const longestChildWidth = this.children
-      .map((nodeData) => nodeData.mGroupWidth)
+      .map((nodeData) => nodeData.groupWidth)
       .reduce(pickBiggerNumber, 0);
 
-    this.mGroupWidth = this.nodeWidth + longestChildWidth;
+    this.groupWidth = this.nodeWidth + longestChildWidth;
   }
 
+  // Recursively update group height of self and children.
+  public recursivelyUpdateGroupHeight() {
+    this.children.forEach((nodeData) =>
+      nodeData.recursivelyUpdateGroupHeight()
+    );
+    this.updateGroupHeight();
+  }
+
+  // Update group height of self.
   public updateGroupHeight() {
-    this.children.forEach((nodeData) => nodeData.updateGroupHeight());
-    const childrenHeight = this.children
-      .map((nodeData) => nodeData.mGroupHeight)
-      .reduce(sum, 0);
-
-    this.mGroupHeight =
-      this.nodeHeight > childrenHeight ? this.nodeHeight : childrenHeight;
+    this.groupHeight =
+      this.nodeHeight > this.childrenHeight
+        ? this.nodeHeight
+        : this.childrenHeight;
   }
 
-  public setTopFromRootNode(top: number) {
-    this.mTop = top;
+  // Update node top of self
+  public updateNodeTop() {
+    if (this.nodeHeight > this.childrenHeight) {
+      this.nodeTop = this.groupTop;
+    } else {
+      const distanceFromGroupTop = (this.childrenHeight - this.nodeHeight) / 2;
+      this.nodeTop = this.groupTop + distanceFromGroupTop;
+    }
   }
 
-  public updateChildrenTop() {
-    let cumulativeHeightOfPreNodeData = 0;
+  // Recursively update node top of children
+  public recursivelyUpdateChildrenNodeTop() {
+    this.updateChildrenNodeTop();
+    this.children.forEach((nodeData) =>
+      nodeData.recursivelyUpdateChildrenNodeTop()
+    );
+  }
+
+  // update node top of children
+  public updateChildrenNodeTop() {
+    let distanceFromGroupTopOfChild =
+      this.nodeHeight > this.childrenHeight
+        ? (this.nodeHeight - this.childrenHeight) / 2
+        : 0;
+
     this.children.forEach((nodeData) => {
-      nodeData.mTop = this.mTop + cumulativeHeightOfPreNodeData;
-      cumulativeHeightOfPreNodeData += nodeData.groupHeight;
+      nodeData.nodeTop = this.groupTop + distanceFromGroupTopOfChild;
+      distanceFromGroupTopOfChild += nodeData.groupHeight;
     });
+  }
+
+  public updateChildrenLeft() {
+    // absolute の場合
+    this.children.forEach(
+      (nodeData) => (nodeData.nodeLeft = this.nodeLeft + this.groupWidth)
+    );
   }
 }
 
