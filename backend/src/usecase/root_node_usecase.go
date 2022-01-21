@@ -3,14 +3,14 @@ package usecase
 import (
 	"taskmeister.com/backend/domain/api_io"
 	"taskmeister.com/backend/domain/entity"
-	"taskmeister.com/backend/infrastructure/repository"
+	"taskmeister.com/backend/domain/repository"
 )
 
 type RootNodeUsecase struct {
-	RootNodeRepository *repository.RootNodeRepository
+	RootNodeRepository repository.RootNodeRepository
 }
 
-func NewRootNodeUsecase(rootNodeRepository *repository.RootNodeRepository) *RootNodeUsecase {
+func NewRootNodeUsecase(rootNodeRepository repository.RootNodeRepository) *RootNodeUsecase {
 	return &RootNodeUsecase{
 		RootNodeRepository: rootNodeRepository,
 	}

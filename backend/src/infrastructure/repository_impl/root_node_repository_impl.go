@@ -1,4 +1,4 @@
-package repository
+package repository_impl
 
 import (
 	"context"
@@ -9,23 +9,28 @@ import (
 	"google.golang.org/grpc/status"
 
 	"taskmeister.com/backend/domain/entity"
+	"taskmeister.com/backend/domain/repository"
 	"taskmeister.com/backend/infrastructure/client"
 )
 
-type RootNodeRepository struct {
+const (
+	collectionName = "RootNodes"
+)
+
+type RootNodeRepositoryImpl struct {
 	ctx        context.Context
 	collection *firestore.CollectionRef
 }
 
-func NewRootNodeRepository(ctx context.Context, handler *client.FirestoreClient) *RootNodeRepository {
-	return &RootNodeRepository{
+func NewRootNodeRepository(ctx context.Context, handler *client.FirestoreClient) repository.RootNodeRepository {
+	return &RootNodeRepositoryImpl{
 		ctx:        ctx,
-		collection: handler.Client.Collection("RootNodes"),
+		collection: handler.Client.Collection(collectionName),
 	}
 }
 
 // Add create or update Node.
-func (r *RootNodeRepository) Add(rootNode *entity.RootNode) error {
+func (r *RootNodeRepositoryImpl) Add(rootNode *entity.RootNode) error {
 	doc, _, err := r.collection.Add(r.ctx, &rootNode)
 	if err != nil {
 		log.Printf("adding Collection to Node failed.\nerr = %+v\n", err)
@@ -39,7 +44,7 @@ func (r *RootNodeRepository) Add(rootNode *entity.RootNode) error {
 }
 
 // GetById get Node from id.
-func (r *RootNodeRepository) GetById(id string) (*entity.RootNode, error) {
+func (r *RootNodeRepositoryImpl) GetById(id string) (*entity.RootNode, error) {
 	dataSnap, err := r.collection.Doc(id).Get(r.ctx)
 	if status.Code(err) == codes.NotFound {
 		log.Printf("not found Node Doc. Id is %+v\nerr = %+v", id, err)
@@ -59,7 +64,7 @@ func (r *RootNodeRepository) GetById(id string) (*entity.RootNode, error) {
 }
 
 // DeleteById delete Node by id.
-func (r *RootNodeRepository) DeleteById(id string) error {
+func (r *RootNodeRepositoryImpl) DeleteById(id string) error {
 	_, err := r.collection.Doc(id).Delete(r.ctx)
 	if err != nil {
 		log.Printf("can not delete Node. Id is %+v\nerr = %+v", id, err)
