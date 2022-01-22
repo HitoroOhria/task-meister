@@ -51,7 +51,7 @@ export const newNodeData = (
   children: NodeData[]
 ): NodeData => {
   return {
-    ...nodeData,
+    ...nodeDataImpl,
     id: id,
     text: text,
     children: children,
@@ -62,7 +62,7 @@ export const newNodeData = (
 // NodeData consists of a node and children's nodes.
 // Whole group is called a group.
 // NodeData is not group, but holds value of group to calculate placement.
-export const nodeData: NodeData = {
+export const nodeDataImpl: NodeData = {
   // an id for identify when updating node
   id: "",
 
@@ -230,6 +230,6 @@ export const nodeData: NodeData = {
   },
 };
 
-Object.freeze(nodeData)
+Object.freeze(nodeDataImpl)
 
 export default NodeData;

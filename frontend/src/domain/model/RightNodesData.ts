@@ -19,12 +19,12 @@ interface RightNodesData {
 
 export const newRightNodesData = (list: NodeData[]): RightNodesData => {
   return {
-    ...rightNodeData,
+    ...rightNodeDataImpl,
     list: list,
   };
 };
 
-export const rightNodeData: RightNodesData = {
+export const rightNodeDataImpl: RightNodesData = {
   list: [],
 
   findNodeDataById(id: string): NodeData | null {
@@ -55,6 +55,7 @@ export const rightNodeData: RightNodesData = {
       return;
     }
 
+    this.processChangingWidth(target, width);
     this.processChangingHeight(target, height);
   },
 
@@ -81,6 +82,6 @@ export const rightNodeData: RightNodesData = {
   },
 };
 
-Object.freeze(rightNodeData);
+Object.freeze(rightNodeDataImpl);
 
 export default RightNodesData;

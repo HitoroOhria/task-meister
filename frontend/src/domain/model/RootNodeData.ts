@@ -1,6 +1,8 @@
-import NodeData, { nodeData } from "~/domain/model/NodeData";
+import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
 import RightNodesData from "~/domain/model/RightNodesData";
-import rightNodesData, { rightNodeData } from "~/domain/model/RightNodesData";
+import rightNodesData, {
+  rightNodeDataImpl,
+} from "~/domain/model/RightNodesData";
 
 interface RootNodeData {
   param: NodeData;
@@ -30,9 +32,9 @@ export const newRootNodeData = (
 };
 
 export const rootNodeData: RootNodeData = {
-  param: nodeData,
-  rightNodesData: rightNodeData,
-  leftNodesData: rightNodeData,
+  param: nodeDataImpl,
+  rightNodesData: rightNodeDataImpl,
+  leftNodesData: rightNodeDataImpl,
 
   processChangingText(width: number, height: number) {
     this.processChangingWidth(width);
