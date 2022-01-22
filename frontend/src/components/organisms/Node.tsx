@@ -19,6 +19,7 @@ type NodeDivProps = {
 };
 
 const NodeDiv = styled.div<NodeDivProps>`
+  position: absolute;
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
 `;

@@ -15,7 +15,7 @@ type RootNodeDivProps = {
 };
 
 const RootNodeDiv = styled.div<RootNodeDivProps>`
-  position: relative;
+  position: absolute;
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
 `;
