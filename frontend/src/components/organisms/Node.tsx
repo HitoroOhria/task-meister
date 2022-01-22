@@ -1,88 +1,57 @@
-import React, { FC, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, VFC } from "react";
 import { styled } from "@linaria/react";
-import ElementSizeCalculator from "../../domain/model/ElementSizeCalculator";
+import NodeData from "~/domain/model/NodeData";
+import TextInputer from "~/components/atoms/TextInputer";
 
-type NodeProps = {};
+type NodeProps = {
+  nodeData: NodeData;
+  setNodeDataText: (id: string, text: string) => void;
+  processChangingNodeDataText: (
+    id: string,
+    width: number,
+    height: number
+  ) => void;
+};
 
-// CSS
-const minWidthPx = 50;
-const lineHeightEm = 1;
-const font = "13px monospace";
+type NodeDivProps = {
+  top: number;
+  left: number;
+};
 
-// const
-const initialWidth = 96;
-const initialHeight = 59;
-// For measure text width
-const elementSizeCalculator = new ElementSizeCalculator(font);
-
-const TextInputer = styled.textarea`
-  min-width: ${minWidthPx}px;
-  font: ${font};
-  line-height: ${lineHeightEm}em
-  border: solid blue;
-  border-radius: 10px;
-  background-color: gray;
-  padding: 20px;
-  resize: none;
+const NodeDiv = styled.div<NodeDivProps>`
+  top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
 `;
 
-const Node: FC<NodeProps> = () => {
-  const textInputerElement = useRef<HTMLTextAreaElement>(null);
-  const [isInputting, setIsInputting] = useState<boolean>(false);
-  const [text, setText] = useState<string>("");
-  const [width, setWidth] = useState<number>(initialWidth);
-  const [height, setHeight] = useState<number>(initialHeight);
+const Node: VFC<NodeProps> = (props) => {
+  const nodeDivElement = useRef<HTMLDivElement>(null);
 
-  const changeTextInputerHeight = () => {
-    if (textInputerElement.current === null) {
-      return;
-    }
-
-    const numberOfLines = text.split("\n").length;
-    const heightEm = numberOfLines * lineHeightEm;
-
-    textInputerElement.current.style.height = heightEm + "em";
+  const handleTextInputerSetText = (text: string) => {
+    nodeDivElement.current && props.setNodeDataText(props.nodeData.id, text);
   };
 
-  const changeTextInputerWidth = () => {
-    if (textInputerElement.current === null) {
-      return;
-    }
-
-    const longestLine = elementSizeCalculator.findLongestLine(text);
-    const textWidth = Math.ceil(
-      elementSizeCalculator.measureWidth(longestLine)
-    );
-    const textareaWidth = textWidth > minWidthPx ? textWidth : minWidthPx;
-
-    textInputerElement.current.style.width = textareaWidth + "px";
+  const processChangingNodeDataText = () => {
+    nodeDivElement.current &&
+      props.processChangingNodeDataText(
+        props.nodeData.id,
+        nodeDivElement.current.offsetWidth,
+        nodeDivElement.current.offsetHeight
+      );
   };
 
-  const updateWidth = () => {
-    textInputerElement.current !== null &&
-      setWidth(textInputerElement.current.offsetWidth);
-  };
-
-  const updateHeight = () => {
-    textInputerElement.current !== null &&
-      setHeight(textInputerElement.current.offsetHeight);
-  };
-
-  useEffect(changeTextInputerHeight, [text]);
-  useEffect(changeTextInputerWidth, [text]);
-  useEffect(updateWidth, [text]);
-  useEffect(updateHeight, [text]);
+  useEffect(processChangingNodeDataText, [props.nodeData.text]);
 
   return (
-    // TODO Eliminate range selection after double-clicking
-    <TextInputer
-      ref={textInputerElement}
-      readOnly={!isInputting}
-      defaultValue={text}
-      onChange={(e) => setText(e.target.value)}
-      onDoubleClick={() => setIsInputting(true)}
-      onBlur={() => setIsInputting(false)}
-    />
+    <NodeDiv
+      ref={nodeDivElement}
+      top={props.nodeData.nodeTop}
+      left={props.nodeData.nodeLeft}
+    >
+      <TextInputer
+        text={props.nodeData.text}
+        setText={handleTextInputerSetText}
+      />
+    </NodeDiv>
   );
 };
 

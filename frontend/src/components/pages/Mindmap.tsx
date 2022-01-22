@@ -1,6 +1,10 @@
 import React, { FC, useState } from "react";
 import { styled } from "@linaria/react";
-import Node from "../organisms/Node";
+import Node from "~/components/organisms/Node";
+import RootNodeData, { newRootNodeData } from "~/domain/model/RootNodeData";
+import { newNodeData } from "~/domain/model/NodeData";
+import RootNode from "~/components/organisms/RootNode";
+import { newRightNodesData } from "~/domain/model/RightNodesData";
 
 type PositionWrapperStyleProps = {
   windowWidth: number;
@@ -13,9 +17,46 @@ const PositionWrapper = styled.div<PositionWrapperStyleProps>`
   left: ${(props) => props.windowWidth / 2}px;
 `;
 
+const rootNodeDataObj = newRootNodeData(
+  newNodeData("rootNode", "rootNode", []),
+  newRightNodesData([
+    newNodeData("id1 of right", "id1 of right", []),
+    newNodeData("id2 of right", "id2 of right", []),
+  ]),
+  newRightNodesData([])
+);
+
 const Mindmap: FC = () => {
+  const [rootNodeData, setRootNodeData] =
+    useState<RootNodeData>(rootNodeDataObj);
   const [windowWidth] = useState<number>(window.innerWidth);
   const [windowHeight] = useState<number>(window.innerHeight);
+
+  const setRootNodeDataText = (text: string) => {
+    setRootNodeData({
+      ...rootNodeData,
+      param: { ...rootNodeData.param, text: text },
+    });
+  };
+
+  const processChangingRootNodeText = (width: number, height: number) => {
+    rootNodeData.processChangingText(width, height);
+    setRootNodeData(rootNodeData);
+  };
+
+  const setNodeDataText = (id: string, text: string) => {
+    rootNodeData.rightNodesData.setNodeTextById(id, text);
+    setRootNodeData({ ...rootNodeData });
+  };
+
+  const processChangingNodeDataText = (
+    id: string,
+    width: number,
+    height: number
+  ) => {
+    rootNodeData.rightNodesData.processChangingText(id, width, height);
+    setRootNodeData({ ...rootNodeData });
+  };
 
   return (
     // TODO Resize when window size changes
@@ -24,8 +65,18 @@ const Mindmap: FC = () => {
       windowWidth={windowWidth}
       windowHeight={windowHeight}
     >
-      {[...Array(3)].map(() => (
-        <Node />
+      <RootNode
+        nodeData={rootNodeData.param}
+        setRootNodeDataText={setRootNodeDataText}
+        processChangingRootNodeText={processChangingRootNodeText}
+      />
+      {rootNodeData.rightNodesData.list.map((nodeData) => (
+        <Node
+          key={nodeData.id}
+          nodeData={nodeData}
+          setNodeDataText={setNodeDataText}
+          processChangingNodeDataText={processChangingNodeDataText}
+        />
       ))}
     </PositionWrapper>
   );

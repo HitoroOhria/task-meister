@@ -1,132 +1,201 @@
-import {pickBiggerNumber, sum} from "~/util/NumberUtil";
+import { pickBiggerNumber, sum } from "~/util/NumberUtil";
+
+interface NodeData {
+  id: string;
+  text: string;
+  nodeWidth: number;
+  nodeHeight: number;
+  nodeTop: number;
+  nodeLeft: number;
+  groupWidth: number;
+  groupHeight: number;
+  groupTop: number;
+  groupLeft: number;
+  children: NodeData[];
+  childrenHeight: number;
+
+  findNodeDataById(id: string): NodeData | null;
+
+  processChangingWidth(width: number): void;
+
+  processChangingHeight(height: number): void;
+
+  recursivelyUpdateGroupHeightAndChildrenHeight(): void;
+
+  updateChildrenHeight(): void;
+
+  recursivelyUpdateGroupWidth(): void;
+
+  updateGroupWidth(): void;
+
+  recursivelyUpdateGroupHeight(): void;
+
+  updateGroupHeight(): void;
+
+  updateNodeTop(): void;
+
+  recursivelyUpdateChildrenNodeTop(): void;
+
+  updateChildrenNodeTop(): void;
+
+  updateChildrenLeft(): void;
+
+  recursivelyUpdateChildrenGroupTop(): void;
+
+  updateChildrenGroupTop(): void;
+}
+
+export const newNodeData = (
+  id: string,
+  text: string,
+  children: NodeData[]
+): NodeData => {
+  return {
+    ...nodeData,
+    id: id,
+    text: text,
+    children: children,
+  };
+};
 
 // Data of node to be placed on Mindmap.
 // NodeData consists of a node and children's nodes.
 // Whole group is called a group.
 // NodeData is not group, but holds value of group to calculate placement.
-class NodeData {
+export const nodeData: NodeData = {
   // an id for identify when updating node
-  public readonly id: string;
+  id: "",
+
+  // an text fo node
+  text: "",
 
   // width including margin
-  public nodeWidth: number;
+  nodeWidth: 0,
 
   // height including height
-  public nodeHeight: number;
+  nodeHeight: 0,
 
   // node top value of style
-  public nodeTop: number;
+  nodeTop: 0,
 
   // node left value of style
-  public nodeLeft: number;
+  nodeLeft: 0,
 
   // total width of node and children
-  public groupWidth: number;
+  groupWidth: 0,
 
   // total height of node and children
-  public groupHeight: number;
+  groupHeight: 0,
 
   // group top value of style
-  public groupTop: number;
+  groupTop: 0,
 
   // group left value of style
-  public groupLeft: number;
+  groupLeft: 0,
 
   // children nodes of this node
-  public children: NodeData[];
+  children: [],
 
   // total height of children node
-  public childrenHeight: number;
+  childrenHeight: 0,
 
-  constructor(id: string, children: NodeData[]) {
-    this.id = id;
-    this.nodeWidth = 0;
-    this.nodeHeight = 0;
-    this.nodeTop = 0;
-    this.nodeLeft = 0;
-    this.groupWidth = 0;
-    this.groupHeight = 0;
-    this.groupTop = 0;
-    this.groupLeft = 0;
-    this.children = children;
-    this.childrenHeight = 0;
-  }
-
-  public findNodeDataById(id: string): NodeData | null {
+  findNodeDataById(id: string): NodeData | null {
     if (this.id === id) {
       return this;
     }
 
     for (const child of this.children) {
-      const target = child.findNodeDataById(id)
+      const target = child.findNodeDataById(id);
+
       if (target !== null) {
-        return target
+        return target;
       }
     }
 
-    return null
-  }
+    return null;
+  },
+
+  processChangingWidth(width: number) {
+    this.nodeWidth = width;
+    this.recursivelyUpdateGroupWidth();
+    this.updateChildrenLeft();
+  },
+
+  processChangingHeight(height: number) {
+    this.nodeHeight = height;
+    this.recursivelyUpdateGroupHeightAndChildrenHeight();
+    this.recursivelyUpdateChildrenGroupTop();
+    this.updateNodeTop();
+    this.recursivelyUpdateChildrenNodeTop();
+  },
+
+  recursivelyUpdateGroupHeightAndChildrenHeight() {
+    this.children.forEach((child) => child.updateGroupHeight());
+    this.updateGroupHeight();
+  },
 
   // Update children height of self
-  public updateChildrenHeight() {
-    this.children.forEach((nodeData) => nodeData.updateChildrenHeight());
+  updateChildrenHeight() {
+    this.children.forEach((child) => child.updateGroupHeight());
 
     this.childrenHeight = this.children
       .map((nodeData) => nodeData.groupHeight)
       .reduce(sum, 0);
-  }
+  },
 
   // Recursively update group width of self and children
-  public recursivelyUpdateGroupWidth() {
+  recursivelyUpdateGroupWidth() {
     this.children.forEach((nodeData) => nodeData.recursivelyUpdateGroupWidth());
     this.updateGroupWidth();
-  }
+  },
 
   // Update group width of self
-  public updateGroupWidth() {
+  updateGroupWidth() {
     const longestChildWidth = this.children
       .map((nodeData) => nodeData.groupWidth)
       .reduce(pickBiggerNumber, 0);
 
     this.groupWidth = this.nodeWidth + longestChildWidth;
-  }
+  },
 
   // Recursively update group height of self and children.
-  public recursivelyUpdateGroupHeight() {
+  recursivelyUpdateGroupHeight() {
     this.children.forEach((nodeData) =>
       nodeData.recursivelyUpdateGroupHeight()
     );
     this.updateGroupHeight();
-  }
+  },
 
   // Update group height of self.
-  public updateGroupHeight() {
+  updateGroupHeight() {
+    this.updateChildrenHeight();
+
     this.groupHeight =
       this.nodeHeight > this.childrenHeight
         ? this.nodeHeight
         : this.childrenHeight;
-  }
+  },
 
   // Update node top of self
-  public updateNodeTop() {
+  updateNodeTop() {
     if (this.nodeHeight > this.childrenHeight) {
       this.nodeTop = this.groupTop;
     } else {
       const distanceFromGroupTop = (this.childrenHeight - this.nodeHeight) / 2;
       this.nodeTop = this.groupTop + distanceFromGroupTop;
     }
-  }
+  },
 
   // Recursively update node top of children
-  public recursivelyUpdateChildrenNodeTop() {
+  recursivelyUpdateChildrenNodeTop() {
     this.updateChildrenNodeTop();
     this.children.forEach((nodeData) =>
       nodeData.recursivelyUpdateChildrenNodeTop()
     );
-  }
+  },
 
   // update node top of children
-  public updateChildrenNodeTop() {
+  updateChildrenNodeTop() {
     let distanceFromGroupTopOfChild =
       this.nodeHeight > this.childrenHeight
         ? (this.nodeHeight - this.childrenHeight) / 2
@@ -136,13 +205,31 @@ class NodeData {
       nodeData.nodeTop = this.groupTop + distanceFromGroupTopOfChild;
       distanceFromGroupTopOfChild += nodeData.groupHeight;
     });
-  }
+  },
 
-  public updateChildrenLeft() {
+  updateChildrenLeft() {
     this.children.forEach(
       (nodeData) => (nodeData.nodeLeft = this.nodeLeft + this.groupWidth)
     );
-  }
-}
+  },
+
+  recursivelyUpdateChildrenGroupTop() {
+    this.updateChildrenGroupTop();
+    this.children.forEach((child) => child.recursivelyUpdateChildrenGroupTop());
+  },
+
+  // 依存
+  //  - 子の親の groupTop
+  //  - 子の groupHeight
+  updateChildrenGroupTop() {
+    let totalPreChildGroupTop = 0;
+    this.children.forEach((child) => {
+      child.groupTop = this.groupTop + totalPreChildGroupTop;
+      totalPreChildGroupTop += child.groupHeight;
+    });
+  },
+};
+
+Object.freeze(nodeData)
 
 export default NodeData;

@@ -1,33 +1,64 @@
-import NodeData from "~/domain/model/NodeData";
+import NodeData, { nodeData } from "~/domain/model/NodeData";
+import RightNodesData from "~/domain/model/RightNodesData";
+import rightNodesData, { rightNodeData } from "~/domain/model/RightNodesData";
 
-class RootNodeData {
-  public rightNodesData: NodeData[];
-  public leftNodesData: NodeData[];
+interface RootNodeData {
+  param: NodeData;
+  rightNodesData: RightNodesData;
+  leftNodesData: rightNodesData;
 
-  constructor(rightNodesData: NodeData[], leftNodesData: NodeData[]) {
-    this.rightNodesData = rightNodesData;
-    this.leftNodesData = leftNodesData;
-  }
+  processChangingText(width: number, height: number): void;
 
-  public updateRightNodeDataGroupHeight() {
-    this.rightNodesData.forEach((nodeData) => nodeData.updateGroupHeight());
-  }
+  processChangingWidth(width: number): void;
 
-  public updateRightNodesDataTop() {
-    const heightOfAllNodeData = this.rightNodesData
-      .map((nodeData) => nodeData.groupHeight)
-      .reduce(sum, 0);
-    const topOfFirstNodeData = -heightOfAllNodeData / 2;
-    let cumulativeHeightOfPreNodeData = 0;
+  processChangingHeight(height: number): void;
 
-    this.rightNodesData.forEach((nodeData) => {
-      const top = topOfFirstNodeData + cumulativeHeightOfPreNodeData;
-      nodeData.setTopFromRootNode(top);
-      cumulativeHeightOfPreNodeData += nodeData.groupHeight;
-    });
-
-    this.rightNodesData.forEach((nodeData) => nodeData.updateChildrenTop());
-  }
+  updateRightNodesDataLeft(): void;
 }
+
+export const newRootNodeData = (
+  nodeData: NodeData,
+  rightNodesData: RightNodesData,
+  leftNodesData: RightNodesData
+): RootNodeData => {
+  return {
+    ...rootNodeData,
+    param: nodeData,
+    rightNodesData: rightNodesData,
+    leftNodesData: rightNodesData,
+  };
+};
+
+export const rootNodeData: RootNodeData = {
+  param: nodeData,
+  rightNodesData: rightNodeData,
+  leftNodesData: rightNodeData,
+
+  processChangingText(width: number, height: number) {
+    this.processChangingWidth(width);
+    this.processChangingHeight(height);
+    this.updateRightNodesDataLeft();
+  },
+
+  processChangingWidth(width: number) {
+    this.param.nodeWidth = width;
+    this.param.nodeLeft = -width / 2;
+  },
+
+  processChangingHeight(height: number) {
+    this.param.nodeHeight = height;
+    this.param.nodeTop = -height / 2;
+  },
+
+  updateRightNodesDataLeft() {
+    const left = this.param.nodeWidth / 2;
+    this.rightNodesData.list.forEach((nodeData) => (nodeData.nodeLeft = left));
+    this.rightNodesData.list.forEach((nodeData) =>
+      nodeData.updateChildrenLeft()
+    );
+  },
+};
+
+Object.freeze(rootNodeData);
 
 export default RootNodeData;

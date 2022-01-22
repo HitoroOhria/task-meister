@@ -1,70 +1,85 @@
-import NodeData from "~/domain/model/NodeData";
+import { newNodeData } from "~/domain/model/NodeData";
 
 describe("findNodeDataById", () => {
   test("Return null when do not have children and id does not match that", () => {
-    const nodeData = new NodeData("id", []);
+    const nodeData = newNodeData("id", "", []);
 
     expect(nodeData.findNodeDataById("not-match")).toBe(null);
   });
 
   test("Return self when do not have children and id matches that", () => {
-    const nodeData = new NodeData("id", []);
+    const nodeData = newNodeData("id", "", []);
 
     expect(nodeData.findNodeDataById("id")).toBe(nodeData);
   });
 
   test("Return null when have children and id does not match that", () => {
-    const nodeData = new NodeData("parent", []);
+    const nodeData = newNodeData("parent", "", []);
 
-    nodeData.children.push(new NodeData("child1 of parent", []));
-    nodeData.children[0].children.push(new NodeData("nested1 of child1", []));
-    nodeData.children[0].children.push(new NodeData("nested2 of child1", []));
+    nodeData.children.push(newNodeData("child1 of parent", "", []));
+    nodeData.children[0].children.push(
+      newNodeData("nested1 of child1", "", [])
+    );
+    nodeData.children[0].children.push(
+      newNodeData("nested2 of child1", "", [])
+    );
 
-    nodeData.children.push(new NodeData("child2 of parent", []));
-    nodeData.children[0].children.push(new NodeData("nested1 of child2", []));
-    nodeData.children[0].children.push(new NodeData("nested2 of child2", []));
+    nodeData.children.push(newNodeData("child2 of parent", "", []));
+    nodeData.children[0].children.push(
+      newNodeData("nested1 of child2", "", [])
+    );
+    nodeData.children[0].children.push(
+      newNodeData("nested2 of child2", "", [])
+    );
 
     expect(nodeData.findNodeDataById("not-match")).toBe(null);
   });
 
   test("Return self when have children and id matches self", () => {
-    const nodeData = new NodeData("parent", []);
+    const nodeData = newNodeData("parent", "", []);
 
-    nodeData.children.push(new NodeData("child1 of parent", []));
-    nodeData.children[0].children.push(new NodeData("nested1 of child1", []));
-    nodeData.children[0].children.push(new NodeData("nested2 of child1", []));
+    nodeData.children.push(newNodeData("child1 of parent", "", []));
+    nodeData.children[0].children.push(
+      newNodeData("nested1 of child1", "", [])
+    );
+    nodeData.children[0].children.push(
+      newNodeData("nested2 of child1", "", [])
+    );
 
-    nodeData.children.push(new NodeData("child2 of parent", []));
-    nodeData.children[0].children.push(new NodeData("nested1 of child2", []));
-    nodeData.children[0].children.push(new NodeData("nested2 of child2", []));
+    nodeData.children.push(newNodeData("child2 of parent", "", []));
+    nodeData.children[0].children.push(
+      newNodeData("nested1 of child2", "", [])
+    );
+    nodeData.children[0].children.push(
+      newNodeData("nested2 of child2", "", [])
+    );
 
     expect(nodeData.findNodeDataById("parent")).toBe(nodeData);
   });
 
   test("Return NodeData matches id when have children and id matches that", () => {
-    const nodeData = new NodeData("parent", []);
+    const nodeData = newNodeData("parent", "", []);
 
-    nodeData.children.push(new NodeData("child1 of parent", []));
-    nodeData.children[0].children.push(new NodeData("nested1 of child1", []));
-    nodeData.children[0].children.push(new NodeData("nested2 of child1", []));
+    nodeData.children.push(newNodeData("child1 of parent", "", []));
+    nodeData.children[0].children.push(
+      newNodeData("nested1 of child1", "", [])
+    );
+    nodeData.children[0].children.push(
+      newNodeData("nested2 of child1", "", [])
+    );
 
     // ↓ コレを返しちゃってる
-    nodeData.children.push(new NodeData("child2 of parent", []));
-    nodeData.children[1].children.push(new NodeData("nested1 of child2", []));
-    // ↓ ほしいのはコレ
-    nodeData.children[1].children.push(new NodeData("nested2 of child2", []));
-
-    // expect(nodeData.findNodeDataById("child1 of parent")).toBe(
-    //   nodeData.children[0]
-    // );
-
-    console.log(
-      'nodeData.findNodeDataById("nested2 of child2") = ',
-      nodeData.findNodeDataById("nested2 of child2")
+    nodeData.children.push(newNodeData("child2 of parent", "", []));
+    nodeData.children[1].children.push(
+      newNodeData("nested1 of child2", "", [])
     );
-    console.log(
-      "nodeData.children[1].children[1] = ",
-      nodeData.children[1].children[1]
+    // ↓ ほしいのはコレ
+    nodeData.children[1].children.push(
+      newNodeData("nested2 of child2", "", [])
+    );
+
+    expect(nodeData.findNodeDataById("child1 of parent")).toBe(
+      nodeData.children[0]
     );
     expect(nodeData.findNodeDataById("nested2 of child2")).toBe(
       nodeData.children[1].children[1]
@@ -74,7 +89,7 @@ describe("findNodeDataById", () => {
 
 describe("recursivelyUpdateGroupWidth", () => {
   test("GroupWidth is set to width of node when node does not have child", () => {
-    const nodeData = new NodeData("id", []);
+    const nodeData = newNodeData("id", "", []);
     nodeData.nodeWidth = 100;
     nodeData.children = [];
 
@@ -84,10 +99,10 @@ describe("recursivelyUpdateGroupWidth", () => {
 
   test("GroupWidth is set to sum of itself and longest among children when there are one or more children", () => {
     // There is one child
-    const nodeData1 = new NodeData("id1", []);
+    const nodeData1 = newNodeData("id1", "", []);
     nodeData1.nodeWidth = 100;
 
-    nodeData1.children.push(new NodeData("child1", []));
+    nodeData1.children.push(newNodeData("child1", "", []));
     nodeData1.children[0].nodeWidth = 200;
 
     nodeData1.recursivelyUpdateGroupWidth();
@@ -95,12 +110,12 @@ describe("recursivelyUpdateGroupWidth", () => {
     expect(nodeData1.children[0].groupWidth).toBe(200);
 
     // There are three children
-    const nodeData2 = new NodeData("id", []);
+    const nodeData2 = newNodeData("id", "", []);
     nodeData2.nodeWidth = 100;
 
-    nodeData2.children.push(new NodeData("child1", []));
-    nodeData2.children.push(new NodeData("child2", []));
-    nodeData2.children.push(new NodeData("child3", []));
+    nodeData2.children.push(newNodeData("child1", "", []));
+    nodeData2.children.push(newNodeData("child2", "", []));
+    nodeData2.children.push(newNodeData("child3", "", []));
     nodeData2.children[0].nodeWidth = 200;
     nodeData2.children[1].nodeWidth = 300;
     nodeData2.children[2].nodeWidth = 400;
@@ -114,22 +129,22 @@ describe("recursivelyUpdateGroupWidth", () => {
 
   test("GroupWidth is set to recursive sum of children when children are nested", () => {
     // As result of recursivelyUpdateGroupWidth, groupWidth of first child is 1100
-    const nodeData = new NodeData("id", []);
+    const nodeData = newNodeData("id", "", []);
     nodeData.nodeWidth = 100;
 
     // As result of recursivelyUpdateGroupWidth, groupWidth of first child is 700
-    nodeData.children.push(new NodeData("child1", []));
+    nodeData.children.push(newNodeData("child1", "", []));
     nodeData.children[0].nodeWidth = 200;
-    nodeData.children[0].children.push(new NodeData("child1 of child1", []));
-    nodeData.children[0].children.push(new NodeData("child2 of child1", []));
+    nodeData.children[0].children.push(newNodeData("child1 of child1", "", []));
+    nodeData.children[0].children.push(newNodeData("child2 of child1", "", []));
     nodeData.children[0].children[0].nodeWidth = 400;
     nodeData.children[0].children[1].nodeWidth = 500;
 
     // As result of recursivelyUpdateGroupWidth, groupWidth of second child is 10000
-    nodeData.children.push(new NodeData("child2", []));
+    nodeData.children.push(newNodeData("child2", "", []));
     nodeData.children[1].nodeWidth = 300;
-    nodeData.children[1].children.push(new NodeData("child1 of child2", []));
-    nodeData.children[1].children.push(new NodeData("child2 of child2", []));
+    nodeData.children[1].children.push(newNodeData("child1 of child2", "", []));
+    nodeData.children[1].children.push(newNodeData("child2 of child2", "", []));
     nodeData.children[1].children[0].nodeWidth = 600;
     nodeData.children[1].children[1].nodeWidth = 700;
 
@@ -146,7 +161,7 @@ describe("recursivelyUpdateGroupWidth", () => {
 
 describe("recursivelyUpdateGroupHeight", () => {
   test("GroupHeight is set to height of node when there is zero children", () => {
-    const nodeData = new NodeData("id", []);
+    const nodeData = newNodeData("id", "", []);
     nodeData.nodeHeight = 100;
     nodeData.children = [];
 
@@ -159,11 +174,11 @@ describe("recursivelyUpdateGroupHeight", () => {
     // GroupHeight is set to height of children When children are longer than node
 
     // There is one child
-    const nodeData1 = new NodeData("id1", []);
+    const nodeData1 = newNodeData("id1", "", []);
     nodeData1.nodeHeight = 350;
     nodeData1.childrenHeight = 50;
 
-    nodeData1.children.push(new NodeData("child1 of id1", []));
+    nodeData1.children.push(newNodeData("child1 of id1", "", []));
     nodeData1.children[0].nodeHeight = 300;
     nodeData1.children[0].childrenHeight = 0;
 
@@ -172,19 +187,19 @@ describe("recursivelyUpdateGroupHeight", () => {
     expect(nodeData1.children[0].groupHeight).toBe(300);
 
     // There are three children
-    const nodeData2 = new NodeData("id2", []);
+    const nodeData2 = newNodeData("id2", "", []);
     nodeData2.nodeHeight = 400;
     nodeData2.childrenHeight = 750;
 
-    nodeData2.children.push(new NodeData("child1 of id2", []));
+    nodeData2.children.push(newNodeData("child1 of id2", "", []));
     nodeData2.children[0].nodeHeight = 200;
     nodeData2.children[0].childrenHeight = 0;
 
-    nodeData2.children.push(new NodeData("child2 of id2", []));
+    nodeData2.children.push(newNodeData("child2 of id2", "", []));
     nodeData2.children[1].nodeHeight = 300;
     nodeData2.children[1].childrenHeight = 0;
 
-    nodeData2.children.push(new NodeData("child3 of id2", []));
+    nodeData2.children.push(newNodeData("child3 of id2", "", []));
     nodeData2.children[2].nodeHeight = 250;
     nodeData2.children[2].childrenHeight = 0;
 
@@ -199,33 +214,33 @@ describe("recursivelyUpdateGroupHeight", () => {
     // GroupHeight is set to height of node When node is longer than children
     // GroupHeight is set to height of children When children are longer than node
 
-    const nodeData = new NodeData("id", []);
+    const nodeData = newNodeData("id", "", []);
     nodeData.nodeHeight = 100;
     nodeData.childrenHeight = 1700;
 
     // As result of recursivelyUpdateGroupWidth, groupHeight of first child is 400
-    nodeData.children.push(new NodeData("child1", []));
+    nodeData.children.push(newNodeData("child1", "", []));
     nodeData.children[0].nodeHeight = 400;
     nodeData.children[0].childrenHeight = 400;
 
-    nodeData.children[0].children.push(new NodeData("child1 of child1", []));
+    nodeData.children[0].children.push(newNodeData("child1 of child1", "", []));
     nodeData.children[0].children[0].nodeHeight = 150;
     nodeData.children[0].children[0].childrenHeight = 0;
 
-    nodeData.children[0].children.push(new NodeData("child2 of child1", []));
+    nodeData.children[0].children.push(newNodeData("child2 of child1", "", []));
     nodeData.children[0].children[1].nodeHeight = 250;
     nodeData.children[0].children[1].childrenHeight = 0;
 
     // As result of recursivelyUpdateGroupWidth, groupHeight of second child is 13000
-    nodeData.children.push(new NodeData("child2", []));
+    nodeData.children.push(newNodeData("child2", "", []));
     nodeData.children[1].nodeHeight = 300;
     nodeData.children[1].childrenHeight = 1300;
 
-    nodeData.children[1].children.push(new NodeData("child1 of child2", []));
+    nodeData.children[1].children.push(newNodeData("child1 of child2", "", []));
     nodeData.children[1].children[0].nodeHeight = 600;
     nodeData.children[1].children[0].childrenHeight = 0;
 
-    nodeData.children[1].children.push(new NodeData("child2 of child2", []));
+    nodeData.children[1].children.push(newNodeData("child2 of child2", "", []));
     nodeData.children[1].children[1].nodeHeight = 700;
     nodeData.children[1].children[1].childrenHeight = 0;
 
@@ -242,7 +257,7 @@ describe("recursivelyUpdateGroupHeight", () => {
 
 describe("recursivelyUpdateChildrenNodeTop", () => {
   test("Do nothing when there is zero child", () => {
-    const nodeData = new NodeData("id1", []);
+    const nodeData = newNodeData("id1", "", []);
     nodeData.groupTop = -300;
     nodeData.nodeHeight = 100;
     nodeData.childrenHeight = 0;
@@ -256,26 +271,26 @@ describe("recursivelyUpdateChildrenNodeTop", () => {
     // NodeTop of children is set to groupTop minus half different of node and children when height of node is longer than children
 
     // There is one child
-    const nodeData1 = new NodeData("id1", []);
+    const nodeData1 = newNodeData("id1", "", []);
     nodeData1.groupTop = -100;
     nodeData1.nodeHeight = 300;
     nodeData1.childrenHeight = 200;
 
-    nodeData1.children.push(new NodeData("child1 of id1", []));
+    nodeData1.children.push(newNodeData("child1 of id1", "", []));
     nodeData1.children[0].groupHeight = 200;
 
     nodeData1.recursivelyUpdateChildrenNodeTop();
     expect(nodeData1.children[0].nodeTop).toBe(-50);
 
     // There are three children
-    const nodeData2 = new NodeData("id2", []);
+    const nodeData2 = newNodeData("id2", "", []);
     nodeData2.groupTop = -600;
     nodeData2.nodeHeight = 450;
     nodeData2.childrenHeight = 600;
 
-    nodeData2.children.push(new NodeData("child1 of id2", []));
-    nodeData2.children.push(new NodeData("child2 of id2", []));
-    nodeData2.children.push(new NodeData("child3 of id2", []));
+    nodeData2.children.push(newNodeData("child1 of id2", "", []));
+    nodeData2.children.push(newNodeData("child2 of id2", "", []));
+    nodeData2.children.push(newNodeData("child3 of id2", "", []));
     nodeData2.children[0].groupHeight = 200;
     nodeData2.children[1].groupHeight = 100;
     nodeData2.children[2].groupHeight = 300;
@@ -290,45 +305,45 @@ describe("recursivelyUpdateChildrenNodeTop", () => {
     // NodeTop of children is set to groupTop when height of children is longer than node
     // NodeTop of children is set to groupTop minus half different of node and children when height of node is longer than children
 
-    const nodeData = new NodeData("id", []);
+    const nodeData = newNodeData("id", "", []);
     nodeData.groupTop = -600;
     nodeData.nodeTop = 222;
     nodeData.nodeHeight = 500;
     nodeData.childrenHeight = 1700;
 
     // As result of recursivelyUpdateChildrenNodeTop, nodeTop of first child is -600
-    nodeData.children.push(new NodeData("child1 of id", []));
+    nodeData.children.push(newNodeData("child1 of id", "", []));
     nodeData.children[0].groupTop = -600;
     nodeData.children[0].nodeHeight = 450;
     nodeData.children[0].groupHeight = 450;
     nodeData.children[0].childrenHeight = 250;
 
-    nodeData.children[0].children.push(new NodeData("nested1 of child1", []));
+    nodeData.children[0].children.push(newNodeData("nested1 of child1", "", []));
     nodeData.children[0].children[0].groupTop = -500;
     nodeData.children[0].children[0].nodeHeight = 200;
     nodeData.children[0].children[0].groupHeight = 200;
     nodeData.children[0].children[0].childrenHeight = 0;
 
-    nodeData.children[0].children.push(new NodeData("nested2 of child1", []));
+    nodeData.children[0].children.push(newNodeData("nested2 of child1", "", []));
     nodeData.children[0].children[1].groupTop = -300;
     nodeData.children[0].children[1].nodeHeight = 50;
     nodeData.children[0].children[1].groupHeight = 50;
     nodeData.children[0].children[1].childrenHeight = 0;
 
     // As result of recursivelyUpdateChildrenNodeTop, nodeTop of first child is -360
-    nodeData.children.push(new NodeData("child2 of id", []));
+    nodeData.children.push(newNodeData("child2 of id", "", []));
     nodeData.children[1].groupTop = -250;
     nodeData.children[1].nodeHeight = 600;
     nodeData.children[1].groupHeight = 1450;
     nodeData.children[1].childrenHeight = 1450;
 
-    nodeData.children[1].children.push(new NodeData("nested1 of child2", []));
+    nodeData.children[1].children.push(newNodeData("nested1 of child2", "", []));
     nodeData.children[1].children[0].groupTop = -250;
     nodeData.children[1].children[0].nodeHeight = 1000;
     nodeData.children[1].children[0].groupHeight = 1000;
     nodeData.children[1].children[0].childrenHeight = 0;
 
-    nodeData.children[1].children.push(new NodeData("nested2 of child2", []));
+    nodeData.children[1].children.push(newNodeData("nested2 of child2", "", []));
     nodeData.children[1].children[1].groupTop = 750;
     nodeData.children[1].children[1].nodeHeight = 450;
     nodeData.children[1].children[1].groupHeight = 450;
