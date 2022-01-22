@@ -1,5 +1,77 @@
 import NodeData from "~/domain/model/NodeData";
 
+describe("findNodeDataById", () => {
+  test("Return null when do not have children and id does not match that", () => {
+    const nodeData = new NodeData("id", []);
+
+    expect(nodeData.findNodeDataById("not-match")).toBe(null);
+  });
+
+  test("Return self when do not have children and id matches that", () => {
+    const nodeData = new NodeData("id", []);
+
+    expect(nodeData.findNodeDataById("id")).toBe(nodeData);
+  });
+
+  test("Return null when have children and id does not match that", () => {
+    const nodeData = new NodeData("parent", []);
+
+    nodeData.children.push(new NodeData("child1 of parent", []));
+    nodeData.children[0].children.push(new NodeData("nested1 of child1", []));
+    nodeData.children[0].children.push(new NodeData("nested2 of child1", []));
+
+    nodeData.children.push(new NodeData("child2 of parent", []));
+    nodeData.children[0].children.push(new NodeData("nested1 of child2", []));
+    nodeData.children[0].children.push(new NodeData("nested2 of child2", []));
+
+    expect(nodeData.findNodeDataById("not-match")).toBe(null);
+  });
+
+  test("Return self when have children and id matches self", () => {
+    const nodeData = new NodeData("parent", []);
+
+    nodeData.children.push(new NodeData("child1 of parent", []));
+    nodeData.children[0].children.push(new NodeData("nested1 of child1", []));
+    nodeData.children[0].children.push(new NodeData("nested2 of child1", []));
+
+    nodeData.children.push(new NodeData("child2 of parent", []));
+    nodeData.children[0].children.push(new NodeData("nested1 of child2", []));
+    nodeData.children[0].children.push(new NodeData("nested2 of child2", []));
+
+    expect(nodeData.findNodeDataById("parent")).toBe(nodeData);
+  });
+
+  test("Return NodeData matches id when have children and id matches that", () => {
+    const nodeData = new NodeData("parent", []);
+
+    nodeData.children.push(new NodeData("child1 of parent", []));
+    nodeData.children[0].children.push(new NodeData("nested1 of child1", []));
+    nodeData.children[0].children.push(new NodeData("nested2 of child1", []));
+
+    // ↓ コレを返しちゃってる
+    nodeData.children.push(new NodeData("child2 of parent", []));
+    nodeData.children[1].children.push(new NodeData("nested1 of child2", []));
+    // ↓ ほしいのはコレ
+    nodeData.children[1].children.push(new NodeData("nested2 of child2", []));
+
+    // expect(nodeData.findNodeDataById("child1 of parent")).toBe(
+    //   nodeData.children[0]
+    // );
+
+    console.log(
+      'nodeData.findNodeDataById("nested2 of child2") = ',
+      nodeData.findNodeDataById("nested2 of child2")
+    );
+    console.log(
+      "nodeData.children[1].children[1] = ",
+      nodeData.children[1].children[1]
+    );
+    expect(nodeData.findNodeDataById("nested2 of child2")).toBe(
+      nodeData.children[1].children[1]
+    );
+  });
+});
+
 describe("recursivelyUpdateGroupWidth", () => {
   test("GroupWidth is set to width of node when node does not have child", () => {
     const nodeData = new NodeData("id", []);

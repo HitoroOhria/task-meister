@@ -52,6 +52,21 @@ class NodeData {
     this.childrenHeight = 0;
   }
 
+  public findNodeDataById(id: string): NodeData | null {
+    if (this.id === id) {
+      return this;
+    }
+
+    for (const child of this.children) {
+      const target = child.findNodeDataById(id)
+      if (target !== null) {
+        return target
+      }
+    }
+
+    return null
+  }
+
   // Update children height of self
   public updateChildrenHeight() {
     this.children.forEach((nodeData) => nodeData.updateChildrenHeight());
@@ -124,7 +139,6 @@ class NodeData {
   }
 
   public updateChildrenLeft() {
-    // absolute の場合
     this.children.forEach(
       (nodeData) => (nodeData.nodeLeft = this.nodeLeft + this.groupWidth)
     );
