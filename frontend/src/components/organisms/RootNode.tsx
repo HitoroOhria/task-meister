@@ -45,8 +45,8 @@ const RootNode: VFC<RootNodeProps> = (props) => {
   return (
     <RootNodeDiv
       ref={rootNodeDivElement}
-      top={props.nodeData.nodeTop}
-      left={props.nodeData.nodeLeft}
+      top={props.nodeData.top}
+      left={props.nodeData.left}
     >
       <TextInputer
         text={props.nodeData.text}

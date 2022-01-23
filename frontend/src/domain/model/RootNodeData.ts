@@ -43,20 +43,20 @@ export const rootNodeData: RootNodeData = {
   },
 
   processChangingWidth(width: number) {
-    this.param.nodeWidth = width;
-    this.param.nodeLeft = -width / 2;
+    this.param.width = width;
+    this.param.left = -width / 2;
   },
 
   processChangingHeight(height: number) {
-    this.param.nodeHeight = height;
-    this.param.nodeTop = -height / 2;
+    this.param.height = height;
+    this.param.top = -height / 2;
   },
 
   updateRightNodesDataLeft() {
-    const left = this.param.nodeWidth / 2;
-    this.rightNodesData.list.forEach((nodeData) => (nodeData.nodeLeft = left));
+    const left = this.param.width / 2;
+    this.rightNodesData.list.forEach((nodeData) => (nodeData.left = left));
     this.rightNodesData.list.forEach((nodeData) =>
-      nodeData.children.updateNodeLeft(nodeData.nodeLeft, nodeData.group.width)
+      nodeData.children.updateNodeLeft(nodeData.left, nodeData.group.width)
     );
   },
 };

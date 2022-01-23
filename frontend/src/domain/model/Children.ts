@@ -52,7 +52,7 @@ export const childrenImpl: Children = {
 
   updateAllChildGroupHeight() {
     this.list.forEach((child) =>
-      child.group.updateHeight(child.nodeHeight, child.children.height)
+      child.group.updateHeight(child.height, child.children.height)
     );
   },
 
@@ -62,14 +62,14 @@ export const childrenImpl: Children = {
       parentNodeHeight > this.height ? (parentNodeHeight - this.height) / 2 : 0;
 
     this.list.forEach((child) => {
-      child.nodeTop = parentGroupTop + distanceFromGroupTopOfChild;
+      child.top = parentGroupTop + distanceFromGroupTopOfChild;
       distanceFromGroupTopOfChild += child.group.height;
     });
   },
 
   updateNodeLeft(parentNodeLeft: number, parentGroupWidth: number) {
     this.list.forEach(
-      (child) => (child.nodeLeft = parentNodeLeft + parentGroupWidth)
+      (child) => (child.left = parentNodeLeft + parentGroupWidth)
     );
   },
 

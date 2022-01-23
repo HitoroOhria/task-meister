@@ -50,8 +50,8 @@ const Node: VFC<NodeProps> = (props) => {
   return (
     <NodeDiv
       ref={nodeDivElement}
-      top={props.nodeData.nodeTop}
-      left={props.nodeData.nodeLeft}
+      top={props.nodeData.top}
+      left={props.nodeData.left}
     >
       <TextInputer
         text={props.nodeData.text}
