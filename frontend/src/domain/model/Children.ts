@@ -2,6 +2,7 @@ import NodeData from "~/domain/model/NodeData";
 import { sum } from "~/util/NumberUtil";
 
 interface Children {
+  // TODO Array を継承して表現できるか？
   list: NodeData[];
   height: number;
 
