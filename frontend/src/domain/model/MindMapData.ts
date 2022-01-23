@@ -1,12 +1,10 @@
 import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
-import RightNodesData from "~/domain/model/RightNodesData";
-import rightNodesData, {
-  rightNodeDataImpl,
-} from "~/domain/model/RightNodesData";
+import RightMapData from "~/domain/model/RightMapData";
+import rightNodesData, { rightNodeDataImpl } from "~/domain/model/RightMapData";
 
 interface MindMapData {
   rootNodeData: NodeData;
-  rightMapData: RightNodesData;
+  rightMapData: RightMapData;
   leftMapData: rightNodesData;
 
   processChangingText(width: number, height: number): void;
@@ -20,14 +18,14 @@ interface MindMapData {
 
 export const newRootNodeData = (
   nodeData: NodeData,
-  rightNodesData: RightNodesData,
-  leftNodesData: RightNodesData
+  rightNodesData: RightMapData,
+  leftNodesData: RightMapData
 ): MindMapData => {
   return {
     ...rootNodeData,
     rootNodeData: nodeData,
     rightMapData: rightNodesData,
-    leftMapData: rightNodesData,
+    leftMapData: leftNodesData,
   };
 };
 
@@ -54,8 +52,8 @@ export const rootNodeData: MindMapData = {
 
   updateRightNodesDataLeft() {
     const left = this.rootNodeData.width / 2;
-    this.rightMapData.list.forEach((nodeData) => (nodeData.left = left));
-    this.rightMapData.list.forEach((nodeData) =>
+    this.rightMapData.nodes.list.forEach((nodeData) => (nodeData.left = left));
+    this.rightMapData.nodes.list.forEach((nodeData) =>
       nodeData.children.updateNodeLeft(nodeData.left, nodeData.group.width)
     );
   },

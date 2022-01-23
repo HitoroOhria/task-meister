@@ -1,8 +1,9 @@
 import NodeData from "~/domain/model/NodeData";
 import { sum } from "~/util/NumberUtil";
+import Children, { childrenImpl } from "~/domain/model/Children";
 
-interface RightNodesData {
-  list: NodeData[];
+interface RightMapData {
+  nodes: Children;
 
   findNodeDataById(id: string): NodeData | null;
 
@@ -17,18 +18,18 @@ interface RightNodesData {
   updateListGroupTop(): void;
 }
 
-export const newRightNodesData = (list: NodeData[]): RightNodesData => {
+export const newRightNodesData = (nodes: Children): RightMapData => {
   return {
     ...rightNodeDataImpl,
-    list: list,
+    nodes: nodes,
   };
 };
 
-export const rightNodeDataImpl: RightNodesData = {
-  list: [],
+export const rightNodeDataImpl: RightMapData = {
+  nodes: childrenImpl,
 
   findNodeDataById(id: string): NodeData | null {
-    for (const nodeData of this.list) {
+    for (const nodeData of this.nodes.list) {
       const target = nodeData.findNodeDataById(id);
 
       if (target != null) {
@@ -65,17 +66,19 @@ export const rightNodeDataImpl: RightNodesData = {
 
   processChangingHeight(height: number) {
     this.updateListGroupTop();
-    this.list.forEach((nodeData) => nodeData.processChangingHeight(height));
+    this.nodes.list.forEach((nodeData) =>
+      nodeData.processChangingHeight(height)
+    );
   },
 
   updateListGroupTop() {
-    const totalHeightOfList = this.list
+    const totalHeightOfList = this.nodes.list
       .map((nodeData) => nodeData.group.height)
       .reduce(sum, 0);
     const topOfFirstNodeData = -totalHeightOfList / 2;
     let cumulativeHeightOfPreNodeData = 0;
 
-    this.list.forEach((nodeData) => {
+    this.nodes.list.forEach((nodeData) => {
       nodeData.group.top = topOfFirstNodeData + cumulativeHeightOfPreNodeData;
       cumulativeHeightOfPreNodeData += nodeData.group.height;
     });
@@ -84,4 +87,4 @@ export const rightNodeDataImpl: RightNodesData = {
 
 Object.freeze(rightNodeDataImpl);
 
-export default RightNodesData;
+export default RightMapData;

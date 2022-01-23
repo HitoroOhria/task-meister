@@ -4,7 +4,7 @@ import Node from "~/components/organisms/Node";
 import MindMapData, { newRootNodeData } from "~/domain/model/MindMapData";
 import { newNodeData } from "~/domain/model/NodeData";
 import RootNode from "~/components/organisms/RootNode";
-import { newRightNodesData } from "~/domain/model/RightNodesData";
+import { newRightNodesData } from "~/domain/model/RightMapData";
 import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
 
@@ -21,11 +21,13 @@ const PositionWrapper = styled.div<PositionWrapperStyleProps>`
 
 const rootNodeDataObj = newRootNodeData(
   newNodeData("rootNode", "rootNode", newGroup(), newChildren([])),
-  newRightNodesData([
-    newNodeData("id1 of right", "id1 of right", newGroup(), newChildren([])),
-    newNodeData("id2 of right", "id2 of right", newGroup(), newChildren([])),
-  ]),
-  newRightNodesData([])
+  newRightNodesData(
+    newChildren([
+      newNodeData("id1 of right", "id1 of right", newGroup(), newChildren([])),
+      newNodeData("id2 of right", "id2 of right", newGroup(), newChildren([])),
+    ])
+  ),
+  newRightNodesData(newChildren([]))
 );
 
 const Mindmap: FC = () => {
@@ -72,7 +74,7 @@ const Mindmap: FC = () => {
         setRootNodeDataText={setRootNodeDataText}
         processChangingRootNodeText={processChangingRootNodeText}
       />
-      {rootNodeData.rightMapData.list.map((nodeData) => (
+      {rootNodeData.rightMapData.nodes.list.map((nodeData) => (
         <Node
           key={nodeData.id}
           nodeData={nodeData}
