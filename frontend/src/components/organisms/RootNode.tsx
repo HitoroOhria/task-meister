@@ -1,24 +1,13 @@
 import React, { useEffect, useRef, VFC } from "react";
+import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import TextInputer from "~/components/atoms/TextInputer";
 import NodeData from "~/domain/model/NodeData";
-import { styled } from "@linaria/react";
 
 type RootNodeProps = {
   nodeData: NodeData;
   setRootNodeDataText: (text: string) => void;
   processChangingRootNodeText: (width: number, height: number) => void;
 };
-
-type RootNodeDivProps = {
-  top: number;
-  left: number;
-};
-
-const RootNodeDiv = styled.div<RootNodeDivProps>`
-  position: absolute;
-  top: ${(props) => props.top}px;
-  left: ${(props) => props.left}px;
-`;
 
 const RootNode: VFC<RootNodeProps> = (props) => {
   const rootNodeDivElement = useRef<HTMLDivElement>(null);
@@ -43,7 +32,7 @@ const RootNode: VFC<RootNodeProps> = (props) => {
   };
 
   return (
-    <RootNodeDiv
+    <PositionAdjuster
       ref={rootNodeDivElement}
       top={props.nodeData.top}
       left={props.nodeData.left}
@@ -52,7 +41,7 @@ const RootNode: VFC<RootNodeProps> = (props) => {
         text={props.nodeData.text}
         setText={handleTextInputerSetText}
       />
-    </RootNodeDiv>
+    </PositionAdjuster>
   );
 };
 

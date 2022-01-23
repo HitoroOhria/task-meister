@@ -1,5 +1,5 @@
-import {styled} from "@linaria/react";
 import React, {useEffect, useRef, useState, VFC} from "react";
+import {styled} from "@linaria/react";
 import ElementSizeCalculator from "~/domain/model/ElementSizeCalculator";
 
 // CSS

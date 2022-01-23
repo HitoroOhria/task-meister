@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, VFC } from "react";
-import { styled } from "@linaria/react";
 import NodeData from "~/domain/model/NodeData";
+import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import TextInputer from "~/components/atoms/TextInputer";
 
 type NodeProps = {
@@ -12,17 +12,6 @@ type NodeProps = {
     height: number
   ) => void;
 };
-
-type NodeDivProps = {
-  top: number;
-  left: number;
-};
-
-const NodeDiv = styled.div<NodeDivProps>`
-  position: absolute;
-  top: ${(props) => props.top}px;
-  left: ${(props) => props.left}px;
-`;
 
 const Node: VFC<NodeProps> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
@@ -48,7 +37,7 @@ const Node: VFC<NodeProps> = (props) => {
   useEffect(processChangingNodeDataText, [props.nodeData.text]);
 
   return (
-    <NodeDiv
+    <PositionAdjuster
       ref={nodeDivElement}
       top={props.nodeData.top}
       left={props.nodeData.left}
@@ -57,7 +46,7 @@ const Node: VFC<NodeProps> = (props) => {
         text={props.nodeData.text}
         setText={handleTextInputerSetText}
       />
-    </NodeDiv>
+    </PositionAdjuster>
   );
 };
 

@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { styled } from "@linaria/react";
+import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import Node from "~/components/organisms/Node";
 import MindMapData, { newRootNodeData } from "~/domain/model/MindMapData";
 import { newNodeData } from "~/domain/model/NodeData";
@@ -7,17 +7,6 @@ import RootNode from "~/components/organisms/RootNode";
 import { newRightNodesData } from "~/domain/model/RightMapData";
 import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
-
-type PositionWrapperStyleProps = {
-  windowWidth: number;
-  windowHeight: number;
-};
-
-const PositionWrapper = styled.div<PositionWrapperStyleProps>`
-  position: absolute;
-  top: ${(props) => props.windowHeight / 2}px;
-  left: ${(props) => props.windowWidth / 2}px;
-`;
 
 const rootNodeDataObj = newRootNodeData(
   newNodeData("rootNode", "rootNode", newGroup(), newChildren([])),
@@ -33,8 +22,8 @@ const rootNodeDataObj = newRootNodeData(
 const Mindmap: FC = () => {
   const [rootNodeData, setRootNodeData] =
     useState<MindMapData>(rootNodeDataObj);
-  const [windowWidth] = useState<number>(window.innerWidth);
-  const [windowHeight] = useState<number>(window.innerHeight);
+  const [top] = useState<number>(window.innerWidth / 2);
+  const [left] = useState<number>(window.innerHeight / 2);
 
   const setRootNodeDataText = (text: string) => {
     setRootNodeData({
@@ -64,11 +53,7 @@ const Mindmap: FC = () => {
 
   return (
     // TODO Resize when window size changes
-    <PositionWrapper
-      id="PositionWrapper"
-      windowWidth={windowWidth}
-      windowHeight={windowHeight}
-    >
+    <PositionAdjuster top={top} left={left}>
       <RootNode
         nodeData={rootNodeData.rootNodeData}
         setRootNodeDataText={setRootNodeDataText}
@@ -82,7 +67,7 @@ const Mindmap: FC = () => {
           processChangingNodeDataText={processChangingNodeDataText}
         />
       ))}
-    </PositionWrapper>
+    </PositionAdjuster>
   );
 };
 
