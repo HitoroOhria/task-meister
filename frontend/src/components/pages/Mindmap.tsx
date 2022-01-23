@@ -6,6 +6,7 @@ import { newNodeData } from "~/domain/model/NodeData";
 import RootNode from "~/components/organisms/RootNode";
 import { newRightNodesData } from "~/domain/model/RightNodesData";
 import { newGroup } from "~/domain/model/Group";
+import { newChildren } from "~/domain/model/Children";
 
 type PositionWrapperStyleProps = {
   windowWidth: number;
@@ -19,10 +20,10 @@ const PositionWrapper = styled.div<PositionWrapperStyleProps>`
 `;
 
 const rootNodeDataObj = newRootNodeData(
-  newNodeData("rootNode", "rootNode", newGroup(), []),
+  newNodeData("rootNode", "rootNode", newGroup(), newChildren([])),
   newRightNodesData([
-    newNodeData("id1 of right", "id1 of right", newGroup(), []),
-    newNodeData("id2 of right", "id2 of right", newGroup(), []),
+    newNodeData("id1 of right", "id1 of right", newGroup(), newChildren([])),
+    newNodeData("id2 of right", "id2 of right", newGroup(), newChildren([])),
   ]),
   newRightNodesData([])
 );

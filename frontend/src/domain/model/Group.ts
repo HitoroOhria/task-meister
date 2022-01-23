@@ -1,5 +1,5 @@
 import { pickBiggerNumber } from "~/util/NumberUtil";
-import NodeData from "~/domain/model/NodeData";
+import Children from "~/domain/model/Children";
 
 interface Group {
   width: number;
@@ -7,7 +7,7 @@ interface Group {
   top: number;
   left: number;
 
-  updateWidth(nodeWidth: number, children: NodeData[]): void;
+  updateWidth(nodeWidth: number, children: Children): void;
 
   updateHeight(nodeHeight: number, childrenHeight: number): void;
 
@@ -31,8 +31,8 @@ export const groupImpl: Group = {
   left: 0,
 
   // Update group width of self
-  updateWidth(nodeWidth: number, children: NodeData[]) {
-    const longestChildWidth = children
+  updateWidth(nodeWidth: number, children: Children) {
+    const longestChildWidth = children.list
       .map((nodeData) => nodeData.group.width)
       .reduce(pickBiggerNumber, 0);
 

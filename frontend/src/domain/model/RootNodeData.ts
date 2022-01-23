@@ -56,7 +56,7 @@ export const rootNodeData: RootNodeData = {
     const left = this.param.nodeWidth / 2;
     this.rightNodesData.list.forEach((nodeData) => (nodeData.nodeLeft = left));
     this.rightNodesData.list.forEach((nodeData) =>
-      nodeData.updateChildrenLeft()
+      nodeData.children.updateNodeLeft(nodeData.nodeLeft, nodeData.group.width)
     );
   },
 };
