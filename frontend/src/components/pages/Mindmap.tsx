@@ -1,7 +1,7 @@
 import React, { FC, useState } from "react";
 import { styled } from "@linaria/react";
 import Node from "~/components/organisms/Node";
-import RootNodeData, { newRootNodeData } from "~/domain/model/RootNodeData";
+import MindMapData, { newRootNodeData } from "~/domain/model/MindMapData";
 import { newNodeData } from "~/domain/model/NodeData";
 import RootNode from "~/components/organisms/RootNode";
 import { newRightNodesData } from "~/domain/model/RightNodesData";
@@ -30,14 +30,14 @@ const rootNodeDataObj = newRootNodeData(
 
 const Mindmap: FC = () => {
   const [rootNodeData, setRootNodeData] =
-    useState<RootNodeData>(rootNodeDataObj);
+    useState<MindMapData>(rootNodeDataObj);
   const [windowWidth] = useState<number>(window.innerWidth);
   const [windowHeight] = useState<number>(window.innerHeight);
 
   const setRootNodeDataText = (text: string) => {
     setRootNodeData({
       ...rootNodeData,
-      param: { ...rootNodeData.param, text: text },
+      rootNodeData: { ...rootNodeData.rootNodeData, text: text },
     });
   };
 
@@ -47,7 +47,7 @@ const Mindmap: FC = () => {
   };
 
   const setNodeDataText = (id: string, text: string) => {
-    rootNodeData.rightNodesData.setNodeTextById(id, text);
+    rootNodeData.rightMapData.setNodeTextById(id, text);
     setRootNodeData({ ...rootNodeData });
   };
 
@@ -56,7 +56,7 @@ const Mindmap: FC = () => {
     width: number,
     height: number
   ) => {
-    rootNodeData.rightNodesData.processChangingText(id, width, height);
+    rootNodeData.rightMapData.processChangingText(id, width, height);
     setRootNodeData({ ...rootNodeData });
   };
 
@@ -68,11 +68,11 @@ const Mindmap: FC = () => {
       windowHeight={windowHeight}
     >
       <RootNode
-        nodeData={rootNodeData.param}
+        nodeData={rootNodeData.rootNodeData}
         setRootNodeDataText={setRootNodeDataText}
         processChangingRootNodeText={processChangingRootNodeText}
       />
-      {rootNodeData.rightNodesData.list.map((nodeData) => (
+      {rootNodeData.rightMapData.list.map((nodeData) => (
         <Node
           key={nodeData.id}
           nodeData={nodeData}

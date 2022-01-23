@@ -8,7 +8,7 @@ test("dummy", () => {
 //
 // describe("updateRightNodesDataTop", () => {
 //   test("Do noting when there are zero right nodes data", () => {
-//     const rootNodeData = new RootNodeData([], []);
+//     const rootNodeData = new MindMapData([], []);
 //     rootNodeData.updateRightNodesDataTop();
 //   });
 //
@@ -23,7 +23,7 @@ test("dummy", () => {
 //
 //     // There is one child
 //     const oneRightNodeData = [nodeData1];
-//     const havingOneChildRootNodeData = new RootNodeData(oneRightNodeData, []);
+//     const havingOneChildRootNodeData = new MindMapData(oneRightNodeData, []);
 //     havingOneChildRootNodeData.updateRightNodeDataGroupHeight();
 //     havingOneChildRootNodeData.updateRightNodesDataTop();
 //
@@ -31,7 +31,7 @@ test("dummy", () => {
 //
 //     // There are two children
 //     const twoRightNodesData = [nodeData1, nodeData2];
-//     const havingTwoChildrenRootNodeData = new RootNodeData(
+//     const havingTwoChildrenRootNodeData = new MindMapData(
 //       twoRightNodesData,
 //       []
 //     );
@@ -43,7 +43,7 @@ test("dummy", () => {
 //
 //     // There are three children
 //     const threeRightNodesData = [nodeData1, nodeData2, nodeData3];
-//     const havingThreeChildrenRootNodeData = new RootNodeData(
+//     const havingThreeChildrenRootNodeData = new MindMapData(
 //       threeRightNodesData,
 //       []
 //     );

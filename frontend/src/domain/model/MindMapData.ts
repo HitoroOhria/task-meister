@@ -4,10 +4,10 @@ import rightNodesData, {
   rightNodeDataImpl,
 } from "~/domain/model/RightNodesData";
 
-interface RootNodeData {
-  param: NodeData;
-  rightNodesData: RightNodesData;
-  leftNodesData: rightNodesData;
+interface MindMapData {
+  rootNodeData: NodeData;
+  rightMapData: RightNodesData;
+  leftMapData: rightNodesData;
 
   processChangingText(width: number, height: number): void;
 
@@ -22,19 +22,19 @@ export const newRootNodeData = (
   nodeData: NodeData,
   rightNodesData: RightNodesData,
   leftNodesData: RightNodesData
-): RootNodeData => {
+): MindMapData => {
   return {
     ...rootNodeData,
-    param: nodeData,
-    rightNodesData: rightNodesData,
-    leftNodesData: rightNodesData,
+    rootNodeData: nodeData,
+    rightMapData: rightNodesData,
+    leftMapData: rightNodesData,
   };
 };
 
-export const rootNodeData: RootNodeData = {
-  param: nodeDataImpl,
-  rightNodesData: rightNodeDataImpl,
-  leftNodesData: rightNodeDataImpl,
+export const rootNodeData: MindMapData = {
+  rootNodeData: nodeDataImpl,
+  rightMapData: rightNodeDataImpl,
+  leftMapData: rightNodeDataImpl,
 
   processChangingText(width: number, height: number) {
     this.processChangingWidth(width);
@@ -43,19 +43,19 @@ export const rootNodeData: RootNodeData = {
   },
 
   processChangingWidth(width: number) {
-    this.param.width = width;
-    this.param.left = -width / 2;
+    this.rootNodeData.width = width;
+    this.rootNodeData.left = -width / 2;
   },
 
   processChangingHeight(height: number) {
-    this.param.height = height;
-    this.param.top = -height / 2;
+    this.rootNodeData.height = height;
+    this.rootNodeData.top = -height / 2;
   },
 
   updateRightNodesDataLeft() {
-    const left = this.param.width / 2;
-    this.rightNodesData.list.forEach((nodeData) => (nodeData.left = left));
-    this.rightNodesData.list.forEach((nodeData) =>
+    const left = this.rootNodeData.width / 2;
+    this.rightMapData.list.forEach((nodeData) => (nodeData.left = left));
+    this.rightMapData.list.forEach((nodeData) =>
       nodeData.children.updateNodeLeft(nodeData.left, nodeData.group.width)
     );
   },
@@ -63,4 +63,4 @@ export const rootNodeData: RootNodeData = {
 
 Object.freeze(rootNodeData);
 
-export default RootNodeData;
+export default MindMapData;
