@@ -12,7 +12,7 @@ interface RightNodesData {
 
   processChangingWidth(target: NodeData, width: number): void;
 
-  processChangingHeight(target: NodeData, height: number): void;
+  processChangingHeight(height: number): void;
 
   updateListGroupTop(): void;
 }
@@ -56,28 +56,28 @@ export const rightNodeDataImpl: RightNodesData = {
     }
 
     this.processChangingWidth(target, width);
-    this.processChangingHeight(target, height);
+    this.processChangingHeight(height);
   },
 
   processChangingWidth(target: NodeData, width: number) {
     target.processChangingWidth(width);
   },
 
-  processChangingHeight(target: NodeData, height: number) {
+  processChangingHeight(height: number) {
     this.updateListGroupTop();
-    target.processChangingHeight(height);
+    this.list.forEach((nodeData) => nodeData.processChangingHeight(height));
   },
 
   updateListGroupTop() {
-    const heightOfAllNodeData = this.list
-      .map((nodeData) => nodeData.groupHeight)
+    const totalHeightOfList = this.list
+      .map((nodeData) => nodeData.group.height)
       .reduce(sum, 0);
-    const topOfFirstNodeData = -heightOfAllNodeData / 2;
+    const topOfFirstNodeData = -totalHeightOfList / 2;
     let cumulativeHeightOfPreNodeData = 0;
 
     this.list.forEach((nodeData) => {
-      nodeData.groupTop = topOfFirstNodeData + cumulativeHeightOfPreNodeData;
-      cumulativeHeightOfPreNodeData += nodeData.groupHeight;
+      nodeData.group.top = topOfFirstNodeData + cumulativeHeightOfPreNodeData;
+      cumulativeHeightOfPreNodeData += nodeData.group.height;
     });
   },
 };

@@ -1,4 +1,5 @@
-import { pickBiggerNumber, sum } from "~/util/NumberUtil";
+import { sum } from "~/util/NumberUtil";
+import Group, { groupImpl } from "~/domain/model/Group";
 
 interface NodeData {
   id: string;
@@ -7,10 +8,7 @@ interface NodeData {
   nodeHeight: number;
   nodeTop: number;
   nodeLeft: number;
-  groupWidth: number;
-  groupHeight: number;
-  groupTop: number;
-  groupLeft: number;
+  group: Group;
   children: NodeData[];
   childrenHeight: number;
 
@@ -26,11 +24,7 @@ interface NodeData {
 
   recursivelyUpdateGroupWidth(): void;
 
-  updateGroupWidth(): void;
-
   recursivelyUpdateGroupHeight(): void;
-
-  updateGroupHeight(): void;
 
   updateNodeTop(): void;
 
@@ -48,12 +42,14 @@ interface NodeData {
 export const newNodeData = (
   id: string,
   text: string,
+  group: Group,
   children: NodeData[]
 ): NodeData => {
   return {
     ...nodeDataImpl,
     id: id,
     text: text,
+    group: group,
     children: children,
   };
 };
@@ -66,7 +62,7 @@ export const nodeDataImpl: NodeData = {
   // an id for identify when updating node
   id: "",
 
-  // an text fo node
+  // an text of node
   text: "",
 
   // width including margin
@@ -81,17 +77,7 @@ export const nodeDataImpl: NodeData = {
   // node left value of style
   nodeLeft: 0,
 
-  // total width of node and children
-  groupWidth: 0,
-
-  // total height of node and children
-  groupHeight: 0,
-
-  // group top value of style
-  groupTop: 0,
-
-  // group left value of style
-  groupLeft: 0,
+  group: groupImpl,
 
   // children nodes of this node
   children: [],
@@ -130,32 +116,27 @@ export const nodeDataImpl: NodeData = {
   },
 
   recursivelyUpdateGroupHeightAndChildrenHeight() {
-    this.children.forEach((child) => child.updateGroupHeight());
-    this.updateGroupHeight();
+    this.children.forEach((child) =>
+      child.group.updateHeight(child.nodeHeight, child.childrenHeight)
+    );
+    this.group.updateHeight(this.nodeHeight, this.childrenHeight);
   },
 
   // Update children height of self
   updateChildrenHeight() {
-    this.children.forEach((child) => child.updateGroupHeight());
+    this.children.forEach((child) =>
+      child.group.updateHeight(child.nodeHeight, child.childrenHeight)
+    );
 
     this.childrenHeight = this.children
-      .map((nodeData) => nodeData.groupHeight)
+      .map((nodeData) => nodeData.group.height)
       .reduce(sum, 0);
   },
 
   // Recursively update group width of self and children
   recursivelyUpdateGroupWidth() {
     this.children.forEach((nodeData) => nodeData.recursivelyUpdateGroupWidth());
-    this.updateGroupWidth();
-  },
-
-  // Update group width of self
-  updateGroupWidth() {
-    const longestChildWidth = this.children
-      .map((nodeData) => nodeData.groupWidth)
-      .reduce(pickBiggerNumber, 0);
-
-    this.groupWidth = this.nodeWidth + longestChildWidth;
+    this.group.updateWidth(this.nodeWidth, this.children);
   },
 
   // Recursively update group height of self and children.
@@ -163,26 +144,16 @@ export const nodeDataImpl: NodeData = {
     this.children.forEach((nodeData) =>
       nodeData.recursivelyUpdateGroupHeight()
     );
-    this.updateGroupHeight();
-  },
-
-  // Update group height of self.
-  updateGroupHeight() {
-    this.updateChildrenHeight();
-
-    this.groupHeight =
-      this.nodeHeight > this.childrenHeight
-        ? this.nodeHeight
-        : this.childrenHeight;
+    this.group.updateHeight(this.nodeHeight, this.childrenHeight);
   },
 
   // Update node top of self
   updateNodeTop() {
     if (this.nodeHeight > this.childrenHeight) {
-      this.nodeTop = this.groupTop;
+      this.nodeTop = this.group.top;
     } else {
       const distanceFromGroupTop = (this.childrenHeight - this.nodeHeight) / 2;
-      this.nodeTop = this.groupTop + distanceFromGroupTop;
+      this.nodeTop = this.group.top + distanceFromGroupTop;
     }
   },
 
@@ -202,14 +173,14 @@ export const nodeDataImpl: NodeData = {
         : 0;
 
     this.children.forEach((nodeData) => {
-      nodeData.nodeTop = this.groupTop + distanceFromGroupTopOfChild;
-      distanceFromGroupTopOfChild += nodeData.groupHeight;
+      nodeData.nodeTop = this.group.top + distanceFromGroupTopOfChild;
+      distanceFromGroupTopOfChild += nodeData.group.height;
     });
   },
 
   updateChildrenLeft() {
     this.children.forEach(
-      (nodeData) => (nodeData.nodeLeft = this.nodeLeft + this.groupWidth)
+      (nodeData) => (nodeData.nodeLeft = this.nodeLeft + this.group.width)
     );
   },
 
@@ -224,12 +195,12 @@ export const nodeDataImpl: NodeData = {
   updateChildrenGroupTop() {
     let totalPreChildGroupTop = 0;
     this.children.forEach((child) => {
-      child.groupTop = this.groupTop + totalPreChildGroupTop;
-      totalPreChildGroupTop += child.groupHeight;
+      child.group.updateTop(this.group.top, totalPreChildGroupTop);
+      totalPreChildGroupTop += child.group.height;
     });
   },
 };
 
-Object.freeze(nodeDataImpl)
+Object.freeze(nodeDataImpl);
 
 export default NodeData;
