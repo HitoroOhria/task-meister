@@ -28,14 +28,11 @@ const RootNode: VFC<RootNodeProps> = (props) => {
   };
 
   const processChangingText = () => {
-    if (rootNodeDivElement.current == null) {
-      return;
-    }
-
-    const width = rootNodeDivElement.current.offsetWidth;
-    const height = rootNodeDivElement.current.offsetHeight;
-
-    props.processChangingRootNodeText(width, height);
+    rootNodeDivElement.current &&
+      props.processChangingRootNodeText(
+        rootNodeDivElement.current.offsetWidth,
+        rootNodeDivElement.current.offsetHeight
+      );
   };
 
   useEffect(componentDidMount, []);

@@ -27,6 +27,10 @@ const NodeDiv = styled.div<NodeDivProps>`
 const Node: VFC<NodeProps> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
 
+  const componentDidMount = () => {
+    processChangingNodeDataText();
+  };
+
   const handleTextInputerSetText = (text: string) => {
     nodeDivElement.current && props.setNodeDataText(props.nodeData.id, text);
   };
@@ -40,6 +44,7 @@ const Node: VFC<NodeProps> = (props) => {
       );
   };
 
+  useEffect(componentDidMount, []);
   useEffect(processChangingNodeDataText, [props.nodeData.text]);
 
   return (
