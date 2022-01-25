@@ -19,7 +19,7 @@ const rootNodeDataObj = newRootNodeData(
   newRightNodesData(newChildren([]))
 );
 
-const Mindmap: FC = () => {
+const MindMap: FC = () => {
   const [rootNodeData, setRootNodeData] =
     useState<MindMapData>(rootNodeDataObj);
   const [top] = useState<number>(window.innerWidth / 2);
@@ -71,4 +71,4 @@ const Mindmap: FC = () => {
   );
 };
 
-export default Mindmap;
+export default MindMap;
