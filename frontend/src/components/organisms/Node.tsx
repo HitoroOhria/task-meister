@@ -1,7 +1,14 @@
-import React, { useEffect, useRef, VFC } from "react";
+import React, {useEffect, useRef, VFC} from "react";
 import NodeData from "~/domain/model/NodeData";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
-import TextInputer from "~/components/atoms/TextInputer";
+import TextInputer, {elementSizeCalculator,} from "~/components/atoms/TextInputer";
+import {numberOfLines} from "~/util/StringUtil";
+
+// width of textarea from border to text
+// values of below is average of measured values
+const insideWidthOfTextarea = 40.75;
+const nodeHeightWhenOneLine = 62;
+const heightPerOneLine = 23;
 
 type NodeProps = {
   nodeData: NodeData;
@@ -24,13 +31,18 @@ const Node: VFC<NodeProps> = (props) => {
     nodeDivElement.current && props.setNodeDataText(props.nodeData.id, text);
   };
 
+  // Do not use value of element. (ex. innerHeight, offsetHeight)
+  // Because getting process ends before dom rendered. and the value of the previous text is acquired.
+  // So, get previous value
   const processChangingNodeDataText = () => {
-    nodeDivElement.current &&
-      props.processChangingNodeDataText(
-        props.nodeData.id,
-        nodeDivElement.current.offsetWidth,
-        nodeDivElement.current.offsetHeight
-      );
+    const width =
+      insideWidthOfTextarea +
+      elementSizeCalculator.measureWidth(props.nodeData.text);
+    const height =
+      nodeHeightWhenOneLine +
+      heightPerOneLine * numberOfLines(props.nodeData.text);
+
+    props.processChangingNodeDataText(props.nodeData.id, width, height);
   };
 
   useEffect(componentDidMount, []);

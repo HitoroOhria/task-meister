@@ -1,14 +1,13 @@
 import React, { FC, useState } from "react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import Node from "~/components/organisms/Node";
-import MindMapData, { newRootNodeData } from "~/domain/model/MindMapData";
-import { newNodeData } from "~/domain/model/NodeData";
-import RootNode from "~/components/organisms/RootNode";
+import MindMapData, { newMindMapData } from "~/domain/model/MindMapData";
 import { newRightNodesData } from "~/domain/model/RightMapData";
+import { newNodeData } from "~/domain/model/NodeData";
 import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
 
-const rootNodeDataObj = newRootNodeData(
+const mindMapDataObj = newMindMapData(
   newNodeData("rootNode", "rootNode", newGroup(), newChildren([])),
   newRightNodesData(
     newChildren([
@@ -20,26 +19,14 @@ const rootNodeDataObj = newRootNodeData(
 );
 
 const MindMap: FC = () => {
-  const [rootNodeData, setRootNodeData] =
-    useState<MindMapData>(rootNodeDataObj);
+  const [mindMapData, setMindMapData] =
+    useState<MindMapData>(mindMapDataObj);
   const [top] = useState<number>(window.innerWidth / 2);
   const [left] = useState<number>(window.innerHeight / 2);
 
-  const setRootNodeDataText = (text: string) => {
-    setRootNodeData({
-      ...rootNodeData,
-      rootNodeData: { ...rootNodeData.rootNodeData, text: text },
-    });
-  };
-
-  const processChangingRootNodeText = (width: number, height: number) => {
-    rootNodeData.processChangingText(width, height);
-    setRootNodeData(rootNodeData);
-  };
-
   const setNodeDataText = (id: string, text: string) => {
-    rootNodeData.rightMapData.setNodeTextById(id, text);
-    setRootNodeData({ ...rootNodeData });
+    mindMapData.rightMapData.setNodeTextById(id, text);
+    setMindMapData({ ...mindMapData });
   };
 
   const processChangingNodeDataText = (
@@ -47,19 +34,19 @@ const MindMap: FC = () => {
     width: number,
     height: number
   ) => {
-    rootNodeData.rightMapData.processChangingText(id, width, height);
-    setRootNodeData({ ...rootNodeData });
+    mindMapData.rightMapData.processChangingText(id, width, height);
+    setMindMapData({ ...mindMapData });
   };
 
   return (
     // TODO Resize when window size changes
     <PositionAdjuster top={top} left={left}>
-      <RootNode
-        nodeData={rootNodeData.rootNodeData}
-        setRootNodeDataText={setRootNodeDataText}
-        processChangingRootNodeText={processChangingRootNodeText}
+      <Node
+        nodeData={mindMapData.rootNodeData}
+        setNodeDataText={setNodeDataText}
+        processChangingNodeDataText={processChangingNodeDataText}
       />
-      {rootNodeData.rightMapData.nodes.list.map((nodeData) => (
+      {mindMapData.rightMapData.nodes.list.map((nodeData) => (
         <Node
           key={nodeData.id}
           nodeData={nodeData}

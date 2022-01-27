@@ -9,7 +9,7 @@ const font = "13px monospace";
 
 // const
 // For measure text width
-const elementSizeCalculator = new ElementSizeCalculator(font);
+export const elementSizeCalculator = new ElementSizeCalculator(font);
 
 type TextInputerProps = {
   text: string;

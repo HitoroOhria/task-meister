@@ -8,8 +8,8 @@ test("dummy", () => {
 //
 // describe("updateRightNodesDataTop", () => {
 //   test("Do noting when there are zero right nodes data", () => {
-//     const rootNodeData = new MindMapData([], []);
-//     rootNodeData.updateRightNodesDataTop();
+//     const mindMapData = new MindMapData([], []);
+//     mindMapData.updateRightNodesDataTop();
 //   });
 //
 //   test("Top of right nodes data is set to half total height of right nodes data minus total height previous children when there are one or more right nodes data", () => {
@@ -23,35 +23,35 @@ test("dummy", () => {
 //
 //     // There is one child
 //     const oneRightNodeData = [nodeData1];
-//     const havingOneChildRootNodeData = new MindMapData(oneRightNodeData, []);
-//     havingOneChildRootNodeData.updateRightNodeDataGroupHeight();
-//     havingOneChildRootNodeData.updateRightNodesDataTop();
+//     const havingOneChildmindMapData = new MindMapData(oneRightNodeData, []);
+//     havingOneChildmindMapData.updateRightNodeDataGroupHeight();
+//     havingOneChildmindMapData.updateRightNodesDataTop();
 //
-//     expect(havingOneChildRootNodeData.rightNodesData[0].top).toBe(-50);
+//     expect(havingOneChildmindMapData.rightNodesData[0].top).toBe(-50);
 //
 //     // There are two children
 //     const twoRightNodesData = [nodeData1, nodeData2];
-//     const havingTwoChildrenRootNodeData = new MindMapData(
+//     const havingTwoChildrenmindMapData = new MindMapData(
 //       twoRightNodesData,
 //       []
 //     );
-//     havingTwoChildrenRootNodeData.updateRightNodeDataGroupHeight();
-//     havingTwoChildrenRootNodeData.updateRightNodesDataTop();
+//     havingTwoChildrenmindMapData.updateRightNodeDataGroupHeight();
+//     havingTwoChildrenmindMapData.updateRightNodesDataTop();
 //
-//     expect(havingTwoChildrenRootNodeData.rightNodesData[0].top).toBe(-150);
-//     expect(havingTwoChildrenRootNodeData.rightNodesData[1].top).toBe(-50);
+//     expect(havingTwoChildrenmindMapData.rightNodesData[0].top).toBe(-150);
+//     expect(havingTwoChildrenmindMapData.rightNodesData[1].top).toBe(-50);
 //
 //     // There are three children
 //     const threeRightNodesData = [nodeData1, nodeData2, nodeData3];
-//     const havingThreeChildrenRootNodeData = new MindMapData(
+//     const havingThreeChildrenmindMapData = new MindMapData(
 //       threeRightNodesData,
 //       []
 //     );
-//     havingThreeChildrenRootNodeData.updateRightNodeDataGroupHeight();
-//     havingThreeChildrenRootNodeData.updateRightNodesDataTop();
+//     havingThreeChildrenmindMapData.updateRightNodeDataGroupHeight();
+//     havingThreeChildrenmindMapData.updateRightNodesDataTop();
 //
-//     expect(havingThreeChildrenRootNodeData.rightNodesData[0].top).toBe(-300);
-//     expect(havingThreeChildrenRootNodeData.rightNodesData[1].top).toBe(-200);
-//     expect(havingThreeChildrenRootNodeData.rightNodesData[2].top).toBe(0);
+//     expect(havingThreeChildrenmindMapData.rightNodesData[0].top).toBe(-300);
+//     expect(havingThreeChildrenmindMapData.rightNodesData[1].top).toBe(-200);
+//     expect(havingThreeChildrenmindMapData.rightNodesData[2].top).toBe(0);
 //   });
 // });

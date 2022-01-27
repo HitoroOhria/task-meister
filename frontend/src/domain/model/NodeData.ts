@@ -45,7 +45,7 @@ export const newNodeData = (
   };
 };
 
-// Data of node to be placed on Mindmap.
+// Data of node to be placed on MindMap.
 // NodeData consists of a node and children's nodes.
 // Whole group is called a group.
 // NodeData is not group, but holds value of group to calculate placement.

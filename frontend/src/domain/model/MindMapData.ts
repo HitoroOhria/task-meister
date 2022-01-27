@@ -7,7 +7,9 @@ interface MindMapData {
   rightMapData: RightMapData;
   leftMapData: rightNodesData;
 
-  processChangingText(width: number, height: number): void;
+  setNodeTextById(id: string, text: string): void;
+
+  processChangingText(id: string, width: number, height: number): void;
 
   processChangingWidth(width: number): void;
 
@@ -16,28 +18,44 @@ interface MindMapData {
   updateRightNodesDataLeft(): void;
 }
 
-export const newRootNodeData = (
-  nodeData: NodeData,
+export const newMindMapData = (
+  rootNodeData: NodeData,
   rightNodesData: RightMapData,
   leftNodesData: RightMapData
 ): MindMapData => {
   return {
-    ...rootNodeData,
-    rootNodeData: nodeData,
+    ...mindMapDataImpl,
+    rootNodeData: rootNodeData,
     rightMapData: rightNodesData,
     leftMapData: leftNodesData,
   };
 };
 
-export const rootNodeData: MindMapData = {
+export const mindMapDataImpl: MindMapData = {
   rootNodeData: nodeDataImpl,
   rightMapData: rightNodeDataImpl,
   leftMapData: rightNodeDataImpl,
 
-  processChangingText(width: number, height: number) {
-    this.processChangingWidth(width);
-    this.processChangingHeight(height);
-    this.updateRightNodesDataLeft();
+  setNodeTextById(id: string, text: string) {
+    if (id === this.rootNodeData.id) {
+      this.rootNodeData.text = text;
+
+      return;
+    }
+
+    this.rightMapData.setNodeTextById(id, text);
+  },
+
+  processChangingText(id: string, width: number, height: number) {
+    if (id === this.rootNodeData.id) {
+      this.processChangingWidth(width);
+      this.processChangingHeight(height);
+      this.updateRightNodesDataLeft();
+
+      return;
+    }
+
+    this.rightMapData.processChangingText(id, width, height);
   },
 
   processChangingWidth(width: number) {
@@ -59,6 +77,6 @@ export const rootNodeData: MindMapData = {
   },
 };
 
-Object.freeze(rootNodeData);
+Object.freeze(mindMapDataImpl);
 
 export default MindMapData;
