@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useState, VFC} from "react";
 import {styled} from "@linaria/react";
 import ElementSizeCalculator from "~/domain/model/ElementSizeCalculator";
+import {numberOfLines} from "~/util/StringUtil";
 
 // CSS
 const minWidthPx = 50;
@@ -74,9 +75,7 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
       return;
     }
 
-    const numberOfLines = props.text.split("\n").length;
-    const heightEm = numberOfLines * lineHeightEm;
-
+    const heightEm = numberOfLines(props.text) * lineHeightEm;
     setTextareaHeightEm(heightEm);
   };
 

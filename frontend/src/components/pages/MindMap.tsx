@@ -25,7 +25,7 @@ const MindMap: FC = () => {
   const [left] = useState<number>(window.innerHeight / 2);
 
   const setNodeDataText = (id: string, text: string) => {
-    mindMapData.rightMapData.setNodeTextById(id, text);
+    mindMapData.setNodeTextById(id, text);
     setMindMapData({ ...mindMapData });
   };
 
@@ -34,7 +34,7 @@ const MindMap: FC = () => {
     width: number,
     height: number
   ) => {
-    mindMapData.rightMapData.processChangingText(id, width, height);
+    mindMapData.processChangingText(id, width, height);
     setMindMapData({ ...mindMapData });
   };
 
