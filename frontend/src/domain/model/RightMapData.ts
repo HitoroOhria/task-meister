@@ -43,18 +43,14 @@ export const rightNodeDataImpl: RightMapData = {
 
   setNodeTextById(id: string, text: string) {
     const target = this.findNodeDataById(id);
-    if (target == null) {
-      return;
-    }
+    if (target == null) return;
 
     target.text = text;
   },
 
   processChangingText(id: string, width: number, height: number) {
     const target = this.findNodeDataById(id);
-    if (target == null) {
-      return;
-    }
+    if (target == null) return;
 
     this.processChangingWidth(target, width);
     this.processChangingHeight(height);

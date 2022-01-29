@@ -42,11 +42,6 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
   const [textareaHeightEm, setTextareaHeightEm] = useState<number>(0);
 
   const componentDidMount = () => {
-    if (textareaElement.current == null) {
-      return;
-    }
-
-    // useEffect の方で代用できるか？
     updateTextInputerWidth();
     updateTextInputerHeight();
   };
@@ -57,9 +52,7 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
   };
 
   const updateTextInputerWidth = () => {
-    if (textareaElement.current === null) {
-      return;
-    }
+    if (textareaElement.current === null) return;
 
     const textWidth = Math.ceil(
       elementSizeCalculator.measureLongestLineWidth(props.text)
@@ -70,9 +63,7 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
   };
 
   const updateTextInputerHeight = () => {
-    if (textareaElement.current === null) {
-      return;
-    }
+    if (textareaElement.current === null) return;
 
     const heightEm = numberOfLines(props.text) * lineHeightEm;
     setTextareaHeightEm(heightEm);
