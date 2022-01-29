@@ -12,6 +12,10 @@ class ElementSizeCalculator {
     return canvasCtx;
   };
 
+  public measureLongestLineWidth(text: string): number {
+    return this.measureWidth(this.findLongestLine(text))
+  }
+
   public findLongestLine(text: string): string {
     return text
       .split("\n")

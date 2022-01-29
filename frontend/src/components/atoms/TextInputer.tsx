@@ -61,9 +61,8 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
       return;
     }
 
-    const longestLine = elementSizeCalculator.findLongestLine(props.text);
     const textWidth = Math.ceil(
-      elementSizeCalculator.measureWidth(longestLine)
+      elementSizeCalculator.measureLongestLineWidth(props.text)
     );
     const textareaWidth = textWidth > minWidthPx ? textWidth : minWidthPx;
 

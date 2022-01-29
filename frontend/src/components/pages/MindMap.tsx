@@ -19,8 +19,7 @@ const mindMapDataObj = newMindMapData(
 );
 
 const MindMap: FC = () => {
-  const [mindMapData, setMindMapData] =
-    useState<MindMapData>(mindMapDataObj);
+  const [mindMapData, setMindMapData] = useState<MindMapData>(mindMapDataObj);
   const [top] = useState<number>(window.innerWidth / 2);
   const [left] = useState<number>(window.innerHeight / 2);
 

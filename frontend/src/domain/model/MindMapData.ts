@@ -11,11 +11,13 @@ interface MindMapData {
 
   processChangingText(id: string, width: number, height: number): void;
 
-  processChangingWidth(width: number): void;
+  processChangingRootNodeText(width: number, height: number): void;
 
-  processChangingHeight(height: number): void;
+  updateRootNodeLateral(width: number): void;
 
-  updateRightNodesDataLeft(): void;
+  updateRootNodeLongitudinal(height: number): void;
+
+  updateRightNodesLeft(): void;
 }
 
 export const newMindMapData = (
@@ -39,7 +41,6 @@ export const mindMapDataImpl: MindMapData = {
   setNodeTextById(id: string, text: string) {
     if (id === this.rootNodeData.id) {
       this.rootNodeData.text = text;
-
       return;
     }
 
@@ -48,27 +49,30 @@ export const mindMapDataImpl: MindMapData = {
 
   processChangingText(id: string, width: number, height: number) {
     if (id === this.rootNodeData.id) {
-      this.processChangingWidth(width);
-      this.processChangingHeight(height);
-      this.updateRightNodesDataLeft();
-
+      this.processChangingRootNodeText(width, height);
       return;
     }
 
     this.rightMapData.processChangingText(id, width, height);
   },
 
-  processChangingWidth(width: number) {
+  processChangingRootNodeText(width: number, height: number) {
+    this.updateRootNodeLateral(width);
+    this.updateRootNodeLongitudinal(height);
+    this.updateRightNodesLeft();
+  },
+
+  updateRootNodeLateral(width: number) {
     this.rootNodeData.width = width;
     this.rootNodeData.left = -width / 2;
   },
 
-  processChangingHeight(height: number) {
+  updateRootNodeLongitudinal(height: number) {
     this.rootNodeData.height = height;
     this.rootNodeData.top = -height / 2;
   },
 
-  updateRightNodesDataLeft() {
+  updateRightNodesLeft() {
     const left = this.rootNodeData.width / 2;
     this.rightMapData.nodes.list.forEach((nodeData) => (nodeData.left = left));
     this.rightMapData.nodes.list.forEach((nodeData) =>

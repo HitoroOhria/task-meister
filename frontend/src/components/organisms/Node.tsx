@@ -37,7 +37,7 @@ const Node: VFC<NodeProps> = (props) => {
   const processChangingNodeDataText = () => {
     const width =
       insideWidthOfTextarea +
-      elementSizeCalculator.measureWidth(props.nodeData.text);
+      elementSizeCalculator.measureLongestLineWidth(props.nodeData.text);
     const height =
       nodeHeightWhenOneLine +
       heightPerOneLine * numberOfLines(props.nodeData.text);
