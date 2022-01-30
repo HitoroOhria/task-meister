@@ -1,21 +1,37 @@
 import NodeData from "~/domain/model/NodeData";
-import { sum } from "~/util/NumberUtil";
+import {sum} from "~/util/NumberUtil";
 
+// Collection of NodeData.
+// Define process to be managed as a whole¬.
 interface Children {
-  // TODO Array を継承して表現できるか？
+  // Collection of nodes
+  // TODO Can expressed by implementing Array?
   list: NodeData[];
+
+  // total height of children node.
   height: number;
 
+  // find child by id.
   findChildById(id: string): NodeData | null;
 
-  updateHeight(): void;
+  // Update height of self.
+  // Height of child needs to be updated.
+  updateChildrenHeight(): void;
 
+  // Update group height of all child.
+  // Following need to be updated.
+  //   - height of child
+  //   - children height of child
   updateAllChildGroupHeight(): void;
 
+  // Update node top of all child..
   updateNodeTop(parentNodeHeight: number, parentGroupTop: number): void;
 
+  // Update node left of all child.
   updateNodeLeft(parentNodeLeft: number, parentGroupWidth: number): void;
 
+  // Update group top left of all child
+  // Group height of child needs to be updated.
   updateGroupTop(parentGroupTop: number): void;
 }
 
@@ -28,7 +44,6 @@ export const newChildren = (list: NodeData[]): Children => {
 
 export const childrenImpl: Children = {
   list: [],
-  // total height of children node
   height: 0,
 
   findChildById(id: string): NodeData | null {
@@ -44,8 +59,7 @@ export const childrenImpl: Children = {
   },
 
   // TODO どこからも呼ばれてない？
-  // Update children height
-  updateHeight() {
+  updateChildrenHeight() {
     this.updateAllChildGroupHeight();
 
     this.height = this.list.map((child) => child.group.height).reduce(sum, 0);
@@ -57,7 +71,6 @@ export const childrenImpl: Children = {
     );
   },
 
-  // update node top of children
   updateNodeTop(parentNodeHeight: number, parentGroupTop: number) {
     let distanceFromGroupTopOfChild =
       parentNodeHeight > this.height ? (parentNodeHeight - this.height) / 2 : 0;
@@ -74,9 +87,6 @@ export const childrenImpl: Children = {
     );
   },
 
-  // 依存
-  //  - 子の親の groupTop
-  //  - 子の groupHeight
   updateGroupTop(parentGroupTop: number) {
     let totalPreChildGroupTop = 0;
     this.list.forEach((child) => {

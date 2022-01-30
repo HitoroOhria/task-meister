@@ -17,9 +17,9 @@ interface NodeData {
 
   processChangingWidth(width: number): void;
 
-  processChangingHeight(height: number): void;
+  processVerticalChanging(height: number): void;
 
-  recursivelyUpdateGroupHeightAndChildrenHeight(): void;
+  recursivelyUpdateChildrenGroupHeightAndSelf(): void;
 
   recursivelyUpdateGroupWidth(): void;
 
@@ -97,18 +97,20 @@ export const nodeDataImpl: NodeData = {
     this.children.updateNodeLeft(this.left, this.group.width);
   },
 
-  processChangingHeight(height: number) {
+  //
+  processVerticalChanging(height: number) {
     this.height = height;
-    this.recursivelyUpdateGroupHeightAndChildrenHeight();
+    this.recursivelyUpdateChildrenGroupHeightAndSelf();
     this.recursivelyUpdateChildrenGroupTop();
     this.updateTop();
     this.recursivelyUpdateChildrenNodeTop();
   },
 
-  recursivelyUpdateGroupHeightAndChildrenHeight() {
+  recursivelyUpdateChildrenGroupHeightAndSelf() {
     this.children.list.forEach((child) =>
       child.group.updateHeight(child.height, child.children.height)
     );
+    this.children.updateChildrenHeight();
     this.group.updateHeight(this.height, this.children.height);
   },
 

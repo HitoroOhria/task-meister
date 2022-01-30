@@ -15,6 +15,8 @@ interface RightMapData {
 
   processChangingHeight(height: number): void;
 
+  // Set group top of first layer on right map.
+  // Group height of first layer needs to be updated in advance.
   updateListGroupTop(): void;
 }
 
@@ -61,9 +63,10 @@ export const rightNodeDataImpl: RightMapData = {
   },
 
   processChangingHeight(height: number) {
+    // TODO 事前に第1層の Group Height は更新されているか？
     this.updateListGroupTop();
     this.nodes.list.forEach((nodeData) =>
-      nodeData.processChangingHeight(height)
+      nodeData.processVerticalChanging(height)
     );
   },
 
@@ -71,7 +74,7 @@ export const rightNodeDataImpl: RightMapData = {
     const totalHeightOfList = this.nodes.list
       .map((nodeData) => nodeData.group.height)
       .reduce(sum, 0);
-    const topOfFirstNodeData = -totalHeightOfList / 2;
+    const topOfFirstNodeData = -(totalHeightOfList / 2);
     let cumulativeHeightOfPreNodeData = 0;
 
     this.nodes.list.forEach((nodeData) => {

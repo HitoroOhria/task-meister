@@ -15,7 +15,7 @@ interface MindMapData {
 
   updateRootNodeLateral(width: number): void;
 
-  updateRootNodeLongitudinal(height: number): void;
+  updateRootNodeVertical(height: number): void;
 
   updateRightNodesLeft(): void;
 }
@@ -58,7 +58,7 @@ export const mindMapDataImpl: MindMapData = {
 
   processChangingRootNodeText(width: number, height: number) {
     this.updateRootNodeLateral(width);
-    this.updateRootNodeLongitudinal(height);
+    this.updateRootNodeVertical(height);
     this.updateRightNodesLeft();
   },
 
@@ -67,7 +67,7 @@ export const mindMapDataImpl: MindMapData = {
     this.rootNodeData.left = -width / 2;
   },
 
-  updateRootNodeLongitudinal(height: number) {
+  updateRootNodeVertical(height: number) {
     this.rootNodeData.height = height;
     this.rootNodeData.top = -height / 2;
   },
