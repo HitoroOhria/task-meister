@@ -15,11 +15,11 @@ interface Children {
   findChildById(id: string): NodeData | null;
 
   // Update height of self.
-  // Height of child needs to be updated.
+  // Height of child needs to be updated in advance.
   updateChildrenHeight(): void;
 
   // Update group height of all child.
-  // Following need to be updated.
+  // Following need to be updated in advance.
   //   - height of child
   //   - children height of child
   updateAllChildGroupHeight(): void;
@@ -31,7 +31,7 @@ interface Children {
   updateNodeLeft(parentNodeLeft: number, parentGroupWidth: number): void;
 
   // Update group top left of all child
-  // Group height of child needs to be updated.
+  // Group height of child needs to be updated in advance..
   updateGroupTop(parentGroupTop: number): void;
 }
 
