@@ -37,6 +37,7 @@ const MindMap: FC = () => {
     setMindMapData({ ...mindMapData });
   };
 
+  // TODO Why is display smaller on monitor?
   return (
     // TODO Resize when window size changes
     <PositionAdjuster top={top} left={left}>

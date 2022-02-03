@@ -8,7 +8,7 @@ import {numberOfLines} from "~/util/StringUtil";
 // values of below is average of measured values
 const insideWidthOfTextarea = 40.75;
 const nodeHeightWhenOneLine = 62;
-const heightPerOneLine = 23;
+const heightPerOneLine = 12.5;
 
 type NodeProps = {
   nodeData: NodeData;
@@ -40,7 +40,7 @@ const Node: VFC<NodeProps> = (props) => {
       elementSizeCalculator.measureLongestLineWidth(props.nodeData.text);
     const height =
       nodeHeightWhenOneLine +
-      heightPerOneLine * numberOfLines(props.nodeData.text);
+      heightPerOneLine * (numberOfLines(props.nodeData.text) - 1);
 
     props.processChangingNodeDataText(props.nodeData.id, width, height);
   };
