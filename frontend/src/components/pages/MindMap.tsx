@@ -7,14 +7,34 @@ import { newNodeData } from "~/domain/model/NodeData";
 import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
 
+const node1_1 = newNodeData(
+  "id1-1 of right",
+  "id1-1 of right",
+  newGroup(),
+  newChildren([])
+);
+const node1_2 = newNodeData(
+  "id1-2 of right",
+  "id1-2 of right",
+  newGroup(),
+  newChildren([])
+);
+const node1 = newNodeData(
+  "id1 of right",
+  "id1 of right",
+  newGroup(),
+  newChildren([node1_1, node1_2])
+);
+const node2 = newNodeData(
+  "id2 of right",
+  "id2 of right",
+  newGroup(),
+  newChildren([])
+);
+
 const mindMapDataObj = newMindMapData(
   newNodeData("rootNode", "rootNode", newGroup(), newChildren([])),
-  newRightNodesData(
-    newChildren([
-      newNodeData("id1 of right", "id1 of right", newGroup(), newChildren([])),
-      newNodeData("id2 of right", "id2 of right", newGroup(), newChildren([])),
-    ])
-  ),
+  newRightNodesData(newChildren([node1, node2])),
   newRightNodesData(newChildren([]))
 );
 
