@@ -15,6 +15,8 @@ interface NodeData {
 
   updateTop(): void;
 
+  updateLeft(parentLeft: number, parentWidth: number): void;
+
   processChangingWidth(width: number): void;
 
   processVerticalChanging(height: number): void;
@@ -26,6 +28,8 @@ interface NodeData {
   recursivelyUpdateGroupHeight(): void;
 
   recursivelyUpdateChildrenNodeTop(): void;
+
+  newUpdateNodeTop(parentHeight: number): void;
 
   recursivelyUpdateChildrenGroupTop(): void;
 }
@@ -83,18 +87,24 @@ export const nodeDataImpl: NodeData = {
 
   // Update node top of self
   updateTop() {
-    if (this.height > this.children.height) {
+    if (this.children.height < this.height) {
       this.top = this.group.top;
-    } else {
-      const distanceFromGroupTop = (this.children.height - this.height) / 2;
-      this.top = this.group.top + distanceFromGroupTop;
+      return;
     }
+
+    const distanceFromGroupTop = (this.children.height - this.height) / 2;
+    this.top = this.group.top + distanceFromGroupTop;
+  },
+
+  updateLeft(parentLeft: number, parentWidth: number) {
+    this.left = parentLeft + parentWidth;
   },
 
   processChangingWidth(width: number) {
     this.width = width;
-    this.recursivelyUpdateGroupWidth();
-    this.children.updateNodeLeft(this.left, this.group.width);
+    // TODO 以下を更新する必要はないのでは？
+    // this.recursivelyUpdateGroupWidth();
+    this.children.updateNodeLeft(this.left, this.width);
   },
 
   //
@@ -136,6 +146,19 @@ export const nodeDataImpl: NodeData = {
     this.children.list.forEach((child) =>
       child.recursivelyUpdateChildrenNodeTop()
     );
+  },
+
+  newUpdateNodeTop(parentHeight: number) {
+    if (this.group.height < parentHeight) {
+      this.top = parentHeight - this.height;
+    }
+
+    const distanceFromGroupTop =
+      this.height < this.children.height
+        ? (this.children.height - this.height) / 2
+        : 0;
+
+    this.top = this.group.top + distanceFromGroupTop;
   },
 
   recursivelyUpdateChildrenGroupTop() {

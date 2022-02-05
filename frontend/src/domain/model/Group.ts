@@ -22,6 +22,8 @@ interface Group {
   // Update group height of self.
   updateHeight(nodeHeight: number, childrenHeight: number): void;
 
+  newUpdateHeight(nodeHeight: number, children: Children):  void
+
   updateTop(parentGroupTop: number, totalPreGroupHeight: number): void;
 }
 
@@ -42,7 +44,7 @@ export const groupImpl: Group = {
 
   updateWidth(nodeWidth: number, children: Children) {
     const longestChildWidth = children.list
-      .map((nodeData) => nodeData.group.width)
+      .map((child) => child.group.width)
       .reduce(pickBiggerNumber, 0);
 
     this.width = nodeWidth + longestChildWidth;
@@ -50,6 +52,12 @@ export const groupImpl: Group = {
 
   updateHeight(nodeHeight: number, childrenHeight: number) {
     this.height = nodeHeight > childrenHeight ? nodeHeight : childrenHeight;
+  },
+
+  newUpdateHeight(nodeHeight: number, children: Children) {
+    children.newUpdateChildrenHeight()
+
+    this.height = nodeHeight > children.height ? nodeHeight : children.height;
   },
 
   updateTop(parentGroupTop: number, totalPreGroupHeight: number) {

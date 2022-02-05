@@ -73,10 +73,11 @@ export const mindMapDataImpl: MindMapData = {
   },
 
   updateRightNodesLeft() {
-    const left = this.rootNodeData.width / 2;
-    this.rightMapData.nodes.list.forEach((nodeData) => (nodeData.left = left));
     this.rightMapData.nodes.list.forEach((nodeData) =>
-      nodeData.children.updateNodeLeft(nodeData.left, nodeData.group.width)
+      nodeData.updateLeft(this.rootNodeData.left, this.rootNodeData.width)
+    );
+    this.rightMapData.nodes.list.forEach((nodeData) =>
+      nodeData.children.updateNodeLeft(nodeData.left, nodeData.width)
     );
   },
 };

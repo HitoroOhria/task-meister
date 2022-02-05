@@ -8,7 +8,7 @@ import {numberOfLines} from "~/util/StringUtil";
 // values of below is average of measured values
 const insideWidthOfTextarea = 40.75;
 const nodeHeightWhenOneLine = 62;
-const heightPerOneLine = 12.5;
+const heightPerOneLine = 13;
 
 type NodeProps = {
   nodeData: NodeData;

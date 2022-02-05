@@ -1,5 +1,5 @@
 import NodeData from "~/domain/model/NodeData";
-import { sum } from "~/util/NumberUtil";
+import { sum, total } from "~/util/NumberUtil";
 import Children, { childrenImpl } from "~/domain/model/Children";
 
 interface RightMapData {
@@ -13,7 +13,7 @@ interface RightMapData {
 
   processChangingWidth(target: NodeData, width: number): void;
 
-  processChangingHeight(height: number): void;
+  processChangingHeight(target: NodeData, height: number): void;
 
   // Set group top of first layer on right map.
   // Group height of first layer needs to be updated in advance.
@@ -55,19 +55,37 @@ export const rightNodeDataImpl: RightMapData = {
     if (target == null) return;
 
     this.processChangingWidth(target, width);
-    this.processChangingHeight(height);
+    this.processChangingHeight(target, height);
   },
 
   processChangingWidth(target: NodeData, width: number) {
     target.processChangingWidth(width);
   },
 
-  processChangingHeight(height: number) {
+  processChangingHeight(target: NodeData, height: number) {
     // TODO 事前に第1層の Group Height は更新されているか？
-    this.updateListGroupTop();
-    this.nodes.list.forEach((nodeData) =>
-      nodeData.processVerticalChanging(height)
+    //  - Children の Group Height はどこでセットされるか？
+    //    - Children.updateAllChildGroupHeight
+    // this.updateListGroupTop();
+    // this.nodes.list.forEach((nodeData) =>
+    //   nodeData.processVerticalChanging(height)
+    // );
+
+    target.height = height;
+    this.nodes.newUpdateChildrenHeight();
+    this.nodes.updateAllChildGroupHeight();
+
+    const totalGroupHeights = total(
+      this.nodes.list.map((nodeData) => nodeData.group.height)
     );
+    const nodesGroupTop = -totalGroupHeights / 2;
+    this.nodes.updateAllGroupTop(0, nodesGroupTop);
+    // this.nodes.newUpdateAllNodeTop()
+
+    // const totalOfNodesGroupHeights = total(
+    //   this.nodes.list.map((nodeData) => nodeData.group.height)
+    // );
+    this.nodes.newUpdateAllNodeTop();
   },
 
   updateListGroupTop() {
