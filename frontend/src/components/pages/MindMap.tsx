@@ -1,11 +1,12 @@
 import React, { FC, useState } from "react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import Node from "~/components/organisms/Node";
+import Nodes from "~/components/organisms/Nodes";
 import MindMapData, { newMindMapData } from "~/domain/model/MindMapData";
 import { newRightNodesData } from "~/domain/model/RightMapData";
-import NodeData, { newNodeData } from "~/domain/model/NodeData";
+import { newNodeData } from "~/domain/model/NodeData";
 import { newGroup } from "~/domain/model/Group";
-import Children, { newChildren } from "~/domain/model/Children";
+import { newChildren } from "~/domain/model/Children";
 
 const node1_1 = newNodeData(
   "id1-1 of right",
@@ -57,25 +58,6 @@ const MindMap: FC = () => {
     setMindMapData({ ...mindMapData });
   };
 
-  const renderNode = (nodeData: NodeData): JSX.Element => {
-    return (
-      <Node
-        nodeData={nodeData}
-        setNodeDataText={setNodeDataText}
-        processChangingNodeDataText={processChangingNodeDataText}
-      />
-    );
-  };
-
-  const renderNodes = (children: Children): JSX.Element[] => {
-    const nodes = children.list.map((child) => renderNode(child));
-    const childNodes = children.list.flatMap((child) =>
-      renderNodes(child.children)
-    );
-
-    return nodes.concat(childNodes);
-  };
-
   // TODO Why is display smaller on monitor?
   return (
     // TODO Resize when window size changes
@@ -85,7 +67,11 @@ const MindMap: FC = () => {
         setNodeDataText={setNodeDataText}
         processChangingNodeDataText={processChangingNodeDataText}
       />
-      {renderNodes(mindMapData.rightMapData.nodes)}
+      <Nodes
+        nodes={mindMapData.rightMapData.nodes}
+        setNodeDataText={setNodeDataText}
+        processChangingNodeDataText={processChangingNodeDataText}
+      />
     </PositionAdjuster>
   );
 };
