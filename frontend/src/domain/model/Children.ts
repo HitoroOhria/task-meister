@@ -1,5 +1,5 @@
 import NodeData from "~/domain/model/NodeData";
-import {sum} from "~/util/NumberUtil";
+import {total} from "~/util/NumberUtil";
 
 // Collection of NodeData.
 // Define process to be managed as a whole¬.
@@ -14,35 +14,19 @@ interface Children {
   // find child by id.
   findChildById(id: string): NodeData | null;
 
-  // Update height of self.
-  // Height of child needs to be updated in advance.
-  updateChildrenHeight(): void;
+  recursivelyUpdateGroupAndSelfHeight(): void;
 
-  newUpdateChildrenHeight(): void;
-
-  // Update group height of all child.
-  // Following need to be updated in advance.
-  //   - height of child
-  //   - children height of child
-  updateAllChildGroupHeight(): void;
-
-  // Update node top of all child..
-  updateNodeTop(parentNodeHeight: number, parentGroupTop: number): void;
-
-  newUpdateAllNodeTop(): void;
-
-  newUpdateNodeTop(parentHeight: number, parentTop: number): void;
+  recursivelyUpdateNodeTop(): void;
 
   // Update node left of all child.
-  updateNodeLeft(parentNodeLeft: number, parentGroupWidth: number): void;
+  recursivelySetNodeLeft(
+    parentNodeLeft: number,
+    parentGroupWidth: number
+  ): void;
 
-  updateAllGroupTop(parentHeight: number, parentGroupTop: number): void;
+  recursivelySetGroupTop(parentHeight: number, parentGroupTop: number): void;
 
-  // Update group top left of all child
-  // Group height of child needs to be updated in advance.
-  updateGroupTop(parentGroupTop: number): void;
-
-  newUpdateGroupTop(parentHeight: number, parentGroupTop: number): void;
+  setGroupTop(parentHeight: number, parentGroupTop: number): void;
 }
 
 export const newChildren = (list: NodeData[]): Children => {
@@ -58,7 +42,7 @@ export const childrenImpl: Children = {
 
   findChildById(id: string): NodeData | null {
     for (const child of this.list) {
-      const target = child.findNodeDataById(id);
+      const target = child.findByIdFromGroup(id);
 
       if (target != null) {
         return target;
@@ -68,110 +52,43 @@ export const childrenImpl: Children = {
     return null;
   },
 
-  // TODO どこからも呼ばれてない？
-  updateChildrenHeight() {
-    // TODO 以下は更新されているか？
-    //   - child の高さは更新されているか？
-    //   - child の children height は更新されているか？
-    this.updateAllChildGroupHeight();
-
-    this.height = this.list.map((child) => child.group.height).reduce(sum, 0);
-  },
-
-  newUpdateChildrenHeight() {
+  recursivelyUpdateGroupAndSelfHeight() {
     this.list.forEach((child) =>
-      child.group.newUpdateHeight(child.height, child.children)
+      child.group.updateHeight(child.height, child.children)
     );
 
     // TODO Return 0 when list is empty?
-    this.height = this.list
-      .map((child) => child.group.height)
-      .reduce(
-        (preGroupHeight, curGroupHeight) => sum(preGroupHeight, curGroupHeight),
-        0
-      );
+    this.height = total(this.list.map((child) => child.group.height));
   },
 
-  updateAllChildGroupHeight() {
-    this.list.forEach((child) =>
-      child.group.updateHeight(child.height, child.children.height)
-    );
-  },
-
-  updateNodeTop(parentNodeHeight: number, parentGroupTop: number) {
-    let distanceFromGroupTopOfChild =
-      parentNodeHeight > this.height ? (parentNodeHeight - this.height) / 2 : 0;
-
-    this.list.forEach((child) => {
-      child.top = parentGroupTop + distanceFromGroupTopOfChild;
-      distanceFromGroupTopOfChild += child.group.height;
-    });
-  },
-
-  newUpdateAllNodeTop() {
+  recursivelyUpdateNodeTop() {
     this.list.forEach((child) => child.updateTop());
-    this.list.forEach((child) => child.children.newUpdateAllNodeTop());
-
-    // this.newUpdateNodeTop(parentHeight, parentTop);
-    // this.list.forEach((child) =>
-    //   child.children.newUpdateAllNodeTop(child.height, child.top)
-    // );
+    this.list.forEach((child) => child.children.recursivelyUpdateNodeTop());
   },
 
-  newUpdateNodeTop(parentHeight: number, parentTop: number) {
-    let heightOfParentGroupTop =
+  recursivelySetNodeLeft(parentNodeLeft: number, parentNodeWidth: number) {
+    this.list.forEach((child) =>
+      child.setLeft(parentNodeLeft, parentNodeWidth)
+    );
+    this.list.forEach((child) =>
+      child.children.recursivelySetNodeLeft(child.left, child.width)
+    );
+  },
+
+  recursivelySetGroupTop(parentHeight, parentGroupTop: number) {
+    this.setGroupTop(parentHeight, parentGroupTop);
+    this.list.forEach((child) =>
+      child.children.recursivelySetGroupTop(child.height, child.group.top)
+    );
+  },
+
+  setGroupTop(parentHeight: number, parentGroupTop: number) {
+    let fromParentGroupTop =
       this.height < parentHeight ? (parentHeight - this.height) / 2 : 0;
+
     this.list.forEach((child) => {
-      child.top = parentTop + heightOfParentGroupTop;
-      heightOfParentGroupTop = child.height;
-    });
-  },
-
-  updateNodeLeft(parentNodeLeft: number, parentNodeWidth: number) {
-    this.list.forEach((child) =>
-      child.updateLeft(parentNodeLeft, parentNodeWidth)
-    );
-    this.list.forEach((child) =>
-      child.children.updateNodeLeft(child.left, child.width)
-    );
-  },
-
-  updateAllGroupTop(parentHeight, parentGroupTop: number) {
-    // this.updateGroupTop(parentGroupTop);
-    // this.list.forEach((child) =>
-    //   child.children.updateAllGroupTop(child.group.top)
-    // );
-
-    this.newUpdateGroupTop(parentHeight, parentGroupTop);
-    this.list.forEach((child) =>
-      child.children.updateAllGroupTop(child.height, child.group.top)
-    );
-  },
-
-  updateGroupTop(parentGroupTop: number) {
-    let totalPreChildGroupTop = 0;
-    this.list.forEach((child) => {
-      child.group.updateTop(parentGroupTop, totalPreChildGroupTop);
-      totalPreChildGroupTop += child.group.height;
-    });
-  },
-
-  newUpdateGroupTop(parentHeight: number, parentGroupTop: number) {
-    if (this.height < parentHeight) {
-      let heightFromParentGroupTop = (parentHeight - this.height) / 2;
-      this.list.forEach((child) => {
-        child.group.top = parentGroupTop + heightFromParentGroupTop;
-        // const log = `id: ${child.id} parentGroupTop: ${parentGroupTop} heightFromParentGroupTop: ${heightFromParentGroupTop} groupTop: ${child.group.top}`
-        // child.id === "id1-1 of right" && console.log(log)
-        heightFromParentGroupTop += child.group.height;
-      });
-      return
-    }
-
-    let totalPreChildGroupTop = 0;
-    this.list.forEach((child) => {
-      child.group.updateTop(parentGroupTop, totalPreChildGroupTop);
-      totalPreChildGroupTop += child.group.height;
+      child.group.setTop(parentGroupTop, fromParentGroupTop);
+      fromParentGroupTop += child.group.height;
     });
   },
 };

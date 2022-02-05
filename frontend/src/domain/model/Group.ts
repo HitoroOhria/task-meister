@@ -1,4 +1,3 @@
-import {pickBiggerNumber} from "~/util/NumberUtil";
 import Children from "~/domain/model/Children";
 
 // Total area of node and its children.
@@ -16,15 +15,9 @@ interface Group {
   // group left value of style.
   left: number;
 
-  // Update group width of self.
-  updateWidth(nodeWidth: number, children: Children): void;
+  updateHeight(nodeHeight: number, children: Children):  void
 
-  // Update group height of self.
-  updateHeight(nodeHeight: number, childrenHeight: number): void;
-
-  newUpdateHeight(nodeHeight: number, children: Children):  void
-
-  updateTop(parentGroupTop: number, totalPreGroupHeight: number): void;
+  setTop(parentGroupTop: number, fromGroupHeight: number): void;
 }
 
 export const newGroup = (): Group => {
@@ -42,26 +35,14 @@ export const groupImpl: Group = {
 
   left: 0,
 
-  updateWidth(nodeWidth: number, children: Children) {
-    const longestChildWidth = children.list
-      .map((child) => child.group.width)
-      .reduce(pickBiggerNumber, 0);
-
-    this.width = nodeWidth + longestChildWidth;
-  },
-
-  updateHeight(nodeHeight: number, childrenHeight: number) {
-    this.height = nodeHeight > childrenHeight ? nodeHeight : childrenHeight;
-  },
-
-  newUpdateHeight(nodeHeight: number, children: Children) {
-    children.newUpdateChildrenHeight()
+  updateHeight(nodeHeight: number, children: Children) {
+    children.recursivelyUpdateGroupAndSelfHeight()
 
     this.height = nodeHeight > children.height ? nodeHeight : children.height;
   },
 
-  updateTop(parentGroupTop: number, totalPreGroupHeight: number) {
-    this.top = parentGroupTop + totalPreGroupHeight;
+  setTop(parentGroupTop: number, fromGroupHeight: number) {
+    this.top = parentGroupTop + fromGroupHeight;
   },
 };
 

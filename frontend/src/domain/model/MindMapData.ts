@@ -1,6 +1,6 @@
-import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
 import RightMapData from "~/domain/model/RightMapData";
 import rightNodesData, { rightNodeDataImpl } from "~/domain/model/RightMapData";
+import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
 
 interface MindMapData {
   rootNodeData: NodeData;
@@ -9,9 +9,9 @@ interface MindMapData {
 
   setNodeTextById(id: string, text: string): void;
 
-  processChangingText(id: string, width: number, height: number): void;
+  handleTextChanges(id: string, width: number, height: number): void;
 
-  processChangingRootNodeText(width: number, height: number): void;
+  handleRootNodeTextChanges(width: number, height: number): void;
 
   updateRootNodeLateral(width: number): void;
 
@@ -44,19 +44,19 @@ export const mindMapDataImpl: MindMapData = {
       return;
     }
 
-    this.rightMapData.setNodeTextById(id, text);
+    this.rightMapData.setTextById(id, text);
   },
 
-  processChangingText(id: string, width: number, height: number) {
+  handleTextChanges(id: string, width: number, height: number) {
     if (id === this.rootNodeData.id) {
-      this.processChangingRootNodeText(width, height);
+      this.handleRootNodeTextChanges(width, height);
       return;
     }
 
-    this.rightMapData.processChangingText(id, width, height);
+    this.rightMapData.handleTextChanges(id, width, height);
   },
 
-  processChangingRootNodeText(width: number, height: number) {
+  handleRootNodeTextChanges(width: number, height: number) {
     this.updateRootNodeLateral(width);
     this.updateRootNodeVertical(height);
     this.updateRightNodesLeft();
@@ -73,11 +73,9 @@ export const mindMapDataImpl: MindMapData = {
   },
 
   updateRightNodesLeft() {
-    this.rightMapData.nodes.list.forEach((nodeData) =>
-      nodeData.updateLeft(this.rootNodeData.left, this.rootNodeData.width)
-    );
-    this.rightMapData.nodes.list.forEach((nodeData) =>
-      nodeData.children.updateNodeLeft(nodeData.left, nodeData.width)
+    this.rightMapData.recursivelySetLeft(
+      this.rootNodeData.left,
+      this.rootNodeData.width
     );
   },
 };

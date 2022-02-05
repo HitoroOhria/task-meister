@@ -53,7 +53,7 @@ const MindMap: FC = () => {
     width: number,
     height: number
   ) => {
-    mindMapData.processChangingText(id, width, height);
+    mindMapData.handleTextChanges(id, width, height);
     setMindMapData({ ...mindMapData });
   };
 

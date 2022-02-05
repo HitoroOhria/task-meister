@@ -1,23 +1,21 @@
 import NodeData from "~/domain/model/NodeData";
-import { sum, total } from "~/util/NumberUtil";
 import Children, { childrenImpl } from "~/domain/model/Children";
+import { total } from "~/util/NumberUtil";
 
 interface RightMapData {
   nodes: Children;
 
   findNodeDataById(id: string): NodeData | null;
 
-  setNodeTextById(id: string, text: string): void;
+  setTextById(id: string, text: string): void;
 
-  processChangingText(id: string, width: number, height: number): void;
+  recursivelySetLeft(rootNodeLeft: number, rootNodeWidth: number): void;
 
-  processChangingWidth(target: NodeData, width: number): void;
+  handleTextChanges(id: string, width: number, height: number): void;
 
-  processChangingHeight(target: NodeData, height: number): void;
+  handleLateralChanges(target: NodeData, width: number): void;
 
-  // Set group top of first layer on right map.
-  // Group height of first layer needs to be updated in advance.
-  updateListGroupTop(): void;
+  handleVerticalChanges(target: NodeData, height: number): void;
 }
 
 export const newRightNodesData = (nodes: Children): RightMapData => {
@@ -32,7 +30,7 @@ export const rightNodeDataImpl: RightMapData = {
 
   findNodeDataById(id: string): NodeData | null {
     for (const nodeData of this.nodes.list) {
-      const target = nodeData.findNodeDataById(id);
+      const target = nodeData.findByIdFromGroup(id);
 
       if (target != null) {
         return target;
@@ -43,62 +41,45 @@ export const rightNodeDataImpl: RightMapData = {
     return null;
   },
 
-  setNodeTextById(id: string, text: string) {
+  setTextById(id: string, text: string) {
     const target = this.findNodeDataById(id);
     if (target == null) return;
 
     target.text = text;
   },
 
-  processChangingText(id: string, width: number, height: number) {
+  recursivelySetLeft(rootNodeLeft: number, rootNodeWidth: number) {
+    this.nodes.list.forEach((nodeData) =>
+      nodeData.setLeft(rootNodeLeft, rootNodeWidth)
+    );
+    this.nodes.list.forEach((nodeData) =>
+      nodeData.children.recursivelySetNodeLeft(nodeData.left, nodeData.width)
+    );
+  },
+
+  handleTextChanges(id: string, width: number, height: number) {
     const target = this.findNodeDataById(id);
     if (target == null) return;
 
-    this.processChangingWidth(target, width);
-    this.processChangingHeight(target, height);
+    this.handleLateralChanges(target, width);
+    this.handleVerticalChanges(target, height);
   },
 
-  processChangingWidth(target: NodeData, width: number) {
-    target.processChangingWidth(width);
+  handleLateralChanges(target: NodeData, width: number) {
+    target.handleLateralChanges(width);
   },
 
-  processChangingHeight(target: NodeData, height: number) {
-    // TODO 事前に第1層の Group Height は更新されているか？
-    //  - Children の Group Height はどこでセットされるか？
-    //    - Children.updateAllChildGroupHeight
-    // this.updateListGroupTop();
-    // this.nodes.list.forEach((nodeData) =>
-    //   nodeData.processVerticalChanging(height)
-    // );
-
+  handleVerticalChanges(target: NodeData, height: number) {
     target.height = height;
-    this.nodes.newUpdateChildrenHeight();
-    this.nodes.updateAllChildGroupHeight();
+    this.nodes.recursivelyUpdateGroupAndSelfHeight();
 
-    const totalGroupHeights = total(
+    const totalOfGroupHeights = total(
       this.nodes.list.map((nodeData) => nodeData.group.height)
     );
-    const nodesGroupTop = -totalGroupHeights / 2;
-    this.nodes.updateAllGroupTop(0, nodesGroupTop);
-    // this.nodes.newUpdateAllNodeTop()
+    const nodesGroupTop = -totalOfGroupHeights / 2;
+    this.nodes.recursivelySetGroupTop(0, nodesGroupTop);
 
-    // const totalOfNodesGroupHeights = total(
-    //   this.nodes.list.map((nodeData) => nodeData.group.height)
-    // );
-    this.nodes.newUpdateAllNodeTop();
-  },
-
-  updateListGroupTop() {
-    const totalHeightOfList = this.nodes.list
-      .map((nodeData) => nodeData.group.height)
-      .reduce(sum, 0);
-    const topOfFirstNodeData = -(totalHeightOfList / 2);
-    let cumulativeHeightOfPreNodeData = 0;
-
-    this.nodes.list.forEach((nodeData) => {
-      nodeData.group.top = topOfFirstNodeData + cumulativeHeightOfPreNodeData;
-      cumulativeHeightOfPreNodeData += nodeData.group.height;
-    });
+    this.nodes.recursivelyUpdateNodeTop();
   },
 };
 
