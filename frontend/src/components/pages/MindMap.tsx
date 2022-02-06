@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import Node from "~/components/organisms/Node";
 import Nodes from "~/components/organisms/Nodes";
@@ -41,8 +41,17 @@ const mindMapDataObj = newMindMapData(
 
 const MindMap: FC = () => {
   const [mindMapData, setMindMapData] = useState<MindMapData>(mindMapDataObj);
-  const [top] = useState<number>(window.innerHeight / 2);
-  const [left] = useState<number>(window.innerWidth / 2);
+  const [originTop, setOriginTop] = useState<number>(window.innerHeight / 2);
+  const [originLeft, setOrigintLeft] = useState<number>(window.innerWidth / 2);
+
+  const resetOrigin = () => {
+    setOriginTop(window.innerHeight / 2);
+    setOrigintLeft(window.innerWidth / 2);
+  };
+
+  const componentDidMount = () => {
+    window.onresize = resetOrigin;
+  };
 
   const setNodeDataText = (id: string, text: string) => {
     mindMapData.setNodeTextById(id, text);
@@ -54,10 +63,11 @@ const MindMap: FC = () => {
     setMindMapData({ ...mindMapData });
   };
 
+  useEffect(componentDidMount, []);
+
   // TODO Why is display smaller on monitor?
   return (
-    // TODO Resize when window size changes
-    <PositionAdjuster top={top} left={left}>
+    <PositionAdjuster top={originTop} left={originLeft}>
       <Node
         nodeData={mindMapData.rootNodeData}
         setNodeDataText={setNodeDataText}
