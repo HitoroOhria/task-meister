@@ -26,7 +26,7 @@ export const groupImpl: Group = {
   top: 0,
 
   updateHeight(nodeHeight: number, children: Children) {
-    children.recursivelyUpdateGroupAndSelfHeight();
+    children.recursively.updateGroupAndSelfHeight();
 
     this.height = nodeHeight > children.height ? nodeHeight : children.height;
   },

@@ -65,7 +65,7 @@ export const rightNodeDataImpl: RightMapData = {
       nodeData.setLeft(rootNodeLeft, rootNodeWidth)
     );
     this.nodes.list.forEach((nodeData) =>
-      nodeData.children.recursivelySetNodeLeft(nodeData.left, nodeData.width)
+      nodeData.children.recursively.setNodeLeft(nodeData.left, nodeData.width)
     );
   },
 
@@ -80,20 +80,20 @@ export const rightNodeDataImpl: RightMapData = {
   handleLateralChanges(target: NodeData, width: number, left: number) {
     target.width = width;
     target.left = left;
-    target.children.recursivelySetNodeLeft(left, width);
+    target.children.recursively.setNodeLeft(left, width);
   },
 
   handleVerticalChanges(target: NodeData, height: number) {
     target.height = height;
-    this.nodes.recursivelyUpdateGroupAndSelfHeight();
+    this.nodes.recursively.updateGroupAndSelfHeight();
 
     const totalOfGroupHeights = total(
       this.nodes.list.map((nodeData) => nodeData.group.height)
     );
     const nodesGroupTop = -totalOfGroupHeights / 2;
-    this.nodes.recursivelySetGroupTop(0, nodesGroupTop);
+    this.nodes.recursively.setGroupTop(0, nodesGroupTop);
 
-    this.nodes.recursivelyUpdateNodeTop();
+    this.nodes.recursively.updateNodeTop();
   },
 
   handleDropNode(id: string, top: number, left: number) {
