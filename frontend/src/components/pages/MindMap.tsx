@@ -122,12 +122,8 @@ const MindMap: FC = () => {
       onDragOver={handleDragOver}
       style={{ width: window.innerWidth, height: window.innerHeight }}
     >
-      <Origin
-        ref={originElement}
-        top={originTop}
-        left={originLeft}
-        draggable={false}
-      >
+      <Origin ref={originElement} top={originTop} left={originLeft}>
+        {/* TODO Make tail of root node to draggable */}
         <Node
           nodeData={mindMapData.rootNodeData}
           setNodeDataText={setNodeDataText}

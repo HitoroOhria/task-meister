@@ -41,11 +41,6 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
   const [textareaWidthPx, setTextareaWidthPx] = useState<number>(0);
   const [textareaHeightEm, setTextareaHeightEm] = useState<number>(0);
 
-  const componentDidMount = () => {
-    updateTextareaWidth();
-    updateTextareaHeight();
-  };
-
   const handleTextChanges = () => {
     // TODO Can refactor to use BoundingClientRect?
     //   - see https://developer.mozilla.org/ja/docs/Web/API/Element/getBoundingClientRect
@@ -69,6 +64,11 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
 
     const heightEm = numberOfLines(props.text) * lineHeightEm;
     setTextareaHeightEm(heightEm);
+  };
+
+  const componentDidMount = () => {
+    updateTextareaWidth();
+    updateTextareaHeight();
   };
 
   useEffect(componentDidMount, []);

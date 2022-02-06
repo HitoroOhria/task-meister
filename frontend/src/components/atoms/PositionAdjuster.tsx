@@ -4,7 +4,7 @@ import { styled } from "@linaria/react";
 type PositionAdjusterProps = {
   top: number;
   left: number;
-  draggable: boolean;
+  draggable?: boolean;
   children?: ReactNode;
 };
 

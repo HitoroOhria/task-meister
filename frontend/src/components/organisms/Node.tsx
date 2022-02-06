@@ -55,6 +55,7 @@ const Node: VFC<NodeProps> = (props) => {
   useEffect(handleNodeTextChanges, [props.nodeData.text]);
 
   return (
+    // TODO Make TextInputer draggable
     <PositionAdjuster
       ref={nodeDivElement}
       top={props.nodeData.top}
