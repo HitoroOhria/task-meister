@@ -14,6 +14,7 @@ const Nodes: VFC<NodesProps> = (props) => {
   const renderNode = (nodeData: NodeData): JSX.Element => {
     return (
       <Node
+        key={nodeData.id}
         nodeData={nodeData}
         setNodeDataText={props.setNodeDataText}
         handleNodeTextChanges={props.handleNodeTextChanges}
@@ -27,7 +28,6 @@ const Nodes: VFC<NodesProps> = (props) => {
       renderNodes(child.children)
     );
 
-    console.log(nodes.concat(childNodes));
     return nodes.concat(childNodes);
   };
 
