@@ -62,6 +62,7 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
   const updateTextareaHeight = () => {
     if (textareaElement.current === null) return;
 
+    // TODO Maybe height changes depending on resolution of display
     const heightEm = numberOfLines(props.text) * lineHeightEm;
     setTextareaHeightEm(heightEm);
   };
