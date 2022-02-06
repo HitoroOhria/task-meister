@@ -7,11 +7,7 @@ import NodeData from "~/domain/model/NodeData";
 type NodesProps = {
   nodes: Children;
   setNodeDataText: (id: string, text: string) => void;
-  processChangingNodeDataText: (
-    id: string,
-    width: number,
-    height: number
-  ) => void;
+  handleNodeTextChanges: (id: string, width: number, height: number) => void;
 };
 
 const Nodes: VFC<NodesProps> = (props) => {
@@ -20,7 +16,7 @@ const Nodes: VFC<NodesProps> = (props) => {
       <Node
         nodeData={nodeData}
         setNodeDataText={props.setNodeDataText}
-        processChangingNodeDataText={props.processChangingNodeDataText}
+        handleNodeTextChanges={props.handleNodeTextChanges}
       />
     );
   };

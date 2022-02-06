@@ -42,16 +42,16 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
   const [textareaHeightEm, setTextareaHeightEm] = useState<number>(0);
 
   const componentDidMount = () => {
-    updateTextInputerWidth();
-    updateTextInputerHeight();
+    updateTextareaWidth();
+    updateTextareaHeight();
   };
 
-  const processChangingText = () => {
-    updateTextInputerWidth();
-    updateTextInputerHeight();
+  const handleTextChanges = () => {
+    updateTextareaWidth();
+    updateTextareaHeight();
   };
 
-  const updateTextInputerWidth = () => {
+  const updateTextareaWidth = () => {
     if (textareaElement.current === null) return;
 
     const textWidth = Math.ceil(
@@ -62,7 +62,7 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
     setTextareaWidthPx(textareaWidth);
   };
 
-  const updateTextInputerHeight = () => {
+  const updateTextareaHeight = () => {
     if (textareaElement.current === null) return;
 
     const heightEm = numberOfLines(props.text) * lineHeightEm;
@@ -70,7 +70,7 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
   };
 
   useEffect(componentDidMount, []);
-  useEffect(processChangingText, [props.text]);
+  useEffect(handleTextChanges, [props.text]);
 
   return (
     // TODO Eliminate range selection after double-clicking

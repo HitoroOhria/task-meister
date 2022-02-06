@@ -49,11 +49,7 @@ const MindMap: FC = () => {
     setMindMapData({ ...mindMapData });
   };
 
-  const processChangingNodeDataText = (
-    id: string,
-    width: number,
-    height: number
-  ) => {
+  const handleNodeTextChanges = (id: string, width: number, height: number) => {
     mindMapData.handleTextChanges(id, width, height);
     setMindMapData({ ...mindMapData });
   };
@@ -65,12 +61,12 @@ const MindMap: FC = () => {
       <Node
         nodeData={mindMapData.rootNodeData}
         setNodeDataText={setNodeDataText}
-        processChangingNodeDataText={processChangingNodeDataText}
+        handleNodeTextChanges={handleNodeTextChanges}
       />
       <Nodes
         nodes={mindMapData.rightMapData.nodes}
         setNodeDataText={setNodeDataText}
-        processChangingNodeDataText={processChangingNodeDataText}
+        handleNodeTextChanges={handleNodeTextChanges}
       />
     </PositionAdjuster>
   );

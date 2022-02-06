@@ -13,28 +13,24 @@ const heightPerOneLine = 13;
 type NodeProps = {
   nodeData: NodeData;
   setNodeDataText: (id: string, text: string) => void;
-  processChangingNodeDataText: (
-    id: string,
-    width: number,
-    height: number
-  ) => void;
+  handleNodeTextChanges: (id: string, width: number, height: number) => void;
 };
 
 const Node: VFC<NodeProps> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
 
   const componentDidMount = () => {
-    processChangingNodeDataText();
+    handleNodeTextChanges();
   };
 
-  const handleTextInputerSetText = (text: string) => {
+  const handleSetText = (text: string) => {
     nodeDivElement.current && props.setNodeDataText(props.nodeData.id, text);
   };
 
   // Do not use value of element. (ex. innerHeight, offsetHeight)
   // Because getting process ends before dom rendered. and the value of the previous text is acquired.
   // So, get previous value
-  const processChangingNodeDataText = () => {
+  const handleNodeTextChanges = () => {
     const width =
       insideWidthOfTextarea +
       elementSizeCalculator.measureLongestLineWidth(props.nodeData.text);
@@ -42,11 +38,11 @@ const Node: VFC<NodeProps> = (props) => {
       nodeHeightWhenOneLine +
       heightPerOneLine * (numberOfLines(props.nodeData.text) - 1);
 
-    props.processChangingNodeDataText(props.nodeData.id, width, height);
+    props.handleNodeTextChanges(props.nodeData.id, width, height);
   };
 
   useEffect(componentDidMount, []);
-  useEffect(processChangingNodeDataText, [props.nodeData.text]);
+  useEffect(handleNodeTextChanges, [props.nodeData.text]);
 
   return (
     <PositionAdjuster
@@ -54,10 +50,7 @@ const Node: VFC<NodeProps> = (props) => {
       top={props.nodeData.top}
       left={props.nodeData.left}
     >
-      <TextInputer
-        text={props.nodeData.text}
-        setText={handleTextInputerSetText}
-      />
+      <TextInputer text={props.nodeData.text} setText={handleSetText} />
     </PositionAdjuster>
   );
 };
