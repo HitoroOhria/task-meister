@@ -20,7 +20,7 @@ const Node: VFC<NodeProps> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
 
   const handleSetText = (text: string) => {
-    nodeDivElement.current && props.setNodeDataText(props.nodeData.id, text);
+    props.setNodeDataText(props.nodeData.id, text);
   };
 
   // Do not use value of element. (ex. innerHeight, offsetHeight)
@@ -56,14 +56,11 @@ const Node: VFC<NodeProps> = (props) => {
 
   return (
     // TODO Make TextInputer draggable
-    <PositionAdjuster
-      ref={nodeDivElement}
-      top={props.nodeData.top}
-      left={props.nodeData.left}
-      draggable={true}
-    >
-      <TextInputer text={props.nodeData.text} setText={handleSetText} />
-    </PositionAdjuster>
+    <div ref={nodeDivElement} draggable={"true"}>
+      <PositionAdjuster top={props.nodeData.top} left={props.nodeData.left}>
+        <TextInputer text={props.nodeData.text} setText={handleSetText} />
+      </PositionAdjuster>
+    </div>
   );
 };
 

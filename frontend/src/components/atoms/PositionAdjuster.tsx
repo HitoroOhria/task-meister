@@ -4,7 +4,6 @@ import { styled } from "@linaria/react";
 type PositionAdjusterProps = {
   top: number;
   left: number;
-  draggable?: boolean;
   children?: ReactNode;
 };
 
@@ -22,12 +21,7 @@ const PositionAdjusterDiv = styled.div<PositionAdjusterDivProps>`
 const PositionAdjuster = forwardRef<HTMLDivElement, PositionAdjusterProps>(
   (props, ref) => {
     return (
-      <PositionAdjusterDiv
-        ref={ref}
-        top={props.top}
-        left={props.left}
-        draggable={props.draggable}
-      >
+      <PositionAdjusterDiv ref={ref} top={props.top} left={props.left}>
         {props.children}
       </PositionAdjusterDiv>
     );
