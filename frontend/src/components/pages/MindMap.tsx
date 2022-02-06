@@ -8,8 +8,6 @@ import { newNodeData } from "~/domain/model/NodeData";
 import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
 
-const Origin = PositionAdjuster;
-
 const node1_2_1 = newNodeData(
   "id1-2-1 of right",
   "id1-2-1 of right",
@@ -122,19 +120,21 @@ const MindMap: FC = () => {
       onDragOver={handleDragOver}
       style={{ width: window.innerWidth, height: window.innerHeight }}
     >
-      <Origin ref={originElement} top={originTop} left={originLeft}>
-        {/* TODO Make tail of root node to draggable */}
-        <Node
-          nodeData={mindMapData.rootNodeData}
-          setNodeDataText={setNodeDataText}
-          handleNodeTextChanges={handleNodeTextChanges}
-        />
-        <Nodes
-          nodes={mindMapData.rightMapData.nodes}
-          setNodeDataText={setNodeDataText}
-          handleNodeTextChanges={handleNodeTextChanges}
-        />
-      </Origin>
+      <PositionAdjuster top={originTop} left={originLeft}>
+        <div ref={originElement}>
+          {/* TODO Make tail of root node to draggable */}
+          <Node
+            nodeData={mindMapData.rootNodeData}
+            setNodeDataText={setNodeDataText}
+            handleNodeTextChanges={handleNodeTextChanges}
+          />
+          <Nodes
+            nodes={mindMapData.rightMapData.nodes}
+            setNodeDataText={setNodeDataText}
+            handleNodeTextChanges={handleNodeTextChanges}
+          />
+        </div>
+      </PositionAdjuster>
     </div>
   );
 };

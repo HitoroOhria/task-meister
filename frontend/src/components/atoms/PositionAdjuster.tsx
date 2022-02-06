@@ -1,4 +1,4 @@
-import React, { forwardRef, ReactNode } from "react";
+import React, { FC, ReactNode } from "react";
 import { styled } from "@linaria/react";
 
 type PositionAdjusterProps = {
@@ -18,14 +18,12 @@ const PositionAdjusterDiv = styled.div<PositionAdjusterDivProps>`
   left: ${(props) => props.left}px;
 `;
 
-const PositionAdjuster = forwardRef<HTMLDivElement, PositionAdjusterProps>(
-  (props, ref) => {
-    return (
-      <PositionAdjusterDiv ref={ref} top={props.top} left={props.left}>
-        {props.children}
-      </PositionAdjusterDiv>
-    );
-  }
-);
+const PositionAdjuster: FC<PositionAdjusterProps> = (props) => {
+  return (
+    <PositionAdjusterDiv top={props.top} left={props.left}>
+      {props.children}
+    </PositionAdjusterDiv>
+  );
+};
 
 export default PositionAdjuster;
