@@ -1,5 +1,8 @@
-import Group, { groupImpl } from "~/domain/model/Group";
-import Children, { childrenImpl } from "~/domain/model/Children";
+import Group, {groupImpl} from "~/domain/model/Group";
+import Children, {childrenImpl} from "~/domain/model/Children";
+
+// Ratio of width representing tail area of node.
+const tailAreaRatio = 0.2;
 
 interface NodeData {
   id: string;
@@ -13,11 +16,21 @@ interface NodeData {
 
   findByIdFromGroup(id: string): NodeData | null;
 
+  findByPositionFromGroup(top: number, left: number): NodeData | null;
+
+  inXRange(left: number): boolean;
+
+  inYRange(top: number): boolean;
+
+  onUpper(top: number): boolean;
+
+  onTail(left: number): boolean;
+
   updateTop(): void;
 
   setLeft(parentLeft: number, parentWidth: number): void;
 
-  handleLateralChanges(width: number): void;
+  insertChild(target: NodeData): void;
 }
 
 export const newNodeData = (
@@ -71,6 +84,38 @@ export const nodeDataImpl: NodeData = {
     return this.children.findChildById(id);
   },
 
+  findByPositionFromGroup(top: number, left: number): NodeData | null {
+    if (this.inXRange(left) && this.inYRange(top)) {
+      return this;
+    }
+
+    return this.children.findChildByPosition(top, left);
+  },
+
+  // TODO Respond to left map.
+  //   - Maybe invert width when left map
+  inXRange(left: number): boolean {
+    return this.left < left && left < this.left + this.width;
+  },
+
+  inYRange(top: number): boolean {
+    return this.top < top && top < this.top + this.height;
+  },
+
+  onUpper(top: number): boolean {
+    const center = this.top + this.height / 2;
+
+    return this.top < top && top < center;
+  },
+
+  // TODO Respond to left map.
+  //   - Maybe invert width when left map
+  onTail(left: number): boolean {
+    const border = this.left + this.width * (1 - tailAreaRatio);
+
+    return border < left && left < this.left + this.width;
+  },
+
   // Update node top of self
   updateTop() {
     const fromGroupTop =
@@ -84,9 +129,8 @@ export const nodeDataImpl: NodeData = {
     this.left = parentLeft + parentWidth;
   },
 
-  handleLateralChanges(width: number) {
-    this.width = width;
-    this.children.recursivelySetNodeLeft(this.left, this.width);
+  insertChild(target: NodeData) {
+    this.children.list.push(target);
   },
 };
 

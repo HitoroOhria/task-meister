@@ -47,6 +47,8 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
   };
 
   const handleTextChanges = () => {
+    // TODO Can refactor to use BoundingClientRect?
+    //   - see https://developer.mozilla.org/ja/docs/Web/API/Element/getBoundingClientRect
     updateTextareaWidth();
     updateTextareaHeight();
   };
@@ -57,7 +59,7 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
     const textWidth = Math.ceil(
       elementSizeCalculator.measureLongestLineWidth(props.text)
     );
-    const textareaWidth = textWidth > minWidthPx ? textWidth : minWidthPx;
+    const textareaWidth = minWidthPx < textWidth ? textWidth : minWidthPx;
 
     setTextareaWidthPx(textareaWidth);
   };

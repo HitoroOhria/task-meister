@@ -13,9 +13,20 @@ interface RightMapData {
 
   handleTextChanges(id: string, width: number, height: number): void;
 
-  handleLateralChanges(target: NodeData, width: number): void;
+  handleLateralChanges(target: NodeData, width: number, left: number): void;
 
   handleVerticalChanges(target: NodeData, height: number): void;
+
+  handleDropNode(id: string, top: number, left: number): void;
+
+  removeNode(id: string): NodeData | null;
+
+  insertNode(
+    target: NodeData,
+    top: number,
+    left: number,
+    lowerNode: NodeData
+  ): void;
 }
 
 export const newRightNodesData = (nodes: Children): RightMapData => {
@@ -29,6 +40,7 @@ export const rightNodeDataImpl: RightMapData = {
   nodes: childrenImpl,
 
   findNodeDataById(id: string): NodeData | null {
+    // TODO Can refactor using Children.findById?
     for (const nodeData of this.nodes.list) {
       const target = nodeData.findByIdFromGroup(id);
 
@@ -61,12 +73,14 @@ export const rightNodeDataImpl: RightMapData = {
     const target = this.findNodeDataById(id);
     if (target == null) return;
 
-    this.handleLateralChanges(target, width);
+    this.handleLateralChanges(target, width, target.left);
     this.handleVerticalChanges(target, height);
   },
 
-  handleLateralChanges(target: NodeData, width: number) {
-    target.handleLateralChanges(width);
+  handleLateralChanges(target: NodeData, width: number, left: number) {
+    target.width = width;
+    target.left = left;
+    target.children.recursivelySetNodeLeft(left, width);
   },
 
   handleVerticalChanges(target: NodeData, height: number) {
@@ -80,6 +94,50 @@ export const rightNodeDataImpl: RightMapData = {
     this.nodes.recursivelySetGroupTop(0, nodesGroupTop);
 
     this.nodes.recursivelyUpdateNodeTop();
+  },
+
+  handleDropNode(id: string, top: number, left: number) {
+    const lowerNode = this.nodes.findChildByPosition(top, left);
+    if (lowerNode == null) return;
+
+    const movedNode = this.removeNode(id);
+    if (movedNode == null) return;
+    this.insertNode(movedNode, top, left, lowerNode);
+
+    const newLeft = lowerNode.onTail(left)
+      ? lowerNode.left + lowerNode.width
+      : lowerNode.left;
+    this.handleLateralChanges(movedNode, movedNode.width, newLeft);
+    this.handleVerticalChanges(movedNode, movedNode.height);
+  },
+
+  removeNode(id: string): NodeData | null {
+    const children = this.nodes.findChildrenContainsId(id);
+    if (children == null) {
+      console.error(
+        `can not found id of target to remove from all children. id = ${id}`
+      );
+      return null;
+    }
+
+    return children.removeChild(id);
+  },
+
+  insertNode(target: NodeData, top: number, left: number, lowerNode: NodeData) {
+    if (lowerNode.onTail(left)) {
+      lowerNode.insertChild(target);
+      return;
+    }
+
+    const children = this.nodes.findChildrenContainsId(lowerNode.id);
+    if (children == null) {
+      console.error(
+        `can not find NodeData using id to insert. id of lower node = ${lowerNode.id}`
+      );
+      return;
+    }
+
+    children.insertChild(target, top, lowerNode);
   },
 };
 

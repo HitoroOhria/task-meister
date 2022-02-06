@@ -18,6 +18,8 @@ interface MindMapData {
   updateRootNodeVertical(height: number): void;
 
   updateRightNodesLeft(): void;
+
+  handleDropNode(id: string, top: number, left: number): void;
 }
 
 export const newMindMapData = (
@@ -78,6 +80,10 @@ export const mindMapDataImpl: MindMapData = {
       this.rootNodeData.width
     );
   },
+
+  handleDropNode(id: string, top: number, left: number) {
+    this.rightMapData.handleDropNode(id, top, left)
+  }
 };
 
 Object.freeze(mindMapDataImpl);

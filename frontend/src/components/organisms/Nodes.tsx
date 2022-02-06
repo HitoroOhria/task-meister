@@ -1,5 +1,4 @@
 import React, { VFC } from "react";
-import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import Children from "~/domain/model/Children";
 import Node from "~/components/organisms/Node";
 import NodeData from "~/domain/model/NodeData";
@@ -32,9 +31,9 @@ const Nodes: VFC<NodesProps> = (props) => {
   };
 
   return (
-    <PositionAdjuster top={0} left={0}>
+    <div>
       {renderNodes(props.nodes)}
-    </PositionAdjuster>
+    </div>
   );
 };
 

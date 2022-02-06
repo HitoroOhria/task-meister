@@ -14,6 +14,14 @@ interface Children {
   // find child by id.
   findChildById(id: string): NodeData | null;
 
+  findChildByPosition(top: number, left: number): NodeData | null;
+
+  findChildrenContainsId(id: string): Children | null;
+
+  removeChild(id: string): NodeData | null;
+
+  insertChild(target: NodeData, dropTop: number, lowerNode: NodeData): void;
+
   recursivelyUpdateGroupAndSelfHeight(): void;
 
   recursivelyUpdateNodeTop(): void;
@@ -50,6 +58,60 @@ export const childrenImpl: Children = {
     }
 
     return null;
+  },
+
+  findChildByPosition(top: number, left: number): NodeData | null {
+    for (const child of this.list) {
+      const target = child.findByPositionFromGroup(top, left);
+
+      if (target != null) {
+        return target;
+      }
+    }
+
+    return null;
+  },
+
+  findChildrenContainsId(id: string): Children | null {
+    const include = this.list.map((child) => child.id).includes(id);
+    if (include) {
+      return this;
+    }
+
+    for (const child of this.list) {
+      const target = child.children.findChildrenContainsId(id);
+
+      if (target != null) {
+        return target;
+      }
+    }
+
+    return null;
+  },
+
+  removeChild(id: string): NodeData | null {
+    const target = this.list.find((child) => child.id === id);
+    const targetIndex = this.list.findIndex((child) => child.id === id);
+    if (target === undefined || targetIndex === -1) {
+      console.log(
+        `can not found targetId to remove from this children. id = ${id}`
+      );
+      return null;
+    }
+
+    this.list.splice(targetIndex, 1);
+    return target;
+  },
+
+  insertChild(target: NodeData, dropTop: number, lowerNode: NodeData) {
+    let index = this.list.findIndex((child) => child.id === lowerNode.id);
+    if (index < 0 || this.list.length < index) {
+      console.error(`index out of list. index = ${index}`);
+      return;
+    }
+
+    lowerNode.onUpper(dropTop) || index++;
+    this.list.splice(index, 0, target);
   },
 
   recursivelyUpdateGroupAndSelfHeight() {

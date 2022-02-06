@@ -19,10 +19,6 @@ type NodeProps = {
 const Node: VFC<NodeProps> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
 
-  const componentDidMount = () => {
-    handleNodeTextChanges();
-  };
-
   const handleSetText = (text: string) => {
     nodeDivElement.current && props.setNodeDataText(props.nodeData.id, text);
   };
@@ -41,6 +37,20 @@ const Node: VFC<NodeProps> = (props) => {
     props.handleNodeTextChanges(props.nodeData.id, width, height);
   };
 
+  const addDragEventListener = () => {
+    nodeDivElement.current &&
+      nodeDivElement.current.addEventListener("dragstart", handleDragStart);
+  };
+
+  const handleDragStart = (e: DragEvent) => {
+    e.dataTransfer && e.dataTransfer.setData("text/plain", props.nodeData.id);
+  };
+
+  const componentDidMount = () => {
+    handleNodeTextChanges();
+    addDragEventListener();
+  };
+
   useEffect(componentDidMount, []);
   useEffect(handleNodeTextChanges, [props.nodeData.text]);
 
@@ -49,6 +59,7 @@ const Node: VFC<NodeProps> = (props) => {
       ref={nodeDivElement}
       top={props.nodeData.top}
       left={props.nodeData.left}
+      draggable={true}
     >
       <TextInputer text={props.nodeData.text} setText={handleSetText} />
     </PositionAdjuster>
