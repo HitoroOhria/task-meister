@@ -42,11 +42,11 @@ const mindMapDataObj = newMindMapData(
 const MindMap: FC = () => {
   const [mindMapData, setMindMapData] = useState<MindMapData>(mindMapDataObj);
   const [originTop, setOriginTop] = useState<number>(window.innerHeight / 2);
-  const [originLeft, setOrigintLeft] = useState<number>(window.innerWidth / 2);
+  const [originLeft, setOriginLeft] = useState<number>(window.innerWidth / 2);
 
   const resetOrigin = () => {
     setOriginTop(window.innerHeight / 2);
-    setOrigintLeft(window.innerWidth / 2);
+    setOriginLeft(window.innerWidth / 2);
   };
 
   const componentDidMount = () => {
