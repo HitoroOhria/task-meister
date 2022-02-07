@@ -1,10 +1,11 @@
 import Group, {groupImpl} from "~/domain/model/Group";
 import Children, {childrenImpl} from "~/domain/model/Children";
+import DropPosition from "~/domain/model/DropPosition";
 
 // Ratio of width representing tail area of node.
 const tailAreaRatio = 0.2;
 
-interface NodeData {
+type NodeData = {
   id: string;
   text: string;
   width: number;
@@ -16,7 +17,7 @@ interface NodeData {
 
   findByIdFromGroup(id: string): NodeData | null;
 
-  findByPositionFromGroup(top: number, left: number): NodeData | null;
+  findByPositionFromGroup(position: DropPosition): NodeData | null;
 
   inXRange(left: number): boolean;
 
@@ -31,7 +32,7 @@ interface NodeData {
   setLeft(parentLeft: number, parentWidth: number): void;
 
   insertChild(target: NodeData): void;
-}
+};
 
 export const newNodeData = (
   id: string,
@@ -84,12 +85,12 @@ export const nodeDataImpl: NodeData = {
     return this.children.findChildById(id);
   },
 
-  findByPositionFromGroup(top: number, left: number): NodeData | null {
-    if (this.inXRange(left) && this.inYRange(top)) {
+  findByPositionFromGroup(position: DropPosition): NodeData | null {
+    if (this.inXRange(position.left) && this.inYRange(position.top)) {
       return this;
     }
 
-    return this.children.findChildByPosition(top, left);
+    return this.children.findChildByPosition(position);
   },
 
   // TODO Respond to left map.

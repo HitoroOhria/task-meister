@@ -1,8 +1,9 @@
 import NodeData from "~/domain/model/NodeData";
 import Children, { childrenImpl } from "~/domain/model/Children";
+import DropPosition from "~/domain/model/DropPosition";
 import { total } from "~/util/NumberUtil";
 
-interface RightMapData {
+type RightMapData = {
   nodes: Children;
 
   findNodeDataById(id: string): NodeData | null;
@@ -17,17 +18,16 @@ interface RightMapData {
 
   handleVerticalChanges(target: NodeData, height: number): void;
 
-  handleDropNode(id: string, top: number, left: number): void;
+  handleDropNode(id: string, dropPosition: DropPosition): void;
 
   removeNode(id: string): NodeData | null;
 
   insertNode(
     target: NodeData,
-    top: number,
-    left: number,
+    dropPosition: DropPosition,
     lowerNode: NodeData
   ): void;
-}
+};
 
 export const newRightNodesData = (nodes: Children): RightMapData => {
   return {
@@ -96,16 +96,16 @@ export const rightNodeDataImpl: RightMapData = {
     this.nodes.recursively.updateNodeTop();
   },
 
-  handleDropNode(id: string, top: number, left: number) {
-    const lowerNode = this.nodes.findChildByPosition(top, left);
+  handleDropNode(id: string, dropPosition: DropPosition) {
     // TODO Node cannot move to own children
+    const lowerNode = this.nodes.findChildByPosition(dropPosition);
     if (lowerNode == null) return;
 
     const movedNode = this.removeNode(id);
     if (movedNode == null) return;
-    this.insertNode(movedNode, top, left, lowerNode);
+    this.insertNode(movedNode, dropPosition, lowerNode);
 
-    const newLeft = lowerNode.onTail(left)
+    const newLeft = lowerNode.onTail(dropPosition.left)
       ? lowerNode.left + lowerNode.width
       : lowerNode.left;
     this.handleLateralChanges(movedNode, movedNode.width, newLeft);
@@ -124,8 +124,12 @@ export const rightNodeDataImpl: RightMapData = {
     return children.removeChild(id);
   },
 
-  insertNode(target: NodeData, top: number, left: number, lowerNode: NodeData) {
-    if (lowerNode.onTail(left)) {
+  insertNode(
+    target: NodeData,
+    dropPosition: DropPosition,
+    lowerNode: NodeData
+  ) {
+    if (lowerNode.onTail(dropPosition.left)) {
       lowerNode.insertChild(target);
       return;
     }
@@ -138,7 +142,7 @@ export const rightNodeDataImpl: RightMapData = {
       return;
     }
 
-    children.insertChild(target, top, lowerNode);
+    children.insertChild(target, dropPosition.top, lowerNode);
   },
 };
 

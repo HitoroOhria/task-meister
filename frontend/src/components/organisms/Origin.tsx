@@ -7,13 +7,14 @@ import React, {
   useState,
 } from "react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
+import OriginPoint, { newOriginPoint } from "~/domain/model/OriginPoint";
 
 type OriginProps = {
   children?: ReactNode;
 };
 
 export type OriginHandles = {
-  getPagePoint: () => [number, number];
+  getPoint: () => OriginPoint | null;
 };
 
 const Origin = forwardRef<OriginHandles, OriginProps>((props, ref) => {
@@ -21,17 +22,15 @@ const Origin = forwardRef<OriginHandles, OriginProps>((props, ref) => {
   const [top, setTop] = useState<number>(window.innerHeight / 2);
   const [left, setLeft] = useState<number>(window.innerWidth / 2);
 
-  const getPagePoint = (): [number, number] => {
-    if (originElement.current == null) return [0, 0];
+  const getPoint = (): OriginPoint | null => {
+    if (originElement.current == null) return null;
 
     const rect = originElement.current.getBoundingClientRect();
     const pageX = window.scrollX + rect.left;
     const pageY = window.scrollY + rect.top;
 
-    return [pageX, pageY];
+    return newOriginPoint(pageX, pageY);
   };
-
-  useImperativeHandle(ref, () => ({ getPagePoint }));
 
   const resetPosition = () => {
     setTop(window.innerHeight / 2);
@@ -43,6 +42,7 @@ const Origin = forwardRef<OriginHandles, OriginProps>((props, ref) => {
   };
 
   useEffect(componentDidMount, []);
+  useImperativeHandle(ref, () => ({ getPoint: getPoint }));
 
   return (
     <PositionAdjuster top={top} left={left}>

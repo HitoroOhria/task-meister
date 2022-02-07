@@ -2,7 +2,7 @@ import Children from "~/domain/model/Children";
 
 // Total area of node and its children.
 // Group has area and location information.
-interface Group {
+type Group = {
   // total height of node and children.
   height: number;
 
@@ -12,7 +12,7 @@ interface Group {
   updateHeight(nodeHeight: number, children: Children): void;
 
   setTop(parentGroupTop: number, fromGroupHeight: number): void;
-}
+};
 
 export const newGroup = (): Group => {
   return {

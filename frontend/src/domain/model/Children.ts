@@ -3,15 +3,16 @@ import RecursivelyChildren, {
   newRecursivelyChildren,
   recursivelyChildrenImpl,
 } from "~/domain/model/RecursivelyChildren";
+import DropPosition from "~/domain/model/DropPosition";
 
 // Collection of NodeData.
 // Define process to be managed as a whole¬.
-interface Children {
+type Children = {
   // Collection of nodes
   // TODO Can expressed by implementing Array?
   list: NodeData[];
 
-  recursively: RecursivelyChildren
+  recursively: RecursivelyChildren;
 
   // total height of children node.
   height: number;
@@ -19,7 +20,7 @@ interface Children {
   // find child by id.
   findChildById(id: string): NodeData | null;
 
-  findChildByPosition(top: number, left: number): NodeData | null;
+  findChildByPosition(position: DropPosition): NodeData | null;
 
   findChildrenContainsId(id: string): Children | null;
 
@@ -28,14 +29,14 @@ interface Children {
   insertChild(target: NodeData, dropTop: number, lowerNode: NodeData): void;
 
   setGroupTop(parentHeight: number, parentGroupTop: number): void;
-}
+};
 
 export const newChildren = (list: NodeData[]): Children => {
   const children: Children = {
     ...childrenImpl,
     list: list,
-  }
-  children.recursively = newRecursivelyChildren(children)
+  };
+  children.recursively = newRecursivelyChildren(children);
 
   return children;
 };
@@ -57,9 +58,9 @@ export const childrenImpl: Children = {
     return null;
   },
 
-  findChildByPosition(top: number, left: number): NodeData | null {
+  findChildByPosition(position: DropPosition): NodeData | null {
     for (const child of this.list) {
-      const target = child.findByPositionFromGroup(top, left);
+      const target = child.findByPositionFromGroup(position);
 
       if (target != null) {
         return target;

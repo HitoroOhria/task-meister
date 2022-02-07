@@ -7,6 +7,7 @@ import { newRightNodesData } from "~/domain/model/RightMapData";
 import { newNodeData } from "~/domain/model/NodeData";
 import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
+import { newDropPosition } from "~/domain/model/DropPosition";
 
 const node1_2_1 = newNodeData(
   "id1-2-1 of right",
@@ -88,13 +89,11 @@ const MindMap: FC = () => {
     e.preventDefault();
     if (originElement.current == null) return;
 
-    const [originX, originY] = originElement.current.getPagePoint();
-
-    const mouseTopFromOrigin = e.pageY - originY;
-    const mouseLeftFromOrigin = e.pageX - originX;
     const nodeId = e.dataTransfer!.getData("text/plain");
+    const originPoint = originElement.current.getPoint();
+    const dropPosition = newDropPosition(e, originPoint!);
 
-    mindMapData.handleDropNode(nodeId, mouseTopFromOrigin, mouseLeftFromOrigin);
+    mindMapData.handleDropNode(nodeId, dropPosition);
     setMindMapData({ ...mindMapData });
   };
 

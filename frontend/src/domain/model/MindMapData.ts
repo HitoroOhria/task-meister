@@ -1,8 +1,9 @@
 import RightMapData from "~/domain/model/RightMapData";
 import rightNodesData, { rightNodeDataImpl } from "~/domain/model/RightMapData";
 import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
+import DropPosition from "~/domain/model/DropPosition";
 
-interface MindMapData {
+type MindMapData = {
   rootNodeData: NodeData;
   rightMapData: RightMapData;
   leftMapData: rightNodesData;
@@ -19,8 +20,8 @@ interface MindMapData {
 
   updateRightNodesLeft(): void;
 
-  handleDropNode(id: string, top: number, left: number): void;
-}
+  handleDropNode(id: string, dropPosition: DropPosition): void;
+};
 
 export const newMindMapData = (
   rootNodeData: NodeData,
@@ -81,9 +82,9 @@ export const mindMapDataImpl: MindMapData = {
     );
   },
 
-  handleDropNode(id: string, top: number, left: number) {
-    this.rightMapData.handleDropNode(id, top, left)
-  }
+  handleDropNode(id: string, dropPosition: DropPosition) {
+    this.rightMapData.handleDropNode(id, dropPosition);
+  },
 };
 
 Object.freeze(mindMapDataImpl);
