@@ -1,4 +1,5 @@
 import React, {useEffect, useRef, VFC} from "react";
+import {styled} from "@linaria/react";
 import NodeData from "~/domain/model/NodeData";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import TextInputer, {elementSizeCalculator,} from "~/components/atoms/TextInputer";
@@ -15,6 +16,14 @@ type NodeProps = {
   setNodeDataText: (id: string, text: string) => void;
   handleNodeTextChanges: (id: string, width: number, height: number) => void;
 };
+
+type NodeDivProps = {
+  hidden: boolean;
+};
+
+const NodeDiv = styled.div<NodeDivProps>`
+  display: ${(props) => (props.hidden ? "none" : "block")};
+`;
 
 const Node: VFC<NodeProps> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
@@ -56,11 +65,15 @@ const Node: VFC<NodeProps> = (props) => {
 
   return (
     // TODO Make TextInputer draggable
-    <div ref={nodeDivElement} draggable={"true"}>
+    <NodeDiv
+      ref={nodeDivElement}
+      draggable={"true"}
+      hidden={props.nodeData.isHidden}
+    >
       <PositionAdjuster top={props.nodeData.top} left={props.nodeData.left}>
         <TextInputer text={props.nodeData.text} setText={handleSetText} />
       </PositionAdjuster>
-    </div>
+    </NodeDiv>
   );
 };
 

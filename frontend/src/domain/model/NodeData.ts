@@ -14,6 +14,7 @@ type NodeData = {
   left: number;
   group: Group;
   children: Children;
+  isHidden: boolean;
 
   findByIdFromGroup(id: string): NodeData | null;
 
@@ -76,6 +77,8 @@ export const nodeDataImpl: NodeData = {
 
   // children nodes of this node
   children: childrenImpl,
+
+  isHidden: false,
 
   findByIdFromGroup(id: string): NodeData | null {
     if (this.id === id) {
