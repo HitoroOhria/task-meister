@@ -1,5 +1,5 @@
-import React, { DragEvent, FC, useEffect, useRef, useState } from "react";
-import PositionAdjuster from "~/components/atoms/PositionAdjuster";
+import React, { DragEvent, FC, useRef, useState } from "react";
+import Origin, { OriginHandles } from "~/components/organisms/Origin";
 import Node from "~/components/organisms/Node";
 import Nodes from "~/components/organisms/Nodes";
 import MindMapData, { newMindMapData } from "~/domain/model/MindMapData";
@@ -66,19 +66,8 @@ const mindMapDataObj = newMindMapData(
 );
 
 const MindMap: FC = () => {
-  const originElement = useRef<HTMLDivElement>(null);
+  const originElement = useRef<OriginHandles>(null);
   const [mindMapData, setMindMapData] = useState<MindMapData>(mindMapDataObj);
-  const [originTop, setOriginTop] = useState<number>(window.innerHeight / 2);
-  const [originLeft, setOriginLeft] = useState<number>(window.innerWidth / 2);
-
-  const resetOrigin = () => {
-    setOriginTop(window.innerHeight / 2);
-    setOriginLeft(window.innerWidth / 2);
-  };
-
-  const componentDidMount = () => {
-    window.onresize = resetOrigin;
-  };
 
   const setNodeDataText = (id: string, text: string) => {
     mindMapData.setNodeTextById(id, text);
@@ -99,9 +88,7 @@ const MindMap: FC = () => {
     e.preventDefault();
     if (originElement.current == null) return;
 
-    const originRect = originElement.current.getBoundingClientRect();
-    const originX = window.scrollX + originRect.left;
-    const originY = window.scrollY + originRect.top;
+    const [originX, originY] = originElement.current.getPagePoint();
 
     const mouseTopFromOrigin = e.pageY - originY;
     const mouseLeftFromOrigin = e.pageX - originX;
@@ -111,8 +98,6 @@ const MindMap: FC = () => {
     setMindMapData({ ...mindMapData });
   };
 
-  useEffect(componentDidMount, []);
-
   // TODO Why is display smaller on monitor?
   return (
     <div
@@ -120,21 +105,19 @@ const MindMap: FC = () => {
       onDragOver={handleDragOver}
       style={{ width: window.innerWidth, height: window.innerHeight }}
     >
-      <PositionAdjuster top={originTop} left={originLeft}>
-        <div ref={originElement}>
-          {/* TODO Make tail of root node to draggable */}
-          <Node
-            nodeData={mindMapData.rootNodeData}
-            setNodeDataText={setNodeDataText}
-            handleNodeTextChanges={handleNodeTextChanges}
-          />
-          <Nodes
-            nodes={mindMapData.rightMapData.nodes}
-            setNodeDataText={setNodeDataText}
-            handleNodeTextChanges={handleNodeTextChanges}
-          />
-        </div>
-      </PositionAdjuster>
+      <Origin ref={originElement}>
+        {/* TODO Make tail of root node to draggable */}
+        <Node
+          nodeData={mindMapData.rootNodeData}
+          setNodeDataText={setNodeDataText}
+          handleNodeTextChanges={handleNodeTextChanges}
+        />
+        <Nodes
+          nodes={mindMapData.rightMapData.nodes}
+          setNodeDataText={setNodeDataText}
+          handleNodeTextChanges={handleNodeTextChanges}
+        />
+      </Origin>
     </div>
   );
 };
