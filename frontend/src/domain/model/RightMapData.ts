@@ -85,7 +85,7 @@ export const rightNodeDataImpl: RightMapData = {
 
   handleVerticalChanges(target: NodeData, height: number) {
     target.height = height;
-    this.nodes.recursively.updateGroupAndSelfHeight();
+    this.nodes.recursively.updateGroupAndChildrenHeight();
 
     const totalOfGroupHeights = total(
       this.nodes.list.map((nodeData) => nodeData.group.height)

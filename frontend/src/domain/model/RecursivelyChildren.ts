@@ -4,13 +4,13 @@ import { total } from "~/util/NumberUtil";
 interface RecursivelyChildren {
   mirror: Children | null;
 
-  updateGroupAndSelfHeight(): void;
-
   updateNodeTop(): void;
 
   setNodeLeft(parentNodeLeft: number, parentNodeWidth: number): void;
 
   setGroupTop(parentHeight: number, parentGroupTop: number): void;
+
+  updateGroupAndChildrenHeight(): void;
 }
 
 export const newRecursivelyChildren = (
@@ -25,17 +25,6 @@ export const newRecursivelyChildren = (
 export const recursivelyChildrenImpl: RecursivelyChildren = {
   // TODO Can implement using spread operator?
   mirror: null,
-
-  updateGroupAndSelfHeight() {
-    this.mirror!.list.forEach((child) =>
-      child.group.updateHeight(child.height, child.children)
-    );
-
-    // TODO Return 0 when list is empty?
-    this.mirror!.height = total(
-      this.mirror!.list.map((child) => child.group.height)
-    );
-  },
 
   updateNodeTop() {
     this.mirror!.list.forEach((child) => child.updateTop());
@@ -57,6 +46,17 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     this.mirror!.setGroupTop(parentHeight, parentGroupTop);
     this.mirror!.list.forEach((child) =>
       child.children.recursively.setGroupTop(child.height, child.group.top)
+    );
+  },
+
+  updateGroupAndChildrenHeight() {
+    this.mirror!.list.forEach((child) =>
+      child.group.updateHeight(child.height, child.children)
+    );
+
+    // TODO Return 0 when list is empty?
+    this.mirror!.height = total(
+      this.mirror!.list.map((child) => child.group.height)
     );
   },
 };
