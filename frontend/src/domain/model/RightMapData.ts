@@ -98,6 +98,7 @@ export const rightNodeDataImpl: RightMapData = {
 
   handleDropNode(id: string, top: number, left: number) {
     const lowerNode = this.nodes.findChildByPosition(top, left);
+    // TODO Node cannot move to own children
     if (lowerNode == null) return;
 
     const movedNode = this.removeNode(id);
