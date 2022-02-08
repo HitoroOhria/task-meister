@@ -1,5 +1,5 @@
 import { assertNever } from "~/util/ExceptionUtil";
-import Shortcut, { shortcuts } from "~/domain/model/Shortcut";
+import Shortcut, { shortcuts } from "~/enum/Shortcut";
 import MindMapData, { mindMapDataImpl } from "~/domain/model/MindMapData";
 
 type ShortcutController = {

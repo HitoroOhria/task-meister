@@ -9,7 +9,7 @@ import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
 import { newDropPosition } from "~/domain/model/DropPosition";
 import { newShortcutController } from "~/domain/model/ShortcutController";
-import { getShortcut } from "~/domain/model/Shortcut";
+import { getShortcut } from "~/enum/Shortcut";
 
 const node1_2_1 = newNodeData(
   "id1-2-1 of right",
