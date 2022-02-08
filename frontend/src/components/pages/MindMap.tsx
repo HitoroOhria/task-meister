@@ -1,4 +1,4 @@
-import React, { DragEvent, FC, useRef, useState } from "react";
+import React, { DragEvent, FC, useEffect, useRef, useState } from "react";
 import Origin, { OriginHandles } from "~/components/organisms/Origin";
 import Node from "~/components/organisms/Node";
 import Nodes from "~/components/organisms/Nodes";
@@ -8,6 +8,8 @@ import { newNodeData } from "~/domain/model/NodeData";
 import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
 import { newDropPosition } from "~/domain/model/DropPosition";
+import { newShortcutController } from "~/domain/model/ShortcutController";
+import { getShortcut } from "~/domain/model/Shortcut";
 
 const node1_2_1 = newNodeData(
   "id1-2-1 of right",
@@ -66,6 +68,8 @@ const mindMapDataObj = newMindMapData(
   newRightNodesData(newChildren([]))
 );
 
+const shortcutController = newShortcutController(mindMapDataObj);
+
 const MindMap: FC = () => {
   const originElement = useRef<OriginHandles>(null);
   const [mindMapData, setMindMapData] = useState<MindMapData>(mindMapDataObj);
@@ -96,6 +100,21 @@ const MindMap: FC = () => {
     mindMapData.handleDropNode(nodeId, dropPosition);
     setMindMapData({ ...mindMapData });
   };
+
+  const handleKeypress = (e: KeyboardEvent) => {
+    const shortcut = getShortcut(e.key);
+    if (shortcut == null) return;
+
+    // TODO Take id from global store.
+    shortcutController.handleKeypress(shortcut, "id1-2 of right");
+    setMindMapData({ ...mindMapData });
+  };
+
+  const componentDidMount = () => {
+    window.addEventListener("keypress", handleKeypress);
+  };
+
+  useEffect(componentDidMount, []);
 
   // TODO Why is display smaller on monitor?
   return (

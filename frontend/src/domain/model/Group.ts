@@ -9,7 +9,7 @@ type Group = {
   // group top value of style.
   top: number;
 
-  updateHeight(nodeHeight: number, children: Children): void;
+  updateHeight(isHidden: boolean, nodeHeight: number, children: Children): void;
 
   setTop(parentGroupTop: number, fromGroupHeight: number): void;
 };
@@ -25,9 +25,13 @@ export const groupImpl: Group = {
 
   top: 0,
 
-  updateHeight(nodeHeight: number, children: Children) {
-    children.recursively.updateGroupAndChildrenHeight();
+  updateHeight(isHidden: boolean, nodeHeight: number, children: Children) {
+    if (isHidden) {
+      this.height = 0;
+      return;
+    }
 
+    children.recursively.updateGroupAndChildrenHeight();
     this.height = nodeHeight > children.height ? nodeHeight : children.height;
   },
 

@@ -14,9 +14,9 @@ type RightMapData = {
 
   handleTextChanges(id: string, width: number, height: number): void;
 
-  handleLateralChanges(target: NodeData, width: number, left: number): void;
+  updateNodesLateral(target: NodeData, width: number, left: number): void;
 
-  handleVerticalChanges(target: NodeData, height: number): void;
+  updateNodesVertical(target: NodeData, height: number): void;
 
   handleDropNode(id: string, dropPosition: DropPosition): void;
 
@@ -27,6 +27,8 @@ type RightMapData = {
     dropPosition: DropPosition,
     lowerNode: NodeData
   ): void;
+
+  collapseNodes(id: string): void;
 };
 
 export const newRightNodesData = (nodes: Children): RightMapData => {
@@ -73,17 +75,17 @@ export const rightNodeDataImpl: RightMapData = {
     const target = this.findNodeDataById(id);
     if (target == null) return;
 
-    this.handleLateralChanges(target, width, target.left);
-    this.handleVerticalChanges(target, height);
+    this.updateNodesLateral(target, width, target.left);
+    this.updateNodesVertical(target, height);
   },
 
-  handleLateralChanges(target: NodeData, width: number, left: number) {
+  updateNodesLateral(target: NodeData, width: number, left: number) {
     target.width = width;
     target.left = left;
     target.children.recursively.setNodeLeft(left, width);
   },
 
-  handleVerticalChanges(target: NodeData, height: number) {
+  updateNodesVertical(target: NodeData, height: number) {
     target.height = height;
     this.nodes.recursively.updateGroupAndChildrenHeight();
 
@@ -108,8 +110,8 @@ export const rightNodeDataImpl: RightMapData = {
     const newLeft = lowerNode.onTail(dropPosition.left)
       ? lowerNode.left + lowerNode.width
       : lowerNode.left;
-    this.handleLateralChanges(movedNode, movedNode.width, newLeft);
-    this.handleVerticalChanges(movedNode, movedNode.height);
+    this.updateNodesLateral(movedNode, movedNode.width, newLeft);
+    this.updateNodesVertical(movedNode, movedNode.height);
   },
 
   removeNode(id: string): NodeData | null {
@@ -143,6 +145,14 @@ export const rightNodeDataImpl: RightMapData = {
     }
 
     children.insertChild(target, dropPosition.top, lowerNode);
+  },
+
+  collapseNodes(id: string) {
+    const target = this.nodes.findChildById(id);
+    if (target == null) return;
+
+    target.toggleChildrenHidden();
+    this.updateNodesVertical(target, target.height);
   },
 };
 

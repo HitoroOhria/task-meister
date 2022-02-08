@@ -11,6 +11,8 @@ interface RecursivelyChildren {
   setGroupTop(parentHeight: number, parentGroupTop: number): void;
 
   updateGroupAndChildrenHeight(): void;
+
+  toggleHidden(): void;
 }
 
 export const newRecursivelyChildren = (
@@ -51,12 +53,19 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
 
   updateGroupAndChildrenHeight() {
     this.mirror!.list.forEach((child) =>
-      child.group.updateHeight(child.height, child.children)
+      child.group.updateHeight(child.isHidden, child.height, child.children)
     );
 
     // TODO Return 0 when list is empty?
     this.mirror!.height = total(
       this.mirror!.list.map((child) => child.group.height)
+    );
+  },
+
+  toggleHidden() {
+    this.mirror!.list.forEach((child) => (child.isHidden = !child.isHidden));
+    this.mirror!.list.forEach((child) =>
+      child.children.recursively.toggleHidden()
     );
   },
 };

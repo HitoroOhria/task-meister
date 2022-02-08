@@ -21,6 +21,8 @@ type MindMapData = {
   updateRightNodesLeft(): void;
 
   handleDropNode(id: string, dropPosition: DropPosition): void;
+
+  handlePressSpace(id: string): void;
 };
 
 export const newMindMapData = (
@@ -84,6 +86,10 @@ export const mindMapDataImpl: MindMapData = {
 
   handleDropNode(id: string, dropPosition: DropPosition) {
     this.rightMapData.handleDropNode(id, dropPosition);
+  },
+
+  handlePressSpace(id: string) {
+    this.rightMapData.collapseNodes(id);
   },
 };
 
