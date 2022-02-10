@@ -111,10 +111,12 @@ const MindMap: FC = () => {
     setMindMapData({ ...mindMapData });
   };
 
-  useEffect(() => {
+  const handleKeypressEventListerEffect = (): (() => void) => {
     document.body.addEventListener("keypress", handleKeypress);
     return () => document.body.removeEventListener("keypress", handleKeypress);
-  }, [handleKeypress]);
+  };
+
+  useEffect(handleKeypressEventListerEffect, [handleKeypress]);
 
   // TODO Why is display smaller on monitor?
   return (
