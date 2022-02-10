@@ -73,6 +73,7 @@ const shortcutController = newShortcutController(mindMapDataObj);
 const MindMap: FC = () => {
   const originElement = useRef<OriginHandles>(null);
   const [mindMapData, setMindMapData] = useState<MindMapData>(mindMapDataObj);
+  const [selectedNodeId, setSelectedNodeId] = useState<string>("");
 
   const setNodeDataText = (id: string, text: string) => {
     mindMapData.setNodeTextById(id, text);
@@ -106,15 +107,14 @@ const MindMap: FC = () => {
     if (shortcut == null) return;
 
     // TODO Take id from global store.
-    shortcutController.handleKeypress(shortcut, "id1-2 of right");
+    shortcutController.handleKeypress(shortcut, selectedNodeId);
     setMindMapData({ ...mindMapData });
   };
 
-  const componentDidMount = () => {
-    window.addEventListener("keypress", handleKeypress);
-  };
-
-  useEffect(componentDidMount, []);
+  useEffect(() => {
+    document.body.addEventListener("keypress", handleKeypress);
+    return () => document.body.removeEventListener("keypress", handleKeypress);
+  }, [handleKeypress]);
 
   // TODO Why is display smaller on monitor?
   return (
@@ -127,11 +127,13 @@ const MindMap: FC = () => {
         {/* TODO Make tail of root node to draggable */}
         <Node
           nodeData={mindMapData.rootNodeData}
+          setSelectedNodeId={setSelectedNodeId}
           setNodeDataText={setNodeDataText}
           handleNodeTextChanges={handleNodeTextChanges}
         />
         <Nodes
           nodes={mindMapData.rightMapData.nodes}
+          setSelectedNodeId={setSelectedNodeId}
           setNodeDataText={setNodeDataText}
           handleNodeTextChanges={handleNodeTextChanges}
         />

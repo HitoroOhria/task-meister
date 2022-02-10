@@ -151,6 +151,7 @@ export const rightNodeDataImpl: RightMapData = {
     const target = this.nodes.findChildById(id);
     if (target == null) return;
 
+    // TODO Corresponds to nested collapse.
     target.toggleChildrenHidden();
     this.updateNodesVertical(target, target.height);
   },

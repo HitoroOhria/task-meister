@@ -5,6 +5,7 @@ import NodeData from "~/domain/model/NodeData";
 
 type NodesProps = {
   nodes: Children;
+  setSelectedNodeId: (id: string) => void;
   setNodeDataText: (id: string, text: string) => void;
   handleNodeTextChanges: (id: string, width: number, height: number) => void;
 };
@@ -15,6 +16,7 @@ const Nodes: VFC<NodesProps> = (props) => {
       <Node
         key={nodeData.id}
         nodeData={nodeData}
+        setSelectedNodeId={props.setSelectedNodeId}
         setNodeDataText={props.setNodeDataText}
         handleNodeTextChanges={props.handleNodeTextChanges}
       />
@@ -30,11 +32,7 @@ const Nodes: VFC<NodesProps> = (props) => {
     return nodes.concat(childNodes);
   };
 
-  return (
-    <div>
-      {renderNodes(props.nodes)}
-    </div>
-  );
+  return <div>{renderNodes(props.nodes)}</div>;
 };
 
 export default Nodes;

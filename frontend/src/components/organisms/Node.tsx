@@ -1,8 +1,8 @@
 import React, {useEffect, useRef, VFC} from "react";
 import {styled} from "@linaria/react";
-import NodeData from "~/domain/model/NodeData";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import TextInputer, {elementSizeCalculator,} from "~/components/atoms/TextInputer";
+import NodeData from "~/domain/model/NodeData";
 import {numberOfLines} from "~/util/StringUtil";
 
 // width of textarea from border to text
@@ -13,6 +13,7 @@ const heightPerOneLine = 13;
 
 type NodeProps = {
   nodeData: NodeData;
+  setSelectedNodeId: (id: string) => void;
   setNodeDataText: (id: string, text: string) => void;
   handleNodeTextChanges: (id: string, width: number, height: number) => void;
 };
@@ -46,13 +47,13 @@ const Node: VFC<NodeProps> = (props) => {
     props.handleNodeTextChanges(props.nodeData.id, width, height);
   };
 
+  const handleDragStart = (e: DragEvent) => {
+    e.dataTransfer && e.dataTransfer.setData("text/plain", props.nodeData.id);
+  };
+
   const addDragEventListener = () => {
     nodeDivElement.current &&
       nodeDivElement.current.addEventListener("dragstart", handleDragStart);
-  };
-
-  const handleDragStart = (e: DragEvent) => {
-    e.dataTransfer && e.dataTransfer.setData("text/plain", props.nodeData.id);
   };
 
   const componentDidMount = () => {
@@ -69,6 +70,7 @@ const Node: VFC<NodeProps> = (props) => {
       ref={nodeDivElement}
       draggable={"true"}
       hidden={props.nodeData.isHidden}
+      onClick={() => props.setSelectedNodeId(props.nodeData.id)}
     >
       <PositionAdjuster top={props.nodeData.top} left={props.nodeData.left}>
         <TextInputer text={props.nodeData.text} setText={handleSetText} />
