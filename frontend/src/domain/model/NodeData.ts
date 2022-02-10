@@ -136,6 +136,7 @@ export const nodeDataImpl: NodeData = {
   },
 
   toggleChildrenHidden() {
+    this.group.isHidden = !this.group.isHidden;
     this.children.recursively.toggleHidden();
   },
 

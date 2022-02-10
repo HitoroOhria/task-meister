@@ -23,16 +23,19 @@ const Nodes: VFC<NodesProps> = (props) => {
     );
   };
 
-  const renderNodes = (children: Children): JSX.Element[] => {
-    const nodes = children.list.map((child) => renderNode(child));
-    const childNodes = children.list.flatMap((child) =>
-      renderNodes(child.children)
-    );
+  const renderNodeAndChildren = (nodeData: NodeData): JSX.Element[] => {
+    const node = renderNode(nodeData);
+    const childrenNodes = nodeData.group.isHidden
+      ? []
+      : renderNodes(nodeData.children);
 
-    return nodes.concat(childNodes);
+    return [node, ...childrenNodes];
   };
 
-  return <div>{renderNodes(props.nodes)}</div>;
+  const renderNodes = (children: Children): JSX.Element[] =>
+    children.list.flatMap((child) => renderNodeAndChildren(child));
+
+  return <>{renderNodes(props.nodes)}</>;
 };
 
 export default Nodes;
