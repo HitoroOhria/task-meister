@@ -15,6 +15,7 @@ export const elementSizeCalculator = new ElementSizeCalculator(font);
 type TextInputerProps = {
   text: string;
   setText: (text: string) => void;
+  setGlobalIsInputting: (isInputting: boolean) => void;
 };
 
 type TextareaProps = {
@@ -76,6 +77,16 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
   useEffect(componentDidMount, []);
   useEffect(handleTextChanges, [props.text]);
 
+  const handleDoubleClick = () => {
+    setIsInputting(true);
+    props.setGlobalIsInputting(true);
+  };
+
+  const handleBlur = () => {
+    setIsInputting(false);
+    props.setGlobalIsInputting(false);
+  };
+
   return (
     // TODO Eliminate range selection after double-clicking
     <Textarea
@@ -85,8 +96,8 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
       heightEm={textareaHeightEm}
       widthPx={textareaWidthPx}
       onChange={(e) => props.setText(e.target.value)}
-      onDoubleClick={() => setIsInputting(true)}
-      onBlur={() => setIsInputting(false)}
+      onDoubleClick={handleDoubleClick}
+      onBlur={handleBlur}
     />
   );
 };

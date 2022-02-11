@@ -16,6 +16,7 @@ type NodeProps = {
   nodeData: NodeData;
   selectedNodeId: string;
   setSelectedNodeId: (id: string) => void;
+  setIsInputting: (isInputting: boolean) => void;
   setNodeDataText: (id: string, text: string) => void;
   handleNodeTextChanges: (id: string, width: number, height: number) => void;
 };
@@ -84,7 +85,11 @@ const Node: VFC<NodeProps> = (props) => {
         onClick={() => props.setSelectedNodeId(props.nodeData.id)}
         draggable={"true"}
       >
-        <TextInputer text={props.nodeData.text} setText={handleSetText} />
+        <TextInputer
+          text={props.nodeData.text}
+          setText={handleSetText}
+          setGlobalIsInputting={props.setIsInputting}
+        />
       </NodeDiv>
     </PositionAdjuster>
   );

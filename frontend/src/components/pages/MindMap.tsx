@@ -76,6 +76,11 @@ const MindMap: FC = () => {
     setMindMapData({ ...mindMapData });
   };
 
+  const setIsInputting = (isInputting: boolean) => {
+    mindMapData.isInputting = isInputting;
+    setMindMapData({ ...mindMapData });
+  };
+
   const setNodeDataText = (id: string, text: string) => {
     mindMapData.setNodeTextById(id, text);
     setMindMapData({ ...mindMapData });
@@ -104,6 +109,7 @@ const MindMap: FC = () => {
   };
 
   const handleKeydown = (e: KeyboardEvent) => {
+    if (mindMapData.isInputting) return;
     const shortcut = getShortcut(e.key);
     if (shortcut == null) return;
 
@@ -134,6 +140,7 @@ const MindMap: FC = () => {
         <Node
           nodeData={mindMapData.rootNodeData}
           selectedNodeId={mindMapData.selectedNodeId}
+          setIsInputting={setIsInputting}
           setSelectedNodeId={setSelectedNodeId}
           setNodeDataText={setNodeDataText}
           handleNodeTextChanges={handleNodeTextChanges}
@@ -141,6 +148,7 @@ const MindMap: FC = () => {
         <Nodes
           nodes={mindMapData.rightMapData.nodes}
           selectedNodeId={mindMapData.selectedNodeId}
+          setIsInputting={setIsInputting}
           setSelectedNodeId={setSelectedNodeId}
           setNodeDataText={setNodeDataText}
           handleNodeTextChanges={handleNodeTextChanges}

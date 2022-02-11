@@ -9,6 +9,7 @@ import ShortcutController, {
 
 type MindMapData = {
   selectedNodeId: string;
+  isInputting: boolean;
   rootNodeData: NodeData;
   rightMapData: RightMapData;
   leftMapData: rightNodesData;
@@ -48,8 +49,8 @@ export const newMindMapData = (
 };
 
 export const mindMapDataImpl: MindMapData = {
-  ...shortcutControllerImpl,
   selectedNodeId: "",
+  isInputting: false,
   rootNodeData: nodeDataImpl,
   rightMapData: rightNodeDataImpl,
   leftMapData: rightNodeDataImpl,

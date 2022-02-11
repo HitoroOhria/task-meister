@@ -6,6 +6,7 @@ import NodeData from "~/domain/model/NodeData";
 type NodesProps = {
   nodes: Children;
   selectedNodeId: string;
+  setIsInputting: (isInputting: boolean) => void;
   setSelectedNodeId: (id: string) => void;
   setNodeDataText: (id: string, text: string) => void;
   handleNodeTextChanges: (id: string, width: number, height: number) => void;
@@ -19,6 +20,7 @@ const Nodes: VFC<NodesProps> = (props) => {
         key={nodeData.id}
         nodeData={nodeData}
         selectedNodeId={props.selectedNodeId}
+        setIsInputting={props.setIsInputting}
         setSelectedNodeId={props.setSelectedNodeId}
         setNodeDataText={props.setNodeDataText}
         handleNodeTextChanges={props.handleNodeTextChanges}
