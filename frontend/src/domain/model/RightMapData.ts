@@ -8,17 +8,15 @@ type RightMapData = {
 
   setTextById(id: string, text: string): void;
 
-  recursivelySetLeft(rootNodeLeft: number, rootNodeWidth: number): void;
-
   handleTextChanges(id: string, width: number, height: number): void;
 
   updateNodesLateral(target: NodeData, width: number, left: number): void;
 
   updateNodesVertical(target: NodeData, height: number): void;
 
-  handleDropNode(id: string, dropPosition: DropPosition): void;
+  handleDropNode(movedNodeId: string, dropPosition: DropPosition): void;
 
-  removeNode(id: string): NodeData | null;
+  removeNode(id: string): NodeData;
 
   insertNode(
     target: NodeData,
@@ -46,15 +44,6 @@ export const rightNodeDataImpl: RightMapData = {
     }
 
     target.text = text;
-  },
-
-  recursivelySetLeft(rootNodeLeft: number, rootNodeWidth: number) {
-    this.nodes.list.forEach((nodeData) =>
-      nodeData.setLeft(rootNodeLeft, rootNodeWidth)
-    );
-    this.nodes.list.forEach((nodeData) =>
-      nodeData.children.recursively.setNodeLeft(nodeData.left, nodeData.width)
-    );
   },
 
   handleTextChanges(id: string, width: number, height: number) {
@@ -86,13 +75,12 @@ export const rightNodeDataImpl: RightMapData = {
     this.nodes.recursively.updateNodeTop();
   },
 
-  handleDropNode(id: string, dropPosition: DropPosition) {
+  handleDropNode(movedNodeId: string, dropPosition: DropPosition) {
     // TODO Node cannot move to own children
     const lowerNode = this.nodes.recursively.findChildByPosition(dropPosition);
-    if (lowerNode === undefined) return;
+    if (!lowerNode) return;
 
-    const movedNode = this.removeNode(id);
-    if (movedNode == null) return;
+    const movedNode = this.removeNode(movedNodeId);
     this.insertNode(movedNode, dropPosition, lowerNode);
 
     const newLeft = lowerNode.onTail(dropPosition.left)
@@ -102,9 +90,9 @@ export const rightNodeDataImpl: RightMapData = {
     this.updateNodesVertical(movedNode, movedNode.height);
   },
 
-  removeNode(id: string): NodeData | null {
+  removeNode(id: string): NodeData {
     const children = this.nodes.recursively.findChildrenContainsId(id);
-    if (children === undefined) {
+    if (!children) {
       throw new Error(`Can not found children contains id. id = ${id}`);
     }
 
@@ -124,7 +112,7 @@ export const rightNodeDataImpl: RightMapData = {
     const children = this.nodes.recursively.findChildrenContainsId(
       lowerNode.id
     );
-    if (children === undefined) {
+    if (!children) {
       throw new Error(
         `Can not found children contains id. id = ${lowerNode.id}`
       );

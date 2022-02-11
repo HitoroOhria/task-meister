@@ -29,7 +29,7 @@ type Children = {
 
   findTailNodeOf(childId: string): NodeData | undefined;
 
-  removeChild(id: string): NodeData | null;
+  removeChild(id: string): NodeData;
 
   insertChild(target: NodeData, dropTop: number, lowerNode: NodeData): void;
 
@@ -92,10 +92,10 @@ export const childrenImpl: Children = {
     return this.list.find((child) => child.id === childId)?.children.list[0];
   },
 
-  removeChild(id: string): NodeData | null {
+  removeChild(id: string): NodeData {
     const removedChild = this.list.find((child) => child.id === id);
     const removedChildIndex = this.list.findIndex((child) => child.id === id);
-    if (removedChild === undefined || removedChildIndex === -1) {
+    if (!removedChild || removedChildIndex === -1) {
       throw new Error(
         `can not found targetId to remove from children. id = ${id}`
       );

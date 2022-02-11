@@ -73,7 +73,7 @@ export const shortcutControllerImpl: ShortcutController = {
       this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
         selectedNodeId
       )?.findTopNodeOf(selectedNodeId)?.id;
-    if (topNodeId === undefined) {
+    if (!topNodeId) {
       throw new Error(
         `Can not found NodeData by selected id. selected id = ${selectedNodeId}`
       );
@@ -88,7 +88,7 @@ export const shortcutControllerImpl: ShortcutController = {
       this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
         selectedNodeId
       )?.findBottomNodeOf(selectedNodeId)?.id;
-    if (bottomNodeId === undefined) {
+    if (!bottomNodeId) {
       throw new Error(
         `Can not found NodeData by selected id. selected id = ${selectedNodeId}`
       );
@@ -104,7 +104,7 @@ export const shortcutControllerImpl: ShortcutController = {
       this.mindMapData!.rightMapData.nodes.recursively.findChildHasGrandChildId(
         selectedNodeId
       )?.id;
-    if (leftNodeId === undefined) return this.mindMapData!;
+    if (!leftNodeId) return this.mindMapData!;
 
     this.mindMapData!.selectedNodeId = leftNodeId;
     return this.mindMapData!;
@@ -115,7 +115,7 @@ export const shortcutControllerImpl: ShortcutController = {
       this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
         selectedNodeId
       )?.findTailNodeOf(selectedNodeId)?.id;
-    if (rightNodeId === undefined) {
+    if (!rightNodeId) {
       return this.mindMapData!;
     }
 

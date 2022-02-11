@@ -91,7 +91,7 @@ export const mindMapDataImpl: MindMapData = {
   },
 
   updateRightNodesLeft() {
-    this.rightMapData.recursivelySetLeft(
+    this.rightMapData.nodes.recursively.setNodeLeft(
       this.rootNodeData.left,
       this.rootNodeData.width
     );
