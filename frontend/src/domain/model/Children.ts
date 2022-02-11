@@ -22,12 +22,12 @@ type Children = {
 
   findBottomNodeOf(childId: string): NodeData | undefined;
 
-  findRightNodeOf(childId: string): NodeData | undefined;
-
-  findLeftNodeOf(
+  findHeadNodeOf(
     childId: string,
     parentChildren: Children
   ): NodeData | undefined;
+
+  findTailNodeOf(childId: string): NodeData | undefined;
 
   removeChild(id: string): NodeData | null;
 
@@ -79,17 +79,17 @@ export const childrenImpl: Children = {
       : this.list[baseNodeIndex + 1];
   },
 
-  findRightNodeOf(childId: string): NodeData | undefined {
-    return this.list.find((child) => child.id === childId)?.children.list[0];
-  },
-
-  findLeftNodeOf(
+  findHeadNodeOf(
     childId: string,
     parentChildren: Children
   ): NodeData | undefined {
     return parentChildren.list.find((parentNodeData) =>
       parentNodeData.children.list.find((child) => child.id === childId)
     );
+  },
+
+  findTailNodeOf(childId: string): NodeData | undefined {
+    return this.list.find((child) => child.id === childId)?.children.list[0];
   },
 
   removeChild(id: string): NodeData | null {

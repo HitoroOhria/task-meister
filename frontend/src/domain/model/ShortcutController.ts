@@ -13,9 +13,9 @@ type ShortcutController = {
 
   selectBottomNodeId(selectedNodeId: string): MindMapData;
 
-  selectRightNodeId(selectedNodeId: string): MindMapData;
+  selectHeadNodeId(selectedNodeId: string): MindMapData;
 
-  selectLeftNodeId(selectedNodeId: string): MindMapData;
+  selectTailNodeId(selectedNodeId: string): MindMapData;
 };
 
 export const newShortcutController = (
@@ -58,9 +58,9 @@ export const shortcutControllerImpl: ShortcutController = {
       case arrowKeys.Down:
         return this.selectBottomNodeId(selectedId);
       case arrowKeys.Right:
-        return this.selectRightNodeId(selectedId);
+        return this.selectTailNodeId(selectedId);
       case arrowKeys.Left:
-        return this.selectLeftNodeId(selectedId);
+        return this.selectHeadNodeId(selectedId);
       default:
         assertNever(arrowKey, `Not defined arrow key. arrow key = ${arrowKey}`);
     }
@@ -98,21 +98,8 @@ export const shortcutControllerImpl: ShortcutController = {
     return this.mindMapData!;
   },
 
-  selectRightNodeId(selectedNodeId: string): MindMapData {
-    const rightNodeId =
-      this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
-        selectedNodeId
-      )?.findRightNodeOf(selectedNodeId)?.id;
-    if (rightNodeId === undefined) {
-      return this.mindMapData!;
-    }
-
-    this.mindMapData!.selectedNodeId = rightNodeId;
-    return this.mindMapData!;
-  },
-
   // TODO Select root node.
-  selectLeftNodeId(selectedNodeId: string): MindMapData {
+  selectHeadNodeId(selectedNodeId: string): MindMapData {
     const leftNodeId =
       this.mindMapData!.rightMapData.nodes.recursively.findChildHasGrandChildId(
         selectedNodeId
@@ -120,6 +107,19 @@ export const shortcutControllerImpl: ShortcutController = {
     if (leftNodeId === undefined) return this.mindMapData!;
 
     this.mindMapData!.selectedNodeId = leftNodeId;
+    return this.mindMapData!;
+  },
+
+  selectTailNodeId(selectedNodeId: string): MindMapData {
+    const rightNodeId =
+      this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
+        selectedNodeId
+      )?.findTailNodeOf(selectedNodeId)?.id;
+    if (rightNodeId === undefined) {
+      return this.mindMapData!;
+    }
+
+    this.mindMapData!.selectedNodeId = rightNodeId;
     return this.mindMapData!;
   },
 };
