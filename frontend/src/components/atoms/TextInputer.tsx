@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState, VFC} from "react";
 import {styled} from "@linaria/react";
-import ElementSizeCalculator from "~/domain/model/ElementSizeCalculator";
+import ElementSizeCalculator from "~/util/ElementSizeCalculator";
 import {numberOfLines} from "~/util/StringUtil";
 
 // CSS
