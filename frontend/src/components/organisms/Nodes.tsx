@@ -1,7 +1,7 @@
 import React, { VFC } from "react";
 import Children from "~/domain/model/Children";
 import Node from "~/components/organisms/Node";
-import NestableNode from "~/domain/model/NestableNode";
+import * as NodeObj from "~/domain/model/Node";
 
 type NodesProps = {
   nodes: Children;
@@ -14,7 +14,7 @@ type NodesProps = {
 
 const Nodes: VFC<NodesProps> = (props) => {
   // TODO Move to Render object?
-  const renderNode = (node: NestableNode): JSX.Element => {
+  const renderNode = (node: NodeObj.default): JSX.Element => {
     return (
       <Node
         key={node.id}
@@ -28,7 +28,7 @@ const Nodes: VFC<NodesProps> = (props) => {
     );
   };
 
-  const renderNodeAndChildren = (node: NestableNode): JSX.Element[] => {
+  const renderNodeAndChildren = (node: NodeObj.default): JSX.Element[] => {
     const selfNode = renderNode(node);
     const childrenNodes = node.group.isHidden ? [] : renderNodes(node.children);
 

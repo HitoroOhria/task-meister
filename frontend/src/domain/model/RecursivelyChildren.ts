@@ -1,4 +1,4 @@
-import NestableNode from "~/domain/model/NestableNode";
+import Node from "~/domain/model/Node";
 import Children from "~/domain/model/Children";
 import DropPosition from "~/domain/model/DropPosition";
 import { total } from "~/util/NumberUtil";
@@ -6,11 +6,11 @@ import { total } from "~/util/NumberUtil";
 interface RecursivelyChildren {
   children: Children | null;
 
-  findChildById(id: string): NestableNode | undefined;
+  findChildById(id: string): Node | undefined;
 
-  findChildByPosition(position: DropPosition): NestableNode | undefined;
+  findChildByPosition(position: DropPosition): Node | undefined;
 
-  findChildHasGrandChildId(id: string): NestableNode | undefined;
+  findChildHasGrandChildId(id: string): Node | undefined;
 
   findChildrenContainsId(id: string): Children | undefined;
 
@@ -38,7 +38,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   // TODO Can implement using spread operator?
   children: null,
 
-  findChildById(id: string): NestableNode | undefined {
+  findChildById(id: string): Node | undefined {
     const child = this.children!.nodes.find((child) => child.id === id);
     if (child) {
       return child;
@@ -55,7 +55,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined;
   },
 
-  findChildByPosition(position: DropPosition): NestableNode | undefined {
+  findChildByPosition(position: DropPosition): Node | undefined {
     const child = this.children!.nodes.find((child) => child.onArea(position));
     if (child) {
       return child;
@@ -72,7 +72,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined;
   },
 
-  findChildHasGrandChildId(id: string): NestableNode | undefined {
+  findChildHasGrandChildId(id: string): Node | undefined {
     const nodeData = this.children!.findChildHasGrandChildId(id);
     if (nodeData !== undefined) {
       return nodeData;

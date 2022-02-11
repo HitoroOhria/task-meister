@@ -1,4 +1,4 @@
-import NestableNode from "~/domain/model/NestableNode";
+import Node from "~/domain/model/Node";
 import Children, { childrenImpl } from "~/domain/model/Children";
 import DropPosition from "~/domain/model/DropPosition";
 import { total } from "~/util/NumberUtil";
@@ -10,23 +10,15 @@ type RightMap = {
 
   handleTextChanges(id: string, width: number, height: number): void;
 
-  updateNodesLateral(
-    updatedNode: NestableNode,
-    width: number,
-    left: number
-  ): void;
+  updateNodesLateral(updatedNode: Node, width: number, left: number): void;
 
-  updateNodesVertical(updatedNode: NestableNode, height: number): void;
+  updateNodesVertical(updatedNode: Node, height: number): void;
 
   handleDropNode(movedNodeId: string, dropPosition: DropPosition): void;
 
-  removeNode(id: string): NestableNode;
+  removeNode(id: string): Node;
 
-  insertNode(
-    target: NestableNode,
-    dropPosition: DropPosition,
-    lowerNode: NestableNode
-  ): void;
+  insertNode(target: Node, dropPosition: DropPosition, lowerNode: Node): void;
 
   collapseNodes(selectedId: string): void;
 };
@@ -61,7 +53,7 @@ export const rightMapImpl: RightMap = {
   },
 
   updateNodesLateral(
-    updatedNode: NestableNode,
+    updatedNode: Node,
     width: number,
     left: number
   ) {
@@ -70,7 +62,7 @@ export const rightMapImpl: RightMap = {
     updatedNode.children.recursively.setNodeLeft(left, width);
   },
 
-  updateNodesVertical(updatedNode: NestableNode, height: number) {
+  updateNodesVertical(updatedNode: Node, height: number) {
     updatedNode.height = height;
     this.nodes.recursively.updateGroupAndChildrenHeight();
 
@@ -98,7 +90,7 @@ export const rightMapImpl: RightMap = {
     this.updateNodesVertical(movedNode, movedNode.height);
   },
 
-  removeNode(id: string): NestableNode {
+  removeNode(id: string): Node {
     const children = this.nodes.recursively.findChildrenContainsId(id);
     if (!children) {
       throw new Error(`Can not found children contains id. id = ${id}`);
@@ -108,9 +100,9 @@ export const rightMapImpl: RightMap = {
   },
 
   insertNode(
-    target: NestableNode,
+    target: Node,
     dropPosition: DropPosition,
-    lowerNode: NestableNode
+    lowerNode: Node
   ) {
     if (lowerNode.onTail(dropPosition.left)) {
       lowerNode.children.nodes.push(target);

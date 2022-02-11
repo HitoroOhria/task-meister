@@ -4,7 +4,7 @@ import Node from "~/components/organisms/Node";
 import Nodes from "~/components/organisms/Nodes";
 import MindMapData, { newMindMapData } from "~/domain/model/MindMapData";
 import { newRightMap } from "~/domain/model/RightMap";
-import { newNestableNode } from "~/domain/model/NestableNode";
+import { newNestableNode } from "~/domain/model/Node";
 import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
 import { newDropPosition } from "~/domain/model/DropPosition";

@@ -2,7 +2,7 @@ import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
 import Group, { groupImpl } from "~/domain/model/Group";
 import Children, { childrenImpl } from "~/domain/model/Children";
 
-type NestableNode = NodeData & {
+type Node = NodeData & {
   group: Group;
   children: Children;
 
@@ -18,7 +18,7 @@ export const newNestableNode = (
   text: string,
   group: Group,
   children: Children
-): NestableNode => {
+): Node => {
   return {
     ...nestableNode,
     id: id,
@@ -32,7 +32,7 @@ export const newNestableNode = (
 // NodeData consists of a node and children's nodes.
 // Whole group is called a group.
 // NodeData is not group, but holds value of group to calculate placement.
-export const nestableNode: NestableNode = {
+export const nestableNode: Node = {
   ...nodeDataImpl,
 
   group: groupImpl,
@@ -61,4 +61,4 @@ export const nestableNode: NestableNode = {
 
 Object.freeze(nestableNode);
 
-export default NestableNode;
+export default Node;

@@ -1,4 +1,4 @@
-import NestableNode from "~/domain/model/NestableNode";
+import Node from "~/domain/model/Node";
 import RecursivelyChildren, {
   newRecursivelyChildren,
   recursivelyChildrenImpl,
@@ -9,38 +9,38 @@ import RecursivelyChildren, {
 type Children = {
   // Collection of nodes
   // TODO Can expressed by implementing Array?
-  nodes: NestableNode[];
+  nodes: Node[];
 
   // total height of children node.
   height: number;
 
   recursively: RecursivelyChildren;
 
-  findChildHasGrandChildId(grandChildId: string): NestableNode | undefined;
+  findChildHasGrandChildId(grandChildId: string): Node | undefined;
 
-  findTopNodeOf(childId: string): NestableNode | undefined;
+  findTopNodeOf(childId: string): Node | undefined;
 
-  findBottomNodeOf(childId: string): NestableNode | undefined;
+  findBottomNodeOf(childId: string): Node | undefined;
 
   findHeadNodeOf(
     childId: string,
     parentChildren: Children
-  ): NestableNode | undefined;
+  ): Node | undefined;
 
-  findTailNodeOf(childId: string): NestableNode | undefined;
+  findTailNodeOf(childId: string): Node | undefined;
 
-  removeChild(id: string): NestableNode;
+  removeChild(id: string): Node;
 
   insertChild(
-    target: NestableNode,
+    target: Node,
     dropTop: number,
-    lowerNode: NestableNode
+    lowerNode: Node
   ): void;
 
   setGroupTop(parentChildrenHeight: number, parentGroupTop: number): void;
 };
 
-export const newChildren = (nodes: NestableNode[]): Children => {
+export const newChildren = (nodes: Node[]): Children => {
   const children: Children = {
     ...childrenImpl,
     nodes: nodes,
@@ -55,7 +55,7 @@ export const childrenImpl: Children = {
   height: 0,
   recursively: recursivelyChildrenImpl,
 
-  findChildHasGrandChildId(grandChildId: string): NestableNode | undefined {
+  findChildHasGrandChildId(grandChildId: string): Node | undefined {
     return this.nodes.find((child) =>
       child.children.nodes
         .map((grandChild) => grandChild.id)
@@ -63,7 +63,7 @@ export const childrenImpl: Children = {
     );
   },
 
-  findTopNodeOf(childId: string): NestableNode | undefined {
+  findTopNodeOf(childId: string): Node | undefined {
     const baseNodeIndex = this.nodes.findIndex((child) => child.id === childId);
     if (baseNodeIndex === -1) {
       return undefined;
@@ -74,7 +74,7 @@ export const childrenImpl: Children = {
       : this.nodes[baseNodeIndex - 1];
   },
 
-  findBottomNodeOf(childId: string): NestableNode | undefined {
+  findBottomNodeOf(childId: string): Node | undefined {
     const baseNodeIndex = this.nodes.findIndex((child) => child.id === childId);
     if (baseNodeIndex === -1) {
       return undefined;
@@ -88,17 +88,17 @@ export const childrenImpl: Children = {
   findHeadNodeOf(
     childId: string,
     parentChildren: Children
-  ): NestableNode | undefined {
+  ): Node | undefined {
     return parentChildren.nodes.find((parentNodeData) =>
       parentNodeData.children.nodes.find((child) => child.id === childId)
     );
   },
 
-  findTailNodeOf(childId: string): NestableNode | undefined {
+  findTailNodeOf(childId: string): Node | undefined {
     return this.nodes.find((child) => child.id === childId)?.children.nodes[0];
   },
 
-  removeChild(id: string): NestableNode {
+  removeChild(id: string): Node {
     const removedChild = this.nodes.find((child) => child.id === id);
     const removedChildIndex = this.nodes.findIndex((child) => child.id === id);
     if (!removedChild || removedChildIndex === -1) {
@@ -112,9 +112,9 @@ export const childrenImpl: Children = {
   },
 
   insertChild(
-    targetNode: NestableNode,
+    targetNode: Node,
     dropTop: number,
-    lowerNode: NestableNode
+    lowerNode: Node
   ) {
     let lowerNodeIndex = this.nodes.findIndex(
       (child) => child.id === lowerNode.id
