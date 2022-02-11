@@ -1,14 +1,14 @@
 import React, {useEffect, useRef, VFC} from "react";
 import {styled} from "@linaria/react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
-import TextInputer, {elementSizeCalculator,} from "~/components/atoms/TextInputer";
+import TextInputer, {elementSizeCalculator, minWidthPx as TextInputerMinWidth,} from "~/components/atoms/TextInputer";
 import NodeData from "~/domain/model/NodeData";
 import {numberOfLines} from "~/util/StringUtil";
 
 // width of textarea from border to text
 // values of below is average of measured values
 const borderWidth = 5;
-const insideWidthOfTextarea = 40.75;
+const insideWidthOfTextarea = 40.75; // TODO Maybe this is padding of TextInputer
 const nodeHeightWhenOneLine = 62;
 const heightPerOneLine = 13;
 
@@ -44,10 +44,13 @@ const Node: VFC<NodeProps> = (props) => {
   // Because getting process ends before dom rendered. and the value of the previous text is acquired.
   // So, get previous value
   const handleNodeTextChanges = () => {
-    const width =
-      borderWidth * 2 +
-      insideWidthOfTextarea +
-      elementSizeCalculator.measureLongestLineWidth(props.nodeData.text);
+    const textWidth =
+      // TODO Set Prettier config
+      elementSizeCalculator.measureLongestLineWidth(props.nodeData.text) <
+      TextInputerMinWidth
+        ? TextInputerMinWidth
+        : elementSizeCalculator.measureLongestLineWidth(props.nodeData.text);
+    const width = borderWidth * 2 + insideWidthOfTextarea + textWidth;
     const height =
       borderWidth * 2 +
       nodeHeightWhenOneLine +

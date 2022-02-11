@@ -4,7 +4,7 @@ import ElementSizeCalculator from "~/domain/model/ElementSizeCalculator";
 import {numberOfLines} from "~/util/StringUtil";
 
 // CSS
-const minWidthPx = 50;
+export const minWidthPx = 50;
 const lineHeightEm = 1;
 const font = "13px monospace";
 
