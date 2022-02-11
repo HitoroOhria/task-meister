@@ -17,8 +17,6 @@ type NodeData = {
   children: Children;
   isHidden: boolean;
 
-  findByIdFromGroup(id: string): NodeData | null;
-
   findByPositionFromGroup(position: DropPosition): NodeData | null;
 
   inXRange(left: number): boolean;
@@ -82,14 +80,6 @@ export const nodeDataImpl: NodeData = {
   children: childrenImpl,
 
   isHidden: false,
-
-  findByIdFromGroup(id: string): NodeData | null {
-    if (this.id === id) {
-      return this;
-    }
-
-    return this.children.findChildById(id);
-  },
 
   findByPositionFromGroup(position: DropPosition): NodeData | null {
     if (this.inXRange(position.left) && this.inYRange(position.top)) {

@@ -17,9 +17,6 @@ type Children = {
   // total height of children node.
   height: number;
 
-  // find child by id.
-  findChildById(id: string): NodeData | null;
-
   findChildByPosition(position: DropPosition): NodeData | null;
 
   findChildHasGrandChildId(id: string): NodeData | undefined;
@@ -55,18 +52,6 @@ export const childrenImpl: Children = {
   list: [],
   height: 0,
   recursively: recursivelyChildrenImpl,
-
-  findChildById(id: string): NodeData | null {
-    for (const child of this.list) {
-      const target = child.findByIdFromGroup(id);
-
-      if (target != null) {
-        return target;
-      }
-    }
-
-    return null;
-  },
 
   findChildByPosition(position: DropPosition): NodeData | null {
     for (const child of this.list) {

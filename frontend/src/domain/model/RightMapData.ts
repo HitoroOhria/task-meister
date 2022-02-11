@@ -6,8 +6,6 @@ import { total } from "~/util/NumberUtil";
 type RightMapData = {
   nodes: Children;
 
-  findNodeDataById(id: string): NodeData | null;
-
   setTextById(id: string, text: string): void;
 
   recursivelySetLeft(rootNodeLeft: number, rootNodeWidth: number): void;
@@ -41,23 +39,11 @@ export const newRightNodesData = (nodes: Children): RightMapData => {
 export const rightNodeDataImpl: RightMapData = {
   nodes: childrenImpl,
 
-  findNodeDataById(id: string): NodeData | null {
-    // TODO Can refactor using Children.findById?
-    for (const nodeData of this.nodes.list) {
-      const target = nodeData.findByIdFromGroup(id);
-
-      if (target != null) {
-        return target;
-      }
-    }
-
-    console.error(`Can not find NodeData by id. id = ${id}`);
-    return null;
-  },
-
   setTextById(id: string, text: string) {
-    const target = this.findNodeDataById(id);
-    if (target == null) return;
+    const target = this.nodes.recursively.findChildById(id);
+    if (!target) {
+      throw new Error(`Can not found nodeData by id. id = ${id}`);
+    }
 
     target.text = text;
   },
@@ -72,8 +58,10 @@ export const rightNodeDataImpl: RightMapData = {
   },
 
   handleTextChanges(id: string, width: number, height: number) {
-    const target = this.findNodeDataById(id);
-    if (target == null) return;
+    const target = this.nodes.recursively.findChildById(id);
+    if (!target) {
+      throw new Error(`Can not found nodeData by id. id = ${id}`);
+    }
 
     this.updateNodesLateral(target, width, target.left);
     this.updateNodesVertical(target, height);
@@ -148,8 +136,10 @@ export const rightNodeDataImpl: RightMapData = {
   },
 
   collapseNodes(id: string) {
-    const target = this.nodes.findChildById(id);
-    if (target == null) return;
+    const target = this.nodes.recursively.findChildById(id);
+    if (!target) {
+      throw new Error(`Can not found nodeData by id. id = ${id}`);
+    }
 
     target.toggleChildrenHidden();
     this.updateNodesVertical(target, target.height);
