@@ -27,10 +27,11 @@ const Textarea = styled.textarea<TextareaProps>`
   min-width: ${minWidthPx}px;
   height: ${(props) => props.heightEm}em;
   font: ${font};
-  line-height: ${lineHeightEm}em
-  border: solid blue;
+  line-height: ${lineHeightEm}em;
+  border-color: gray;
   border-radius: 10px;
   background-color: gray;
+  outline: none;
   padding: 20px;
   resize: none;
 `;

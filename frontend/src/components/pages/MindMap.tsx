@@ -129,12 +129,14 @@ const MindMap: FC = () => {
         {/* TODO Make tail of root node to draggable */}
         <Node
           nodeData={mindMapData.rootNodeData}
+          selectedNodeId={selectedNodeId}
           setSelectedNodeId={setSelectedNodeId}
           setNodeDataText={setNodeDataText}
           handleNodeTextChanges={handleNodeTextChanges}
         />
         <Nodes
           nodes={mindMapData.rightMapData.nodes}
+          selectedNodeId={selectedNodeId}
           setSelectedNodeId={setSelectedNodeId}
           setNodeDataText={setNodeDataText}
           handleNodeTextChanges={handleNodeTextChanges}

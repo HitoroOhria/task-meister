@@ -7,12 +7,14 @@ import {numberOfLines} from "~/util/StringUtil";
 
 // width of textarea from border to text
 // values of below is average of measured values
+const borderWidth = 5;
 const insideWidthOfTextarea = 40.75;
 const nodeHeightWhenOneLine = 62;
 const heightPerOneLine = 13;
 
 type NodeProps = {
   nodeData: NodeData;
+  selectedNodeId: string;
   setSelectedNodeId: (id: string) => void;
   setNodeDataText: (id: string, text: string) => void;
   handleNodeTextChanges: (id: string, width: number, height: number) => void;
@@ -20,10 +22,14 @@ type NodeProps = {
 
 type NodeDivProps = {
   hidden: boolean;
+  borderColor: string;
 };
 
 const NodeDiv = styled.div<NodeDivProps>`
   display: ${(props) => (props.hidden ? "none" : "block")};
+  border: thick solid ${(props) => props.borderColor};
+  border-radius: 10px;
+  background-color: gray;
 `;
 
 const Node: VFC<NodeProps> = (props) => {
@@ -38,9 +44,11 @@ const Node: VFC<NodeProps> = (props) => {
   // So, get previous value
   const handleNodeTextChanges = () => {
     const width =
+      borderWidth * 2 +
       insideWidthOfTextarea +
       elementSizeCalculator.measureLongestLineWidth(props.nodeData.text);
     const height =
+      borderWidth * 2 +
       nodeHeightWhenOneLine +
       heightPerOneLine * (numberOfLines(props.nodeData.text) - 1);
 
@@ -65,17 +73,20 @@ const Node: VFC<NodeProps> = (props) => {
   useEffect(handleNodeTextChanges, [props.nodeData.text]);
 
   return (
-    // TODO Make TextInputer draggable
-    <NodeDiv
-      ref={nodeDivElement}
-      draggable={"true"}
-      hidden={props.nodeData.isHidden}
-      onClick={() => props.setSelectedNodeId(props.nodeData.id)}
-    >
-      <PositionAdjuster top={props.nodeData.top} left={props.nodeData.left}>
+    <PositionAdjuster top={props.nodeData.top} left={props.nodeData.left}>
+      {/* TODO Make TextInputer draggable*/}
+      <NodeDiv
+        ref={nodeDivElement}
+        hidden={props.nodeData.isHidden}
+        borderColor={
+          props.selectedNodeId === props.nodeData.id ? "yellow" : "blue"
+        }
+        onClick={() => props.setSelectedNodeId(props.nodeData.id)}
+        draggable={"true"}
+      >
         <TextInputer text={props.nodeData.text} setText={handleSetText} />
-      </PositionAdjuster>
-    </NodeDiv>
+      </NodeDiv>
+    </PositionAdjuster>
   );
 };
 
