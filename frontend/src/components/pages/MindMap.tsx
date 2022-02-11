@@ -8,7 +8,6 @@ import { newNodeData } from "~/domain/model/NodeData";
 import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
 import { newDropPosition } from "~/domain/model/DropPosition";
-import { newShortcutController } from "~/domain/model/ShortcutController";
 import { getShortcut } from "~/enum/Shortcut";
 
 const node1_2_1 = newNodeData(
@@ -68,12 +67,14 @@ const mindMapDataObj = newMindMapData(
   newRightNodesData(newChildren([]))
 );
 
-const shortcutController = newShortcutController(mindMapDataObj);
-
 const MindMap: FC = () => {
   const originElement = useRef<OriginHandles>(null);
   const [mindMapData, setMindMapData] = useState<MindMapData>(mindMapDataObj);
-  const [selectedNodeId, setSelectedNodeId] = useState<string>("");
+
+  const setSelectedNodeId = (selectedNodeId: string) => {
+    mindMapData.selectedNodeId = selectedNodeId;
+    setMindMapData({ ...mindMapData });
+  };
 
   const setNodeDataText = (id: string, text: string) => {
     mindMapData.setNodeTextById(id, text);
@@ -102,21 +103,24 @@ const MindMap: FC = () => {
     setMindMapData({ ...mindMapData });
   };
 
-  const handleKeypress = (e: KeyboardEvent) => {
+  const handleKeydown = (e: KeyboardEvent) => {
     const shortcut = getShortcut(e.key);
     if (shortcut == null) return;
 
     // TODO Take id from global store.
-    shortcutController.handleKeypress(shortcut, selectedNodeId);
-    setMindMapData({ ...mindMapData });
+    const newMindMapData = mindMapData.shortcutController.handleKeydown(
+      shortcut,
+      mindMapData.selectedNodeId
+    );
+    setMindMapData({ ...newMindMapData });
   };
 
-  const handleKeypressEventListerEffect = (): (() => void) => {
-    document.body.addEventListener("keypress", handleKeypress);
-    return () => document.body.removeEventListener("keypress", handleKeypress);
+  const handleKeydownEventListerEffect = (): (() => void) => {
+    document.body.addEventListener("keydown", handleKeydown);
+    return () => document.body.removeEventListener("keydown", handleKeydown);
   };
 
-  useEffect(handleKeypressEventListerEffect, [handleKeypress]);
+  useEffect(handleKeydownEventListerEffect, [handleKeydown]);
 
   // TODO Why is display smaller on monitor?
   return (
@@ -129,14 +133,14 @@ const MindMap: FC = () => {
         {/* TODO Make tail of root node to draggable */}
         <Node
           nodeData={mindMapData.rootNodeData}
-          selectedNodeId={selectedNodeId}
+          selectedNodeId={mindMapData.selectedNodeId}
           setSelectedNodeId={setSelectedNodeId}
           setNodeDataText={setNodeDataText}
           handleNodeTextChanges={handleNodeTextChanges}
         />
         <Nodes
           nodes={mindMapData.rightMapData.nodes}
-          selectedNodeId={selectedNodeId}
+          selectedNodeId={mindMapData.selectedNodeId}
           setSelectedNodeId={setSelectedNodeId}
           setNodeDataText={setNodeDataText}
           handleNodeTextChanges={handleNodeTextChanges}

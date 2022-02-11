@@ -6,6 +6,7 @@ import DropPosition from "~/domain/model/DropPosition";
 const tailAreaRatio = 0.2;
 
 type NodeData = {
+  // TODO change to number.
   id: string;
   text: string;
   width: number;

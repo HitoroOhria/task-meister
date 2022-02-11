@@ -1,11 +1,21 @@
 import { assertNever } from "~/util/ExceptionUtil";
-import Shortcut, { shortcuts } from "~/enum/Shortcut";
-import MindMapData, { mindMapDataImpl } from "~/domain/model/MindMapData";
+import Shortcut, { ArrowKey, arrowKeys, shortcuts } from "~/enum/Shortcut";
+import MindMapData from "~/domain/model/MindMapData";
 
 type ShortcutController = {
-  mindMapData: MindMapData;
+  mindMapData: MindMapData | undefined;
 
-  handleKeypress(key: string, id: string): void;
+  handleKeydown(key: string, selectedNodeId: string): MindMapData;
+
+  handleArrowKeyDown(arrowKey: ArrowKey, selectedId: string): MindMapData;
+
+  selectTopNodeId(selectedNodeId: string): MindMapData;
+
+  selectBottomNodeId(selectedNodeId: string): MindMapData;
+
+  selectRightNodeId(selectedNodeId: string): MindMapData;
+
+  selectLeftNodeId(selectedNodeId: string): MindMapData;
 };
 
 export const newShortcutController = (
@@ -17,18 +27,90 @@ export const newShortcutController = (
   };
 };
 
-const shortcutControllerImpl: ShortcutController = {
-  mindMapData: mindMapDataImpl,
+export const shortcutControllerImpl: ShortcutController = {
+  mindMapData: undefined,
 
   // TODO Can move process of MindMapData to ShortcutController?
-  handleKeypress(key: Shortcut, id: string) {
+  handleKeydown(key: Shortcut, selectedNodeId: string): MindMapData {
     switch (key) {
+      case shortcuts.Up:
+      case shortcuts.Down:
+      case shortcuts.Right:
+      case shortcuts.Left:
+        return this.handleArrowKeyDown(key, selectedNodeId);
       case shortcuts.Space:
-        this.mindMapData.handlePressSpace(id);
+        this.mindMapData!.handlePressSpace(selectedNodeId);
+        break;
+      case shortcuts.Tab:
+        console.log("pressed Tab");
         break;
       default:
         assertNever(key, `Not defined key. key = ${key}`);
     }
+
+    return this.mindMapData!;
+  },
+
+  handleArrowKeyDown(arrowKey: ArrowKey, selectedId: string): MindMapData {
+    switch (arrowKey) {
+      case arrowKeys.Up:
+        return this.selectTopNodeId(selectedId);
+      case arrowKeys.Down:
+        return this.selectBottomNodeId(selectedId);
+      case arrowKeys.Right:
+        return this.selectRightNodeId(selectedId);
+      case arrowKeys.Left:
+        return this.selectLeftNodeId(selectedId);
+      default:
+        assertNever(arrowKey, `Not defined arrow key. arrow key = ${arrowKey}`);
+    }
+
+    return this.mindMapData!;
+  },
+
+  selectTopNodeId(selectedNodeId: string): MindMapData {
+    const topNodeId =
+      this.mindMapData!.rightMapData.nodes.findChildrenContainsId(
+        selectedNodeId
+      )?.findTopNodeIdOf(selectedNodeId);
+    if (topNodeId === undefined) return this.mindMapData!;
+
+    this.mindMapData!.selectedNodeId = topNodeId;
+    return this.mindMapData!;
+  },
+
+  selectBottomNodeId(selectedNodeId: string): MindMapData {
+    const bottomNodeId =
+      this.mindMapData!.rightMapData.nodes.findChildrenContainsId(
+        selectedNodeId
+      )?.findBottomNodeIdOf(selectedNodeId);
+    if (bottomNodeId === undefined) return this.mindMapData!;
+
+    this.mindMapData!.selectedNodeId = bottomNodeId;
+    return this.mindMapData!;
+  },
+
+  selectRightNodeId(selectedNodeId: string): MindMapData {
+    const rightNodeId =
+      this.mindMapData!.rightMapData.nodes.findChildrenContainsId(
+        selectedNodeId
+      )?.findRightNodeIdOf(selectedNodeId);
+    if (rightNodeId === undefined) return this.mindMapData!;
+
+    this.mindMapData!.selectedNodeId = rightNodeId;
+    return this.mindMapData!;
+  },
+
+  // TODO Select root node.
+  selectLeftNodeId(selectedNodeId: string): MindMapData {
+    const leftNodeId =
+      this.mindMapData!.rightMapData.nodes.recursively.findChildHasGrandChildId(
+        selectedNodeId
+      )?.id;
+    if (leftNodeId === undefined) return this.mindMapData!;
+
+    this.mindMapData!.selectedNodeId = leftNodeId;
+    return this.mindMapData!;
   },
 };
 Object.freeze(shortcutControllerImpl);

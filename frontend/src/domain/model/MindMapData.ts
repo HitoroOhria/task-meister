@@ -2,11 +2,17 @@ import RightMapData from "~/domain/model/RightMapData";
 import rightNodesData, { rightNodeDataImpl } from "~/domain/model/RightMapData";
 import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
 import DropPosition from "~/domain/model/DropPosition";
+import ShortcutController, {
+  newShortcutController,
+  shortcutControllerImpl,
+} from "~/domain/model/ShortcutController";
 
 type MindMapData = {
+  selectedNodeId: string;
   rootNodeData: NodeData;
   rightMapData: RightMapData;
   leftMapData: rightNodesData;
+  shortcutController: ShortcutController;
 
   setNodeTextById(id: string, text: string): void;
 
@@ -30,18 +36,24 @@ export const newMindMapData = (
   rightNodesData: RightMapData,
   leftNodesData: RightMapData
 ): MindMapData => {
-  return {
+  const mindMapData: MindMapData = {
     ...mindMapDataImpl,
     rootNodeData: rootNodeData,
     rightMapData: rightNodesData,
     leftMapData: leftNodesData,
   };
+  mindMapData.shortcutController = newShortcutController(mindMapData);
+
+  return mindMapData;
 };
 
 export const mindMapDataImpl: MindMapData = {
+  ...shortcutControllerImpl,
+  selectedNodeId: "",
   rootNodeData: nodeDataImpl,
   rightMapData: rightNodeDataImpl,
   leftMapData: rightNodeDataImpl,
+  shortcutController: shortcutControllerImpl,
 
   setNodeTextById(id: string, text: string) {
     if (id === this.rootNodeData.id) {

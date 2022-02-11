@@ -1,8 +1,11 @@
 import Children from "~/domain/model/Children";
 import { total } from "~/util/NumberUtil";
+import NodeData from "~/domain/model/NodeData";
 
 interface RecursivelyChildren {
   mirror: Children | null;
+
+  findChildHasGrandChildId(id: string): NodeData | undefined;
 
   updateNodeTop(): void;
 
@@ -27,6 +30,23 @@ export const newRecursivelyChildren = (
 export const recursivelyChildrenImpl: RecursivelyChildren = {
   // TODO Can implement using spread operator?
   mirror: null,
+
+  findChildHasGrandChildId(id: string): NodeData | undefined {
+    const nodeData = this.mirror!.findChildHasGrandChildId(id);
+    if (nodeData !== undefined) {
+      return nodeData;
+    }
+
+    for (const child of this.mirror!.list) {
+      const target = child.children.recursively.findChildHasGrandChildId(id);
+
+      if (target !== undefined) {
+        return target;
+      }
+    }
+
+    return undefined;
+  },
 
   updateNodeTop() {
     this.mirror!.list.forEach((child) => child.updateTop());
