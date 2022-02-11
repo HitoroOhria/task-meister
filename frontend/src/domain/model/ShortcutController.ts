@@ -1,6 +1,7 @@
-import { assertNever } from "~/util/ExceptionUtil";
-import Shortcut, { ArrowKey, arrowKeys, shortcuts } from "~/enum/Shortcut";
 import MindMapData from "~/domain/model/MindMapData";
+import Shortcut, { shortcuts } from "~/enum/Shortcut";
+import ArrowKey, { arrowKeys } from "~/enum/ArrowKeys";
+import { assertNever } from "~/util/ExceptionUtil";
 
 type ShortcutController = {
   mindMapData: MindMapData | undefined;

@@ -1,11 +1,4 @@
-export const arrowKeys = {
-  Up: "ArrowUp",
-  Down: "ArrowDown",
-  Right: "ArrowRight",
-  Left: "ArrowLeft",
-} as const;
-
-export type ArrowKey = typeof arrowKeys[keyof typeof arrowKeys];
+import { arrowKeys } from "~/enum/ArrowKeys";
 
 export const shortcuts = {
   ...arrowKeys,
