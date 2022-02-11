@@ -9,7 +9,7 @@ type Group = {
   // group top value of style.
   top: number;
 
-  isHidden: boolean
+  isHidden: boolean;
 
   updateHeight(isHidden: boolean, nodeHeight: number, children: Children): void;
 

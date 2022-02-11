@@ -1,40 +1,44 @@
-import NodeData from "~/domain/model/NodeData";
+import NestableNode from "~/domain/model/NestableNode";
 import Children, { childrenImpl } from "~/domain/model/Children";
 import DropPosition from "~/domain/model/DropPosition";
 import { total } from "~/util/NumberUtil";
 
-type RightMapData = {
+type RightMap = {
   nodes: Children;
 
   setTextById(id: string, text: string): void;
 
   handleTextChanges(id: string, width: number, height: number): void;
 
-  updateNodesLateral(target: NodeData, width: number, left: number): void;
+  updateNodesLateral(
+    updatedNode: NestableNode,
+    width: number,
+    left: number
+  ): void;
 
-  updateNodesVertical(target: NodeData, height: number): void;
+  updateNodesVertical(updatedNode: NestableNode, height: number): void;
 
   handleDropNode(movedNodeId: string, dropPosition: DropPosition): void;
 
-  removeNode(id: string): NodeData;
+  removeNode(id: string): NestableNode;
 
   insertNode(
-    target: NodeData,
+    target: NestableNode,
     dropPosition: DropPosition,
-    lowerNode: NodeData
+    lowerNode: NestableNode
   ): void;
 
-  collapseNodes(id: string): void;
+  collapseNodes(selectedId: string): void;
 };
 
-export const newRightNodesData = (nodes: Children): RightMapData => {
+export const newRightMap = (nodes: Children): RightMap => {
   return {
-    ...rightNodeDataImpl,
+    ...rightMapImpl,
     nodes: nodes,
   };
 };
 
-export const rightNodeDataImpl: RightMapData = {
+export const rightMapImpl: RightMap = {
   nodes: childrenImpl,
 
   setTextById(id: string, text: string) {
@@ -56,18 +60,22 @@ export const rightNodeDataImpl: RightMapData = {
     this.updateNodesVertical(target, height);
   },
 
-  updateNodesLateral(target: NodeData, width: number, left: number) {
-    target.width = width;
-    target.left = left;
-    target.children.recursively.setNodeLeft(left, width);
+  updateNodesLateral(
+    updatedNode: NestableNode,
+    width: number,
+    left: number
+  ) {
+    updatedNode.width = width;
+    updatedNode.left = left;
+    updatedNode.children.recursively.setNodeLeft(left, width);
   },
 
-  updateNodesVertical(target: NodeData, height: number) {
-    target.height = height;
+  updateNodesVertical(updatedNode: NestableNode, height: number) {
+    updatedNode.height = height;
     this.nodes.recursively.updateGroupAndChildrenHeight();
 
     const totalOfGroupHeights = total(
-      this.nodes.list.map((nodeData) => nodeData.group.height)
+      this.nodes.nodes.map((nodeData) => nodeData.group.height)
     );
     const nodesGroupTop = -totalOfGroupHeights / 2;
     this.nodes.recursively.setGroupTop(0, nodesGroupTop);
@@ -90,7 +98,7 @@ export const rightNodeDataImpl: RightMapData = {
     this.updateNodesVertical(movedNode, movedNode.height);
   },
 
-  removeNode(id: string): NodeData {
+  removeNode(id: string): NestableNode {
     const children = this.nodes.recursively.findChildrenContainsId(id);
     if (!children) {
       throw new Error(`Can not found children contains id. id = ${id}`);
@@ -100,12 +108,12 @@ export const rightNodeDataImpl: RightMapData = {
   },
 
   insertNode(
-    target: NodeData,
+    target: NestableNode,
     dropPosition: DropPosition,
-    lowerNode: NodeData
+    lowerNode: NestableNode
   ) {
     if (lowerNode.onTail(dropPosition.left)) {
-      lowerNode.children.list.push(target);
+      lowerNode.children.nodes.push(target);
       return;
     }
 
@@ -121,17 +129,17 @@ export const rightNodeDataImpl: RightMapData = {
     children.insertChild(target, dropPosition.top, lowerNode);
   },
 
-  collapseNodes(id: string) {
-    const target = this.nodes.recursively.findChildById(id);
-    if (!target) {
-      throw new Error(`Can not found nodeData by id. id = ${id}`);
+  collapseNodes(selectedId: string) {
+    const selectedNode = this.nodes.recursively.findChildById(selectedId);
+    if (!selectedNode) {
+      throw new Error(`Can not found nodeData by id. id = ${selectedId}`);
     }
 
-    target.toggleCollapse();
-    this.updateNodesVertical(target, target.height);
+    selectedNode.toggleCollapse();
+    this.updateNodesVertical(selectedNode, selectedNode.height);
   },
 };
 
-Object.freeze(rightNodeDataImpl);
+Object.freeze(rightMapImpl);
 
-export default RightMapData;
+export default RightMap;

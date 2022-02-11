@@ -1,47 +1,40 @@
-import RightMapData from "~/domain/model/RightMapData";
-import rightNodesData, { rightNodeDataImpl } from "~/domain/model/RightMapData";
-import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
-import DropPosition from "~/domain/model/DropPosition";
+import RootNode, { rootNodeImpl } from "~/domain/model/RootNode";
+import RightMap, { rightMapImpl } from "~/domain/model/RightMap";
 import ShortcutController, {
   newShortcutController,
   shortcutControllerImpl,
 } from "~/domain/model/ShortcutController";
+import DropPosition from "~/domain/model/DropPosition";
 
 type MindMapData = {
   selectedNodeId: string;
   isInputting: boolean;
-  rootNodeData: NodeData;
-  rightMapData: RightMapData;
-  leftMapData: rightNodesData;
+  rootNode: RootNode;
+  rightMap: RightMap;
+  leftMap: RightMap;
   shortcutController: ShortcutController;
 
   setNodeTextById(id: string, text: string): void;
 
   handleTextChanges(id: string, width: number, height: number): void;
 
-  handleRootNodeTextChanges(width: number, height: number): void;
-
-  updateRootNodeLateral(width: number): void;
-
-  updateRootNodeVertical(height: number): void;
+  processRootNodeTextChanges(width: number, height: number): void;
 
   updateRightNodesLeft(): void;
 
   handleDropNode(id: string, dropPosition: DropPosition): void;
-
-  handlePressSpace(id: string): void;
 };
 
 export const newMindMapData = (
-  rootNodeData: NodeData,
-  rightNodesData: RightMapData,
-  leftNodesData: RightMapData
+  rootNode: RootNode,
+  rightMap: RightMap,
+  leftMap: RightMap
 ): MindMapData => {
   const mindMapData: MindMapData = {
     ...mindMapDataImpl,
-    rootNodeData: rootNodeData,
-    rightMapData: rightNodesData,
-    leftMapData: leftNodesData,
+    rootNode: rootNode,
+    rightMap: rightMap,
+    leftMap: leftMap,
   };
   mindMapData.shortcutController = newShortcutController(mindMapData);
 
@@ -51,58 +44,44 @@ export const newMindMapData = (
 export const mindMapDataImpl: MindMapData = {
   selectedNodeId: "",
   isInputting: false,
-  rootNodeData: nodeDataImpl,
-  rightMapData: rightNodeDataImpl,
-  leftMapData: rightNodeDataImpl,
+  rootNode: rootNodeImpl,
+  rightMap: rightMapImpl,
+  leftMap: rightMapImpl,
   shortcutController: shortcutControllerImpl,
 
   setNodeTextById(id: string, text: string) {
-    if (id === this.rootNodeData.id) {
-      this.rootNodeData.text = text;
+    if (id === this.rootNode.id) {
+      this.rootNode.text = text;
       return;
     }
 
-    this.rightMapData.setTextById(id, text);
+    this.rightMap.setTextById(id, text);
   },
 
   handleTextChanges(id: string, width: number, height: number) {
-    if (id === this.rootNodeData.id) {
-      this.handleRootNodeTextChanges(width, height);
+    if (id === this.rootNode.id) {
+      this.processRootNodeTextChanges(width, height);
       return;
     }
 
-    this.rightMapData.handleTextChanges(id, width, height);
+    this.rightMap.handleTextChanges(id, width, height);
   },
 
-  handleRootNodeTextChanges(width: number, height: number) {
-    this.updateRootNodeLateral(width);
-    this.updateRootNodeVertical(height);
+  processRootNodeTextChanges(width: number, height: number) {
+    this.rootNode.updateLateral(width);
+    this.rootNode.updateVertical(height);
     this.updateRightNodesLeft();
   },
 
-  updateRootNodeLateral(width: number) {
-    this.rootNodeData.width = width;
-    this.rootNodeData.left = -width / 2;
-  },
-
-  updateRootNodeVertical(height: number) {
-    this.rootNodeData.height = height;
-    this.rootNodeData.top = -height / 2;
-  },
-
   updateRightNodesLeft() {
-    this.rightMapData.nodes.recursively.setNodeLeft(
-      this.rootNodeData.left,
-      this.rootNodeData.width
+    this.rightMap.nodes.recursively.setNodeLeft(
+      this.rootNode.left,
+      this.rootNode.width
     );
   },
 
-  handleDropNode(id: string, dropPosition: DropPosition) {
-    this.rightMapData.handleDropNode(id, dropPosition);
-  },
-
-  handlePressSpace(id: string) {
-    this.rightMapData.collapseNodes(id);
+  handleDropNode(movedNodeId: string, dropPosition: DropPosition) {
+    this.rightMap.handleDropNode(movedNodeId, dropPosition);
   },
 };
 

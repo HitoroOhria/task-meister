@@ -17,6 +17,8 @@ type ShortcutController = {
   selectHeadNodeId(selectedNodeId: string): MindMapData;
 
   selectTailNodeId(selectedNodeId: string): MindMapData;
+
+  toggleCollapse(id: string): MindMapData;
 };
 
 export const newShortcutController = (
@@ -40,7 +42,7 @@ export const shortcutControllerImpl: ShortcutController = {
       case shortcuts.Left:
         return this.handleArrowKeyDown(key, selectedNodeId);
       case shortcuts.Space:
-        this.mindMapData!.handlePressSpace(selectedNodeId);
+        this.toggleCollapse(selectedNodeId);
         break;
       case shortcuts.Tab:
         console.log("pressed Tab");
@@ -71,7 +73,7 @@ export const shortcutControllerImpl: ShortcutController = {
 
   selectTopNodeId(selectedNodeId: string): MindMapData {
     const topNodeId =
-      this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
+      this.mindMapData!.rightMap.nodes.recursively.findChildrenContainsId(
         selectedNodeId
       )?.findTopNodeOf(selectedNodeId)?.id;
     if (!topNodeId) {
@@ -86,7 +88,7 @@ export const shortcutControllerImpl: ShortcutController = {
 
   selectBottomNodeId(selectedNodeId: string): MindMapData {
     const bottomNodeId =
-      this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
+      this.mindMapData!.rightMap.nodes.recursively.findChildrenContainsId(
         selectedNodeId
       )?.findBottomNodeOf(selectedNodeId)?.id;
     if (!bottomNodeId) {
@@ -102,7 +104,7 @@ export const shortcutControllerImpl: ShortcutController = {
   // TODO Select root node.
   selectHeadNodeId(selectedNodeId: string): MindMapData {
     const leftNodeId =
-      this.mindMapData!.rightMapData.nodes.recursively.findChildHasGrandChildId(
+      this.mindMapData!.rightMap.nodes.recursively.findChildHasGrandChildId(
         selectedNodeId
       )?.id;
     if (!leftNodeId) return this.mindMapData!;
@@ -113,7 +115,7 @@ export const shortcutControllerImpl: ShortcutController = {
 
   selectTailNodeId(selectedNodeId: string): MindMapData {
     const rightNodeId =
-      this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
+      this.mindMapData!.rightMap.nodes.recursively.findChildrenContainsId(
         selectedNodeId
       )?.findTailNodeOf(selectedNodeId)?.id;
     if (!rightNodeId) {
@@ -122,6 +124,11 @@ export const shortcutControllerImpl: ShortcutController = {
 
     this.mindMapData!.selectedNodeId = rightNodeId;
     return this.mindMapData!;
+  },
+
+  toggleCollapse(selectedNodeId: string): MindMapData {
+    this.mindMapData!.rightMap.collapseNodes(selectedNodeId);
+    return this.mindMapData!
   },
 };
 Object.freeze(shortcutControllerImpl);

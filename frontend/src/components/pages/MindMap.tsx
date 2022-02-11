@@ -3,58 +3,59 @@ import Origin, { OriginHandles } from "~/components/organisms/Origin";
 import Node from "~/components/organisms/Node";
 import Nodes from "~/components/organisms/Nodes";
 import MindMapData, { newMindMapData } from "~/domain/model/MindMapData";
-import { newRightNodesData } from "~/domain/model/RightMapData";
-import { newNodeData } from "~/domain/model/NodeData";
+import { newRightMap } from "~/domain/model/RightMap";
+import { newNestableNode } from "~/domain/model/NestableNode";
 import { newGroup } from "~/domain/model/Group";
 import { newChildren } from "~/domain/model/Children";
 import { newDropPosition } from "~/domain/model/DropPosition";
 import { getShortcut } from "~/enum/Shortcut";
+import { newRootNode } from "~/domain/model/RootNode";
 
-const node1_2_1 = newNodeData(
+const node1_2_1 = newNestableNode(
   "id1-2-1 of right",
   "id1-2-1 of right",
   newGroup(),
   newChildren([])
 );
-const node1_2_2 = newNodeData(
+const node1_2_2 = newNestableNode(
   "id1-2−2 of right",
   "id1-2-2 of right",
   newGroup(),
   newChildren([])
 );
-const node1_2_3 = newNodeData(
+const node1_2_3 = newNestableNode(
   "id1-2−3 of right",
   "id1-2-3 of right",
   newGroup(),
   newChildren([])
 );
 
-const node1_1 = newNodeData(
+const node1_1 = newNestableNode(
   "id1-1 of right",
   "id1-1 of right",
   newGroup(),
   newChildren([])
 );
-const node1_2 = newNodeData(
+const node1_2 = newNestableNode(
   "id1-2 of right",
   "id1-2 of right",
   newGroup(),
   newChildren([node1_2_1, node1_2_2, node1_2_3])
 );
-const node1_3 = newNodeData(
+const node1_3 = newNestableNode(
   "id1-3 of right",
   "id1-3 of right",
   newGroup(),
   newChildren([])
 );
 
-const node1 = newNodeData(
+const node1 = newNestableNode(
   "id1 of right",
   "id1 of right",
   newGroup(),
   newChildren([node1_1, node1_2, node1_3])
 );
-const node2 = newNodeData(
+const node2 = newNestableNode(
   "id2 of right",
   "id2 of right",
   newGroup(),
@@ -62,9 +63,9 @@ const node2 = newNodeData(
 );
 
 const mindMapDataObj = newMindMapData(
-  newNodeData("rootNode", "rootNode", newGroup(), newChildren([])),
-  newRightNodesData(newChildren([node1, node2])),
-  newRightNodesData(newChildren([]))
+  newRootNode("rootNode", "rootNode"),
+  newRightMap(newChildren([node1, node2])),
+  newRightMap(newChildren([]))
 );
 
 const MindMap: FC = () => {
@@ -138,7 +139,7 @@ const MindMap: FC = () => {
       <Origin ref={originElement}>
         {/* TODO Make tail of root node to draggable */}
         <Node
-          nodeData={mindMapData.rootNodeData}
+          nodeData={mindMapData.rootNode}
           selectedNodeId={mindMapData.selectedNodeId}
           setIsInputting={setIsInputting}
           setSelectedNodeId={setSelectedNodeId}
@@ -146,7 +147,7 @@ const MindMap: FC = () => {
           handleNodeTextChanges={handleNodeTextChanges}
         />
         <Nodes
-          nodes={mindMapData.rightMapData.nodes}
+          nodes={mindMapData.rightMap.nodes}
           selectedNodeId={mindMapData.selectedNodeId}
           setIsInputting={setIsInputting}
           setSelectedNodeId={setSelectedNodeId}

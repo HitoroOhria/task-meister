@@ -1,7 +1,7 @@
 import React, { VFC } from "react";
 import Children from "~/domain/model/Children";
 import Node from "~/components/organisms/Node";
-import NodeData from "~/domain/model/NodeData";
+import NestableNode from "~/domain/model/NestableNode";
 
 type NodesProps = {
   nodes: Children;
@@ -14,11 +14,11 @@ type NodesProps = {
 
 const Nodes: VFC<NodesProps> = (props) => {
   // TODO Move to Render object?
-  const renderNode = (nodeData: NodeData): JSX.Element => {
+  const renderNode = (node: NestableNode): JSX.Element => {
     return (
       <Node
-        key={nodeData.id}
-        nodeData={nodeData}
+        key={node.id}
+        nodeData={node}
         selectedNodeId={props.selectedNodeId}
         setIsInputting={props.setIsInputting}
         setSelectedNodeId={props.setSelectedNodeId}
@@ -28,17 +28,15 @@ const Nodes: VFC<NodesProps> = (props) => {
     );
   };
 
-  const renderNodeAndChildren = (nodeData: NodeData): JSX.Element[] => {
-    const node = renderNode(nodeData);
-    const childrenNodes = nodeData.group.isHidden
-      ? []
-      : renderNodes(nodeData.children);
+  const renderNodeAndChildren = (node: NestableNode): JSX.Element[] => {
+    const selfNode = renderNode(node);
+    const childrenNodes = node.group.isHidden ? [] : renderNodes(node.children);
 
-    return [node, ...childrenNodes];
+    return [selfNode, ...childrenNodes];
   };
 
   const renderNodes = (children: Children): JSX.Element[] =>
-    children.list.flatMap((child) => renderNodeAndChildren(child));
+    children.nodes.flatMap((child) => renderNodeAndChildren(child));
 
   return <>{renderNodes(props.nodes)}</>;
 };

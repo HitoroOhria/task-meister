@@ -1,16 +1,16 @@
+import NestableNode from "~/domain/model/NestableNode";
 import Children from "~/domain/model/Children";
-import { total } from "~/util/NumberUtil";
-import NodeData from "~/domain/model/NodeData";
 import DropPosition from "~/domain/model/DropPosition";
+import { total } from "~/util/NumberUtil";
 
 interface RecursivelyChildren {
-  mirror: Children | null;
+  children: Children | null;
 
-  findChildById(id: string): NodeData | undefined;
+  findChildById(id: string): NestableNode | undefined;
 
-  findChildByPosition(position: DropPosition): NodeData | undefined;
+  findChildByPosition(position: DropPosition): NestableNode | undefined;
 
-  findChildHasGrandChildId(id: string): NodeData | undefined;
+  findChildHasGrandChildId(id: string): NestableNode | undefined;
 
   findChildrenContainsId(id: string): Children | undefined;
 
@@ -30,21 +30,21 @@ export const newRecursivelyChildren = (
 ): RecursivelyChildren => {
   return {
     ...recursivelyChildrenImpl,
-    mirror: children,
+    children: children,
   };
 };
 
 export const recursivelyChildrenImpl: RecursivelyChildren = {
   // TODO Can implement using spread operator?
-  mirror: null,
+  children: null,
 
-  findChildById(id: string): NodeData | undefined {
-    const child = this.mirror!.list.find((child) => child.id === id);
+  findChildById(id: string): NestableNode | undefined {
+    const child = this.children!.nodes.find((child) => child.id === id);
     if (child) {
       return child;
     }
 
-    for (const child of this.mirror!.list) {
+    for (const child of this.children!.nodes) {
       const target = child.children.recursively.findChildById(id);
 
       if (target) {
@@ -55,13 +55,13 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined;
   },
 
-  findChildByPosition(position: DropPosition): NodeData | undefined {
-    const child = this.mirror!.list.find((child) => child.onArea(position));
+  findChildByPosition(position: DropPosition): NestableNode | undefined {
+    const child = this.children!.nodes.find((child) => child.onArea(position));
     if (child) {
       return child;
     }
 
-    for (const child of this.mirror!.list) {
+    for (const child of this.children!.nodes) {
       const target = child.children.recursively.findChildByPosition(position);
 
       if (target) {
@@ -72,13 +72,13 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined;
   },
 
-  findChildHasGrandChildId(id: string): NodeData | undefined {
-    const nodeData = this.mirror!.findChildHasGrandChildId(id);
+  findChildHasGrandChildId(id: string): NestableNode | undefined {
+    const nodeData = this.children!.findChildHasGrandChildId(id);
     if (nodeData !== undefined) {
       return nodeData;
     }
 
-    for (const child of this.mirror!.list) {
+    for (const child of this.children!.nodes) {
       const target = child.children.recursively.findChildHasGrandChildId(id);
 
       if (target !== undefined) {
@@ -90,12 +90,12 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   },
 
   findChildrenContainsId(id: string): Children | undefined {
-    const include = this.mirror!.list.map((child) => child.id).includes(id);
+    const include = this.children!.nodes.map((child) => child.id).includes(id);
     if (include) {
-      return this.mirror!;
+      return this.children!;
     }
 
-    for (const child of this.mirror!.list) {
+    for (const child of this.children!.nodes) {
       const children = child.children.recursively.findChildrenContainsId(id);
 
       if (children) {
@@ -107,42 +107,42 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   },
 
   updateNodeTop() {
-    this.mirror!.list.forEach((child) => child.updateTop());
-    this.mirror!.list.forEach((child) =>
+    this.children!.nodes.forEach((child) => child.updateTop());
+    this.children!.nodes.forEach((child) =>
       child.children.recursively.updateNodeTop()
     );
   },
 
   setNodeLeft(parentNodeLeft: number, parentNodeWidth: number) {
-    this.mirror!.list.forEach((child) =>
+    this.children!.nodes.forEach((child) =>
       child.setLeft(parentNodeLeft, parentNodeWidth)
     );
-    this.mirror!.list.forEach((child) =>
+    this.children!.nodes.forEach((child) =>
       child.children.recursively.setNodeLeft(child.left, child.width)
     );
   },
 
   setGroupTop(parentHeight: number, parentGroupTop: number) {
-    this.mirror!.setGroupTop(parentHeight, parentGroupTop);
-    this.mirror!.list.forEach((child) =>
+    this.children!.setGroupTop(parentHeight, parentGroupTop);
+    this.children!.nodes.forEach((child) =>
       child.children.recursively.setGroupTop(child.height, child.group.top)
     );
   },
 
   updateGroupAndChildrenHeight() {
-    this.mirror!.list.forEach((child) =>
+    this.children!.nodes.forEach((child) =>
       child.group.updateHeight(child.isHidden, child.height, child.children)
     );
 
     // TODO Return 0 when list is empty?
-    this.mirror!.height = total(
-      this.mirror!.list.map((child) => child.group.height)
+    this.children!.height = total(
+      this.children!.nodes.map((child) => child.group.height)
     );
   },
 
   toggleHidden() {
-    this.mirror!.list.forEach((child) => (child.isHidden = !child.isHidden));
-    this.mirror!.list.forEach((child) =>
+    this.children!.nodes.forEach((child) => (child.isHidden = !child.isHidden));
+    this.children!.nodes.forEach((child) =>
       child.children.recursively.toggleHidden()
     );
   },
