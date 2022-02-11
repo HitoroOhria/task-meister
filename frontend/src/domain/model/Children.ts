@@ -11,10 +11,10 @@ type Children = {
   // TODO Can expressed by implementing Array?
   list: NodeData[];
 
-  recursively: RecursivelyChildren;
-
   // total height of children node.
   height: number;
+
+  recursively: RecursivelyChildren;
 
   findChildHasGrandChildId(id: string): NodeData | undefined;
 
@@ -33,7 +33,7 @@ type Children = {
 
   insertChild(target: NodeData, dropTop: number, lowerNode: NodeData): void;
 
-  setGroupTop(parentHeight: number, parentGroupTop: number): void;
+  setGroupTop(parentChildrenHeight: number, parentGroupTop: number): void;
 };
 
 export const newChildren = (list: NodeData[]): Children => {
@@ -93,33 +93,35 @@ export const childrenImpl: Children = {
   },
 
   removeChild(id: string): NodeData | null {
-    const target = this.list.find((child) => child.id === id);
-    const targetIndex = this.list.findIndex((child) => child.id === id);
-    if (target === undefined || targetIndex === -1) {
-      console.log(
-        `can not found targetId to remove from this children. id = ${id}`
+    const removedChild = this.list.find((child) => child.id === id);
+    const removedChildIndex = this.list.findIndex((child) => child.id === id);
+    if (removedChild === undefined || removedChildIndex === -1) {
+      throw new Error(
+        `can not found targetId to remove from children. id = ${id}`
       );
-      return null;
     }
 
-    this.list.splice(targetIndex, 1);
-    return target;
+    this.list.splice(removedChildIndex, 1);
+    return removedChild;
   },
 
-  insertChild(target: NodeData, dropTop: number, lowerNode: NodeData) {
-    let index = this.list.findIndex((child) => child.id === lowerNode.id);
-    if (index < 0 || this.list.length < index) {
-      console.error(`index out of list. index = ${index}`);
-      return;
+  insertChild(targetNode: NodeData, dropTop: number, lowerNode: NodeData) {
+    let lowerNodeIndex = this.list.findIndex(
+      (child) => child.id === lowerNode.id
+    );
+    if (lowerNodeIndex === -1) {
+      throw new Error(`index out of list. index = ${lowerNodeIndex}`);
     }
 
-    lowerNode.onUpper(dropTop) || index++;
-    this.list.splice(index, 0, target);
+    !lowerNode.onUpper(dropTop) && lowerNodeIndex++;
+    this.list.splice(lowerNodeIndex, 0, targetNode);
   },
 
-  setGroupTop(parentHeight: number, parentGroupTop: number) {
+  setGroupTop(parentChildrenHeight: number, parentGroupTop: number) {
     let fromParentGroupTop =
-      this.height < parentHeight ? (parentHeight - this.height) / 2 : 0;
+      this.height < parentChildrenHeight
+        ? (parentChildrenHeight - this.height) / 2
+        : 0;
 
     this.list.forEach((child) => {
       child.group.setTop(parentGroupTop, fromParentGroupTop);
