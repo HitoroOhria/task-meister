@@ -14,7 +14,7 @@ type OriginProps = {
 };
 
 export type OriginHandles = {
-  getPoint: () => OriginPoint | null;
+  getPoint: () => OriginPoint | undefined;
 };
 
 const Origin = forwardRef<OriginHandles, OriginProps>((props, ref) => {
@@ -22,8 +22,8 @@ const Origin = forwardRef<OriginHandles, OriginProps>((props, ref) => {
   const [top, setTop] = useState<number>(window.innerHeight / 2);
   const [left, setLeft] = useState<number>(window.innerWidth / 2);
 
-  const getPoint = (): OriginPoint | null => {
-    if (originElement.current == null) return null;
+  const getPoint = (): OriginPoint | undefined => {
+    if (originElement.current == null) return undefined;
 
     const rect = originElement.current.getBoundingClientRect();
     const pageX = window.scrollX + rect.left;
