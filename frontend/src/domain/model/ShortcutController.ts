@@ -72,8 +72,12 @@ export const shortcutControllerImpl: ShortcutController = {
     const topNodeId =
       this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
         selectedNodeId
-      )?.findTopNodeIdOf(selectedNodeId);
-    if (topNodeId === undefined) return this.mindMapData!;
+      )?.findTopNodeOf(selectedNodeId)?.id;
+    if (topNodeId === undefined) {
+      throw new Error(
+        `Can not found NodeData by selected id. selected id = ${selectedNodeId}`
+      );
+    }
 
     this.mindMapData!.selectedNodeId = topNodeId;
     return this.mindMapData!;
@@ -83,8 +87,12 @@ export const shortcutControllerImpl: ShortcutController = {
     const bottomNodeId =
       this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
         selectedNodeId
-      )?.findBottomNodeIdOf(selectedNodeId);
-    if (bottomNodeId === undefined) return this.mindMapData!;
+      )?.findBottomNodeOf(selectedNodeId)?.id;
+    if (bottomNodeId === undefined) {
+      throw new Error(
+        `Can not found NodeData by selected id. selected id = ${selectedNodeId}`
+      );
+    }
 
     this.mindMapData!.selectedNodeId = bottomNodeId;
     return this.mindMapData!;
@@ -94,8 +102,10 @@ export const shortcutControllerImpl: ShortcutController = {
     const rightNodeId =
       this.mindMapData!.rightMapData.nodes.recursively.findChildrenContainsId(
         selectedNodeId
-      )?.findRightNodeIdOf(selectedNodeId);
-    if (rightNodeId === undefined) return this.mindMapData!;
+      )?.findRightNodeOf(selectedNodeId)?.id;
+    if (rightNodeId === undefined) {
+      return this.mindMapData!;
+    }
 
     this.mindMapData!.selectedNodeId = rightNodeId;
     return this.mindMapData!;

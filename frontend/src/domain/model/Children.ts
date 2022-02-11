@@ -18,13 +18,16 @@ type Children = {
 
   findChildHasGrandChildId(id: string): NodeData | undefined;
 
-  findTopNodeIdOf(id: string): string | undefined;
+  findTopNodeOf(childId: string): NodeData | undefined;
 
-  findBottomNodeIdOf(id: string): string | undefined;
+  findBottomNodeOf(childId: string): NodeData | undefined;
 
-  findRightNodeIdOf(id: string): string | undefined;
+  findRightNodeOf(childId: string): NodeData | undefined;
 
-  findLeftNodeIdOf(id: string, parentChildren: Children): string | undefined;
+  findLeftNodeOf(
+    childId: string,
+    parentChildren: Children
+  ): NodeData | undefined;
 
   removeChild(id: string): NodeData | null;
 
@@ -54,32 +57,39 @@ export const childrenImpl: Children = {
     );
   },
 
-  findTopNodeIdOf(id: string): string | undefined {
-    const baseNodeIndex = this.list.findIndex((child) => child.id === id);
-    if (baseNodeIndex === -1) return undefined;
+  findTopNodeOf(childId: string): NodeData | undefined {
+    const baseNodeIndex = this.list.findIndex((child) => child.id === childId);
+    if (baseNodeIndex === -1) {
+      return undefined;
+    }
 
     return baseNodeIndex === 0
-      ? this.list[this.list.length - 1].id
-      : this.list[baseNodeIndex - 1].id;
+      ? this.list[this.list.length - 1]
+      : this.list[baseNodeIndex - 1];
   },
 
-  findBottomNodeIdOf(id: string): string | undefined {
-    const baseNodeIndex = this.list.findIndex((child) => child.id === id);
-    if (baseNodeIndex === -1) return undefined;
+  findBottomNodeOf(childId: string): NodeData | undefined {
+    const baseNodeIndex = this.list.findIndex((child) => child.id === childId);
+    if (baseNodeIndex === -1) {
+      return undefined;
+    }
 
     return baseNodeIndex === this.list.length - 1
-      ? this.list[0].id
-      : this.list[baseNodeIndex + 1].id;
+      ? this.list[0]
+      : this.list[baseNodeIndex + 1];
   },
 
-  findRightNodeIdOf(id: string): string | undefined {
-    return this.list.find((child) => child.id === id)?.children.list[0]?.id;
+  findRightNodeOf(childId: string): NodeData | undefined {
+    return this.list.find((child) => child.id === childId)?.children.list[0];
   },
 
-  findLeftNodeIdOf(id: string, parentChildren: Children): string | undefined {
+  findLeftNodeOf(
+    childId: string,
+    parentChildren: Children
+  ): NodeData | undefined {
     return parentChildren.list.find((parentNodeData) =>
-      parentNodeData.children.list.find((child) => child.id === id)
-    )?.id;
+      parentNodeData.children.list.find((child) => child.id === childId)
+    );
   },
 
   removeChild(id: string): NodeData | null {
