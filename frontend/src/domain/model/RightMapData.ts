@@ -103,12 +103,9 @@ export const rightNodeDataImpl: RightMapData = {
   },
 
   removeNode(id: string): NodeData | null {
-    const children = this.nodes.findChildrenContainsId(id);
-    if (children == null) {
-      console.error(
-        `can not found id of target to remove from all children. id = ${id}`
-      );
-      return null;
+    const children = this.nodes.recursively.findChildrenContainsId(id);
+    if (children === undefined) {
+      throw new Error(`Can not found children contains id. id = ${id}`);
     }
 
     return children.removeChild(id);
@@ -120,16 +117,17 @@ export const rightNodeDataImpl: RightMapData = {
     lowerNode: NodeData
   ) {
     if (lowerNode.onTail(dropPosition.left)) {
-      lowerNode.insertChild(target);
+      lowerNode.children.list.push(target);
       return;
     }
 
-    const children = this.nodes.findChildrenContainsId(lowerNode.id);
-    if (children == null) {
-      console.error(
-        `can not find NodeData using id to insert. id of lower node = ${lowerNode.id}`
+    const children = this.nodes.recursively.findChildrenContainsId(
+      lowerNode.id
+    );
+    if (children === undefined) {
+      throw new Error(
+        `Can not found children contains id. id = ${lowerNode.id}`
       );
-      return;
     }
 
     children.insertChild(target, dropPosition.top, lowerNode);
@@ -141,7 +139,7 @@ export const rightNodeDataImpl: RightMapData = {
       throw new Error(`Can not found nodeData by id. id = ${id}`);
     }
 
-    target.toggleChildrenHidden();
+    target.toggleCollapse();
     this.updateNodesVertical(target, target.height);
   },
 };

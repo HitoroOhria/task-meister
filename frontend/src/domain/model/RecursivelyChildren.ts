@@ -12,6 +12,8 @@ interface RecursivelyChildren {
 
   findChildHasGrandChildId(id: string): NodeData | undefined;
 
+  findChildrenContainsId(id: string): Children | undefined;
+
   updateNodeTop(): void;
 
   setNodeLeft(parentNodeLeft: number, parentNodeWidth: number): void;
@@ -81,6 +83,23 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
 
       if (target !== undefined) {
         return target;
+      }
+    }
+
+    return undefined;
+  },
+
+  findChildrenContainsId(id: string): Children | undefined {
+    const include = this.mirror!.list.map((child) => child.id).includes(id);
+    if (include) {
+      return this.mirror!;
+    }
+
+    for (const child of this.mirror!.list) {
+      const children = child.children.recursively.findChildrenContainsId(id);
+
+      if (children) {
+        return children;
       }
     }
 

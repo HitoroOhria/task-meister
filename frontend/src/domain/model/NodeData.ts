@@ -31,9 +31,7 @@ type NodeData = {
 
   setLeft(parentLeft: number, parentWidth: number): void;
 
-  toggleChildrenHidden(): void;
-
-  insertChild(target: NodeData): void;
+  toggleCollapse(): void;
 };
 
 export const newNodeData = (
@@ -122,13 +120,9 @@ export const nodeDataImpl: NodeData = {
     this.left = parentLeft + parentWidth;
   },
 
-  toggleChildrenHidden() {
+  toggleCollapse() {
     this.group.isHidden = !this.group.isHidden;
     this.children.recursively.toggleHidden();
-  },
-
-  insertChild(target: NodeData) {
-    this.children.list.push(target);
   },
 };
 

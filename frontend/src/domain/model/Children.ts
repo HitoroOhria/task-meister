@@ -18,8 +18,6 @@ type Children = {
 
   findChildHasGrandChildId(id: string): NodeData | undefined;
 
-  findChildrenContainsId(id: string): Children | null;
-
   findTopNodeIdOf(id: string): string | undefined;
 
   findBottomNodeIdOf(id: string): string | undefined;
@@ -54,23 +52,6 @@ export const childrenImpl: Children = {
     return this.list.find((child) =>
       child.children.list.map((grandChild) => grandChild.id).includes(id)
     );
-  },
-
-  findChildrenContainsId(id: string): Children | null {
-    const include = this.list.map((child) => child.id).includes(id);
-    if (include) {
-      return this;
-    }
-
-    for (const child of this.list) {
-      const target = child.children.findChildrenContainsId(id);
-
-      if (target != null) {
-        return target;
-      }
-    }
-
-    return null;
   },
 
   findTopNodeIdOf(id: string): string | undefined {
