@@ -7,6 +7,7 @@ import ShortcutController, {
 import DropPosition from "~/domain/model/DropPosition";
 
 type MindMapData = {
+  // TODO Control readonly, geet, set
   selectedNodeId: string;
   isInputting: boolean;
   rootNode: RootNode;
