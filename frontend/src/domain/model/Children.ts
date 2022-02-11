@@ -3,7 +3,6 @@ import RecursivelyChildren, {
   newRecursivelyChildren,
   recursivelyChildrenImpl,
 } from "~/domain/model/RecursivelyChildren";
-import DropPosition from "~/domain/model/DropPosition";
 
 // Collection of NodeData.
 // Define process to be managed as a whole¬.
@@ -16,8 +15,6 @@ type Children = {
 
   // total height of children node.
   height: number;
-
-  findChildByPosition(position: DropPosition): NodeData | null;
 
   findChildHasGrandChildId(id: string): NodeData | undefined;
 
@@ -52,18 +49,6 @@ export const childrenImpl: Children = {
   list: [],
   height: 0,
   recursively: recursivelyChildrenImpl,
-
-  findChildByPosition(position: DropPosition): NodeData | null {
-    for (const child of this.list) {
-      const target = child.findByPositionFromGroup(position);
-
-      if (target != null) {
-        return target;
-      }
-    }
-
-    return null;
-  },
 
   findChildHasGrandChildId(id: string): NodeData | undefined {
     return this.list.find((child) =>

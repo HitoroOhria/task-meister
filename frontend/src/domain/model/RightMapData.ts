@@ -88,8 +88,8 @@ export const rightNodeDataImpl: RightMapData = {
 
   handleDropNode(id: string, dropPosition: DropPosition) {
     // TODO Node cannot move to own children
-    const lowerNode = this.nodes.findChildByPosition(dropPosition);
-    if (lowerNode == null) return;
+    const lowerNode = this.nodes.recursively.findChildByPosition(dropPosition);
+    if (lowerNode === undefined) return;
 
     const movedNode = this.removeNode(id);
     if (movedNode == null) return;

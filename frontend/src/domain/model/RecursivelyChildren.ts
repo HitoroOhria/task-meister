@@ -1,11 +1,14 @@
 import Children from "~/domain/model/Children";
 import { total } from "~/util/NumberUtil";
 import NodeData from "~/domain/model/NodeData";
+import DropPosition from "~/domain/model/DropPosition";
 
 interface RecursivelyChildren {
   mirror: Children | null;
 
   findChildById(id: string): NodeData | undefined;
+
+  findChildByPosition(position: DropPosition): NodeData | undefined;
 
   findChildHasGrandChildId(id: string): NodeData | undefined;
 
@@ -34,20 +37,37 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   mirror: null,
 
   findChildById(id: string): NodeData | undefined {
-    const child = this.mirror!.list.find(child => child.id === id)
+    const child = this.mirror!.list.find((child) => child.id === id);
     if (child) {
-      return child
+      return child;
     }
 
     for (const child of this.mirror!.list) {
-      const target = child.children.recursively.findChildById(id)
+      const target = child.children.recursively.findChildById(id);
 
       if (target) {
-        return target
+        return target;
       }
     }
 
-    return undefined
+    return undefined;
+  },
+
+  findChildByPosition(position: DropPosition): NodeData | undefined {
+    const child = this.mirror!.list.find((child) => child.onArea(position));
+    if (child) {
+      return child;
+    }
+
+    for (const child of this.mirror!.list) {
+      const target = child.children.recursively.findChildByPosition(position);
+
+      if (target) {
+        return target;
+      }
+    }
+
+    return undefined;
   },
 
   findChildHasGrandChildId(id: string): NodeData | undefined {

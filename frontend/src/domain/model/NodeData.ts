@@ -17,7 +17,7 @@ type NodeData = {
   children: Children;
   isHidden: boolean;
 
-  findByPositionFromGroup(position: DropPosition): NodeData | null;
+  onArea(position: DropPosition): boolean
 
   inXRange(left: number): boolean;
 
@@ -81,12 +81,8 @@ export const nodeDataImpl: NodeData = {
 
   isHidden: false,
 
-  findByPositionFromGroup(position: DropPosition): NodeData | null {
-    if (this.inXRange(position.left) && this.inYRange(position.top)) {
-      return this;
-    }
-
-    return this.children.findChildByPosition(position);
+  onArea(position: DropPosition): boolean {
+    return this.inXRange(position.left) && this.inYRange(position.top)
   },
 
   // TODO Respond to left map.
