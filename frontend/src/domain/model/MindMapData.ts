@@ -5,6 +5,7 @@ import ShortcutController, {
   shortcutControllerImpl,
 } from "~/domain/model/ShortcutController";
 import DropPosition from "~/domain/model/DropPosition";
+import NodeData from "~/domain/model/NodeData";
 
 type MindMapData = {
   // TODO Control readonly, geet, set
@@ -13,6 +14,10 @@ type MindMapData = {
   rightMap: RightMap;
   leftMap: RightMap;
   shortcutController: ShortcutController;
+
+  findNodeById(id: string): NodeData | undefined;
+
+  deselectNode(): void;
 
   setNodeTextById(id: string, text: string): void;
 
@@ -47,6 +52,23 @@ export const mindMapDataImpl: MindMapData = {
   rightMap: rightMapImpl,
   leftMap: rightMapImpl,
   shortcutController: shortcutControllerImpl,
+
+  findNodeById(id: string): NodeData | undefined {
+    if (this.rootNode.id === id) {
+      return this.rootNode;
+    }
+
+    return this.rightMap.nodes.recursively.findChildById(id);
+  },
+
+  deselectNode() {
+    if (this.rootNode.isSelected) {
+      this.rootNode.isSelected = false;
+      return;
+    }
+
+    this.rightMap.nodes.recursively.deselectChild();
+  },
 
   setNodeTextById(id: string, text: string) {
     if (id === this.rootNode.id) {

@@ -45,7 +45,7 @@ export const mindMapDataReducer = (
       newState = handleKeydown(state, action.shortcut, action.selectedNodeId);
       break;
     default:
-      return state;
+      throw new Error(`Not defined action type. action = ${action}`);
   }
   if (!newState) {
     throw new Error(`NewState is undefined!`);
@@ -72,9 +72,9 @@ const setIsInputting = (
 };
 
 const selectNode = (mindMapData: MindMapData, id: string): MindMapData => {
-  mindMapData.rightMap.nodes.recursively.deselectChild();
+  mindMapData.deselectNode();
 
-  const selectedNode = mindMapData.rightMap.nodes.recursively.findChildById(id);
+  const selectedNode = mindMapData.findNodeById(id);
   if (!selectedNode) {
     throw new Error(`Can not found selected node by id. id = ${id}`);
   }

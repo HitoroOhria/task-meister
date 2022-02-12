@@ -71,7 +71,7 @@ export const shortcutControllerImpl: ShortcutController = {
   },
 
   selectTopNodeId(selectedNodeId: string): MindMapData {
-    this.mindMapData.rightMap.nodes.recursively.deselectChild();
+    this.mindMapData.deselectNode();
 
     const topNode = this.mindMapData.rightMap.nodes.recursively
       .findChildrenContainsId(selectedNodeId)
@@ -87,7 +87,7 @@ export const shortcutControllerImpl: ShortcutController = {
   },
 
   selectBottomNodeId(selectedNodeId: string): MindMapData {
-    this.mindMapData.rightMap.nodes.recursively.deselectChild();
+    this.mindMapData.deselectNode();
 
     const bottomNode = this.mindMapData.rightMap.nodes.recursively
       .findChildrenContainsId(selectedNodeId)
@@ -112,7 +112,7 @@ export const shortcutControllerImpl: ShortcutController = {
       return this.mindMapData;
     }
 
-    this.mindMapData.rightMap.nodes.recursively.deselectChild();
+    this.mindMapData.deselectNode();
     leftNode.isSelected = true;
 
     return this.mindMapData;
@@ -126,7 +126,7 @@ export const shortcutControllerImpl: ShortcutController = {
       return this.mindMapData;
     }
 
-    this.mindMapData.rightMap.nodes.recursively.deselectChild();
+    this.mindMapData.deselectNode();
     rightNode.isSelected = true;
 
     return this.mindMapData;
