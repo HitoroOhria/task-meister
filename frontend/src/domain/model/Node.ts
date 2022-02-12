@@ -13,15 +13,14 @@ type Node = NodeData & {
   toggleCollapse(): void;
 };
 
-// TODO Rename to Node
-export const newNestableNode = (
+export const newNode = (
   id: string,
   text: string,
   group: Group,
   children: Children
 ): Node => {
   return {
-    ...nestableNode,
+    ...nodeImpl,
     id: id,
     text: text,
     group: group,
@@ -33,8 +32,7 @@ export const newNestableNode = (
 // NodeData consists of a node and children's nodes.
 // Whole group is called a group.
 // NodeData is not group, but holds value of group to calculate placement.
-// TODO Rename to Node
-export const nestableNode: Node = {
+export const nodeImpl: Node = {
   ...nodeDataImpl,
 
   group: groupImpl,
@@ -61,6 +59,6 @@ export const nestableNode: Node = {
   },
 };
 
-Object.freeze(nestableNode);
+Object.freeze(nodeImpl);
 
 export default Node;
