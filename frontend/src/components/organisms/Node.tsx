@@ -81,6 +81,24 @@ const Node: VFC<NodeProps> = (props) => {
     });
   };
 
+  const handleDoubleClick = () => {
+    dispatchMindMapData({
+      type: "setNodeIsInputting",
+      id: props.nodeData.id,
+      isInputting: true,
+    });
+    dispatchMindMapData({ type: "setGlobalIsInputting", isInputting: true });
+  };
+
+  const handleBlur = () => {
+    dispatchMindMapData({
+      type: "setNodeIsInputting",
+      id: props.nodeData.id,
+      isInputting: false,
+    });
+    dispatchMindMapData({ type: "setGlobalIsInputting", isInputting: false });
+  };
+
   return (
     <PositionAdjuster top={props.nodeData.top} left={props.nodeData.left}>
       {/* TODO Make TextInputer draggable*/}
@@ -93,7 +111,13 @@ const Node: VFC<NodeProps> = (props) => {
         }
         draggable={"true"}
       >
-        <TextInputer text={props.nodeData.text} setText={handleSetText} />
+        <TextInputer
+          text={props.nodeData.text}
+          setText={handleSetText}
+          isInputting={props.nodeData.isInputting}
+          handleDoubleClick={handleDoubleClick}
+          handleBlur={handleBlur}
+        />
       </NodeDiv>
     </PositionAdjuster>
   );

@@ -12,6 +12,7 @@ type NodeData = {
   left: number;
   isHidden: boolean;
   isSelected: boolean;
+  isInputting: boolean
 
   onArea(position: DropPosition): boolean;
 
@@ -46,6 +47,8 @@ export const nodeDataImpl: NodeData = {
   isHidden: false,
 
   isSelected: false,
+
+  isInputting: false,
 
   onArea(position: DropPosition): boolean {
     return this.inXRange(position.left) && this.inYRange(position.top);

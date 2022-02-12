@@ -4,7 +4,9 @@ import Shortcut from "~/enum/Shortcut";
 
 export type MindMapDataAction =
   | { type: "setNodeText"; id: string; text: string }
-  | { type: "setIsInputting"; isInputting: boolean }
+  // TODO Cut out to original store.
+  | { type: "setNodeIsInputting"; id: string; isInputting: boolean }
+  | { type: "setGlobalIsInputting"; isInputting: boolean }
   | { type: "selectNode"; id: string }
   | {
       type: "handleNodeTextChanges";
@@ -24,8 +26,11 @@ export const mindMapDataReducer = (
     case "setNodeText":
       newState = setNodeText(state, action.id, action.text);
       break;
-    case "setIsInputting":
-      newState = setIsInputting(state, action.isInputting);
+    case "setNodeIsInputting":
+      newState = setNodeIsInputting(state, action.id, action.isInputting);
+      break;
+    case "setGlobalIsInputting":
+      newState = setGlobalIsInputting(state, action.isInputting);
       break;
     case "selectNode":
       newState = selectNode(state, action.id);
@@ -64,7 +69,21 @@ const setNodeText = (
   return mindMapData;
 };
 
-const setIsInputting = (
+const setNodeIsInputting = (
+  mindMapData: MindMapData,
+  id: string,
+  isInputting: boolean
+): MindMapData => {
+  const targetNode = mindMapData.findNodeById(id);
+  if (!targetNode) {
+    throw new Error(`Can not found Node by id. id = ${id}`);
+  }
+
+  targetNode.isInputting = isInputting;
+  return mindMapData;
+};
+
+const setGlobalIsInputting = (
   mindMapData: MindMapData,
   isInputting: boolean
 ): MindMapData => {

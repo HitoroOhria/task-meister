@@ -1,8 +1,7 @@
-import React, {useContext, useEffect, useRef, useState, VFC} from "react";
+import React, {useEffect, useRef, useState, VFC} from "react";
 import {styled} from "@linaria/react";
 import ElementSizeCalculator from "~/util/ElementSizeCalculator";
 import {numberOfLines} from "~/util/StringUtil";
-import {MindMapDispatchCtx} from "~/store/context/MindMapDataCtx";
 
 // CSS
 export const minWidthPx = 50;
@@ -15,7 +14,10 @@ export const elementSizeCalculator = new ElementSizeCalculator(font);
 
 type TextInputerProps = {
   text: string;
+  isInputting: boolean;
   setText: (text: string) => void;
+  handleDoubleClick: () => void;
+  handleBlur: () => void;
 };
 
 type TextareaProps = {
@@ -39,8 +41,6 @@ const Textarea = styled.textarea<TextareaProps>`
 
 const TextInputer: VFC<TextInputerProps> = (props) => {
   const textareaElement = useRef<HTMLTextAreaElement>(null);
-  const dispatchMindMapData = useContext(MindMapDispatchCtx);
-  const [isInputting, setIsInputting] = useState<boolean>(false);
   const [textareaWidthPx, setTextareaWidthPx] = useState<number>(0);
   const [textareaHeightEm, setTextareaHeightEm] = useState<number>(0);
 
@@ -78,27 +78,17 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
   useEffect(componentDidMount, []);
   useEffect(handleTextChanges, [props.text]);
 
-  const handleDoubleClick = () => {
-    setIsInputting(true);
-    dispatchMindMapData({ type: "setIsInputting", isInputting: true });
-  };
-
-  const handleBlur = () => {
-    setIsInputting(false);
-    dispatchMindMapData({ type: "setIsInputting", isInputting: false });
-  };
-
   return (
     // TODO Eliminate range selection after double-clicking
     <Textarea
       ref={textareaElement}
-      readOnly={!isInputting}
+      readOnly={!props.isInputting}
       defaultValue={props.text}
       heightEm={textareaHeightEm}
       widthPx={textareaWidthPx}
       onChange={(e) => props.setText(e.target.value)}
-      onDoubleClick={handleDoubleClick}
-      onBlur={handleBlur}
+      onDoubleClick={props.handleDoubleClick}
+      onBlur={props.handleBlur}
     />
   );
 };
