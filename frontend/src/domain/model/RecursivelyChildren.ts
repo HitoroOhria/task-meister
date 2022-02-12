@@ -4,7 +4,7 @@ import DropPosition from "~/domain/model/DropPosition";
 import { total } from "~/util/NumberUtil";
 
 interface RecursivelyChildren {
-  children?: Children;
+  children: Children;
 
   findChildById(id: string): Node | undefined;
 
@@ -36,15 +36,15 @@ export const newRecursivelyChildren = (
 
 export const recursivelyChildrenImpl: RecursivelyChildren = {
   // TODO Can implement using spread operator?
-  children: undefined,
+  children: {} as Children,
 
   findChildById(id: string): Node | undefined {
-    const child = this.children!.nodes.find((child) => child.id === id);
+    const child = this.children.nodes.find((child) => child.id === id);
     if (child) {
       return child;
     }
 
-    for (const child of this.children!.nodes) {
+    for (const child of this.children.nodes) {
       const target = child.children.recursively.findChildById(id);
 
       if (target) {
@@ -56,12 +56,12 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   },
 
   findChildByPosition(position: DropPosition): Node | undefined {
-    const child = this.children!.nodes.find((child) => child.onArea(position));
+    const child = this.children.nodes.find((child) => child.onArea(position));
     if (child) {
       return child;
     }
 
-    for (const child of this.children!.nodes) {
+    for (const child of this.children.nodes) {
       const target = child.children.recursively.findChildByPosition(position);
 
       if (target) {
@@ -73,12 +73,12 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   },
 
   findChildHasGrandChildId(id: string): Node | undefined {
-    const nodeData = this.children!.findChildHasGrandChildId(id);
+    const nodeData = this.children.findChildHasGrandChildId(id);
     if (nodeData !== undefined) {
       return nodeData;
     }
 
-    for (const child of this.children!.nodes) {
+    for (const child of this.children.nodes) {
       const target = child.children.recursively.findChildHasGrandChildId(id);
 
       if (target !== undefined) {
@@ -90,12 +90,12 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   },
 
   findChildrenContainsId(id: string): Children | undefined {
-    const include = this.children!.nodes.map((child) => child.id).includes(id);
+    const include = this.children.nodes.map((child) => child.id).includes(id);
     if (include) {
-      return this.children!;
+      return this.children;
     }
 
-    for (const child of this.children!.nodes) {
+    for (const child of this.children.nodes) {
       const children = child.children.recursively.findChildrenContainsId(id);
 
       if (children) {
@@ -107,42 +107,42 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   },
 
   updateNodeTop() {
-    this.children!.nodes.forEach((child) => child.updateTop());
-    this.children!.nodes.forEach((child) =>
+    this.children.nodes.forEach((child) => child.updateTop());
+    this.children.nodes.forEach((child) =>
       child.children.recursively.updateNodeTop()
     );
   },
 
   setNodeLeft(parentNodeLeft: number, parentNodeWidth: number) {
-    this.children!.nodes.forEach((child) =>
+    this.children.nodes.forEach((child) =>
       child.setLeft(parentNodeLeft, parentNodeWidth)
     );
-    this.children!.nodes.forEach((child) =>
+    this.children.nodes.forEach((child) =>
       child.children.recursively.setNodeLeft(child.left, child.width)
     );
   },
 
   setGroupTop(parentHeight: number, parentGroupTop: number) {
-    this.children!.setGroupTop(parentHeight, parentGroupTop);
-    this.children!.nodes.forEach((child) =>
+    this.children.setGroupTop(parentHeight, parentGroupTop);
+    this.children.nodes.forEach((child) =>
       child.children.recursively.setGroupTop(child.height, child.group.top)
     );
   },
 
   updateGroupAndChildrenHeight() {
-    this.children!.nodes.forEach((child) =>
+    this.children.nodes.forEach((child) =>
       child.group.updateHeight(child.isHidden, child.height, child.children)
     );
 
     // TODO Return 0 when list is empty?
-    this.children!.height = total(
-      this.children!.nodes.map((child) => child.group.height)
+    this.children.height = total(
+      this.children.nodes.map((child) => child.group.height)
     );
   },
 
   toggleHidden() {
-    this.children!.nodes.forEach((child) => (child.isHidden = !child.isHidden));
-    this.children!.nodes.forEach((child) =>
+    this.children.nodes.forEach((child) => (child.isHidden = !child.isHidden));
+    this.children.nodes.forEach((child) =>
       child.children.recursively.toggleHidden()
     );
   },
