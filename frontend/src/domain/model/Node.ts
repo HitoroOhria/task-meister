@@ -13,17 +13,11 @@ type Node = NodeData & {
   toggleCollapse(): void;
 };
 
-export const newNode = (
-  id: string,
-  text: string,
-  group: Group,
-  children: Children
-): Node => {
+export const newNode = (id: string, text: string, children: Children): Node => {
   return {
     ...nodeImpl,
     id: id,
     text: text,
-    group: group,
     children: children,
   };
 };
