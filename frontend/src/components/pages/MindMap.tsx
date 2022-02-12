@@ -2,75 +2,12 @@ import React, { DragEvent, FC, useContext, useEffect, useRef } from "react";
 import Origin, { OriginHandles } from "~/components/organisms/Origin";
 import Node from "~/components/organisms/Node";
 import Nodes from "~/components/organisms/Nodes";
-import { newMindMapData } from "~/domain/model/MindMapData";
-import { newRightMap } from "~/domain/model/RightMap";
-import { newNestableNode } from "~/domain/model/Node";
-import { newGroup } from "~/domain/model/Group";
-import { newChildren } from "~/domain/model/Children";
 import { newDropPosition } from "~/domain/model/DropPosition";
 import { getShortcut } from "~/enum/Shortcut";
-import { newRootNode } from "~/domain/model/RootNode";
 import {
   MindMapDispatchCtx,
   MindMapStateCtx,
 } from "~/store/context/MindMapDataCtx";
-
-const node1_2_1 = newNestableNode(
-  "id1-2-1 of right",
-  "id1-2-1 of right",
-  newGroup(),
-  newChildren([])
-);
-const node1_2_2 = newNestableNode(
-  "id1-2−2 of right",
-  "id1-2-2 of right",
-  newGroup(),
-  newChildren([])
-);
-const node1_2_3 = newNestableNode(
-  "id1-2−3 of right",
-  "id1-2-3 of right",
-  newGroup(),
-  newChildren([])
-);
-
-const node1_1 = newNestableNode(
-  "id1-1 of right",
-  "id1-1 of right",
-  newGroup(),
-  newChildren([])
-);
-const node1_2 = newNestableNode(
-  "id1-2 of right",
-  "id1-2 of right",
-  newGroup(),
-  newChildren([node1_2_1, node1_2_2, node1_2_3])
-);
-const node1_3 = newNestableNode(
-  "id1-3 of right",
-  "id1-3 of right",
-  newGroup(),
-  newChildren([])
-);
-
-const node1 = newNestableNode(
-  "id1 of right",
-  "id1 of right",
-  newGroup(),
-  newChildren([node1_1, node1_2, node1_3])
-);
-const node2 = newNestableNode(
-  "id2 of right",
-  "id2 of right",
-  newGroup(),
-  newChildren([])
-);
-
-export const mindMapDataObj = newMindMapData(
-  newRootNode("rootNode", "rootNode"),
-  newRightMap(newChildren([node1, node2])),
-  newRightMap(newChildren([]))
-);
 
 const MindMap: FC = () => {
   const originElement = useRef<OriginHandles>(null);

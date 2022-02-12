@@ -4,7 +4,7 @@ import {
   MindMapStateCtx,
 } from "~/store/context/MindMapDataCtx";
 import { mindMapDataReducer } from "~/store/reducer/MindMapDataReducer";
-import { mindMapDataObj } from "~/components/pages/MindMap";
+import initMindMapData from "~/util/testInitMindMapData";
 
 type Props = {
   children?: ReactNode;
@@ -13,7 +13,7 @@ type Props = {
 const MindMapDataProvider: FC<Props> = (props) => {
   const [mindMapData, dispatchMindMapData] = useReducer(
     mindMapDataReducer,
-    mindMapDataObj
+    initMindMapData
   );
 
   return (
