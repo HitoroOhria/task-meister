@@ -8,7 +8,6 @@ import DropPosition from "~/domain/model/DropPosition";
 
 type MindMapData = {
   // TODO Control readonly, geet, set
-  selectedNodeId: string;
   isInputting: boolean;
   rootNode: RootNode;
   rightMap: RightMap;
@@ -43,7 +42,6 @@ export const newMindMapData = (
 };
 
 export const mindMapDataImpl: MindMapData = {
-  selectedNodeId: "",
   isInputting: false,
   rootNode: rootNodeImpl,
   rightMap: rightMapImpl,

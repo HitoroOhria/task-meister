@@ -22,20 +22,13 @@ type Children = {
 
   findBottomNodeOf(childId: string): Node | undefined;
 
-  findHeadNodeOf(
-    childId: string,
-    parentChildren: Children
-  ): Node | undefined;
+  findHeadNodeOf(childId: string, parentChildren: Children): Node | undefined;
 
   findTailNodeOf(childId: string): Node | undefined;
 
   removeChild(id: string): Node;
 
-  insertChild(
-    target: Node,
-    dropTop: number,
-    lowerNode: Node
-  ): void;
+  insertChild(target: Node, dropTop: number, lowerNode: Node): void;
 
   setGroupTop(parentChildrenHeight: number, parentGroupTop: number): void;
 };
@@ -85,10 +78,7 @@ export const childrenImpl: Children = {
       : this.nodes[baseNodeIndex + 1];
   },
 
-  findHeadNodeOf(
-    childId: string,
-    parentChildren: Children
-  ): Node | undefined {
+  findHeadNodeOf(childId: string, parentChildren: Children): Node | undefined {
     return parentChildren.nodes.find((parentNodeData) =>
       parentNodeData.children.nodes.find((child) => child.id === childId)
     );
@@ -111,11 +101,7 @@ export const childrenImpl: Children = {
     return removedChild;
   },
 
-  insertChild(
-    targetNode: Node,
-    dropTop: number,
-    lowerNode: Node
-  ) {
+  insertChild(targetNode: Node, dropTop: number, lowerNode: Node) {
     let lowerNodeIndex = this.nodes.findIndex(
       (child) => child.id === lowerNode.id
     );

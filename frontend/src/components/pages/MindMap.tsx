@@ -1,8 +1,8 @@
-import React, { DragEvent, FC, useEffect, useRef, useState } from "react";
+import React, { DragEvent, FC, useContext, useEffect, useRef } from "react";
 import Origin, { OriginHandles } from "~/components/organisms/Origin";
 import Node from "~/components/organisms/Node";
 import Nodes from "~/components/organisms/Nodes";
-import MindMapData, { newMindMapData } from "~/domain/model/MindMapData";
+import { newMindMapData } from "~/domain/model/MindMapData";
 import { newRightMap } from "~/domain/model/RightMap";
 import { newNestableNode } from "~/domain/model/Node";
 import { newGroup } from "~/domain/model/Group";
@@ -10,6 +10,10 @@ import { newChildren } from "~/domain/model/Children";
 import { newDropPosition } from "~/domain/model/DropPosition";
 import { getShortcut } from "~/enum/Shortcut";
 import { newRootNode } from "~/domain/model/RootNode";
+import {
+  MindMapDispatchCtx,
+  MindMapStateCtx,
+} from "~/store/context/MindMapDataCtx";
 
 const node1_2_1 = newNestableNode(
   "id1-2-1 of right",
@@ -62,7 +66,7 @@ const node2 = newNestableNode(
   newChildren([])
 );
 
-const mindMapDataObj = newMindMapData(
+export const mindMapDataObj = newMindMapData(
   newRootNode("rootNode", "rootNode"),
   newRightMap(newChildren([node1, node2])),
   newRightMap(newChildren([]))
@@ -70,27 +74,8 @@ const mindMapDataObj = newMindMapData(
 
 const MindMap: FC = () => {
   const originElement = useRef<OriginHandles>(null);
-  const [mindMapData, setMindMapData] = useState<MindMapData>(mindMapDataObj);
-
-  const setSelectedNodeId = (selectedNodeId: string) => {
-    mindMapData.selectedNodeId = selectedNodeId;
-    setMindMapData({ ...mindMapData });
-  };
-
-  const setIsInputting = (isInputting: boolean) => {
-    mindMapData.isInputting = isInputting;
-    setMindMapData({ ...mindMapData });
-  };
-
-  const setNodeDataText = (id: string, text: string) => {
-    mindMapData.setNodeTextById(id, text);
-    setMindMapData({ ...mindMapData });
-  };
-
-  const handleNodeTextChanges = (id: string, width: number, height: number) => {
-    mindMapData.handleTextChanges(id, width, height);
-    setMindMapData({ ...mindMapData });
-  };
+  const mindMapData = useContext(MindMapStateCtx);
+  const dispatchMindMapData = useContext(MindMapDispatchCtx);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -105,20 +90,19 @@ const MindMap: FC = () => {
     const originPoint = originElement.current.getPoint();
     const dropPosition = newDropPosition(e, originPoint!);
 
-    mindMapData.handleDropNode(nodeId, dropPosition);
-    setMindMapData({ ...mindMapData });
+    dispatchMindMapData({ type: "handleDrop", id: nodeId, dropPosition });
   };
 
   const handleKeydown = (e: KeyboardEvent) => {
-    const shortcut = getShortcut(e.key);
-    if (mindMapData.isInputting || !shortcut) return;
+    if (mindMapData.isInputting) return;
 
-    // TODO Take id from global store.
-    const newMindMapData = mindMapData.shortcutController.handleKeydown(
-      shortcut,
-      mindMapData.selectedNodeId
-    );
-    setMindMapData({ ...newMindMapData });
+    const shortcut = getShortcut(e.key);
+    if (!shortcut) return;
+    const selectedNodeId =
+      mindMapData.rightMap.nodes.recursively.findChildIsSelected()?.id;
+    if (!selectedNodeId) return;
+
+    dispatchMindMapData({ type: "handleKeydown", shortcut, selectedNodeId });
   };
 
   const handleKeydownEventListerEffect = (): (() => void) => {
@@ -137,22 +121,8 @@ const MindMap: FC = () => {
     >
       <Origin ref={originElement}>
         {/* TODO Make tail of root node to draggable */}
-        <Node
-          nodeData={mindMapData.rootNode}
-          selectedNodeId={mindMapData.selectedNodeId}
-          setIsInputting={setIsInputting}
-          setSelectedNodeId={setSelectedNodeId}
-          setNodeDataText={setNodeDataText}
-          handleNodeTextChanges={handleNodeTextChanges}
-        />
-        <Nodes
-          nodes={mindMapData.rightMap.nodes}
-          selectedNodeId={mindMapData.selectedNodeId}
-          setIsInputting={setIsInputting}
-          setSelectedNodeId={setSelectedNodeId}
-          setNodeDataText={setNodeDataText}
-          handleNodeTextChanges={handleNodeTextChanges}
-        />
+        <Node nodeData={mindMapData.rootNode} />
+        <Nodes nodes={mindMapData.rightMap.nodes} />
       </Origin>
     </div>
   );

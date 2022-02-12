@@ -12,6 +12,8 @@ interface RecursivelyChildren {
 
   findChildHasGrandChildId(id: string): Node | undefined;
 
+  findChildIsSelected(): Node | undefined;
+
   findChildrenContainsId(id: string): Children | undefined;
 
   updateNodeTop(): void;
@@ -23,6 +25,8 @@ interface RecursivelyChildren {
   updateGroupAndChildrenHeight(): void;
 
   toggleHidden(): void;
+
+  deselectChild(): void;
 }
 
 export const newRecursivelyChildren = (
@@ -89,6 +93,23 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined;
   },
 
+  findChildIsSelected(): Node | undefined {
+    const selectedNode = this.children.nodes.find((child) => child.isSelected);
+    if (selectedNode) {
+      return selectedNode;
+    }
+
+    for (const child of this.children.nodes) {
+      const foundNode = child.children.recursively.findChildIsSelected();
+
+      if (foundNode) {
+        return foundNode;
+      }
+    }
+
+    return undefined;
+  },
+
   findChildrenContainsId(id: string): Children | undefined {
     const include = this.children.nodes.map((child) => child.id).includes(id);
     if (include) {
@@ -145,6 +166,13 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     this.children.nodes.forEach((child) =>
       child.children.recursively.toggleHidden()
     );
+  },
+
+  deselectChild() {
+    const selectedNode = this.findChildIsSelected();
+    if (!selectedNode) return;
+
+    selectedNode.isSelected = false;
   },
 };
 

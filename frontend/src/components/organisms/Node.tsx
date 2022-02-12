@@ -1,9 +1,10 @@
-import React, {useEffect, useRef, VFC} from "react";
+import React, {useContext, useEffect, useRef, VFC} from "react";
 import {styled} from "@linaria/react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import TextInputer, {elementSizeCalculator, minWidthPx as TextInputerMinWidth,} from "~/components/atoms/TextInputer";
 import NodeData from "~/domain/model/NodeData";
 import {numberOfLines} from "~/util/StringUtil";
+import {MindMapDispatchCtx} from "~/store/context/MindMapDataCtx";
 
 // width of textarea from border to text
 // values of below is average of measured values
@@ -14,11 +15,6 @@ const heightPerOneLine = 13;
 
 type NodeProps = {
   nodeData: NodeData;
-  selectedNodeId: string;
-  setSelectedNodeId: (id: string) => void;
-  setIsInputting: (isInputting: boolean) => void;
-  setNodeDataText: (id: string, text: string) => void;
-  handleNodeTextChanges: (id: string, width: number, height: number) => void;
 };
 
 type NodeDivProps = {
@@ -35,10 +31,7 @@ const NodeDiv = styled.div<NodeDivProps>`
 
 const Node: VFC<NodeProps> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
-
-  const handleSetText = (text: string) => {
-    props.setNodeDataText(props.nodeData.id, text);
-  };
+  const dispatchMindMapData = useContext(MindMapDispatchCtx);
 
   // Do not use value of element. (ex. innerHeight, offsetHeight)
   // Because getting process ends before dom rendered. and the value of the previous text is acquired.
@@ -56,16 +49,20 @@ const Node: VFC<NodeProps> = (props) => {
       nodeHeightWhenOneLine +
       heightPerOneLine * (numberOfLines(props.nodeData.text) - 1);
 
-    props.handleNodeTextChanges(props.nodeData.id, width, height);
+    dispatchMindMapData({
+      type: "handleNodeTextChanges",
+      id: props.nodeData.id,
+      width,
+      height,
+    });
   };
 
   const handleDragStart = (e: DragEvent) => {
-    e.dataTransfer && e.dataTransfer.setData("text/plain", props.nodeData.id);
+    e.dataTransfer!.setData("text/plain", props.nodeData.id);
   };
 
   const addDragEventListener = () => {
-    nodeDivElement.current &&
-      nodeDivElement.current.addEventListener("dragstart", handleDragStart);
+    nodeDivElement.current!.addEventListener("dragstart", handleDragStart);
   };
 
   const componentDidMount = () => {
@@ -76,23 +73,27 @@ const Node: VFC<NodeProps> = (props) => {
   useEffect(componentDidMount, []);
   useEffect(handleNodeTextChanges, [props.nodeData.text]);
 
+  const handleSetText = (text: string) => {
+    dispatchMindMapData({
+      type: "setNodeText",
+      id: props.nodeData.id,
+      text,
+    });
+  };
+
   return (
     <PositionAdjuster top={props.nodeData.top} left={props.nodeData.left}>
       {/* TODO Make TextInputer draggable*/}
       <NodeDiv
         ref={nodeDivElement}
         hidden={props.nodeData.isHidden}
-        borderColor={
-          props.selectedNodeId === props.nodeData.id ? "yellow" : "blue"
+        borderColor={props.nodeData.isSelected ? "yellow" : "blue"}
+        onClick={() =>
+          dispatchMindMapData({ type: "selectNode", id: props.nodeData.id })
         }
-        onClick={() => props.setSelectedNodeId(props.nodeData.id)}
         draggable={"true"}
       >
-        <TextInputer
-          text={props.nodeData.text}
-          setText={handleSetText}
-          setGlobalIsInputting={props.setIsInputting}
-        />
+        <TextInputer text={props.nodeData.text} setText={handleSetText} />
       </NodeDiv>
     </PositionAdjuster>
   );

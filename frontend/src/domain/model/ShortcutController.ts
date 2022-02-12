@@ -42,8 +42,7 @@ export const shortcutControllerImpl: ShortcutController = {
       case shortcuts.Left:
         return this.handleArrowKeyDown(key, selectedNodeId);
       case shortcuts.Space:
-        this.toggleCollapse(selectedNodeId);
-        break;
+        return this.toggleCollapse(selectedNodeId);
       case shortcuts.Tab:
         console.log("pressed Tab");
         break;
@@ -72,54 +71,64 @@ export const shortcutControllerImpl: ShortcutController = {
   },
 
   selectTopNodeId(selectedNodeId: string): MindMapData {
-    const topNodeId = this.mindMapData.rightMap.nodes.recursively
+    this.mindMapData.rightMap.nodes.recursively.deselectChild();
+
+    const topNode = this.mindMapData.rightMap.nodes.recursively
       .findChildrenContainsId(selectedNodeId)
-      ?.findTopNodeOf(selectedNodeId)?.id;
-    if (!topNodeId) {
+      ?.findTopNodeOf(selectedNodeId);
+    if (!topNode) {
       throw new Error(
         `Can not found NodeData by selected id. selected id = ${selectedNodeId}`
       );
     }
 
-    this.mindMapData.selectedNodeId = topNodeId;
+    topNode.isSelected = true;
     return this.mindMapData;
   },
 
   selectBottomNodeId(selectedNodeId: string): MindMapData {
-    const bottomNodeId = this.mindMapData.rightMap.nodes.recursively
+    this.mindMapData.rightMap.nodes.recursively.deselectChild();
+
+    const bottomNode = this.mindMapData.rightMap.nodes.recursively
       .findChildrenContainsId(selectedNodeId)
-      ?.findBottomNodeOf(selectedNodeId)?.id;
-    if (!bottomNodeId) {
+      ?.findBottomNodeOf(selectedNodeId);
+    if (!bottomNode) {
       throw new Error(
         `Can not found NodeData by selected id. selected id = ${selectedNodeId}`
       );
     }
 
-    this.mindMapData.selectedNodeId = bottomNodeId;
+    bottomNode.isSelected = true;
     return this.mindMapData;
   },
 
   // TODO Select root node.
   selectHeadNodeId(selectedNodeId: string): MindMapData {
-    const leftNodeId =
+    const leftNode =
       this.mindMapData.rightMap.nodes.recursively.findChildHasGrandChildId(
         selectedNodeId
-      )?.id;
-    if (!leftNodeId) return this.mindMapData;
+      );
+    if (!leftNode) {
+      return this.mindMapData;
+    }
 
-    this.mindMapData.selectedNodeId = leftNodeId;
+    this.mindMapData.rightMap.nodes.recursively.deselectChild();
+    leftNode.isSelected = true;
+
     return this.mindMapData;
   },
 
   selectTailNodeId(selectedNodeId: string): MindMapData {
-    const rightNodeId = this.mindMapData.rightMap.nodes.recursively
+    const rightNode = this.mindMapData.rightMap.nodes.recursively
       .findChildrenContainsId(selectedNodeId)
-      ?.findTailNodeOf(selectedNodeId)?.id;
-    if (!rightNodeId) {
+      ?.findTailNodeOf(selectedNodeId);
+    if (!rightNode) {
       return this.mindMapData;
     }
 
-    this.mindMapData.selectedNodeId = rightNodeId;
+    this.mindMapData.rightMap.nodes.recursively.deselectChild();
+    rightNode.isSelected = true;
+
     return this.mindMapData;
   },
 

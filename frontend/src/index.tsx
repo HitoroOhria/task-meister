@@ -1,12 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import MindMap from "src/components/pages/MindMap";
 import reportWebVitals from "./reportWebVitals";
+// import MindMap from "src/components/pages/MindMap";
+import MindMapPage from "~/components/pages/MindMapPage";
 
 ReactDOM.render(
   <React.StrictMode>
-    <MindMap />
+    <MindMapPage />
   </React.StrictMode>,
   document.getElementById("root")
 );
