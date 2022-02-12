@@ -8,7 +8,7 @@ export const shortcuts = {
 
 export type Shortcut = typeof shortcuts[keyof typeof shortcuts];
 
-export const getShortcut = (key: string): Shortcut | null => {
+export const getShortcut = (key: string): Shortcut | undefined => {
   switch (key) {
     case shortcuts.Up:
       return shortcuts.Up;
@@ -23,7 +23,7 @@ export const getShortcut = (key: string): Shortcut | null => {
     case shortcuts.Tab:
       return shortcuts.Tab;
     default:
-      return null;
+      return undefined;
   }
 };
 

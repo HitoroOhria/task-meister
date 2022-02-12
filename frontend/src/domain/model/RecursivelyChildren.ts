@@ -4,7 +4,7 @@ import DropPosition from "~/domain/model/DropPosition";
 import { total } from "~/util/NumberUtil";
 
 interface RecursivelyChildren {
-  children: Children | null;
+  children?: Children;
 
   findChildById(id: string): Node | undefined;
 
@@ -36,7 +36,7 @@ export const newRecursivelyChildren = (
 
 export const recursivelyChildrenImpl: RecursivelyChildren = {
   // TODO Can implement using spread operator?
-  children: null,
+  children: undefined,
 
   findChildById(id: string): Node | undefined {
     const child = this.children!.nodes.find((child) => child.id === id);

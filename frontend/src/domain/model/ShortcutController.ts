@@ -4,7 +4,7 @@ import ArrowKey, { arrowKeys } from "~/enum/ArrowKeys";
 import { assertNever } from "~/util/ExceptionUtil";
 
 type ShortcutController = {
-  mindMapData: MindMapData | undefined;
+  mindMapData?: MindMapData;
 
   handleKeydown(key: string, selectedNodeId: string): MindMapData;
 
@@ -128,7 +128,7 @@ export const shortcutControllerImpl: ShortcutController = {
 
   toggleCollapse(selectedNodeId: string): MindMapData {
     this.mindMapData!.rightMap.collapseNodes(selectedNodeId);
-    return this.mindMapData!
+    return this.mindMapData!;
   },
 };
 Object.freeze(shortcutControllerImpl);

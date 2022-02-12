@@ -99,7 +99,7 @@ const MindMap: FC = () => {
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (originElement.current == null) return;
+    if (!originElement.current) return;
 
     const nodeId = e.dataTransfer!.getData("text/plain");
     const originPoint = originElement.current.getPoint();
@@ -110,9 +110,8 @@ const MindMap: FC = () => {
   };
 
   const handleKeydown = (e: KeyboardEvent) => {
-    if (mindMapData.isInputting) return;
     const shortcut = getShortcut(e.key);
-    if (shortcut == null) return;
+    if (mindMapData.isInputting || !shortcut) return;
 
     // TODO Take id from global store.
     const newMindMapData = mindMapData.shortcutController.handleKeydown(
