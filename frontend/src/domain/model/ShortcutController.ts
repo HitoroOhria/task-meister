@@ -1,7 +1,11 @@
 import MindMapData from "~/domain/model/MindMapData";
+import { newNode } from "~/domain/model/Node";
 import Shortcut, { shortcuts } from "~/enum/Shortcut";
 import ArrowKey, { arrowKeys } from "~/enum/ArrowKeys";
 import { assertNever } from "~/util/ExceptionUtil";
+import { newChildren } from "~/domain/model/Children";
+import _ from "lodash";
+import { newGroup } from "~/domain/model/Group";
 
 type ShortcutController = {
   mindMapData: MindMapData;
@@ -19,6 +23,8 @@ type ShortcutController = {
   selectTailNodeId(selectedNodeId: string): MindMapData;
 
   toggleCollapse(id: string): MindMapData;
+
+  addNodeToTail(selectedId: string): MindMapData;
 };
 
 export const newShortcutController = (
@@ -44,8 +50,7 @@ export const shortcutControllerImpl: ShortcutController = {
       case shortcuts.Space:
         return this.toggleCollapse(selectedNodeId);
       case shortcuts.Tab:
-        console.log("pressed Tab");
-        break;
+        return this.addNodeToTail(selectedNodeId);
       default:
         assertNever(key, `Not defined key. key = ${key}`);
     }
@@ -134,6 +139,31 @@ export const shortcutControllerImpl: ShortcutController = {
 
   toggleCollapse(selectedNodeId: string): MindMapData {
     this.mindMapData.rightMap.collapseNodes(selectedNodeId);
+    return this.mindMapData;
+  },
+
+  addNodeToTail(selectedId: string): MindMapData {
+    // TODO Why called twice?
+    //   - but, below log is once
+    console.log("addNodeToTail")
+    this.mindMapData.deselectNode();
+
+    const addedNode = newNode(
+      _.uniqueId("node_"),
+      "",
+      newGroup(),
+      newChildren([])
+    );
+    addedNode.isInputting = true;
+    addedNode.isSelected = true;
+
+    const selectedNode =
+      this.mindMapData.rightMap.nodes.recursively.findChildById(selectedId);
+    if (!selectedNode) {
+      throw new Error(`Can not found Node by id. id = ${selectedNode}`);
+    }
+    selectedNode.children.nodes.push(addedNode);
+
     return this.mindMapData;
   },
 };
