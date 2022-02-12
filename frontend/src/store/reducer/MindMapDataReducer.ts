@@ -51,6 +51,7 @@ export const mindMapDataReducer = (
     throw new Error(`NewState is undefined!`);
   }
 
+  // TODO Why not reflect collapse Node?
   return { ...newState };
 };
 
