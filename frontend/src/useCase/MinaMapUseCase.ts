@@ -1,4 +1,5 @@
 import MindMapData from "~/domain/model/MindMapData";
+import DropPosition from "~/domain/model/DropPosition";
 
 class MinaMapUseCase {
   public setNodeText(
@@ -53,6 +54,20 @@ class MinaMapUseCase {
     }
 
     mindMapData.rightMap.processNodeTextChanges(id, width, height);
+    return mindMapData;
+  }
+
+  processNodeDrop(
+    mindMapData: MindMapData,
+    movedNodeId: string,
+    dropPosition: DropPosition
+  ): MindMapData {
+    if (mindMapData.rootNode.onTail(dropPosition.left)) {
+      mindMapData.processNodeDropToRight(movedNodeId);
+      return mindMapData;
+    }
+
+    mindMapData.rightMap.processNodeDrop(movedNodeId, dropPosition);
     return mindMapData;
   }
 }

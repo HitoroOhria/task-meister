@@ -15,7 +15,7 @@ export type MindMapDataAction =
       width: number;
       height: number;
     }
-  | { type: "handleDrop"; id: string; dropPosition: DropPosition }
+  | { type: "processNodeDrop"; id: string; dropPosition: DropPosition }
   | { type: "handleKeydown"; shortcut: Shortcut; selectedNodeId: string };
 
 const mindMapUseCase = new MinaMapUseCase();
@@ -50,8 +50,12 @@ export const mindMapDataReducer = (
         action.height
       );
       break;
-    case "handleDrop":
-      newState = handleDrop(state, action.id, action.dropPosition);
+    case "processNodeDrop":
+      newState = mindMapUseCase.processNodeDrop(
+        state,
+        action.id,
+        action.dropPosition
+      );
       break;
     case "handleKeydown":
       newState = handleKeydown(state, action.shortcut, action.selectedNodeId);
@@ -72,15 +76,6 @@ const setGlobalIsInputting = (
   isInputting: boolean
 ): MindMapData => {
   mindMapData.isInputting = isInputting;
-  return mindMapData;
-};
-
-const handleDrop = (
-  mindMapData: MindMapData,
-  id: string,
-  dropPosition: DropPosition
-): MindMapData => {
-  mindMapData.handleDropNode(id, dropPosition);
   return mindMapData;
 };
 

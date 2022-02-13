@@ -12,7 +12,7 @@ type NodeData = {
   left: number;
   isHidden: boolean;
   isSelected: boolean;
-  isInputting: boolean
+  isInputting: boolean;
 
   onArea(position: DropPosition): boolean;
 
@@ -73,9 +73,10 @@ export const nodeDataImpl: NodeData = {
   // TODO Respond to left map.
   //   - Maybe invert width when left map
   onTail(left: number): boolean {
-    const border = this.left + this.width * (1 - tailAreaRatio);
+    const borderLeft = this.left + this.width * (1 - tailAreaRatio);
+    const tailLeft = this.left + this.width;
 
-    return border < left && left < this.left + this.width;
+    return borderLeft < left && left < tailLeft;
   },
 };
 Object.freeze(nodeDataImpl);

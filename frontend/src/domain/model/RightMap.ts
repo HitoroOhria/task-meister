@@ -14,7 +14,7 @@ type RightMap = {
 
   updateNodesVertical(updatedNode: Node, height: number): void;
 
-  handleDropNode(movedNodeId: string, dropPosition: DropPosition): void;
+  processNodeDrop(movedNodeId: string, dropPosition: DropPosition): void;
 
   removeNode(id: string): Node;
 
@@ -71,7 +71,7 @@ export const rightMapImpl: RightMap = {
     this.nodes.recursively.updateNodeTop();
   },
 
-  handleDropNode(movedNodeId: string, dropPosition: DropPosition) {
+  processNodeDrop(movedNodeId: string, dropPosition: DropPosition) {
     // TODO Node cannot move to own children
     const lowerNode = this.nodes.recursively.findChildByPosition(dropPosition);
     if (!lowerNode) return;

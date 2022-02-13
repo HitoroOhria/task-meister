@@ -27,7 +27,7 @@ const MindMap: FC = () => {
     const originPoint = originElement.current.getPoint();
     const dropPosition = newDropPosition(e, originPoint!);
 
-    dispatchMindMapData({ type: "handleDrop", id: nodeId, dropPosition });
+    dispatchMindMapData({ type: "processNodeDrop", id: nodeId, dropPosition });
   };
 
   const handleKeydown = (e: KeyboardEvent) => {

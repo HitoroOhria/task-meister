@@ -4,7 +4,6 @@ import ShortcutController, {
   newShortcutController,
   shortcutControllerImpl,
 } from "~/domain/model/ShortcutController";
-import DropPosition from "~/domain/model/DropPosition";
 import NodeData from "~/domain/model/NodeData";
 
 type MindMapData = {
@@ -21,9 +20,7 @@ type MindMapData = {
 
   processRootNodeTextChanges(width: number, height: number): void;
 
-  updateRightNodesLeft(): void;
-
-  handleDropNode(id: string, dropPosition: DropPosition): void;
+  processNodeDropToRight(movedNodeId: string): void;
 };
 
 export const newMindMapData = (
@@ -69,18 +66,19 @@ export const mindMapDataImpl: MindMapData = {
   processRootNodeTextChanges(width: number, height: number) {
     this.rootNode.updateLateral(width);
     this.rootNode.updateVertical(height);
-    this.updateRightNodesLeft();
-  },
-
-  updateRightNodesLeft() {
     this.rightMap.nodes.recursively.setNodeLeft(
       this.rootNode.left,
       this.rootNode.width
     );
   },
 
-  handleDropNode(movedNodeId: string, dropPosition: DropPosition) {
-    this.rightMap.handleDropNode(movedNodeId, dropPosition);
+  processNodeDropToRight(movedNodeId: string) {
+    const movedNode = this.rightMap.removeNode(movedNodeId);
+    this.rightMap.nodes.nodes.push(movedNode);
+
+    const newLeft = this.rootNode.width / 2;
+    this.rightMap.updateNodesLateral(movedNode, movedNode.width, newLeft);
+    this.rightMap.updateNodesVertical(movedNode, movedNode.height);
   },
 };
 
