@@ -55,6 +55,7 @@ class ShortcutUseCase {
     selectedId: string
   ): MindMapData {
     mindMapData.deselectNode();
+    mindMapData.isInputting = true;
 
     // TODO Create constructor
     const addedNode = newNode(
