@@ -1,6 +1,7 @@
 import MindMapData from "~/domain/model/MindMapData";
 import DropPosition from "~/domain/model/DropPosition";
 import Shortcut from "~/enum/Shortcut";
+import MinaMapUseCase from "~/useCase/MinaMapUseCase";
 
 export type MindMapDataAction =
   | { type: "setNodeText"; id: string; text: string }
@@ -17,6 +18,8 @@ export type MindMapDataAction =
   | { type: "handleDrop"; id: string; dropPosition: DropPosition }
   | { type: "handleKeydown"; shortcut: Shortcut; selectedNodeId: string };
 
+const mindMapUseCase = new MinaMapUseCase();
+
 export const mindMapDataReducer = (
   state: MindMapData,
   action: MindMapDataAction
@@ -24,7 +27,7 @@ export const mindMapDataReducer = (
   let newState: MindMapData | undefined = undefined;
   switch (action.type) {
     case "setNodeText":
-      newState = setNodeText(state, action.id, action.text);
+      newState = mindMapUseCase.setNodeText(state, action.id, action.text);
       break;
     case "setNodeIsInputting":
       newState = setNodeIsInputting(state, action.id, action.isInputting);
@@ -58,15 +61,6 @@ export const mindMapDataReducer = (
 
   // TODO Why not reflect collapse Node?
   return { ...newState };
-};
-
-const setNodeText = (
-  mindMapData: MindMapData,
-  id: string,
-  text: string
-): MindMapData => {
-  mindMapData.setNodeTextById(id, text);
-  return mindMapData;
 };
 
 const setNodeIsInputting = (

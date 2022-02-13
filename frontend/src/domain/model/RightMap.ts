@@ -34,12 +34,12 @@ export const rightMapImpl: RightMap = {
   nodes: childrenImpl,
 
   setTextById(id: string, text: string) {
-    const target = this.nodes.recursively.findChildById(id);
-    if (!target) {
+    const targetNode = this.nodes.recursively.findChildById(id);
+    if (!targetNode) {
       throw new Error(`Can not found nodeData by id. id = ${id}`);
     }
 
-    target.text = text;
+    targetNode.text = text;
   },
 
   handleTextChanges(id: string, width: number, height: number) {
@@ -52,11 +52,7 @@ export const rightMapImpl: RightMap = {
     this.updateNodesVertical(target, height);
   },
 
-  updateNodesLateral(
-    updatedNode: Node,
-    width: number,
-    left: number
-  ) {
+  updateNodesLateral(updatedNode: Node, width: number, left: number) {
     updatedNode.width = width;
     updatedNode.left = left;
     updatedNode.children.recursively.setNodeLeft(left, width);
@@ -99,11 +95,7 @@ export const rightMapImpl: RightMap = {
     return children.removeChild(id);
   },
 
-  insertNode(
-    target: Node,
-    dropPosition: DropPosition,
-    lowerNode: Node
-  ) {
+  insertNode(target: Node, dropPosition: DropPosition, lowerNode: Node) {
     if (lowerNode.onTail(dropPosition.left)) {
       lowerNode.children.nodes.push(target);
       return;
