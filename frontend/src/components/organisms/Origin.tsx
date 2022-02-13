@@ -1,53 +1,62 @@
 import React, {
-  forwardRef,
+  FC,
   ReactNode,
+  useContext,
   useEffect,
-  useImperativeHandle,
   useRef,
   useState,
 } from "react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
-import OriginPoint, { newOriginPoint } from "~/domain/model/OriginPoint";
+import { newOriginPoint } from "~/domain/model/OriginPoint";
+import { OriginPointDispatchCtx } from "~/store/context/OriginPointCtx";
 
-type OriginProps = {
+type Props = {
   children?: ReactNode;
 };
 
-export type OriginHandles = {
-  getPoint: () => OriginPoint | undefined;
-};
-
-const Origin = forwardRef<OriginHandles, OriginProps>((props, ref) => {
+// TODO Think name
+// this is not origin.
+// this is origin + droppable element.
+const Origin: FC<Props> = (props) => {
   const originElement = useRef<HTMLDivElement>(null);
   const [top, setTop] = useState<number>(window.innerHeight / 2);
   const [left, setLeft] = useState<number>(window.innerWidth / 2);
-
-  const getPoint = (): OriginPoint | undefined => {
-    if (originElement.current == null) return undefined;
-
-    const rect = originElement.current.getBoundingClientRect();
-    const pageX = window.scrollX + rect.left;
-    const pageY = window.scrollY + rect.top;
-
-    return newOriginPoint(pageX, pageY);
-  };
+  const dispatchOriginPoint = useContext(OriginPointDispatchCtx);
 
   const resetPosition = () => {
     setTop(window.innerHeight / 2);
     setLeft(window.innerWidth / 2);
   };
 
+  const updateOriginPoint = () => {
+    if (originElement.current == null) return;
+
+    const rect = originElement.current.getBoundingClientRect();
+    const pageX = window.scrollX + rect.left;
+    const pageY = window.scrollY + rect.top;
+
+    dispatchOriginPoint({
+      type: "setValue",
+      value: newOriginPoint(pageX, pageY),
+    });
+  };
+
+  const handleOnResize = () => {
+    resetPosition();
+    updateOriginPoint();
+  };
+
   const componentDidMount = () => {
-    window.onresize = resetPosition;
+    updateOriginPoint();
+    window.onresize = handleOnResize;
   };
 
   useEffect(componentDidMount, []);
-  useImperativeHandle(ref, () => ({ getPoint: getPoint }));
 
   return (
     <PositionAdjuster top={top} left={left}>
       <div ref={originElement}>{props.children}</div>
     </PositionAdjuster>
   );
-});
+};
 export default Origin;

@@ -101,7 +101,6 @@ const Node: VFC<NodeProps> = (props) => {
 
   return (
     <PositionAdjuster top={props.nodeData.top} left={props.nodeData.left}>
-      {/* TODO Make TextInputer draggable*/}
       <NodeDiv
         ref={nodeDivElement}
         hidden={props.nodeData.isHidden}
