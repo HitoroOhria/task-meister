@@ -69,6 +69,7 @@ class ShortcutUseCase {
       throw new Error(`Can not found Node by id. id = ${selectedNode}`);
     }
     selectedNode.children.nodes.push(addedNode);
+    addedNode.left = selectedNode.left + selectedNode.width;
 
     return mindMapData;
   }

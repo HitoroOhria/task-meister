@@ -16,7 +16,7 @@ const nodeHeightWhenOneLine = 62;
 const heightPerOneLine = 13;
 
 type NodeProps = {
-  nodeData: NodeData;
+  node: NodeData;
 };
 
 type NodeDivProps = {
@@ -39,7 +39,7 @@ const Node: VFC<NodeProps> = (props) => {
     dispatchMindMapData({
       type: actionType.setNodeText,
       payload: {
-        id: props.nodeData.id,
+        id: props.node.id,
         text,
       },
     });
@@ -51,20 +51,20 @@ const Node: VFC<NodeProps> = (props) => {
   const handleNodeTextChanges = () => {
     const textWidth =
       // TODO Set Prettier config
-      elementSizeCalculator.measureLongestLineWidth(props.nodeData.text) <
+      elementSizeCalculator.measureLongestLineWidth(props.node.text) <
       TextInputerMinWidth
         ? TextInputerMinWidth
-        : elementSizeCalculator.measureLongestLineWidth(props.nodeData.text);
+        : elementSizeCalculator.measureLongestLineWidth(props.node.text);
     const width = borderWidth * 2 + insideWidthOfTextarea + textWidth;
     const height =
       borderWidth * 2 +
       nodeHeightWhenOneLine +
-      heightPerOneLine * (numberOfLines(props.nodeData.text) - 1);
+      heightPerOneLine * (numberOfLines(props.node.text) - 1);
 
     dispatchMindMapData({
       type: actionType.processNodeTextChanges,
       payload: {
-        id: props.nodeData.id,
+        id: props.node.id,
         width,
         height,
       },
@@ -75,7 +75,7 @@ const Node: VFC<NodeProps> = (props) => {
     dispatchMindMapData({
       type: actionType.setNodeIsInputting,
       payload: {
-        id: props.nodeData.id,
+        id: props.node.id,
         isInputting: true,
       },
     });
@@ -89,7 +89,7 @@ const Node: VFC<NodeProps> = (props) => {
     dispatchMindMapData({
       type: actionType.setNodeIsInputting,
       payload: {
-        id: props.nodeData.id,
+        id: props.node.id,
         isInputting: false,
       },
     });
@@ -104,26 +104,26 @@ const Node: VFC<NodeProps> = (props) => {
   };
 
   useEffect(componentDidMount, []);
-  useEffect(handleNodeTextChanges, [props.nodeData.text]);
+  useEffect(handleNodeTextChanges, [props.node.text]);
 
   return (
-    <PositionAdjuster top={props.nodeData.top} left={props.nodeData.left}>
-      <DraggableElement textData={props.nodeData.id}>
+    <PositionAdjuster top={props.node.top} left={props.node.left}>
+      <DraggableElement textData={props.node.id}>
         <NodeDiv
           ref={nodeDivElement}
-          hidden={props.nodeData.isHidden}
-          borderColor={props.nodeData.isSelected ? "yellow" : "blue"}
+          hidden={props.node.isHidden}
+          borderColor={props.node.isSelected ? "yellow" : "blue"}
           onClick={() =>
             dispatchMindMapData({
               type: actionType.selectNode,
-              payload: { id: props.nodeData.id },
+              payload: { id: props.node.id },
             })
           }
         >
           <TextInputer
-            text={props.nodeData.text}
+            text={props.node.text}
             setText={handleSetText}
-            isInputting={props.nodeData.isInputting}
+            isInputting={props.node.isInputting}
             handleDoubleClick={handleDoubleClick}
             handleBlur={handleBlur}
           />

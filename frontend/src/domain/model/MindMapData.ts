@@ -3,7 +3,7 @@ import RightMap, { rightMapImpl } from "~/domain/model/RightMap";
 import NodeData from "~/domain/model/NodeData";
 
 type MindMapData = {
-  // TODO Control readonly, geet, set
+  // TODO Control readonly, get, set
   isInputting: boolean;
   rootNode: RootNode;
   rightMap: RightMap;
