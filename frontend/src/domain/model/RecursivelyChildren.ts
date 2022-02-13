@@ -6,13 +6,13 @@ import { total } from "~/util/NumberUtil";
 interface RecursivelyChildren {
   children: Children;
 
-  findChildById(id: string): Node | undefined;
+  findNodeById(id: string): Node | undefined;
 
-  findChildByPosition(position: DropPosition): Node | undefined;
+  findNodeByPosition(position: DropPosition): Node | undefined;
 
-  findChildHasGrandChildId(id: string): Node | undefined;
+  findNodeHasGrandChildId(id: string): Node | undefined;
 
-  findChildIsSelected(): Node | undefined;
+  findNodeIsSelected(): Node | undefined;
 
   findChildrenContainsId(id: string): Children | undefined;
 
@@ -42,14 +42,14 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   // TODO Can implement using spread operator?
   children: {} as Children,
 
-  findChildById(id: string): Node | undefined {
+  findNodeById(id: string): Node | undefined {
     const child = this.children.nodes.find((child) => child.id === id);
     if (child) {
       return child;
     }
 
     for (const child of this.children.nodes) {
-      const target = child.children.recursively.findChildById(id);
+      const target = child.children.recursively.findNodeById(id);
 
       if (target) {
         return target;
@@ -59,14 +59,14 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined;
   },
 
-  findChildByPosition(position: DropPosition): Node | undefined {
+  findNodeByPosition(position: DropPosition): Node | undefined {
     const child = this.children.nodes.find((child) => child.onArea(position));
     if (child) {
       return child;
     }
 
     for (const child of this.children.nodes) {
-      const target = child.children.recursively.findChildByPosition(position);
+      const target = child.children.recursively.findNodeByPosition(position);
 
       if (target) {
         return target;
@@ -76,31 +76,31 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined;
   },
 
-  findChildHasGrandChildId(id: string): Node | undefined {
-    const nodeData = this.children.findChildHasGrandChildId(id);
-    if (nodeData !== undefined) {
-      return nodeData;
+  findNodeHasGrandChildId(id: string): Node | undefined {
+    const node = this.children.findNodeHasGrandChildId(id);
+    if (node !== undefined) {
+      return node;
     }
 
     for (const child of this.children.nodes) {
-      const target = child.children.recursively.findChildHasGrandChildId(id);
+      const targetNode = child.children.recursively.findNodeHasGrandChildId(id);
 
-      if (target !== undefined) {
-        return target;
+      if (targetNode !== undefined) {
+        return targetNode;
       }
     }
 
     return undefined;
   },
 
-  findChildIsSelected(): Node | undefined {
+  findNodeIsSelected(): Node | undefined {
     const selectedNode = this.children.nodes.find((child) => child.isSelected);
     if (selectedNode) {
       return selectedNode;
     }
 
     for (const child of this.children.nodes) {
-      const foundNode = child.children.recursively.findChildIsSelected();
+      const foundNode = child.children.recursively.findNodeIsSelected();
 
       if (foundNode) {
         return foundNode;
@@ -169,7 +169,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   },
 
   deselectChild() {
-    const selectedNode = this.findChildIsSelected();
+    const selectedNode = this.findNodeIsSelected();
     if (!selectedNode) return;
 
     selectedNode.isSelected = false;

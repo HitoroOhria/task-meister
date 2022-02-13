@@ -44,7 +44,7 @@ export const mindMapDataImpl: MindMapData = {
       return this.rootNode;
     }
 
-    return this.rightMap.nodes.recursively.findChildById(id);
+    return this.rightMap.children.recursively.findNodeById(id);
   },
 
   deselectNode() {
@@ -53,20 +53,20 @@ export const mindMapDataImpl: MindMapData = {
       return;
     }
 
-    this.rightMap.nodes.recursively.deselectChild();
+    this.rightMap.children.recursively.deselectChild();
   },
 
   selectTail() {
-    if (!this.rightMap.nodes.nodes[0]) return ;
+    if (!this.rightMap.children.nodes[0]) return ;
 
     this.deselectNode()
-    this.rightMap.nodes.nodes[0].isSelected = true;
+    this.rightMap.children.nodes[0].isSelected = true;
   },
 
   processRootNodeTextChanges(width: number, height: number) {
     this.rootNode.updateLateral(width);
     this.rootNode.updateVertical(height);
-    this.rightMap.nodes.recursively.setNodeLeft(
+    this.rightMap.children.recursively.setNodeLeft(
       this.rootNode.left,
       this.rootNode.width
     );
@@ -74,7 +74,7 @@ export const mindMapDataImpl: MindMapData = {
 
   processNodeDropToRight(movedNodeId: string) {
     const movedNode = this.rightMap.removeNode(movedNodeId);
-    this.rightMap.nodes.nodes.push(movedNode);
+    this.rightMap.children.nodes.push(movedNode);
 
     const newLeft = this.rootNode.width / 2;
     this.rightMap.updateNodesLateral(movedNode, movedNode.width, newLeft);

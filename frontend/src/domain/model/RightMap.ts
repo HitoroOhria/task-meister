@@ -4,7 +4,7 @@ import DropPosition from "~/domain/model/DropPosition";
 import { total } from "~/util/NumberUtil";
 
 type RightMap = {
-  nodes: Children;
+  children: Children;
 
   setTextById(id: string, text: string): void;
 
@@ -26,15 +26,15 @@ type RightMap = {
 export const newRightMap = (nodes: Children): RightMap => {
   return {
     ...rightMapImpl,
-    nodes: nodes,
+    children: nodes,
   };
 };
 
 export const rightMapImpl: RightMap = {
-  nodes: childrenImpl,
+  children: childrenImpl,
 
   setTextById(id: string, text: string) {
-    const targetNode = this.nodes.recursively.findChildById(id);
+    const targetNode = this.children.recursively.findNodeById(id);
     if (!targetNode) {
       throw new Error(`Can not found nodeData by id. id = ${id}`);
     }
@@ -43,7 +43,7 @@ export const rightMapImpl: RightMap = {
   },
 
   processNodeTextChanges(id: string, width: number, height: number) {
-    const target = this.nodes.recursively.findChildById(id);
+    const target = this.children.recursively.findNodeById(id);
     if (!target) {
       throw new Error(`Can not found nodeData by id. id = ${id}`);
     }
@@ -60,20 +60,21 @@ export const rightMapImpl: RightMap = {
 
   updateNodesVertical(updatedNode: Node, height: number) {
     updatedNode.height = height;
-    this.nodes.recursively.updateGroupAndChildrenHeight();
+    this.children.recursively.updateGroupAndChildrenHeight();
 
     const totalOfGroupHeights = total(
-      this.nodes.nodes.map((nodeData) => nodeData.group.height)
+      this.children.nodes.map((nodeData) => nodeData.group.height)
     );
     const nodesGroupTop = -totalOfGroupHeights / 2;
-    this.nodes.recursively.setGroupTop(0, nodesGroupTop);
+    this.children.recursively.setGroupTop(0, nodesGroupTop);
 
-    this.nodes.recursively.updateNodeTop();
+    this.children.recursively.updateNodeTop();
   },
 
   processNodeDrop(movedNodeId: string, dropPosition: DropPosition) {
     // TODO Node cannot move to own children
-    const lowerNode = this.nodes.recursively.findChildByPosition(dropPosition);
+    const lowerNode =
+      this.children.recursively.findNodeByPosition(dropPosition);
     if (!lowerNode) return;
 
     const movedNode = this.removeNode(movedNodeId);
@@ -87,7 +88,7 @@ export const rightMapImpl: RightMap = {
   },
 
   removeNode(id: string): Node {
-    const children = this.nodes.recursively.findChildrenContainsId(id);
+    const children = this.children.recursively.findChildrenContainsId(id);
     if (!children) {
       throw new Error(`Can not found children contains id. id = ${id}`);
     }
@@ -101,7 +102,7 @@ export const rightMapImpl: RightMap = {
       return;
     }
 
-    const children = this.nodes.recursively.findChildrenContainsId(
+    const children = this.children.recursively.findChildrenContainsId(
       lowerNode.id
     );
     if (!children) {
@@ -114,7 +115,7 @@ export const rightMapImpl: RightMap = {
   },
 
   collapseNodes(selectedId: string) {
-    const selectedNode = this.nodes.recursively.findChildById(selectedId);
+    const selectedNode = this.children.recursively.findNodeById(selectedId);
     if (!selectedNode) {
       throw new Error(`Can not found nodeData by id. id = ${selectedId}`);
     }

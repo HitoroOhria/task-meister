@@ -26,7 +26,7 @@ class ArrowKeyUseCase {
   selectTopNode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
     mindMapData.deselectNode();
 
-    const topNode = mindMapData.rightMap.nodes.recursively
+    const topNode = mindMapData.rightMap.children.recursively
       .findChildrenContainsId(selectedNodeId)
       ?.findTopNodeOf(selectedNodeId);
     if (!topNode) {
@@ -45,7 +45,7 @@ class ArrowKeyUseCase {
   ): MindMapData {
     mindMapData.deselectNode();
 
-    const bottomNode = mindMapData.rightMap.nodes.recursively
+    const bottomNode = mindMapData.rightMap.children.recursively
       .findChildrenContainsId(selectedNodeId)
       ?.findBottomNodeOf(selectedNodeId);
     if (!bottomNode) {
@@ -70,7 +70,7 @@ class ArrowKeyUseCase {
     }
 
     const leftNode =
-      mindMapData.rightMap.nodes.recursively.findChildHasGrandChildId(
+      mindMapData.rightMap.children.recursively.findNodeHasGrandChildId(
         selectedNodeId
       );
     if (!leftNode) {
@@ -84,7 +84,7 @@ class ArrowKeyUseCase {
   }
 
   selectedNodeIsFirstLayer(mindMapData: MindMapData, selectedNodeId: string) {
-    return mindMapData.rightMap.nodes.nodes.find(
+    return mindMapData.rightMap.children.nodes.find(
       (node) => node.id === selectedNodeId
     );
   }
@@ -99,7 +99,7 @@ class ArrowKeyUseCase {
       return mindMapData;
     }
 
-    const tailNode = mindMapData.rightMap.nodes.recursively
+    const tailNode = mindMapData.rightMap.children.recursively
       .findChildrenContainsId(selectedNodeId)
       ?.findTailNodeOf(selectedNodeId);
     if (!tailNode) {

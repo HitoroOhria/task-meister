@@ -16,7 +16,7 @@ type Children = {
 
   recursively: RecursivelyChildren;
 
-  findChildHasGrandChildId(grandChildId: string): Node | undefined;
+  findNodeHasGrandChildId(grandChildId: string): Node | undefined;
 
   findTopNodeOf(childId: string): Node | undefined;
 
@@ -48,12 +48,14 @@ export const childrenImpl: Children = {
   height: 0,
   recursively: recursivelyChildrenImpl,
 
-  findChildHasGrandChildId(grandChildId: string): Node | undefined {
-    return this.nodes.find((child) =>
-      child.children.nodes
+  findNodeHasGrandChildId(grandChildId: string): Node | undefined {
+    const childrenIsContainId = (node: Node, id: string): boolean => {
+      return node.children.nodes
         .map((grandChild) => grandChild.id)
-        .includes(grandChildId)
-    );
+        .includes(id);
+    };
+
+    return this.nodes.find((child) => childrenIsContainId(child, grandChildId));
   },
 
   findTopNodeOf(childId: string): Node | undefined {

@@ -64,7 +64,7 @@ class ShortcutUseCase {
     addedNode.isSelected = true;
 
     const selectedNode =
-      mindMapData.rightMap.nodes.recursively.findChildById(selectedId);
+      mindMapData.rightMap.children.recursively.findNodeById(selectedId);
     if (!selectedNode) {
       throw new Error(`Can not found Node by id. id = ${selectedNode}`);
     }
