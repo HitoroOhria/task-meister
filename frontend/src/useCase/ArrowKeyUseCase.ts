@@ -66,6 +66,12 @@ class ArrowKeyUseCase {
     mindMapData: MindMapData,
     selectedNodeId: string
   ): MindMapData {
+    if (this.selectedNodeIsFirstLayer(mindMapData, selectedNodeId)) {
+      mindMapData.deselectNode();
+      mindMapData.rootNode.isSelected = true;
+      return mindMapData;
+    }
+
     const leftNode =
       mindMapData.rightMap.nodes.recursively.findChildHasGrandChildId(
         selectedNodeId
@@ -80,19 +86,31 @@ class ArrowKeyUseCase {
     return mindMapData;
   }
 
+  selectedNodeIsFirstLayer(mindMapData: MindMapData, selectedNodeId: string) {
+    return mindMapData.rightMap.nodes.nodes.find(
+      (node) => node.id === selectedNodeId
+    );
+  }
+
   selectTailNodeId(
     mindMapData: MindMapData,
     selectedNodeId: string
   ): MindMapData {
-    const rightNode = mindMapData.rightMap.nodes.recursively
+    // TODO Why not call when selected RootNode?
+    if (mindMapData.rootNode.isSelected) {
+      mindMapData.selectTail();
+      return mindMapData;
+    }
+
+    const tailNode = mindMapData.rightMap.nodes.recursively
       .findChildrenContainsId(selectedNodeId)
       ?.findTailNodeOf(selectedNodeId);
-    if (!rightNode) {
+    if (!tailNode) {
       return mindMapData;
     }
 
     mindMapData.deselectNode();
-    rightNode.isSelected = true;
+    tailNode.isSelected = true;
 
     return mindMapData;
   }

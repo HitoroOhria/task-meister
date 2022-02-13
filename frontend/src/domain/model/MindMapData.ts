@@ -13,6 +13,8 @@ type MindMapData = {
 
   deselectNode(): void;
 
+  selectTail(): void;
+
   processRootNodeTextChanges(width: number, height: number): void;
 
   processNodeDropToRight(movedNodeId: string): void;
@@ -52,6 +54,13 @@ export const mindMapDataImpl: MindMapData = {
     }
 
     this.rightMap.nodes.recursively.deselectChild();
+  },
+
+  selectTail() {
+    if (!this.rightMap.nodes.nodes[0]) return ;
+
+    this.deselectNode()
+    this.rightMap.nodes.nodes[0].isSelected = true;
   },
 
   processRootNodeTextChanges(width: number, height: number) {
