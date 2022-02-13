@@ -33,6 +33,9 @@ class ShortcutUseCase {
         return this.toggleCollapse(mindMapData, selectedNodeId);
       case shortcuts.Tab:
         return this.addNodeToTail(mindMapData, selectedNodeId);
+      case shortcuts.Enter:
+        console.log("Press Enter");
+        return mindMapData;
       default:
         assertNever(key, `Not defined key. key = ${key}`);
         return mindMapData;

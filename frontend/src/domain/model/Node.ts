@@ -1,6 +1,7 @@
 import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
 import Group, { groupImpl } from "~/domain/model/Group";
 import Children, { childrenImpl } from "~/domain/model/Children";
+import _ from "lodash";
 
 type Node = NodeData & {
   group: Group;
@@ -27,6 +28,16 @@ export const newNode = (
     children: children,
   };
 };
+
+export const newAddNode = (): Node => {
+  return {
+    ...nodeImpl,
+    id: _.uniqueId("node_"),
+    text: "",
+    isInputting: true,
+    isSelected: true,
+  }
+}
 
 // Data of node to be placed on MindMap.
 // NodeData consists of a node and children's nodes.

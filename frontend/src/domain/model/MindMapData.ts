@@ -9,6 +9,8 @@ type MindMapData = {
   rightMap: RightMap;
   leftMap: RightMap;
 
+  isFirstLayerNode(id: string): boolean;
+
   findNodeById(id: string): NodeData | undefined;
 
   deselectNode(): void;
@@ -38,6 +40,10 @@ export const mindMapDataImpl: MindMapData = {
   rootNode: rootNodeImpl,
   rightMap: rightMapImpl,
   leftMap: rightMapImpl,
+
+  isFirstLayerNode(id: string): boolean {
+    return !!this.rightMap.children.nodes.find((node) => node.id === id);
+  },
 
   findNodeById(id: string): NodeData | undefined {
     if (this.rootNode.id === id) {
