@@ -1,4 +1,5 @@
 import React, { DragEvent, FC, ReactNode, useContext } from "react";
+import { mindMapDataActionType as actionType } from "~/store/reducer/MindMapDataReducer";
 import { OriginPointStateCtx } from "~/store/context/OriginPointCtx";
 import { MindMapDispatchCtx } from "~/store/context/MindMapDataCtx";
 import { newDropPosition } from "~/domain/model/DropPosition";
@@ -22,7 +23,10 @@ const DroppableArea: FC<Props> = (props) => {
     const nodeId = e.dataTransfer!.getData("text/plain");
     const dropPosition = newDropPosition(e, originPoint);
 
-    dispatchMindMapData({ type: "processNodeDrop", id: nodeId, dropPosition });
+    dispatchMindMapData({
+      type: actionType.processNodeDrop,
+      payload: { id: nodeId, dropPosition },
+    });
   };
 
   return (

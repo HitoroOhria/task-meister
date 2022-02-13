@@ -3,6 +3,7 @@ import DroppableArea from "~/components/organisms/DroppableArea";
 import Origin from "~/components/organisms/Origin";
 import Node from "~/components/organisms/Node";
 import Nodes from "~/components/organisms/Nodes";
+import { mindMapDataActionType as actionType } from "~/store/reducer/MindMapDataReducer";
 import {
   MindMapDispatchCtx,
   MindMapStateCtx,
@@ -22,7 +23,10 @@ const MindMap: VFC = () => {
       mindMapData.rightMap.children.recursively.findNodeIsSelected()?.id;
     if (!selectedNodeId) return;
 
-    dispatchMindMapData({ type: "processKeydown", shortcut, selectedNodeId });
+    dispatchMindMapData({
+      type: actionType.processKeydown,
+      payload: { shortcut, selectedNodeId },
+    });
   };
 
   const handleKeydownEventListerEffect = (): (() => void) => {

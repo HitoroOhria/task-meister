@@ -1,7 +1,7 @@
 import MindMapData from "~/domain/model/MindMapData";
 import DropPosition from "~/domain/model/DropPosition";
 
-class MinaMapUseCase {
+class MindMapUseCase {
   public setNodeText(
     mindMapData: MindMapData,
     id: string,
@@ -72,4 +72,4 @@ class MinaMapUseCase {
   }
 }
 
-export default MinaMapUseCase;
+export default MindMapUseCase;

@@ -3,6 +3,7 @@ import {styled} from "@linaria/react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import DraggableElement from "~/components/organisms/DraggableElement";
 import TextInputer, {elementSizeCalculator, minWidthPx as TextInputerMinWidth,} from "~/components/atoms/TextInputer";
+import {mindMapDataActionType as actionType} from "~/store/reducer/MindMapDataReducer";
 import {MindMapDispatchCtx} from "~/store/context/MindMapDataCtx";
 import NodeData from "~/domain/model/NodeData";
 import {numberOfLines} from "~/util/StringUtil";
@@ -36,9 +37,11 @@ const Node: VFC<NodeProps> = (props) => {
 
   const handleSetText = (text: string) => {
     dispatchMindMapData({
-      type: "setNodeText",
-      id: props.nodeData.id,
-      text,
+      type: actionType.setNodeText,
+      payload: {
+        id: props.nodeData.id,
+        text,
+      },
     });
   };
 
@@ -59,29 +62,41 @@ const Node: VFC<NodeProps> = (props) => {
       heightPerOneLine * (numberOfLines(props.nodeData.text) - 1);
 
     dispatchMindMapData({
-      type: "processNodeTextChanges",
-      id: props.nodeData.id,
-      width,
-      height,
+      type: actionType.processNodeTextChanges,
+      payload: {
+        id: props.nodeData.id,
+        width,
+        height,
+      },
     });
   };
 
   const handleDoubleClick = () => {
     dispatchMindMapData({
-      type: "setNodeIsInputting",
-      id: props.nodeData.id,
-      isInputting: true,
+      type: actionType.setNodeIsInputting,
+      payload: {
+        id: props.nodeData.id,
+        isInputting: true,
+      },
     });
-    dispatchMindMapData({ type: "setGlobalIsInputting", isInputting: true });
+    dispatchMindMapData({
+      type: actionType.setGlobalIsInputting,
+      payload: { isInputting: true },
+    });
   };
 
   const handleBlur = () => {
     dispatchMindMapData({
-      type: "setNodeIsInputting",
-      id: props.nodeData.id,
-      isInputting: false,
+      type: actionType.setNodeIsInputting,
+      payload: {
+        id: props.nodeData.id,
+        isInputting: false,
+      },
     });
-    dispatchMindMapData({ type: "setGlobalIsInputting", isInputting: false });
+    dispatchMindMapData({
+      type: actionType.setGlobalIsInputting,
+      payload: { isInputting: false },
+    });
   };
 
   const componentDidMount = () => {
@@ -99,7 +114,10 @@ const Node: VFC<NodeProps> = (props) => {
           hidden={props.nodeData.isHidden}
           borderColor={props.nodeData.isSelected ? "yellow" : "blue"}
           onClick={() =>
-            dispatchMindMapData({ type: "selectNode", id: props.nodeData.id })
+            dispatchMindMapData({
+              type: actionType.selectNode,
+              payload: { id: props.nodeData.id },
+            })
           }
         >
           <TextInputer

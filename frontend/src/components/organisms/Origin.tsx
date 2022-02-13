@@ -9,6 +9,7 @@ import React, {
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import { newOriginPoint } from "~/domain/model/OriginPoint";
 import { OriginPointDispatchCtx } from "~/store/context/OriginPointCtx";
+import { originPointActionType as actionType } from "~/store/reducer/OriginPointReducer";
 
 type Props = {
   children?: ReactNode;
@@ -36,8 +37,8 @@ const Origin: FC<Props> = (props) => {
     const pageY = window.scrollY + rect.top;
 
     dispatchOriginPoint({
-      type: "setValue",
-      value: newOriginPoint(pageX, pageY),
+      type: actionType.setValue,
+      payload: newOriginPoint(pageX, pageY),
     });
   };
 

@@ -1,26 +1,42 @@
 import MindMapData from "~/domain/model/MindMapData";
 import DropPosition from "~/domain/model/DropPosition";
 import Shortcut from "~/enum/Shortcut";
-import MinaMapUseCase from "~/useCase/MinaMapUseCase";
+import MindMapUseCase from "~/useCase/MindMapUseCase";
 import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
 import ShortcutUseCase from "~/useCase/ShortcutUseCase";
 
-export type MindMapDataAction =
-  | { type: "setNodeText"; id: string; text: string }
+export const mindMapDataActionType = {
+  setNodeText: "MIND_MAP_DATA_SET_NODE_TEXT",
+  setNodeIsInputting: "MIND_MAP_DATA_SET_NODE_IS_INPUTTING",
   // TODO Cut out to original store.
-  | { type: "setNodeIsInputting"; id: string; isInputting: boolean }
-  | { type: "setGlobalIsInputting"; isInputting: boolean }
-  | { type: "selectNode"; id: string }
-  | {
-      type: "processNodeTextChanges";
-      id: string;
-      width: number;
-      height: number;
-    }
-  | { type: "processNodeDrop"; id: string; dropPosition: DropPosition }
-  | { type: "processKeydown"; shortcut: Shortcut; selectedNodeId: string };
+  setGlobalIsInputting: "MIND_MAP_DATA_SET_GLOBAL_IS_INPUTTING",
+  selectNode: "MIND_MAP_DATA_SELECT_NODE",
+  processNodeTextChanges: "MIND_MAP_DATA_PROCESS_NODE_TEXT_CHANGES",
+  processNodeDrop: "MIND_MAP_DATA_PROCESS_NODE_DROP",
+  processKeydown: "MIND_MAP_DATA_PROCESS_KEYDOWN",
+} as const;
 
-const mindMapUseCase = new MinaMapUseCase();
+type MindMapDataActionType =
+  typeof mindMapDataActionType[keyof typeof mindMapDataActionType];
+
+// TODO Write validator?
+type MindMapDataPayload = Partial<{
+  id: string;
+  selectedNodeId: string;
+  width: number;
+  height: number;
+  text: string;
+  isInputting: boolean;
+  dropPosition: DropPosition;
+  shortcut: Shortcut;
+}>;
+
+export type MindMapDataAction = {
+  type: MindMapDataActionType;
+  payload: MindMapDataPayload;
+};
+
+const mindMapUseCase = new MindMapUseCase();
 const arrowKeyUseCase = new ArrowKeyUseCase();
 const shortcutUseCase = new ShortcutUseCase(arrowKeyUseCase);
 
@@ -31,42 +47,46 @@ export const mindMapDataReducer = (
   let newState: MindMapData | undefined = undefined;
 
   switch (action.type) {
-    case "setNodeText":
-      newState = mindMapUseCase.setNodeText(state, action.id, action.text);
+    case mindMapDataActionType.setNodeText:
+      newState = mindMapUseCase.setNodeText(
+        state,
+        action.payload.id!,
+        action.payload.text!
+      );
       break;
-    case "setNodeIsInputting":
+    case mindMapDataActionType.setNodeIsInputting:
       newState = mindMapUseCase.setNodeIsInputting(
         state,
-        action.id,
-        action.isInputting
+        action.payload.id!,
+        action.payload.isInputting!
       );
       break;
-    case "setGlobalIsInputting":
-      newState = setGlobalIsInputting(state, action.isInputting);
+    case mindMapDataActionType.setGlobalIsInputting:
+      newState = setGlobalIsInputting(state, action.payload.isInputting!);
       break;
-    case "selectNode":
-      newState = mindMapUseCase.selectNode(state, action.id);
+    case mindMapDataActionType.selectNode:
+      newState = mindMapUseCase.selectNode(state, action.payload.id!);
       break;
-    case "processNodeTextChanges":
+    case mindMapDataActionType.processNodeTextChanges:
       newState = mindMapUseCase.processNodeTextChanges(
         state,
-        action.id,
-        action.width,
-        action.height
+        action.payload.id!,
+        action.payload.width!,
+        action.payload.height!
       );
       break;
-    case "processNodeDrop":
+    case mindMapDataActionType.processNodeDrop:
       newState = mindMapUseCase.processNodeDrop(
         state,
-        action.id,
-        action.dropPosition
+        action.payload.id!,
+        action.payload.dropPosition!
       );
       break;
-    case "processKeydown":
+    case mindMapDataActionType.processKeydown:
       newState = shortcutUseCase.handleKeydown(
         state,
-        action.shortcut,
-        action.selectedNodeId
+        action.payload.shortcut!,
+        action.payload.selectedNodeId!
       );
       break;
     default:
