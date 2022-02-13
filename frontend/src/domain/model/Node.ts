@@ -1,6 +1,6 @@
 import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
-import Group, { groupImpl } from "~/domain/model/Group";
-import Children, { childrenImpl } from "~/domain/model/Children";
+import Group, { groupImpl, newGroup } from "~/domain/model/Group";
+import Children, { childrenImpl, newChildren } from "~/domain/model/Children";
 import _ from "lodash";
 
 type Node = NodeData & {
@@ -36,6 +36,8 @@ export const newAddNode = (): Node => {
     text: "",
     isInputting: true,
     isSelected: true,
+    group: newGroup(),
+    children: newChildren([]),
   }
 }
 

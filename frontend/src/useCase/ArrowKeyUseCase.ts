@@ -63,7 +63,7 @@ class ArrowKeyUseCase {
     mindMapData: MindMapData,
     selectedNodeId: string
   ): MindMapData {
-    if (this.selectedNodeIsFirstLayer(mindMapData, selectedNodeId)) {
+    if (mindMapData.isFirstLayerNode(selectedNodeId)) {
       mindMapData.deselectNode();
       mindMapData.rootNode.isSelected = true;
       return mindMapData;
@@ -81,12 +81,6 @@ class ArrowKeyUseCase {
     leftNode.isSelected = true;
 
     return mindMapData;
-  }
-
-  selectedNodeIsFirstLayer(mindMapData: MindMapData, selectedNodeId: string) {
-    return mindMapData.rightMap.children.nodes.find(
-      (node) => node.id === selectedNodeId
-    );
   }
 
   selectTailNode(

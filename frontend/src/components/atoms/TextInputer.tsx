@@ -70,6 +70,12 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
     setTextareaHeightEm(heightEm);
   };
 
+  const isInputtingEffect = () => {
+    props.isInputting
+      ? textareaElement.current!.focus()
+      : textareaElement.current!.blur();
+  };
+
   const componentDidMount = () => {
     updateTextareaWidth();
     updateTextareaHeight();
@@ -77,6 +83,7 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
 
   useEffect(componentDidMount, []);
   useEffect(handleTextChanges, [props.text]);
+  useEffect(isInputtingEffect, [props.isInputting]);
 
   return (
     // TODO Eliminate range selection after double-clicking

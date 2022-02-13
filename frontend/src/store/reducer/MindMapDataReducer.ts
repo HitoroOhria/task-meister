@@ -7,7 +7,8 @@ import ShortcutUseCase from "~/useCase/ShortcutUseCase";
 
 export const mindMapDataActionType = {
   setNodeIsInputting: "MIND_MAP_DATA_SET_NODE_IS_INPUTTING",
-  // TODO Cut out to original store.
+  // TODO Delete to take from Node.
+  //   - Is performance okay?
   setGlobalIsInputting: "MIND_MAP_DATA_SET_GLOBAL_IS_INPUTTING",
   selectNode: "MIND_MAP_DATA_SELECT_NODE",
   processNodeTextChanges: "MIND_MAP_DATA_PROCESS_NODE_TEXT_CHANGES",

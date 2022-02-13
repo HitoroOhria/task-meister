@@ -84,7 +84,12 @@ const Node: VFC<NodeProps> = (props) => {
     });
   };
 
+  // TODO Is this unnecessary?
+  //   - Maybe can implement only selectNode
   const handleBlur = () => {
+    // When added Node by Enter.
+    if (!props.node.isSelected) return
+
     dispatchMindMapData({
       type: actionType.setNodeIsInputting,
       payload: {

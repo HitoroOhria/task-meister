@@ -1,11 +1,12 @@
 import Shortcut, { shortcuts } from "~/enum/Shortcut";
-import MindMapData from "~/domain/model/MindMapData";
-import { assertNever } from "~/util/ExceptionUtil";
-import { newNode } from "~/domain/model/Node";
-import _ from "lodash";
-import { newGroup } from "~/domain/model/Group";
-import { newChildren } from "~/domain/model/Children";
 import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
+import MindMapData from "~/domain/model/MindMapData";
+import { newAddNode } from "~/domain/model/Node";
+import {
+  assertNever,
+  newNotFoundChildrenErr,
+  newNotFoundNodeErr,
+} from "~/util/ExceptionUtil";
 
 class ShortcutUseCase {
   private arrowKeyUseCase: ArrowKeyUseCase;
@@ -34,8 +35,7 @@ class ShortcutUseCase {
       case shortcuts.Tab:
         return this.addNodeToTail(mindMapData, selectedNodeId);
       case shortcuts.Enter:
-        console.log("Press Enter");
-        return mindMapData;
+        return this.addNodeToBottom(mindMapData, selectedNodeId);
       default:
         assertNever(key, `Not defined key. key = ${key}`);
         return mindMapData;
@@ -52,28 +52,57 @@ class ShortcutUseCase {
 
   public addNodeToTail(
     mindMapData: MindMapData,
+    selectedNodeId: string
+  ): MindMapData {
+    mindMapData.deselectNode();
+    mindMapData.isInputting = true;
+
+    // TODO Fix when select RootNode.
+
+    const addedNode = newAddNode();
+    const selectedNode =
+      mindMapData.rightMap.children.recursively.findNodeById(selectedNodeId);
+    if (!selectedNode) {
+      throw newNotFoundNodeErr(selectedNodeId);
+    }
+
+    // TODO Whey set left? There is top?
+    addedNode.left = selectedNode.left + selectedNode.width;
+    selectedNode.children.nodes.push(addedNode);
+
+    return mindMapData;
+  }
+
+  public addNodeToBottom(
+    mindMapData: MindMapData,
     selectedId: string
   ): MindMapData {
     mindMapData.deselectNode();
     mindMapData.isInputting = true;
 
-    // TODO Create constructor
-    const addedNode = newNode(
-      _.uniqueId("node_"),
-      "",
-      newGroup(),
-      newChildren([])
-    );
-    addedNode.isInputting = true;
-    addedNode.isSelected = true;
+    if (mindMapData.isFirstLayerNode(selectedId)) {
+      const addedNode = newAddNode();
+      addedNode.left = mindMapData.rootNode.width / 2;
+      mindMapData.rightMap.children.insertChildToBottomOf(
+        selectedId,
+        addedNode
+      );
+      return mindMapData;
+    }
 
+    const addedNode = newAddNode();
     const selectedNode =
       mindMapData.rightMap.children.recursively.findNodeById(selectedId);
-    if (!selectedNode) {
-      throw new Error(`Can not found Node by id. id = ${selectedNode}`);
+    const parentChildren =
+      mindMapData.rightMap.children.recursively.findChildrenContainsId(
+        selectedId
+      );
+    if (!parentChildren || !selectedNode) {
+      throw newNotFoundChildrenErr(selectedId);
     }
-    selectedNode.children.nodes.push(addedNode);
-    addedNode.left = selectedNode.left + selectedNode.width;
+
+    addedNode.left = selectedNode.left;
+    parentChildren.insertChildToBottomOf(selectedId, addedNode);
 
     return mindMapData;
   }

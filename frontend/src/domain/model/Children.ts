@@ -3,6 +3,7 @@ import RecursivelyChildren, {
   newRecursivelyChildren,
   recursivelyChildrenImpl,
 } from "~/domain/model/RecursivelyChildren";
+import {newNotFoundNodeErr} from "~/util/ExceptionUtil";
 
 // Collection of NodeData.
 // Define process to be managed as a whole¬.
@@ -29,6 +30,8 @@ type Children = {
   removeChild(id: string): Node;
 
   insertChild(target: Node, dropTop: number, lowerNode: Node): void;
+
+  insertChildToBottomOf(topNodeId: string, addedNode: Node): void;
 
   setGroupTop(parentChildrenHeight: number, parentGroupTop: number): void;
 };
@@ -104,15 +107,26 @@ export const childrenImpl: Children = {
   },
 
   insertChild(targetNode: Node, dropTop: number, lowerNode: Node) {
-    let lowerNodeIndex = this.nodes.findIndex(
+    let insertedNodeIndex = this.nodes.findIndex(
       (child) => child.id === lowerNode.id
     );
-    if (lowerNodeIndex === -1) {
-      throw new Error(`index out of list. index = ${lowerNodeIndex}`);
+    if (insertedNodeIndex === -1) {
+      throw new Error(`index out of list. index = ${insertedNodeIndex}`);
     }
 
-    !lowerNode.onUpper(dropTop) && lowerNodeIndex++;
-    this.nodes.splice(lowerNodeIndex, 0, targetNode);
+    !lowerNode.onUpper(dropTop) && insertedNodeIndex++;
+    this.nodes.splice(insertedNodeIndex, 0, targetNode);
+  },
+
+  insertChildToBottomOf(topNodeId: string, addedNode: Node) {
+    const topNodeIndex = this.nodes.findIndex(
+      (child) => child.id === topNodeId
+    );
+    if (topNodeIndex === -1) {
+      throw newNotFoundNodeErr(topNodeId);
+    }
+
+    this.nodes.splice(topNodeIndex + 1, 0, addedNode);
   },
 
   setGroupTop(parentChildrenHeight: number, parentGroupTop: number) {
