@@ -57,9 +57,9 @@ export const mindMapDataImpl: MindMapData = {
   },
 
   selectTail() {
-    if (!this.rightMap.children.nodes[0]) return ;
+    if (!this.rightMap.children.nodes[0]) return;
 
-    this.deselectNode()
+    this.deselectNode();
     this.rightMap.children.nodes[0].isSelected = true;
   },
 

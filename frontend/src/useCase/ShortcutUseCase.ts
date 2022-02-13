@@ -14,7 +14,7 @@ class ShortcutUseCase {
     this.arrowKeyUseCase = arrowKeyUseCase;
   }
 
-  handleKeydown(
+  public handleKeydown(
     mindMapData: MindMapData,
     key: Shortcut,
     selectedNodeId: string
@@ -39,7 +39,7 @@ class ShortcutUseCase {
     }
   }
 
-  toggleCollapse(
+  public toggleCollapse(
     mindMapData: MindMapData,
     selectedNodeId: string
   ): MindMapData {
@@ -47,10 +47,10 @@ class ShortcutUseCase {
     return mindMapData;
   }
 
-  addNodeToTail(mindMapData: MindMapData, selectedId: string): MindMapData {
-    // TODO Why called twice?
-    //   - but, below log is once
-    console.log("addNodeToTail");
+  public addNodeToTail(
+    mindMapData: MindMapData,
+    selectedId: string
+  ): MindMapData {
     mindMapData.deselectNode();
 
     // TODO Create constructor
