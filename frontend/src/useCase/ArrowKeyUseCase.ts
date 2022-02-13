@@ -10,23 +10,20 @@ class ArrowKeyUseCase {
   ): MindMapData {
     switch (arrowKey) {
       case arrowKeys.Up:
-        return this.selectTopNodeId(mindMapData, selectedId);
+        return this.selectTopNode(mindMapData, selectedId);
       case arrowKeys.Down:
-        return this.selectBottomNodeId(mindMapData, selectedId);
+        return this.selectBottomNode(mindMapData, selectedId);
       case arrowKeys.Right:
-        return this.selectTailNodeId(mindMapData, selectedId);
+        return this.selectTailNode(mindMapData, selectedId);
       case arrowKeys.Left:
-        return this.selectHeadNodeId(mindMapData, selectedId);
+        return this.selectHeadNode(mindMapData, selectedId);
       default:
         assertNever(arrowKey, `Not defined arrow key. arrow key = ${arrowKey}`);
         return mindMapData;
     }
   }
 
-  selectTopNodeId(
-    mindMapData: MindMapData,
-    selectedNodeId: string
-  ): MindMapData {
+  selectTopNode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
     mindMapData.deselectNode();
 
     const topNode = mindMapData.rightMap.nodes.recursively
@@ -42,7 +39,7 @@ class ArrowKeyUseCase {
     return mindMapData;
   }
 
-  selectBottomNodeId(
+  selectBottomNode(
     mindMapData: MindMapData,
     selectedNodeId: string
   ): MindMapData {
@@ -62,7 +59,7 @@ class ArrowKeyUseCase {
   }
 
   // TODO Select root node.
-  selectHeadNodeId(
+  selectHeadNode(
     mindMapData: MindMapData,
     selectedNodeId: string
   ): MindMapData {
@@ -92,7 +89,7 @@ class ArrowKeyUseCase {
     );
   }
 
-  selectTailNodeId(
+  selectTailNode(
     mindMapData: MindMapData,
     selectedNodeId: string
   ): MindMapData {

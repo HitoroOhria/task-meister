@@ -1,4 +1,4 @@
-import { arrowKeys } from "~/enum/ArrowKeys";
+import { arrowKeys, getArrowKey } from "~/enum/ArrowKeys";
 
 export const shortcuts = {
   ...arrowKeys,
@@ -10,14 +10,8 @@ export type Shortcut = typeof shortcuts[keyof typeof shortcuts];
 
 export const getShortcut = (key: string): Shortcut | undefined => {
   switch (key) {
-    case shortcuts.Up:
-      return shortcuts.Up;
-    case shortcuts.Down:
-      return shortcuts.Down;
-    case shortcuts.Right:
-      return shortcuts.Right;
-    case shortcuts.Left:
-      return shortcuts.Left;
+    case getArrowKey(key):
+      return getArrowKey(key);
     case shortcuts.Space:
       return shortcuts.Space;
     case shortcuts.Tab:
