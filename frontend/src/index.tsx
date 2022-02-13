@@ -6,9 +6,14 @@ import reportWebVitals from "./reportWebVitals";
 import MindMapPage from "~/components/pages/MindMapPage";
 
 ReactDOM.render(
-  <React.StrictMode>
-    <MindMapPage />
-  </React.StrictMode>,
+  // TODO Dispatch twice on Strict Mode.
+  // So, following bugs occur
+  //   - Can not collapse (double triggered)
+  //   - Two nodes are added
+  //   - see https://github.com/facebook/react/issues/16295
+  // <React.StrictMode>
+  <MindMapPage />,
+  // </React.StrictMode>,
   document.getElementById("root")
 );
 
