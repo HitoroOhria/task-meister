@@ -28,6 +28,18 @@ class MinaMapUseCase {
     targetNode.isInputting = isInputting;
     return mindMapData;
   }
+
+  public selectNode(mindMapData: MindMapData, id: string): MindMapData {
+    mindMapData.deselectNode();
+
+    const selectedNode = mindMapData.findNodeById(id);
+    if (!selectedNode) {
+      throw new Error(`Can not found selected node by id. id = ${id}`);
+    }
+    selectedNode.isSelected = true;
+
+    return mindMapData;
+  }
 }
 
 export default MinaMapUseCase;

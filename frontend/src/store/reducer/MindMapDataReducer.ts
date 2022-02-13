@@ -40,7 +40,7 @@ export const mindMapDataReducer = (
       newState = setGlobalIsInputting(state, action.isInputting);
       break;
     case "selectNode":
-      newState = selectNode(state, action.id);
+      newState = mindMapUseCase.selectNode(state, action.id);
       break;
     case "handleNodeTextChanges":
       newState = handleNodeTextChanges(
@@ -72,18 +72,6 @@ const setGlobalIsInputting = (
   isInputting: boolean
 ): MindMapData => {
   mindMapData.isInputting = isInputting;
-  return mindMapData;
-};
-
-const selectNode = (mindMapData: MindMapData, id: string): MindMapData => {
-  mindMapData.deselectNode();
-
-  const selectedNode = mindMapData.findNodeById(id);
-  if (!selectedNode) {
-    throw new Error(`Can not found selected node by id. id = ${id}`);
-  }
-  selectedNode.isSelected = true;
-
   return mindMapData;
 };
 
