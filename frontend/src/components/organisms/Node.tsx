@@ -35,39 +35,38 @@ const Node: VFC<NodeProps> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
 
-  const handleSetText = (text: string) => {
-    dispatchMindMapData({
-      type: actionType.setNodeText,
-      payload: {
-        id: props.node.id,
-        text,
-      },
-    });
-  };
-
   // Do not use value of element. (ex. innerHeight, offsetHeight)
   // Because getting process ends before dom rendered. and the value of the previous text is acquired.
   // So, get previous value
-  const handleNodeTextChanges = () => {
+  const handleNodeTextChanges = (text: string) => {
     const textWidth =
       // TODO Set Prettier config
-      elementSizeCalculator.measureLongestLineWidth(props.node.text) <
-      TextInputerMinWidth
+      elementSizeCalculator.measureLongestLineWidth(text) < TextInputerMinWidth
         ? TextInputerMinWidth
-        : elementSizeCalculator.measureLongestLineWidth(props.node.text);
+        : elementSizeCalculator.measureLongestLineWidth(text);
     const width = borderWidth * 2 + insideWidthOfTextarea + textWidth;
     const height =
       borderWidth * 2 +
       nodeHeightWhenOneLine +
-      heightPerOneLine * (numberOfLines(props.node.text) - 1);
+      heightPerOneLine * (numberOfLines(text) - 1);
 
     dispatchMindMapData({
       type: actionType.processNodeTextChanges,
       payload: {
         id: props.node.id,
+        text,
         width,
         height,
       },
+    });
+  };
+
+  const handleClick = () => {
+    if (props.node.isSelected) return;
+
+    dispatchMindMapData({
+      type: actionType.selectNode,
+      payload: { id: props.node.id },
     });
   };
 
@@ -100,11 +99,10 @@ const Node: VFC<NodeProps> = (props) => {
   };
 
   const componentDidMount = () => {
-    handleNodeTextChanges();
+    handleNodeTextChanges(props.node.text);
   };
 
   useEffect(componentDidMount, []);
-  useEffect(handleNodeTextChanges, [props.node.text]);
 
   return (
     <PositionAdjuster top={props.node.top} left={props.node.left}>
@@ -113,16 +111,11 @@ const Node: VFC<NodeProps> = (props) => {
           ref={nodeDivElement}
           hidden={props.node.isHidden}
           borderColor={props.node.isSelected ? "yellow" : "blue"}
-          onClick={() =>
-            dispatchMindMapData({
-              type: actionType.selectNode,
-              payload: { id: props.node.id },
-            })
-          }
+          onClick={handleClick}
         >
           <TextInputer
             text={props.node.text}
-            setText={handleSetText}
+            setText={(text) => handleNodeTextChanges(text)}
             isInputting={props.node.isInputting}
             handleDoubleClick={handleDoubleClick}
             handleBlur={handleBlur}

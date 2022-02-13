@@ -15,7 +15,7 @@ type MindMapData = {
 
   selectTail(): void;
 
-  processRootNodeTextChanges(width: number, height: number): void;
+  updateRootNodePlacement(width: number, height: number): void;
 
   processNodeDropToRight(movedNodeId: string): void;
 };
@@ -63,7 +63,7 @@ export const mindMapDataImpl: MindMapData = {
     this.rightMap.children.nodes[0].isSelected = true;
   },
 
-  processRootNodeTextChanges(width: number, height: number) {
+  updateRootNodePlacement(width: number, height: number) {
     this.rootNode.updateLateral(width);
     this.rootNode.updateVertical(height);
     this.rightMap.children.recursively.setNodeLeft(

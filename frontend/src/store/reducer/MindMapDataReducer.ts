@@ -6,7 +6,6 @@ import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
 import ShortcutUseCase from "~/useCase/ShortcutUseCase";
 
 export const mindMapDataActionType = {
-  setNodeText: "MIND_MAP_DATA_SET_NODE_TEXT",
   setNodeIsInputting: "MIND_MAP_DATA_SET_NODE_IS_INPUTTING",
   // TODO Cut out to original store.
   setGlobalIsInputting: "MIND_MAP_DATA_SET_GLOBAL_IS_INPUTTING",
@@ -47,13 +46,6 @@ export const mindMapDataReducer = (
   let newState: MindMapData | undefined = undefined;
 
   switch (action.type) {
-    case mindMapDataActionType.setNodeText:
-      newState = mindMapUseCase.setNodeText(
-        state,
-        action.payload.id!,
-        action.payload.text!
-      );
-      break;
     case mindMapDataActionType.setNodeIsInputting:
       newState = mindMapUseCase.setNodeIsInputting(
         state,
@@ -71,6 +63,7 @@ export const mindMapDataReducer = (
       newState = mindMapUseCase.processNodeTextChanges(
         state,
         action.payload.id!,
+        action.payload.text!,
         action.payload.width!,
         action.payload.height!
       );
@@ -91,9 +84,6 @@ export const mindMapDataReducer = (
       break;
     default:
       throw new Error(`Not defined action type. action = ${action}`);
-  }
-  if (!newState) {
-    throw new Error(`NewState is undefined!`);
   }
 
   // TODO Why not reflect collapse Node?
