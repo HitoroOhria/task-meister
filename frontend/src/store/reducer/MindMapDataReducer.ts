@@ -30,7 +30,11 @@ export const mindMapDataReducer = (
       newState = mindMapUseCase.setNodeText(state, action.id, action.text);
       break;
     case "setNodeIsInputting":
-      newState = setNodeIsInputting(state, action.id, action.isInputting);
+      newState = mindMapUseCase.setNodeIsInputting(
+        state,
+        action.id,
+        action.isInputting
+      );
       break;
     case "setGlobalIsInputting":
       newState = setGlobalIsInputting(state, action.isInputting);
@@ -61,20 +65,6 @@ export const mindMapDataReducer = (
 
   // TODO Why not reflect collapse Node?
   return { ...newState };
-};
-
-const setNodeIsInputting = (
-  mindMapData: MindMapData,
-  id: string,
-  isInputting: boolean
-): MindMapData => {
-  const targetNode = mindMapData.findNodeById(id);
-  if (!targetNode) {
-    throw new Error(`Can not found Node by id. id = ${id}`);
-  }
-
-  targetNode.isInputting = isInputting;
-  return mindMapData;
 };
 
 const setGlobalIsInputting = (

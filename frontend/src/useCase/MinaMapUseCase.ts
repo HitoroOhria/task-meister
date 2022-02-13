@@ -14,6 +14,20 @@ class MinaMapUseCase {
     mindMapData.rightMap.setTextById(id, text);
     return mindMapData;
   }
+
+  public setNodeIsInputting(
+    mindMapData: MindMapData,
+    id: string,
+    isInputting: boolean
+  ): MindMapData {
+    const targetNode = mindMapData.findNodeById(id);
+    if (!targetNode) {
+      throw new Error(`Can not found Node by id. id = ${id}`);
+    }
+
+    targetNode.isInputting = isInputting;
+    return mindMapData;
+  }
 }
 
-export default MinaMapUseCase
+export default MinaMapUseCase;
