@@ -1,9 +1,5 @@
 import RootNode, { rootNodeImpl } from "~/domain/model/RootNode";
 import RightMap, { rightMapImpl } from "~/domain/model/RightMap";
-import ShortcutController, {
-  newShortcutController,
-  shortcutControllerImpl,
-} from "~/domain/model/ShortcutController";
 import NodeData from "~/domain/model/NodeData";
 
 type MindMapData = {
@@ -12,7 +8,6 @@ type MindMapData = {
   rootNode: RootNode;
   rightMap: RightMap;
   leftMap: RightMap;
-  shortcutController: ShortcutController;
 
   findNodeById(id: string): NodeData | undefined;
 
@@ -28,15 +23,12 @@ export const newMindMapData = (
   rightMap: RightMap,
   leftMap: RightMap
 ): MindMapData => {
-  const mindMapData: MindMapData = {
+  return {
     ...mindMapDataImpl,
     rootNode: rootNode,
     rightMap: rightMap,
     leftMap: leftMap,
   };
-  mindMapData.shortcutController = newShortcutController(mindMapData);
-
-  return mindMapData;
 };
 
 export const mindMapDataImpl: MindMapData = {
@@ -44,7 +36,6 @@ export const mindMapDataImpl: MindMapData = {
   rootNode: rootNodeImpl,
   rightMap: rightMapImpl,
   leftMap: rightMapImpl,
-  shortcutController: shortcutControllerImpl,
 
   findNodeById(id: string): NodeData | undefined {
     if (this.rootNode.id === id) {

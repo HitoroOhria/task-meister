@@ -2,6 +2,8 @@ import MindMapData from "~/domain/model/MindMapData";
 import DropPosition from "~/domain/model/DropPosition";
 import Shortcut from "~/enum/Shortcut";
 import MinaMapUseCase from "~/useCase/MinaMapUseCase";
+import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
+import ShortcutUseCase from "~/useCase/ShortcutUseCase";
 
 export type MindMapDataAction =
   | { type: "setNodeText"; id: string; text: string }
@@ -16,15 +18,18 @@ export type MindMapDataAction =
       height: number;
     }
   | { type: "processNodeDrop"; id: string; dropPosition: DropPosition }
-  | { type: "handleKeydown"; shortcut: Shortcut; selectedNodeId: string };
+  | { type: "processKeydown"; shortcut: Shortcut; selectedNodeId: string };
 
 const mindMapUseCase = new MinaMapUseCase();
+const arrowKeyUseCase = new ArrowKeyUseCase();
+const shortcutUseCase = new ShortcutUseCase(arrowKeyUseCase);
 
 export const mindMapDataReducer = (
   state: MindMapData,
   action: MindMapDataAction
 ): MindMapData => {
   let newState: MindMapData | undefined = undefined;
+
   switch (action.type) {
     case "setNodeText":
       newState = mindMapUseCase.setNodeText(state, action.id, action.text);
@@ -57,8 +62,12 @@ export const mindMapDataReducer = (
         action.dropPosition
       );
       break;
-    case "handleKeydown":
-      newState = handleKeydown(state, action.shortcut, action.selectedNodeId);
+    case "processKeydown":
+      newState = shortcutUseCase.handleKeydown(
+        state,
+        action.shortcut,
+        action.selectedNodeId
+      );
       break;
     default:
       throw new Error(`Not defined action type. action = ${action}`);
@@ -77,14 +86,6 @@ const setGlobalIsInputting = (
 ): MindMapData => {
   mindMapData.isInputting = isInputting;
   return mindMapData;
-};
-
-const handleKeydown = (
-  mindMapData: MindMapData,
-  shortcut: Shortcut,
-  selectedNodeId: string
-): MindMapData => {
-  return mindMapData.shortcutController.handleKeydown(shortcut, selectedNodeId);
 };
 
 export default MindMapDataAction;

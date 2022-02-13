@@ -39,7 +39,7 @@ const MindMap: FC = () => {
       mindMapData.rightMap.nodes.recursively.findChildIsSelected()?.id;
     if (!selectedNodeId) return;
 
-    dispatchMindMapData({ type: "handleKeydown", shortcut, selectedNodeId });
+    dispatchMindMapData({ type: "processKeydown", shortcut, selectedNodeId });
   };
 
   const handleKeydownEventListerEffect = (): (() => void) => {
