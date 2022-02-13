@@ -53,7 +53,7 @@ export const mindMapDataImpl: MindMapData = {
       return;
     }
 
-    this.rightMap.children.recursively.deselectChild();
+    this.rightMap.children.recursively.deselectNode();
   },
 
   selectTail() {

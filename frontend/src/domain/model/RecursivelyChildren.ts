@@ -26,7 +26,7 @@ interface RecursivelyChildren {
 
   toggleHidden(): void;
 
-  deselectChild(): void;
+  deselectNode(): void;
 }
 
 export const newRecursivelyChildren = (
@@ -168,7 +168,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     );
   },
 
-  deselectChild() {
+  deselectNode() {
     const selectedNode = this.findNodeIsSelected();
     if (!selectedNode) return;
 
