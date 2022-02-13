@@ -19,8 +19,6 @@ type MindMapData = {
 
   deselectNode(): void;
 
-  handleTextChanges(id: string, width: number, height: number): void;
-
   processRootNodeTextChanges(width: number, height: number): void;
 
   updateRightNodesLeft(): void;
@@ -66,15 +64,6 @@ export const mindMapDataImpl: MindMapData = {
     }
 
     this.rightMap.nodes.recursively.deselectChild();
-  },
-
-  handleTextChanges(id: string, width: number, height: number) {
-    if (id === this.rootNode.id) {
-      this.processRootNodeTextChanges(width, height);
-      return;
-    }
-
-    this.rightMap.handleTextChanges(id, width, height);
   },
 
   processRootNodeTextChanges(width: number, height: number) {

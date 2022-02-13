@@ -10,7 +10,7 @@ export type MindMapDataAction =
   | { type: "setGlobalIsInputting"; isInputting: boolean }
   | { type: "selectNode"; id: string }
   | {
-      type: "handleNodeTextChanges";
+      type: "processNodeTextChanges";
       id: string;
       width: number;
       height: number;
@@ -42,8 +42,8 @@ export const mindMapDataReducer = (
     case "selectNode":
       newState = mindMapUseCase.selectNode(state, action.id);
       break;
-    case "handleNodeTextChanges":
-      newState = handleNodeTextChanges(
+    case "processNodeTextChanges":
+      newState = mindMapUseCase.processNodeTextChanges(
         state,
         action.id,
         action.width,
@@ -72,16 +72,6 @@ const setGlobalIsInputting = (
   isInputting: boolean
 ): MindMapData => {
   mindMapData.isInputting = isInputting;
-  return mindMapData;
-};
-
-const handleNodeTextChanges = (
-  mindMapData: MindMapData,
-  id: string,
-  width: number,
-  height: number
-): MindMapData => {
-  mindMapData.handleTextChanges(id, width, height);
   return mindMapData;
 };
 

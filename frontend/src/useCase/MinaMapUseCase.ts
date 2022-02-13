@@ -40,6 +40,21 @@ class MinaMapUseCase {
 
     return mindMapData;
   }
+
+  processNodeTextChanges(
+    mindMapData: MindMapData,
+    id: string,
+    width: number,
+    height: number
+  ): MindMapData {
+    if (id === mindMapData.rootNode.id) {
+      mindMapData.processRootNodeTextChanges(width, height);
+      return mindMapData;
+    }
+
+    mindMapData.rightMap.processNodeTextChanges(id, width, height);
+    return mindMapData;
+  }
 }
 
 export default MinaMapUseCase;

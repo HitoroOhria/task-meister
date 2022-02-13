@@ -8,7 +8,7 @@ type RightMap = {
 
   setTextById(id: string, text: string): void;
 
-  handleTextChanges(id: string, width: number, height: number): void;
+  processNodeTextChanges(id: string, width: number, height: number): void;
 
   updateNodesLateral(updatedNode: Node, width: number, left: number): void;
 
@@ -42,7 +42,7 @@ export const rightMapImpl: RightMap = {
     targetNode.text = text;
   },
 
-  handleTextChanges(id: string, width: number, height: number) {
+  processNodeTextChanges(id: string, width: number, height: number) {
     const target = this.nodes.recursively.findChildById(id);
     if (!target) {
       throw new Error(`Can not found nodeData by id. id = ${id}`);

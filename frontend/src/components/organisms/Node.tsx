@@ -50,7 +50,7 @@ const Node: VFC<NodeProps> = (props) => {
       heightPerOneLine * (numberOfLines(props.nodeData.text) - 1);
 
     dispatchMindMapData({
-      type: "handleNodeTextChanges",
+      type: "processNodeTextChanges",
       id: props.nodeData.id,
       width,
       height,
