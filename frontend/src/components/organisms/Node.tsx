@@ -1,10 +1,11 @@
 import React, {useContext, useEffect, useRef, VFC} from "react";
 import {styled} from "@linaria/react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
+import DraggableElement from "~/components/organisms/DraggableElement";
 import TextInputer, {elementSizeCalculator, minWidthPx as TextInputerMinWidth,} from "~/components/atoms/TextInputer";
+import {MindMapDispatchCtx} from "~/store/context/MindMapDataCtx";
 import NodeData from "~/domain/model/NodeData";
 import {numberOfLines} from "~/util/StringUtil";
-import {MindMapDispatchCtx} from "~/store/context/MindMapDataCtx";
 
 // width of textarea from border to text
 // values of below is average of measured values
@@ -33,6 +34,14 @@ const Node: VFC<NodeProps> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
 
+  const handleSetText = (text: string) => {
+    dispatchMindMapData({
+      type: "setNodeText",
+      id: props.nodeData.id,
+      text,
+    });
+  };
+
   // Do not use value of element. (ex. innerHeight, offsetHeight)
   // Because getting process ends before dom rendered. and the value of the previous text is acquired.
   // So, get previous value
@@ -57,30 +66,6 @@ const Node: VFC<NodeProps> = (props) => {
     });
   };
 
-  const handleDragStart = (e: DragEvent) => {
-    e.dataTransfer!.setData("text/plain", props.nodeData.id);
-  };
-
-  const addDragEventListener = () => {
-    nodeDivElement.current!.addEventListener("dragstart", handleDragStart);
-  };
-
-  const componentDidMount = () => {
-    handleNodeTextChanges();
-    addDragEventListener();
-  };
-
-  useEffect(componentDidMount, []);
-  useEffect(handleNodeTextChanges, [props.nodeData.text]);
-
-  const handleSetText = (text: string) => {
-    dispatchMindMapData({
-      type: "setNodeText",
-      id: props.nodeData.id,
-      text,
-    });
-  };
-
   const handleDoubleClick = () => {
     dispatchMindMapData({
       type: "setNodeIsInputting",
@@ -99,25 +84,33 @@ const Node: VFC<NodeProps> = (props) => {
     dispatchMindMapData({ type: "setGlobalIsInputting", isInputting: false });
   };
 
+  const componentDidMount = () => {
+    handleNodeTextChanges();
+  };
+
+  useEffect(componentDidMount, []);
+  useEffect(handleNodeTextChanges, [props.nodeData.text]);
+
   return (
     <PositionAdjuster top={props.nodeData.top} left={props.nodeData.left}>
-      <NodeDiv
-        ref={nodeDivElement}
-        hidden={props.nodeData.isHidden}
-        borderColor={props.nodeData.isSelected ? "yellow" : "blue"}
-        onClick={() =>
-          dispatchMindMapData({ type: "selectNode", id: props.nodeData.id })
-        }
-        draggable={"true"}
-      >
-        <TextInputer
-          text={props.nodeData.text}
-          setText={handleSetText}
-          isInputting={props.nodeData.isInputting}
-          handleDoubleClick={handleDoubleClick}
-          handleBlur={handleBlur}
-        />
-      </NodeDiv>
+      <DraggableElement textData={props.nodeData.id}>
+        <NodeDiv
+          ref={nodeDivElement}
+          hidden={props.nodeData.isHidden}
+          borderColor={props.nodeData.isSelected ? "yellow" : "blue"}
+          onClick={() =>
+            dispatchMindMapData({ type: "selectNode", id: props.nodeData.id })
+          }
+        >
+          <TextInputer
+            text={props.nodeData.text}
+            setText={handleSetText}
+            isInputting={props.nodeData.isInputting}
+            handleDoubleClick={handleDoubleClick}
+            handleBlur={handleBlur}
+          />
+        </NodeDiv>
+      </DraggableElement>
     </PositionAdjuster>
   );
 };
