@@ -8,10 +8,8 @@ import RootNode from "~/domain/model/RootNode";
 import Node from "~/domain/model/Node";
 
 export const mindMapDataActionType = {
-  setNodeIsInputting: "MIND_MAP_DATA_SET_NODE_IS_INPUTTING",
-  // TODO Delete to take from Node.
-  //   - Is performance okay?
   setGlobalIsInputting: "MIND_MAP_DATA_SET_GLOBAL_IS_INPUTTING",
+  setNodeIsInputting: "MIND_MAP_DATA_SET_NODE_IS_INPUTTING",
   selectNode: "MIND_MAP_DATA_SELECT_NODE",
   processNodeTextChanges: "MIND_MAP_DATA_PROCESS_NODE_TEXT_CHANGES",
   processNodeDrop: "MIND_MAP_DATA_PROCESS_NODE_DROP",
@@ -46,52 +44,43 @@ export const mindMapDataReducer = (
   state: MindMapData,
   action: MindMapDataAction
 ): MindMapData => {
-  let newState: MindMapData | undefined = undefined;
+  const newState = { ...state };
 
   // TODO Can rewrite to using Object?
   switch (action.type) {
+    case mindMapDataActionType.setGlobalIsInputting:
+      return setGlobalIsInputting(newState, action.payload.isInputting!);
     case mindMapDataActionType.setNodeIsInputting:
-      newState = mindMapUseCase.setNodeIsInputting(
-        state,
+      return mindMapUseCase.setNodeIsInputting(
+        newState,
         action.payload.id!,
         action.payload.isInputting!
       );
-      break;
-    case mindMapDataActionType.setGlobalIsInputting:
-      newState = setGlobalIsInputting(state, action.payload.isInputting!);
-      break;
     case mindMapDataActionType.selectNode:
-      newState = mindMapUseCase.selectNode(state, action.payload.id!);
-      break;
+      return mindMapUseCase.selectNode(newState, action.payload.id!);
     case mindMapDataActionType.processNodeTextChanges:
-      newState = mindMapUseCase.processNodeTextChanges(
-        state,
+      return mindMapUseCase.processNodeTextChanges(
+        newState,
         action.payload.id!,
         action.payload.text!,
         action.payload.width!,
         action.payload.height!
       );
-      break;
     case mindMapDataActionType.processNodeDrop:
-      newState = mindMapUseCase.processNodeDrop(
-        state,
+      return mindMapUseCase.processNodeDrop(
+        newState,
         action.payload.id!,
         action.payload.dropPosition!
       );
-      break;
     case mindMapDataActionType.processKeydown:
-      newState = shortcutUseCase.handleKeydown(
-        state,
+      return shortcutUseCase.handleKeydown(
+        newState,
         action.payload.shortcut!,
         action.payload.selectedNode!
       );
-      break;
     default:
       throw new Error(`Not defined action type. action = ${action}`);
   }
-
-  // TODO Why not reflect collapse Node?
-  return { ...newState };
 };
 
 const setGlobalIsInputting = (
