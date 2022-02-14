@@ -70,6 +70,7 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
     setTextareaHeightEm(heightEm);
   };
 
+  // TODO Refactor around focus and blur.
   const isInputtingEffect = () => {
     props.isInputting
       ? textareaElement.current!.focus()

@@ -48,6 +48,7 @@ export const mindMapDataReducer = (
 ): MindMapData => {
   let newState: MindMapData | undefined = undefined;
 
+  // TODO Can rewrite to using Object?
   switch (action.type) {
     case mindMapDataActionType.setNodeIsInputting:
       newState = mindMapUseCase.setNodeIsInputting(
