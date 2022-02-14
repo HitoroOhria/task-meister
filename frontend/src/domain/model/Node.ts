@@ -3,7 +3,10 @@ import Group, { groupImpl, newGroup } from "~/domain/model/Group";
 import Children, { childrenImpl, newChildren } from "~/domain/model/Children";
 import _ from "lodash";
 
+const nodeType = "node";
+
 type Node = NodeData & {
+  type: typeof nodeType
   group: Group;
   children: Children;
 
@@ -29,11 +32,12 @@ export const newNode = (
   };
 };
 
-export const newAddNode = (): Node => {
+export const newAddNode = (left: number): Node => {
   return {
     ...nodeImpl,
     id: _.uniqueId("node_"),
     text: "",
+    left: left,
     isInputting: true,
     isSelected: true,
     group: newGroup(),
@@ -47,6 +51,8 @@ export const newAddNode = (): Node => {
 // NodeData is not group, but holds value of group to calculate placement.
 export const nodeImpl: Node = {
   ...nodeDataImpl,
+
+  type: nodeType,
 
   group: groupImpl,
 

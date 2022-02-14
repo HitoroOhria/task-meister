@@ -15,13 +15,12 @@ const KeydownManager: VFC = () => {
 
     const shortcut = getShortcut(e.key);
     if (!shortcut) return;
-    const selectedNodeId =
-      mindMapData.rightMap.children.recursively.findNodeIsSelected()?.id;
-    if (!selectedNodeId) return;
+    const selectedNode = mindMapData.findNodeIsSelected();
+    if (!selectedNode) return;
 
     dispatchMindMapData({
       type: actionType.processKeydown,
-      payload: { shortcut, selectedNodeId },
+      payload: { shortcut, selectedNode },
     });
   };
 

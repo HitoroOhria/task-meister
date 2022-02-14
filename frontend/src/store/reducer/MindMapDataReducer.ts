@@ -4,6 +4,8 @@ import Shortcut from "~/enum/Shortcut";
 import MindMapUseCase from "~/useCase/MindMapUseCase";
 import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
 import ShortcutUseCase from "~/useCase/ShortcutUseCase";
+import RootNode from "~/domain/model/RootNode";
+import Node from "~/domain/model/Node";
 
 export const mindMapDataActionType = {
   setNodeIsInputting: "MIND_MAP_DATA_SET_NODE_IS_INPUTTING",
@@ -22,13 +24,13 @@ type MindMapDataActionType =
 // TODO Write validator?
 type MindMapDataPayload = Partial<{
   id: string;
-  selectedNodeId: string;
   width: number;
   height: number;
   text: string;
   isInputting: boolean;
   dropPosition: DropPosition;
   shortcut: Shortcut;
+  selectedNode: RootNode | Node;
 }>;
 
 export type MindMapDataAction = {
@@ -80,7 +82,7 @@ export const mindMapDataReducer = (
       newState = shortcutUseCase.handleKeydown(
         state,
         action.payload.shortcut!,
-        action.payload.selectedNodeId!
+        action.payload.selectedNode!
       );
       break;
     default:

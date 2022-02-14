@@ -1,38 +1,45 @@
 import ArrowKey, { arrowKeys } from "~/enum/ArrowKeys";
 import MindMapData from "~/domain/model/MindMapData";
-import { assertNever } from "~/util/ExceptionUtil";
+import { assertNever, newNotFoundNodeErr } from "~/util/ExceptionUtil";
+import RootNode from "~/domain/model/RootNode";
+import Node from "~/domain/model/Node";
 
 class ArrowKeyUseCase {
   handleArrowKeyDown(
     mindMapData: MindMapData,
     arrowKey: ArrowKey,
-    selectedId: string
+    selectedNode: RootNode | Node
   ): MindMapData {
     switch (arrowKey) {
       case arrowKeys.Up:
-        return this.selectTopNode(mindMapData, selectedId);
+        return this.selectTopNode(mindMapData, selectedNode);
       case arrowKeys.Down:
-        return this.selectBottomNode(mindMapData, selectedId);
+        return this.selectBottomNode(mindMapData, selectedNode);
       case arrowKeys.Right:
-        return this.selectTailNode(mindMapData, selectedId);
+        return this.selectTailNode(mindMapData, selectedNode);
       case arrowKeys.Left:
-        return this.selectHeadNode(mindMapData, selectedId);
+        return this.selectHeadNode(mindMapData, selectedNode);
       default:
         assertNever(arrowKey, `Not defined arrow key. arrow key = ${arrowKey}`);
         return mindMapData;
     }
   }
 
-  selectTopNode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
+  selectTopNode(
+    mindMapData: MindMapData,
+    selectedNode: RootNode | Node
+  ): MindMapData {
+    if (mindMapData.rootNode.isSelected) {
+      return mindMapData;
+    }
+
     mindMapData.deselectNode();
 
     const topNode = mindMapData.rightMap.children.recursively
-      .findChildrenContainsId(selectedNodeId)
-      ?.findTopNodeOf(selectedNodeId);
+      .findChildrenContainsId(selectedNode.id)
+      ?.findTopNodeOf(selectedNode.id);
     if (!topNode) {
-      throw new Error(
-        `Can not found NodeData by selected id. selected id = ${selectedNodeId}`
-      );
+      throw newNotFoundNodeErr(selectedNode.id);
     }
 
     topNode.isSelected = true;
@@ -41,17 +48,15 @@ class ArrowKeyUseCase {
 
   selectBottomNode(
     mindMapData: MindMapData,
-    selectedNodeId: string
+    selectedNode: RootNode | Node
   ): MindMapData {
     mindMapData.deselectNode();
 
     const bottomNode = mindMapData.rightMap.children.recursively
-      .findChildrenContainsId(selectedNodeId)
-      ?.findBottomNodeOf(selectedNodeId);
+      .findChildrenContainsId(selectedNode.id)
+      ?.findBottomNodeOf(selectedNode.id);
     if (!bottomNode) {
-      throw new Error(
-        `Can not found NodeData by selected id. selected id = ${selectedNodeId}`
-      );
+      throw newNotFoundNodeErr(selectedNode.id);
     }
 
     bottomNode.isSelected = true;
@@ -61,9 +66,9 @@ class ArrowKeyUseCase {
   // TODO Select root node.
   selectHeadNode(
     mindMapData: MindMapData,
-    selectedNodeId: string
+    selectedNode: RootNode | Node
   ): MindMapData {
-    if (mindMapData.isFirstLayerNode(selectedNodeId)) {
+    if (mindMapData.isFirstLayerNode(selectedNode.id)) {
       mindMapData.deselectNode();
       mindMapData.rootNode.isSelected = true;
       return mindMapData;
@@ -71,7 +76,7 @@ class ArrowKeyUseCase {
 
     const leftNode =
       mindMapData.rightMap.children.recursively.findNodeHasGrandChildId(
-        selectedNodeId
+        selectedNode.id
       );
     if (!leftNode) {
       return mindMapData;
@@ -85,7 +90,7 @@ class ArrowKeyUseCase {
 
   selectTailNode(
     mindMapData: MindMapData,
-    selectedNodeId: string
+    selectedNode: RootNode | Node
   ): MindMapData {
     // TODO Why not call when selected RootNode?
     if (mindMapData.rootNode.isSelected) {
@@ -94,8 +99,8 @@ class ArrowKeyUseCase {
     }
 
     const tailNode = mindMapData.rightMap.children.recursively
-      .findChildrenContainsId(selectedNodeId)
-      ?.findTailNodeOf(selectedNodeId);
+      .findChildrenContainsId(selectedNode.id)
+      ?.findTailNodeOf(selectedNode.id);
     if (!tailNode) {
       return mindMapData;
     }

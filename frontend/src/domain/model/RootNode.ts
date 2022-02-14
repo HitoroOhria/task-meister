@@ -1,6 +1,10 @@
 import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
 
+export const rootNodeType = "rootNode";
+
 type RootNode = NodeData & {
+  type: typeof rootNodeType;
+
   updateLateral(width: number): void;
 
   updateVertical(height: number): void;
@@ -10,12 +14,14 @@ export const newRootNode = (id: string, text: string): RootNode => {
   return {
     ...rootNodeImpl,
     id: id,
-    text: text
+    text: text,
   };
 };
 
 export const rootNodeImpl: RootNode = {
   ...nodeDataImpl,
+
+  type: rootNodeType,
 
   updateLateral(width: number) {
     this.width = width;

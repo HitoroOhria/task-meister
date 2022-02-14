@@ -1,6 +1,7 @@
 import RootNode, { rootNodeImpl } from "~/domain/model/RootNode";
 import RightMap, { rightMapImpl } from "~/domain/model/RightMap";
 import NodeData from "~/domain/model/NodeData";
+import Node from "~/domain/model/Node";
 
 type MindMapData = {
   // TODO Control readonly, get, set
@@ -12,6 +13,8 @@ type MindMapData = {
   isFirstLayerNode(id: string): boolean;
 
   findNodeById(id: string): NodeData | undefined;
+
+  findNodeIsSelected(): RootNode | Node | undefined;
 
   deselectNode(): void;
 
@@ -51,6 +54,14 @@ export const mindMapDataImpl: MindMapData = {
     }
 
     return this.rightMap.children.recursively.findNodeById(id);
+  },
+
+  findNodeIsSelected(): RootNode | Node | undefined {
+    if (this.rootNode.isSelected) {
+      return this.rootNode;
+    }
+
+    return this.rightMap.children.recursively.findNodeIsSelected();
   },
 
   deselectNode() {

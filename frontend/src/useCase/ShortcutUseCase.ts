@@ -1,12 +1,9 @@
 import Shortcut, { shortcuts } from "~/enum/Shortcut";
 import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
 import MindMapData from "~/domain/model/MindMapData";
-import { newAddNode } from "~/domain/model/Node";
-import {
-  assertNever,
-  newNotFoundChildrenErr,
-  newNotFoundNodeErr,
-} from "~/util/ExceptionUtil";
+import Node, { newAddNode } from "~/domain/model/Node";
+import { assertNever, newNotFoundChildrenErr } from "~/util/ExceptionUtil";
+import RootNode, { rootNodeType } from "~/domain/model/RootNode";
 
 class ShortcutUseCase {
   private arrowKeyUseCase: ArrowKeyUseCase;
@@ -18,7 +15,7 @@ class ShortcutUseCase {
   public handleKeydown(
     mindMapData: MindMapData,
     key: Shortcut,
-    selectedNodeId: string
+    selectedNode: RootNode | Node
   ): MindMapData {
     switch (key) {
       case shortcuts.Up:
@@ -28,14 +25,14 @@ class ShortcutUseCase {
         return this.arrowKeyUseCase.handleArrowKeyDown(
           mindMapData,
           key,
-          selectedNodeId
+          selectedNode
         );
       case shortcuts.Space:
-        return this.toggleCollapse(mindMapData, selectedNodeId);
+        return this.toggleCollapse(mindMapData, selectedNode);
       case shortcuts.Tab:
-        return this.addNodeToTail(mindMapData, selectedNodeId);
+        return this.addNodeToTail(mindMapData, selectedNode);
       case shortcuts.Enter:
-        return this.addNodeToBottom(mindMapData, selectedNodeId);
+        return this.addNodeToBottom(mindMapData, selectedNode);
       default:
         assertNever(key, `Not defined key. key = ${key}`);
         return mindMapData;
@@ -44,30 +41,31 @@ class ShortcutUseCase {
 
   public toggleCollapse(
     mindMapData: MindMapData,
-    selectedNodeId: string
+    selectedNode: RootNode | Node
   ): MindMapData {
-    mindMapData.rightMap.collapseNodes(selectedNodeId);
+    if (mindMapData.rootNode.isSelected) {
+      return mindMapData;
+    }
+
+    mindMapData.rightMap.collapseNodes(selectedNode.id);
     return mindMapData;
   }
 
   public addNodeToTail(
     mindMapData: MindMapData,
-    selectedNodeId: string
+    selectedNode: RootNode | Node
   ): MindMapData {
     mindMapData.deselectNode();
     mindMapData.isInputting = true;
 
-    // TODO Fix when select RootNode.
-
-    const addedNode = newAddNode();
-    const selectedNode =
-      mindMapData.rightMap.children.recursively.findNodeById(selectedNodeId);
-    if (!selectedNode) {
-      throw newNotFoundNodeErr(selectedNodeId);
+    if (selectedNode.type === rootNodeType) {
+      const addedNode = newAddNode(mindMapData.rootNode.width / 2);
+      mindMapData.rightMap.children.nodes.push(addedNode);
+      return mindMapData;
     }
 
     // TODO Whey set left? There is top?
-    addedNode.left = selectedNode.left + selectedNode.width;
+    const addedNode = newAddNode(selectedNode.left + selectedNode.width);
     selectedNode.children.nodes.push(addedNode);
 
     return mindMapData;
@@ -75,34 +73,27 @@ class ShortcutUseCase {
 
   public addNodeToBottom(
     mindMapData: MindMapData,
-    selectedId: string
+    selectedNode: RootNode | Node
   ): MindMapData {
-    mindMapData.deselectNode();
-    mindMapData.isInputting = true;
-
-    if (mindMapData.isFirstLayerNode(selectedId)) {
-      const addedNode = newAddNode();
-      addedNode.left = mindMapData.rootNode.width / 2;
-      mindMapData.rightMap.children.insertChildToBottomOf(
-        selectedId,
-        addedNode
-      );
+    if (mindMapData.rootNode.isSelected) {
       return mindMapData;
     }
 
-    const addedNode = newAddNode();
-    const selectedNode =
-      mindMapData.rightMap.children.recursively.findNodeById(selectedId);
+    mindMapData.deselectNode();
+    mindMapData.isInputting = true;
+
     const parentChildren =
       mindMapData.rightMap.children.recursively.findChildrenContainsId(
-        selectedId
+        selectedNode.id
       );
-    if (!parentChildren || !selectedNode) {
-      throw newNotFoundChildrenErr(selectedId);
+    if (!parentChildren) {
+      throw newNotFoundChildrenErr(selectedNode.id);
     }
 
-    addedNode.left = selectedNode.left;
-    parentChildren.insertChildToBottomOf(selectedId, addedNode);
+    const addedNode = mindMapData.isFirstLayerNode(selectedNode.id)
+      ? newAddNode(mindMapData.rootNode.width / 2)
+      : newAddNode(selectedNode.left);
+    parentChildren.insertChildToBottomOf(selectedNode.id, addedNode);
 
     return mindMapData;
   }
