@@ -44,6 +44,7 @@ const Node: VFC<NodeProps> = (props) => {
     replaceNodes(text);
   };
 
+  // TODO Move to useCase and responds Shift + Enter to new line.
   // Do not use value of element. (ex. innerHeight, offsetHeight)
   // Because getting process ends before dom rendered. and the value of the previous text is acquired.
   // So, get previous value
