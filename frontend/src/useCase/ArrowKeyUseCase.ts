@@ -67,21 +67,17 @@ class ArrowKeyUseCase {
     mindMapData: MindMapData,
     selectedNode: RootNode | Node
   ): MindMapData {
-    if (mindMapData.isFirstLayerNode(selectedNode.id)) {
-      mindMapData.deselectNode();
-      mindMapData.rootNode.isSelected = true;
+    if (mindMapData.rootNode.isSelected) {
       return mindMapData;
     }
 
-    const leftNode = mindMapData.rightMap.children.recursively.findHeadNode(
-      selectedNode.id
-    );
-    if (!leftNode) {
+    const headNode = mindMapData.findHeadNode(selectedNode.id);
+    if (!headNode) {
       return mindMapData;
     }
 
     mindMapData.deselectNode();
-    leftNode.isSelected = true;
+    headNode.isSelected = true;
 
     return mindMapData;
   }

@@ -71,7 +71,7 @@ export const mindMapDataImpl: MindMapData = {
       return this.rootNode;
     }
 
-    this.rightMap.children.recursively.findHeadNode(id);
+    return this.rightMap.children.recursively.findHeadNode(id);
   },
 
   deselectNode() {
