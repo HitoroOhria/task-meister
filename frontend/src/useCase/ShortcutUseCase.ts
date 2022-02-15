@@ -12,11 +12,12 @@ class ShortcutUseCase {
     this.arrowKeyUseCase = arrowKeyUseCase;
   }
 
-  public handleKeydown(
-    mindMapData: MindMapData,
-    key: Shortcut,
-    selectedNode: RootNode | Node
-  ): MindMapData {
+  public handleKeydown(mindMapData: MindMapData, key: Shortcut): MindMapData {
+    const selectedNode = mindMapData.findNodeIsSelected();
+    if (!selectedNode) {
+      return mindMapData;
+    }
+
     switch (key) {
       case shortcuts.Up:
       case shortcuts.Down:

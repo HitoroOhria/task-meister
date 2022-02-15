@@ -4,8 +4,6 @@ import Shortcut from "~/enum/Shortcut";
 import MindMapUseCase from "~/useCase/MindMapUseCase";
 import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
 import ShortcutUseCase from "~/useCase/ShortcutUseCase";
-import RootNode from "~/domain/model/RootNode";
-import Node from "~/domain/model/Node";
 
 export const mindMapDataActionType = {
   setGlobalIsInputting: "MIND_MAP_DATA_SET_GLOBAL_IS_INPUTTING",
@@ -28,7 +26,6 @@ type MindMapDataPayload = Partial<{
   isInputting: boolean;
   dropPosition: DropPosition;
   shortcut: Shortcut;
-  selectedNode: RootNode | Node;
 }>;
 
 export type MindMapDataAction = {
@@ -73,11 +70,7 @@ export const mindMapDataReducer = (
         action.payload.dropPosition!
       );
     case mindMapDataActionType.processKeydown:
-      return shortcutUseCase.handleKeydown(
-        newState,
-        action.payload.shortcut!,
-        action.payload.selectedNode!
-      );
+      return shortcutUseCase.handleKeydown(newState, action.payload.shortcut!);
     default:
       throw new Error(`Not defined action type. action = ${action}`);
   }
