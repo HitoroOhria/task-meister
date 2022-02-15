@@ -26,11 +26,11 @@ type Children = {
 
   findTailNodeOf(childId: string): Node | undefined;
 
-  removeChild(id: string): Node;
+  removeNode(id: string): Node;
 
-  insertChild(target: Node, dropTop: number, lowerNode: Node): void;
+  insertNode(target: Node, dropTop: number, lowerNode: Node): void;
 
-  insertChildToBottomOf(topNodeId: string, addedNode: Node): void;
+  insertNodeToBottomOf(topNodeId: string, addedNode: Node): void;
 
   setGroupTop(parentChildrenHeight: number, parentGroupTop: number): void;
 };
@@ -92,7 +92,7 @@ export const childrenImpl: Children = {
     return this.nodes.find((child) => child.id === childId)?.children.nodes[0];
   },
 
-  removeChild(id: string): Node {
+  removeNode(id: string): Node {
     const removedChild = this.nodes.find((child) => child.id === id);
     const removedChildIndex = this.nodes.findIndex((child) => child.id === id);
     if (!removedChild || removedChildIndex === -1) {
@@ -105,7 +105,7 @@ export const childrenImpl: Children = {
     return removedChild;
   },
 
-  insertChild(targetNode: Node, dropTop: number, lowerNode: Node) {
+  insertNode(targetNode: Node, dropTop: number, lowerNode: Node) {
     let insertedNodeIndex = this.nodes.findIndex(
       (child) => child.id === lowerNode.id
     );
@@ -117,7 +117,7 @@ export const childrenImpl: Children = {
     this.nodes.splice(insertedNodeIndex, 0, targetNode);
   },
 
-  insertChildToBottomOf(topNodeId: string, addedNode: Node) {
+  insertNodeToBottomOf(topNodeId: string, addedNode: Node) {
     const topNodeIndex = this.nodes.findIndex(
       (child) => child.id === topNodeId
     );

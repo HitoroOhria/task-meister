@@ -93,7 +93,7 @@ export const rightMapImpl: RightMap = {
       throw new Error(`Can not found children contains id. id = ${id}`);
     }
 
-    return children.removeChild(id);
+    return children.removeNode(id);
   },
 
   insertNode(target: Node, dropPosition: DropPosition, lowerNode: Node) {
@@ -111,7 +111,7 @@ export const rightMapImpl: RightMap = {
       );
     }
 
-    children.insertChild(target, dropPosition.top, lowerNode);
+    children.insertNode(target, dropPosition.top, lowerNode);
   },
 
   collapseNodes(selectedId: string) {
