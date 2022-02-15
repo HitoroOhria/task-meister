@@ -6,41 +6,20 @@ import {numberOfLines} from "~/util/StringUtil";
 // CSS
 export const minWidthPx = 50;
 const lineHeightEm = 1;
-const font = "13px monospace";
+const font = "15px monospace";
 
 // const
 // For measure text width
 export const elementSizeCalculator = new ElementSizeCalculator(font);
 
-type TextInputerProps = {
+type Props = {
   text: string;
   isInputting: boolean;
   setText: (text: string) => void;
-  handleDoubleClick: () => void;
   handleBlur: () => void;
 };
 
-type TextareaProps = {
-  widthPx: number;
-  heightEm: number;
-};
-
-const Textarea = styled.textarea<TextareaProps>`
-  width: ${(props) => props.widthPx}px;
-  min-width: ${minWidthPx}px;
-  height: ${(props) => props.heightEm}em;
-  font: ${font};
-  line-height: ${lineHeightEm}em;
-  border-color: gray;
-  border-radius: 10px;
-  background-color: gray;
-  outline: none;
-  padding: 20px;
-  resize: none;
-  overflow: hidden;
-`;
-
-const TextInputer: VFC<TextInputerProps> = (props) => {
+const TextInputer: VFC<Props> = (props) => {
   const textareaElement = useRef<HTMLTextAreaElement>(null);
   const [textareaWidthPx, setTextareaWidthPx] = useState<number>(0);
   const [textareaHeightEm, setTextareaHeightEm] = useState<number>(0);
@@ -71,11 +50,20 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
     setTextareaHeightEm(heightEm);
   };
 
+  const handleFocus = () => {
+    if (!textareaElement.current) return;
+
+    textareaElement.current!.selectionStart = props.text.length;
+    textareaElement.current!.selectionEnd = props.text.length;
+  };
+
   // TODO Refactor around focus and blur.
   const isInputtingEffect = () => {
+    if (!textareaElement.current) return;
+
     props.isInputting
-      ? textareaElement.current!.focus()
-      : textareaElement.current!.blur();
+      ? textareaElement.current.focus()
+      : textareaElement.current.blur();
   };
 
   const componentDidMount = () => {
@@ -89,17 +77,57 @@ const TextInputer: VFC<TextInputerProps> = (props) => {
 
   return (
     // TODO Eliminate range selection after double-clicking
-    <Textarea
-      ref={textareaElement}
-      readOnly={!props.isInputting}
-      defaultValue={props.text}
-      heightEm={textareaHeightEm}
-      widthPx={textareaWidthPx}
-      onChange={(e) => props.setText(e.target.value)}
-      onDoubleClick={props.handleDoubleClick}
-      onBlur={props.handleBlur}
-    />
+    <TopDiv>
+      {props.isInputting ? (
+        <Textarea
+          ref={textareaElement}
+          readOnly={!props.isInputting}
+          defaultValue={props.text}
+          widthPx={textareaWidthPx}
+          heightEm={textareaHeightEm}
+          onChange={(e) => props.setText(e.target.value)}
+          onFocus={handleFocus}
+          onBlur={props.handleBlur}
+        />
+      ) : (
+        <SpanWrapper widthPx={textareaWidthPx} heightEm={textareaHeightEm}>
+          <span>{props.text}</span>
+        </SpanWrapper>
+      )}
+    </TopDiv>
   );
 };
 
 export default TextInputer;
+
+type TextDisplayProps = {
+  widthPx: number;
+  heightEm: number;
+};
+
+const TopDiv = styled.div`
+  font: ${font};
+`;
+
+// TODO Can refactor Textarea and SpanWrapper to using TopDix?
+const Textarea = styled.textarea<TextDisplayProps>`
+  width: ${(props) => props.widthPx}px;
+  min-width: ${minWidthPx}px;
+  height: ${(props) => props.heightEm}em;
+  font: inherit;
+  line-height: ${lineHeightEm}em;
+  border-color: gray;
+  background-color: gray;
+  outline: none;
+  resize: none;
+  overflow: hidden;
+`;
+
+const SpanWrapper = styled.div<TextDisplayProps>`
+  width: ${(props) => props.widthPx}px;
+  min-width: ${minWidthPx}px;
+  height: ${(props) => props.heightEm}em;
+  font: inherit;
+  display: flex;
+  align-items: center;
+`;

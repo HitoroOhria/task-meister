@@ -11,27 +11,15 @@ import {numberOfLines} from "~/util/StringUtil";
 // width of textarea from border to text
 // values of below is average of measured values
 const borderWidth = 5;
-const insideWidthOfTextarea = 40.75; // TODO Maybe this is padding of TextInputer
+const padding = 20;
 const nodeHeightWhenOneLine = 62;
 const heightPerOneLine = 13;
 
-type NodeProps = {
+type Props = {
   node: NodeData;
 };
 
-type NodeDivProps = {
-  hidden: boolean;
-  borderColor: string;
-};
-
-const NodeDiv = styled.div<NodeDivProps>`
-  display: ${(props) => (props.hidden ? "none" : "block")};
-  border: thick solid ${(props) => props.borderColor};
-  border-radius: 10px;
-  background-color: gray;
-`;
-
-const Node: VFC<NodeProps> = (props) => {
+const Node: VFC<Props> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
 
@@ -54,9 +42,10 @@ const Node: VFC<NodeProps> = (props) => {
       elementSizeCalculator.measureLongestLineWidth(text) < TextInputerMinWidth
         ? TextInputerMinWidth
         : elementSizeCalculator.measureLongestLineWidth(text);
-    const width = borderWidth * 2 + insideWidthOfTextarea + textWidth;
+    const width = borderWidth * 2 + padding * 2 + textWidth;
     const height =
       borderWidth * 2 +
+      padding * 2 +
       nodeHeightWhenOneLine +
       heightPerOneLine * (numberOfLines(text) - 1);
 
@@ -127,12 +116,12 @@ const Node: VFC<NodeProps> = (props) => {
           hidden={props.node.isHidden}
           borderColor={props.node.isSelected ? "yellow" : "blue"}
           onClick={handleClick}
+          onDoubleClick={handleDoubleClick}
         >
           <TextInputer
             text={props.node.text}
             setText={(text) => handleNodeTextChanges(text)}
             isInputting={props.node.isInputting}
-            handleDoubleClick={handleDoubleClick}
             handleBlur={outInputting}
           />
         </NodeDiv>
@@ -142,3 +131,16 @@ const Node: VFC<NodeProps> = (props) => {
 };
 
 export default Node;
+
+type NodeDivProps = {
+  hidden: boolean;
+  borderColor: string;
+};
+
+const NodeDiv = styled.div<NodeDivProps>`
+  display: ${(props) => (props.hidden ? "none" : "block")};
+  padding: ${padding}px;
+  border: thick solid ${(props) => props.borderColor};
+  border-radius: 10px;
+  background-color: gray;
+`;
