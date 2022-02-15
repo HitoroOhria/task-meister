@@ -10,7 +10,7 @@ interface RecursivelyChildren {
 
   findNodeByPosition(position: DropPosition): Node | undefined;
 
-  findNodeHasChildId(id: string): Node | undefined;
+  findHeadNode(id: string): Node | undefined;
 
   findNodeIsSelected(): Node | undefined;
 
@@ -78,14 +78,14 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined;
   },
 
-  findNodeHasChildId(id: string): Node | undefined {
+  findHeadNode(id: string): Node | undefined {
     const node = this.children.findNodeHasChildId(id);
     if (node !== undefined) {
       return node;
     }
 
     for (const child of this.children.nodes) {
-      const targetNode = child.children.recursively.findNodeHasChildId(id);
+      const targetNode = child.children.recursively.findHeadNode(id);
 
       if (targetNode !== undefined) {
         return targetNode;

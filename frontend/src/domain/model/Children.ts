@@ -16,14 +16,11 @@ type Children = {
 
   recursively: RecursivelyChildren;
 
-  findNodeHasChildId(grandChildId: string): Node | undefined;
+  findNodeHasChildId(childId: string): Node | undefined;
 
   findTopNodeOf(childId: string): Node | undefined;
 
   findBottomNodeOf(childId: string): Node | undefined;
-
-  // TODO Not used.
-  findHeadNodeOf(childId: string, parentChildren: Children): Node | undefined;
 
   findTailNodeOf(childId: string): Node | undefined;
 
@@ -51,14 +48,14 @@ export const childrenImpl: Children = {
   height: 0,
   recursively: recursivelyChildrenImpl,
 
-  findNodeHasChildId(grandChildId: string): Node | undefined {
+  findNodeHasChildId(childId: string): Node | undefined {
     const childrenIsContainId = (node: Node, id: string): boolean => {
       return node.children.nodes
         .map((grandChild) => grandChild.id)
         .includes(id);
     };
 
-    return this.nodes.find((child) => childrenIsContainId(child, grandChildId));
+    return this.nodes.find((child) => childrenIsContainId(child, childId));
   },
 
   findTopNodeOf(childId: string): Node | undefined {
@@ -81,12 +78,6 @@ export const childrenImpl: Children = {
     return baseNodeIndex === this.nodes.length - 1
       ? this.nodes[0]
       : this.nodes[baseNodeIndex + 1];
-  },
-
-  findHeadNodeOf(childId: string, parentChildren: Children): Node | undefined {
-    return parentChildren.nodes.find((parentNodeData) =>
-      parentNodeData.children.nodes.find((child) => child.id === childId)
-    );
   },
 
   findTailNodeOf(childId: string): Node | undefined {

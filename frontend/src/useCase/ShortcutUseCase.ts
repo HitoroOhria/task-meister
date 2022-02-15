@@ -123,7 +123,7 @@ class ShortcutUseCase {
 
     const nextSelectedNode =
       children.nodes.length === 1
-        ? mindMapData.findNodeHasChildId(selectedNode.id)
+        ? mindMapData.findHeadNode(selectedNode.id)
         : children.findTopNodeOf(selectedNode.id);
     if (!nextSelectedNode) {
       throw newNotFoundNodeErr(selectedNode.id);

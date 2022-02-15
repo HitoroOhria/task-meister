@@ -16,7 +16,7 @@ type MindMapData = {
 
   findNodeIsSelected(): RootNode | Node | undefined;
 
-  findNodeHasChildId(id: string): RootNode | Node | undefined;
+  findHeadNode(id: string): RootNode | Node | undefined;
 
   deselectNode(): void;
 
@@ -66,12 +66,12 @@ export const mindMapDataImpl: MindMapData = {
     return this.rightMap.children.recursively.findNodeIsSelected();
   },
 
-  findNodeHasChildId(id: string): RootNode | Node | undefined {
+  findHeadNode(id: string): RootNode | Node | undefined {
     if (this.isFirstLayerNode(id)) {
       return this.rootNode;
     }
 
-    this.rightMap.children.recursively.findNodeHasChildId(id);
+    this.rightMap.children.recursively.findHeadNode(id);
   },
 
   deselectNode() {

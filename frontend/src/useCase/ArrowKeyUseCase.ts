@@ -73,10 +73,9 @@ class ArrowKeyUseCase {
       return mindMapData;
     }
 
-    const leftNode =
-      mindMapData.rightMap.children.recursively.findNodeHasChildId(
-        selectedNode.id
-      );
+    const leftNode = mindMapData.rightMap.children.recursively.findHeadNode(
+      selectedNode.id
+    );
     if (!leftNode) {
       return mindMapData;
     }
