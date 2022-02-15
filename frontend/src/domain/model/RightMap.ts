@@ -16,8 +16,6 @@ type RightMap = {
 
   processNodeDrop(movedNodeId: string, dropPosition: DropPosition): void;
 
-  removeNode(id: string): Node;
-
   insertNode(target: Node, dropPosition: DropPosition, lowerNode: Node): void;
 
   collapseNodes(selectedId: string): void;
@@ -77,7 +75,7 @@ export const rightMapImpl: RightMap = {
       this.children.recursively.findNodeByPosition(dropPosition);
     if (!lowerNode) return;
 
-    const movedNode = this.removeNode(movedNodeId);
+    const movedNode = this.children.recursively.removeNodeById(movedNodeId);
     this.insertNode(movedNode, dropPosition, lowerNode);
 
     const newLeft = lowerNode.onTail(dropPosition.left)
@@ -85,15 +83,6 @@ export const rightMapImpl: RightMap = {
       : lowerNode.left;
     this.updateNodesLateral(movedNode, movedNode.width, newLeft);
     this.updateNodesVertical(movedNode, movedNode.height);
-  },
-
-  removeNode(id: string): Node {
-    const children = this.children.recursively.findChildrenContainsId(id);
-    if (!children) {
-      throw new Error(`Can not found children contains id. id = ${id}`);
-    }
-
-    return children.removeNode(id);
   },
 
   insertNode(target: Node, dropPosition: DropPosition, lowerNode: Node) {

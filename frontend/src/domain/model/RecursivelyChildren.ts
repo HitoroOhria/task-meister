@@ -10,11 +10,13 @@ interface RecursivelyChildren {
 
   findNodeByPosition(position: DropPosition): Node | undefined;
 
-  findNodeHasGrandChildId(id: string): Node | undefined;
+  findNodeHasChildId(id: string): Node | undefined;
 
   findNodeIsSelected(): Node | undefined;
 
   findChildrenContainsId(id: string): Children | undefined;
+
+  removeNodeById(id: string): Node;
 
   updateNodeTop(): void;
 
@@ -76,14 +78,14 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined;
   },
 
-  findNodeHasGrandChildId(id: string): Node | undefined {
-    const node = this.children.findNodeHasGrandChildId(id);
+  findNodeHasChildId(id: string): Node | undefined {
+    const node = this.children.findNodeHasChildId(id);
     if (node !== undefined) {
       return node;
     }
 
     for (const child of this.children.nodes) {
-      const targetNode = child.children.recursively.findNodeHasGrandChildId(id);
+      const targetNode = child.children.recursively.findNodeHasChildId(id);
 
       if (targetNode !== undefined) {
         return targetNode;
@@ -125,6 +127,15 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     }
 
     return undefined;
+  },
+
+  removeNodeById(id: string): Node {
+    const children = this.children.recursively.findChildrenContainsId(id);
+    if (!children) {
+      throw new Error(`Can not found children contains id. id = ${id}`);
+    }
+
+    return children.removeNode(id);
   },
 
   updateNodeTop() {

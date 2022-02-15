@@ -2,7 +2,11 @@ import Shortcut, { shortcuts } from "~/enum/Shortcut";
 import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
 import MindMapData from "~/domain/model/MindMapData";
 import Node, { newAddNode } from "~/domain/model/Node";
-import { assertNever, newNotFoundChildrenErr } from "~/util/ExceptionUtil";
+import {
+  assertNever,
+  newNotFoundChildrenErr,
+  newNotFoundNodeErr,
+} from "~/util/ExceptionUtil";
 import RootNode, { rootNodeType } from "~/domain/model/RootNode";
 
 class ShortcutUseCase {
@@ -34,6 +38,8 @@ class ShortcutUseCase {
         return this.addNodeToTail(mindMapData, selectedNode);
       case shortcuts.Enter:
         return this.addNodeToBottom(mindMapData, selectedNode);
+      case shortcuts.Backspace:
+        return this.deleteNode(mindMapData, selectedNode);
       default:
         assertNever(key, `Not defined key. key = ${key}`);
         return mindMapData;
@@ -94,8 +100,43 @@ class ShortcutUseCase {
     const addedNode = mindMapData.isFirstLayerNode(selectedNode.id)
       ? newAddNode(mindMapData.rootNode.width / 2)
       : newAddNode(selectedNode.left);
-    parentChildren.insertChildToBottomOf(selectedNode.id, addedNode);
+    parentChildren.insertNodeToBottomOf(selectedNode.id, addedNode);
 
+    return mindMapData;
+  }
+
+  public deleteNode(
+    mindMapData: MindMapData,
+    selectedNode: RootNode | Node
+  ): MindMapData {
+    if (mindMapData.rootNode.isSelected) {
+      return mindMapData;
+    }
+
+    const children =
+      mindMapData.rightMap.children.recursively.findChildrenContainsId(
+        selectedNode.id
+      );
+    if (!children) {
+      throw newNotFoundChildrenErr(selectedNode.id);
+    }
+
+    const nextSelectedNode =
+      children.nodes.length === 1
+        ? mindMapData.findNodeHasChildId(selectedNode.id)
+        : children.findTopNodeOf(selectedNode.id);
+    if (!nextSelectedNode) {
+      throw newNotFoundNodeErr(selectedNode.id);
+    }
+
+    nextSelectedNode.isSelected = true;
+    mindMapData.rightMap.children.recursively.removeNodeById(selectedNode.id);
+
+    nextSelectedNode.type !== rootNodeType &&
+      mindMapData.rightMap.updateNodesVertical(
+        nextSelectedNode,
+        nextSelectedNode.height
+      );
     return mindMapData;
   }
 }

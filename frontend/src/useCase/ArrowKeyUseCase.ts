@@ -74,7 +74,7 @@ class ArrowKeyUseCase {
     }
 
     const leftNode =
-      mindMapData.rightMap.children.recursively.findNodeHasGrandChildId(
+      mindMapData.rightMap.children.recursively.findNodeHasChildId(
         selectedNode.id
       );
     if (!leftNode) {

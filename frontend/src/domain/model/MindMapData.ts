@@ -16,6 +16,8 @@ type MindMapData = {
 
   findNodeIsSelected(): RootNode | Node | undefined;
 
+  findNodeHasChildId(id: string): RootNode | Node | undefined;
+
   deselectNode(): void;
 
   selectTail(): void;
@@ -64,6 +66,14 @@ export const mindMapDataImpl: MindMapData = {
     return this.rightMap.children.recursively.findNodeIsSelected();
   },
 
+  findNodeHasChildId(id: string): RootNode | Node | undefined {
+    if (this.isFirstLayerNode(id)) {
+      return this.rootNode;
+    }
+
+    this.rightMap.children.recursively.findNodeHasChildId(id);
+  },
+
   deselectNode() {
     if (this.rootNode.isSelected) {
       this.rootNode.isSelected = false;
@@ -90,7 +100,8 @@ export const mindMapDataImpl: MindMapData = {
   },
 
   processNodeDropToRight(movedNodeId: string) {
-    const movedNode = this.rightMap.removeNode(movedNodeId);
+    const movedNode =
+      this.rightMap.children.recursively.removeNodeById(movedNodeId);
     this.rightMap.children.nodes.push(movedNode);
 
     const newLeft = this.rootNode.width / 2;

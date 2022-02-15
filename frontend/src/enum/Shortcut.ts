@@ -5,6 +5,7 @@ export const shortcuts = {
   Space: " ",
   Tab: "Tab",
   Enter: "Enter",
+  Backspace: "Backspace",
 } as const;
 
 export type Shortcut = typeof shortcuts[keyof typeof shortcuts];
@@ -19,6 +20,8 @@ export const getShortcut = (key: string): Shortcut | undefined => {
       return shortcuts.Tab;
     case shortcuts.Enter:
       return shortcuts.Enter;
+    case shortcuts.Backspace:
+      return shortcuts.Backspace;
     default:
       return undefined;
   }
