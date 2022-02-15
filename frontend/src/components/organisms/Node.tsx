@@ -35,10 +35,19 @@ const Node: VFC<NodeProps> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
 
+  const handleNodeTextChanges = (text: string) => {
+    if (text.slice(-1) === "\n") {
+      outInputting();
+      return;
+    }
+
+    replaceNodes(text);
+  };
+
   // Do not use value of element. (ex. innerHeight, offsetHeight)
   // Because getting process ends before dom rendered. and the value of the previous text is acquired.
   // So, get previous value
-  const handleNodeTextChanges = (text: string) => {
+  const replaceNodes = (text: string) => {
     const textWidth =
       // TODO Set Prettier config
       elementSizeCalculator.measureLongestLineWidth(text) < TextInputerMinWidth
@@ -86,9 +95,9 @@ const Node: VFC<NodeProps> = (props) => {
 
   // TODO Is this unnecessary?
   //   - Maybe can implement only selectNode
-  const handleBlur = () => {
+  const outInputting = () => {
     // When added Node by Enter.
-    if (!props.node.isSelected) return
+    if (!props.node.isSelected) return;
 
     dispatchMindMapData({
       type: actionType.setNodeIsInputting,
@@ -104,7 +113,7 @@ const Node: VFC<NodeProps> = (props) => {
   };
 
   const componentDidMount = () => {
-    handleNodeTextChanges(props.node.text);
+    replaceNodes(props.node.text);
   };
 
   useEffect(componentDidMount, []);
@@ -123,7 +132,7 @@ const Node: VFC<NodeProps> = (props) => {
             setText={(text) => handleNodeTextChanges(text)}
             isInputting={props.node.isInputting}
             handleDoubleClick={handleDoubleClick}
-            handleBlur={handleBlur}
+            handleBlur={outInputting}
           />
         </NodeDiv>
       </DraggableElement>

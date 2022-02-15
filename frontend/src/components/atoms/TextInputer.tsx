@@ -37,6 +37,7 @@ const Textarea = styled.textarea<TextareaProps>`
   outline: none;
   padding: 20px;
   resize: none;
+  overflow: hidden;
 `;
 
 const TextInputer: VFC<TextInputerProps> = (props) => {
