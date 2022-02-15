@@ -132,11 +132,15 @@ class ShortcutUseCase {
     nextSelectedNode.isSelected = true;
     mindMapData.rightMap.children.recursively.removeNodeById(selectedNode.id);
 
-    nextSelectedNode.type !== rootNodeType &&
-      mindMapData.rightMap.updateNodesVertical(
-        nextSelectedNode,
-        nextSelectedNode.height
-      );
+    // TODO Fix bug when delete last child Node.
+    if (nextSelectedNode.type === rootNodeType) {
+      return mindMapData;
+    }
+
+    mindMapData.rightMap.updateNodesVertical(
+      nextSelectedNode,
+      nextSelectedNode.height
+    );
     return mindMapData;
   }
 }
