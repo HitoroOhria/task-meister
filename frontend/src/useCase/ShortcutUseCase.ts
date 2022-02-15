@@ -130,9 +130,9 @@ class ShortcutUseCase {
     }
 
     nextSelectedNode.isSelected = true;
+    // TODO Fix bug when delete last child Node.
     mindMapData.rightMap.children.recursively.removeNodeById(selectedNode.id);
 
-    // TODO Fix bug when delete last child Node.
     if (nextSelectedNode.type === rootNodeType) {
       return mindMapData;
     }

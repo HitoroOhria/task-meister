@@ -43,7 +43,7 @@ export const mindMapDataReducer = (
 ): MindMapData => {
   const newState = { ...state };
 
-  // TODO Can rewrite to using Object?
+  // TODO Can rewrite to using Map?
   switch (action.type) {
     case mindMapDataActionType.setGlobalIsInputting:
       return setGlobalIsInputting(newState, action.payload.isInputting!);
