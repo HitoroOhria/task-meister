@@ -8,7 +8,6 @@ type NodesProps = {
 };
 
 const Nodes: VFC<NodesProps> = (props) => {
-  // TODO Move to Render object?
   const renderNode = (node: NodeModel.default): JSX.Element => {
     return <Node key={node.id} node={node} />;
   };

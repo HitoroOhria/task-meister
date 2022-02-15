@@ -63,7 +63,6 @@ class ArrowKeyUseCase {
     return mindMapData;
   }
 
-  // TODO Select root node.
   selectHeadNode(
     mindMapData: MindMapData,
     selectedNode: RootNode | Node
@@ -92,7 +91,6 @@ class ArrowKeyUseCase {
     mindMapData: MindMapData,
     selectedNode: RootNode | Node
   ): MindMapData {
-    // TODO Why not call when selected RootNode?
     if (mindMapData.rootNode.isSelected) {
       mindMapData.selectTail();
       return mindMapData;

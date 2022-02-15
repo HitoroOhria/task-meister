@@ -9,7 +9,6 @@ import {newNotFoundNodeErr} from "~/util/ExceptionUtil";
 // Define process to be managed as a whole¬.
 type Children = {
   // Collection of nodes
-  // TODO Can expressed by implementing Array?
   nodes: Node[];
 
   // total height of children node.

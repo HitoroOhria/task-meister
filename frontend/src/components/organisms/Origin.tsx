@@ -15,9 +15,6 @@ type Props = {
   children?: ReactNode;
 };
 
-// TODO Think name
-// this is not origin.
-// this is origin + droppable element.
 const Origin: FC<Props> = (props) => {
   const originElement = useRef<HTMLDivElement>(null);
   const [top, setTop] = useState<number>(window.innerHeight / 2);
