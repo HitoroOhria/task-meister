@@ -4,7 +4,9 @@ import {
   MindMapDispatchCtx,
   MindMapStateCtx,
 } from "~/store/context/MindMapDataCtx";
-import { getShortcut } from "~/enum/Shortcut";
+import KeyCombo from "~/domain/model/KeyCombo";
+
+const keyCombo = new KeyCombo();
 
 const KeydownManager: VFC = () => {
   const mindMapData = useContext(MindMapStateCtx);
@@ -13,7 +15,8 @@ const KeydownManager: VFC = () => {
   const handleKeydown = (e: KeyboardEvent) => {
     if (mindMapData.isInputting) return;
 
-    const shortcut = getShortcut(e.key);
+    keyCombo.add(e.key);
+    const shortcut = keyCombo.getShortcut();
     if (!shortcut) return;
 
     dispatchMindMapData({
