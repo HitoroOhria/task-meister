@@ -113,6 +113,7 @@ const TopDiv = styled.div`
 
 // Not standardize TextDisplayProps
 // Width and Height should be specified directly in text element.
+// TODO Or can inherit?
 const Textarea = styled.textarea<TextDisplayProps>`
   width: ${(props) => props.widthPx}px;
   min-width: ${minWidthPx}px;
