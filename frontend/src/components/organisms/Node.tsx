@@ -43,11 +43,9 @@ const Node: VFC<Props> = (props) => {
         ? TextInputerMinWidth
         : elementSizeCalculator.measureLongestLineWidth(text);
     const width = borderWidth * 2 + padding * 2 + textWidth;
-    const height =
-      borderWidth * 2 +
-      padding * 2 +
-      nodeHeightWhenOneLine +
-      heightPerOneLine * (numberOfLines(text) - 1);
+    const textHeight =
+      nodeHeightWhenOneLine + heightPerOneLine * (numberOfLines(text) - 1);
+    const height = borderWidth * 2 + padding * 2 + textHeight;
 
     dispatchMindMapData({
       type: actionType.processNodeTextChanges,

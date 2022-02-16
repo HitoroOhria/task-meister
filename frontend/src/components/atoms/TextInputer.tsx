@@ -6,7 +6,10 @@ import {numberOfLines} from "~/util/StringUtil";
 // CSS
 export const minWidthPx = 50;
 const lineHeightEm = 1;
-const font = "15px monospace";
+// font size. unit is px.
+const fontSize = 15;
+const fontFamily = "monospace";
+const font = `${fontSize}px ${fontFamily}`;
 
 // const
 // For measure text width
@@ -43,8 +46,6 @@ const TextInputer: VFC<Props> = (props) => {
   };
 
   const updateTextareaHeight = () => {
-    if (textareaElement.current === null) return;
-
     // TODO Maybe height changes depending on resolution of display
     const heightEm = numberOfLines(props.text) * lineHeightEm;
     setTextareaHeightEm(heightEm);
@@ -90,9 +91,10 @@ const TextInputer: VFC<Props> = (props) => {
           onBlur={props.handleBlur}
         />
       ) : (
-        <SpanWrapper widthPx={textareaWidthPx} heightEm={textareaHeightEm}>
-          <span>{props.text}</span>
-        </SpanWrapper>
+        // TODO Why text is out of Node when expanded?
+        <SpanInlineBlock widthPx={textareaWidthPx} heightEm={textareaHeightEm}>
+          {props.text}
+        </SpanInlineBlock>
       )}
     </TopDiv>
   );
@@ -109,25 +111,26 @@ const TopDiv = styled.div`
   font: ${font};
 `;
 
-// TODO Can refactor Textarea and SpanWrapper to using TopDix?
+// Not standardize TextDisplayProps
+// Width and Height should be specified directly in text element.
 const Textarea = styled.textarea<TextDisplayProps>`
   width: ${(props) => props.widthPx}px;
   min-width: ${minWidthPx}px;
   height: ${(props) => props.heightEm}em;
+  padding: 0px;
   font: inherit;
   line-height: ${lineHeightEm}em;
-  border-color: gray;
+  border-width: 0px;
   background-color: gray;
   outline: none;
   resize: none;
   overflow: hidden;
 `;
 
-const SpanWrapper = styled.div<TextDisplayProps>`
+const SpanInlineBlock = styled.span<TextDisplayProps>`
   width: ${(props) => props.widthPx}px;
   min-width: ${minWidthPx}px;
   height: ${(props) => props.heightEm}em;
   font: inherit;
-  display: flex;
-  align-items: center;
+  display: inline-block;
 `;
