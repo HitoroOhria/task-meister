@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useRef, VFC} from "react";
 import {styled} from "@linaria/react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import DraggableElement from "~/components/organisms/DraggableElement";
-import TextInputer, {elementSizeCalculator, minWidthPx as TextInputerMinWidth,} from "~/components/atoms/TextInputer";
+import TextInputer, {elementSizeCalculator, lineHeight, minWidth,} from "~/components/atoms/TextInputer";
 import {mindMapDataActionType as actionType} from "~/store/reducer/MindMapDataReducer";
 import {MindMapDispatchCtx} from "~/store/context/MindMapDataCtx";
 import NodeData from "~/domain/model/NodeData";
@@ -12,8 +12,6 @@ import {numberOfLines} from "~/util/StringUtil";
 // values of below is average of measured values
 const borderWidth = 5;
 const padding = 20;
-const nodeHeightWhenOneLine = 62;
-const heightPerOneLine = 13;
 
 type Props = {
   node: NodeData;
@@ -39,12 +37,11 @@ const Node: VFC<Props> = (props) => {
   const replaceNodes = (text: string) => {
     const textWidth =
       // TODO Set Prettier config
-      elementSizeCalculator.measureLongestLineWidth(text) < TextInputerMinWidth
-        ? TextInputerMinWidth
+      elementSizeCalculator.measureLongestLineWidth(text) < minWidth
+        ? minWidth
         : elementSizeCalculator.measureLongestLineWidth(text);
     const width = borderWidth * 2 + padding * 2 + textWidth;
-    const textHeight =
-      nodeHeightWhenOneLine + heightPerOneLine * (numberOfLines(text) - 1);
+    const textHeight = lineHeight * numberOfLines(text);
     const height = borderWidth * 2 + padding * 2 + textHeight;
 
     dispatchMindMapData({

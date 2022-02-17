@@ -4,8 +4,8 @@ import ElementSizeCalculator from "~/util/ElementSizeCalculator";
 import {numberOfLines} from "~/util/StringUtil";
 
 // CSS
-export const minWidthPx = 50;
-const lineHeight = 18;
+export const minWidth = 50;
+export const lineHeight = 18;
 // font size. unit is px.
 const fontSize = 15;
 const fontFamily = "monospace";
@@ -41,7 +41,7 @@ const TextInputer: VFC<Props> = (props) => {
       elementSizeCalculator.measureLongestLineWidth(props.text)
     );
     const textWidth =
-      minWidthPx < textElementWidth ? textElementWidth : minWidthPx;
+      minWidth < textElementWidth ? textElementWidth : minWidth;
 
     setTextWidth(textWidth);
   };
@@ -105,7 +105,7 @@ type TopDivProps = {
 };
 
 const TopDiv = styled.div<TopDivProps>`
-  min-width: ${minWidthPx}px;
+  min-width: ${minWidth}px;
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
   font: ${font};
