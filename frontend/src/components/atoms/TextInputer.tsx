@@ -5,7 +5,7 @@ import {numberOfLines} from "~/util/StringUtil";
 
 // CSS
 export const minWidthPx = 50;
-const lineHeightEm = 1;
+const lineHeight = 18;
 // font size. unit is px.
 const fontSize = 15;
 const fontFamily = "monospace";
@@ -24,8 +24,8 @@ type Props = {
 
 const TextInputer: VFC<Props> = (props) => {
   const textareaElement = useRef<HTMLTextAreaElement>(null);
-  const [textareaWidthPx, setTextareaWidthPx] = useState<number>(0);
-  const [textareaHeightEm, setTextareaHeightEm] = useState<number>(0);
+  const [textWidth, setTextWidth] = useState<number>(0);
+  const [textHeight, setTextHeight] = useState<number>(0);
 
   const handleTextChanges = () => {
     // TODO Can refactor to use BoundingClientRect?
@@ -37,18 +37,19 @@ const TextInputer: VFC<Props> = (props) => {
   const updateTextareaWidth = () => {
     if (textareaElement.current === null) return;
 
-    const textWidth = Math.ceil(
+    const textElementWidth = Math.ceil(
       elementSizeCalculator.measureLongestLineWidth(props.text)
     );
-    const textareaWidth = minWidthPx < textWidth ? textWidth : minWidthPx;
+    const textWidth =
+      minWidthPx < textElementWidth ? textElementWidth : minWidthPx;
 
-    setTextareaWidthPx(textareaWidth);
+    setTextWidth(textWidth);
   };
 
   const updateTextareaHeight = () => {
     // TODO Maybe height changes depending on resolution of display
-    const heightEm = numberOfLines(props.text) * lineHeightEm;
-    setTextareaHeightEm(heightEm);
+    const textHeight = numberOfLines(props.text) * lineHeight;
+    setTextHeight(textHeight);
   };
 
   const handleFocus = () => {
@@ -78,7 +79,7 @@ const TextInputer: VFC<Props> = (props) => {
 
   return (
     // TODO Eliminate range selection after double-clicking
-    <TopDiv widthPx={textareaWidthPx} heightEm={textareaHeightEm}>
+    <TopDiv width={textWidth} height={textHeight}>
       {props.isInputting ? (
         <Textarea
           ref={textareaElement}
@@ -98,17 +99,17 @@ const TextInputer: VFC<Props> = (props) => {
 
 export default TextInputer;
 
-type TextDisplayProps = {
-  widthPx: number;
-  heightEm: number;
+type TopDivProps = {
+  width: number;
+  height: number;
 };
 
-const TopDiv = styled.div<TextDisplayProps>`
+const TopDiv = styled.div<TopDivProps>`
   min-width: ${minWidthPx}px;
-  width: ${(props) => props.widthPx}px;
-  height: ${(props) => props.heightEm}em;
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
   font: ${font};
-  line-height: ${lineHeightEm}em;
+  line-height: ${lineHeight}px;
 `;
 
 const Textarea = styled.textarea`
