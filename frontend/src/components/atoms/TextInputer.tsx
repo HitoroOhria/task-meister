@@ -3,11 +3,11 @@ import {styled} from "@linaria/react";
 import ElementSizeCalculator from "~/util/ElementSizeCalculator";
 import {numberOfLines} from "~/util/StringUtil";
 
-// minimum width. unit is px.
+// minimum width of css. unit is px.
 export const minWidth = 50;
-// line height. unit is px.
+// line height of css. unit is px.
 export const lineHeight = 18;
-// font size. unit is px.
+// font size of css. unit is px.
 const fontSize = 15;
 const fontFamily = "monospace";
 const font = `${fontSize}px ${fontFamily}`;

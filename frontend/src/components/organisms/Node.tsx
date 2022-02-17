@@ -11,6 +11,11 @@ import {numberOfLines} from "~/util/StringUtil";
 // width of textarea from border to text
 // values of below is average of measured values
 const borderWidth = 5;
+// one of vertical margin. unit is px.
+const verticalMargin = 15;
+// one of horizontal margin. unit is px.
+const horizontalMargin = 30;
+// padding of css. unit is px.
 const padding = 20;
 
 type Props = {
@@ -40,9 +45,11 @@ const Node: VFC<Props> = (props) => {
       elementSizeCalculator.measureLongestLineWidth(text) < minWidth
         ? minWidth
         : elementSizeCalculator.measureLongestLineWidth(text);
-    const width = borderWidth * 2 + padding * 2 + textWidth;
+    const width =
+      horizontalMargin * 2 + borderWidth * 2 + padding * 2 + textWidth;
     const textHeight = lineHeight * numberOfLines(text);
-    const height = borderWidth * 2 + padding * 2 + textHeight;
+    const height =
+      verticalMargin * 2 + borderWidth * 2 + padding * 2 + textHeight;
 
     dispatchMindMapData({
       type: actionType.processNodeTextChanges,
@@ -134,6 +141,7 @@ type NodeDivProps = {
 
 const NodeDiv = styled.div<NodeDivProps>`
   display: ${(props) => (props.hidden ? "none" : "block")};
+  margin: ${verticalMargin}px ${horizontalMargin}px;
   padding: ${padding}px;
   border: thick solid ${(props) => props.borderColor};
   border-radius: 10px;
