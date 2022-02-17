@@ -70,12 +70,14 @@ export const rightMapImpl: RightMap = {
   },
 
   processNodeDrop(movedNodeId: string, dropPosition: DropPosition) {
-    // TODO Node cannot move to own children
+    const movedNode = this.children.recursively.findNodeById(movedNodeId);
     const lowerNode =
       this.children.recursively.findNodeByPosition(dropPosition);
-    if (!lowerNode) return;
+    if (!movedNode || !lowerNode) return;
+    // Cannot move self children.
+    if (movedNode.hasNodeById(lowerNode.id)) return;
 
-    const movedNode = this.children.recursively.removeNodeById(movedNodeId);
+    this.children.recursively.removeNodeById(movedNodeId);
     this.insertNode(movedNode, dropPosition, lowerNode);
 
     const newLeft = lowerNode.onTail(dropPosition.left)

@@ -6,9 +6,11 @@ import _ from "lodash";
 const nodeType = "node";
 
 type Node = NodeData & {
-  type: typeof nodeType
+  type: typeof nodeType;
   group: Group;
   children: Children;
+
+  hasNodeById(childId: string): boolean;
 
   updateTop(): void;
 
@@ -42,8 +44,8 @@ export const newAddNode = (left: number): Node => {
     isSelected: true,
     group: newGroup(),
     children: newChildren([]),
-  }
-}
+  };
+};
 
 // Data of node to be placed on MindMap.
 // NodeData consists of a node and children's nodes.
@@ -58,6 +60,10 @@ export const nodeImpl: Node = {
 
   // children nodes of this node
   children: childrenImpl,
+
+  hasNodeById(childId: string): boolean {
+    return !!this.children.recursively.findNodeById(childId);
+  },
 
   // Update node top of self
   updateTop() {
