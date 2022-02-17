@@ -78,23 +78,19 @@ const TextInputer: VFC<Props> = (props) => {
 
   return (
     // TODO Eliminate range selection after double-clicking
-    <TopDiv>
+    <TopDiv widthPx={textareaWidthPx} heightEm={textareaHeightEm}>
       {props.isInputting ? (
         <Textarea
           ref={textareaElement}
           readOnly={!props.isInputting}
           defaultValue={props.text}
-          widthPx={textareaWidthPx}
-          heightEm={textareaHeightEm}
           onChange={(e) => props.setText(e.target.value)}
           onFocus={handleFocus}
           onBlur={props.handleBlur}
         />
       ) : (
         // TODO Why text is out of Node when expanded?
-        <SpanInlineBlock widthPx={textareaWidthPx} heightEm={textareaHeightEm}>
-          {props.text}
-        </SpanInlineBlock>
+        <SpanInlineBlock>{props.text}</SpanInlineBlock>
       )}
     </TopDiv>
   );
@@ -107,20 +103,20 @@ type TextDisplayProps = {
   heightEm: number;
 };
 
-const TopDiv = styled.div`
+const TopDiv = styled.div<TextDisplayProps>`
+  min-width: ${minWidthPx}px;
+  width: ${(props) => props.widthPx}px;
+  height: ${(props) => props.heightEm}em;
   font: ${font};
+  line-height: ${lineHeightEm}em;
 `;
 
-// Not standardize TextDisplayProps
-// Width and Height should be specified directly in text element.
-// TODO Or can inherit?
-const Textarea = styled.textarea<TextDisplayProps>`
-  width: ${(props) => props.widthPx}px;
-  min-width: ${minWidthPx}px;
-  height: ${(props) => props.heightEm}em;
+const Textarea = styled.textarea`
   padding: 0px;
+  min-width: inherit;
+  width: inherit;
+  height: inherit;
   font: inherit;
-  line-height: ${lineHeightEm}em;
   border-width: 0px;
   background-color: gray;
   outline: none;
@@ -128,10 +124,10 @@ const Textarea = styled.textarea<TextDisplayProps>`
   overflow: hidden;
 `;
 
-const SpanInlineBlock = styled.span<TextDisplayProps>`
-  width: ${(props) => props.widthPx}px;
-  min-width: ${minWidthPx}px;
-  height: ${(props) => props.heightEm}em;
+const SpanInlineBlock = styled.span`
+  min-width: inherit;
+  width: inherit;
+  height: inherit;
   font: inherit;
   display: inline-block;
 `;
