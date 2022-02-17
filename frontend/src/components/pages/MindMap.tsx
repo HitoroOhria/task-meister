@@ -5,7 +5,6 @@ import Node from "~/components/organisms/Node";
 import Nodes from "~/components/organisms/Nodes";
 import { MindMapStateCtx } from "~/store/context/MindMapDataCtx";
 import KeydownManager from "~/components/organisms/KeydownManager";
-import { styled } from "@linaria/react";
 
 const MindMap: VFC = () => {
   const mindMapData = useContext(MindMapStateCtx);
@@ -13,8 +12,6 @@ const MindMap: VFC = () => {
   // TODO Why is display smaller on monitor?
   return (
     <>
-      {/*<Textarea>textarea</Textarea>*/}
-      {/*<Span>span</Span>*/}
       <KeydownManager />
       <DroppableArea>
         <Origin>
@@ -28,16 +25,3 @@ const MindMap: VFC = () => {
 };
 
 export default MindMap;
-
-const Span = styled.span`
-  background-color: yellow;
-  display: block;
-  text-align: center;
-`;
-
-const Textarea = styled.textarea`
-  background-color: red;
-  outline: none;
-  resize: none;
-  overflow: hidden;
-`;
