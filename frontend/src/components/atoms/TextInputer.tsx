@@ -3,8 +3,9 @@ import {styled} from "@linaria/react";
 import ElementSizeCalculator from "~/util/ElementSizeCalculator";
 import {numberOfLines} from "~/util/StringUtil";
 
-// CSS
+// minimum width. unit is px.
 export const minWidth = 50;
+// line height. unit is px.
 export const lineHeight = 18;
 // font size. unit is px.
 const fontSize = 15;
@@ -40,8 +41,7 @@ const TextInputer: VFC<Props> = (props) => {
     const textElementWidth = Math.ceil(
       elementSizeCalculator.measureLongestLineWidth(props.text)
     );
-    const textWidth =
-      minWidth < textElementWidth ? textElementWidth : minWidth;
+    const textWidth = minWidth < textElementWidth ? textElementWidth : minWidth;
 
     setTextWidth(textWidth);
   };
@@ -100,7 +100,9 @@ const TextInputer: VFC<Props> = (props) => {
 export default TextInputer;
 
 type TopDivProps = {
+  // unit is px.
   width: number;
+  // unit is px.
   height: number;
 };
 
