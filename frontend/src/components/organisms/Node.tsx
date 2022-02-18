@@ -25,21 +25,10 @@ type Props = {
 const Node: VFC<Props> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
+  const [width, setWidth] = useState<number>(0);
+  const [height, setHeight] = useState<number>(0);
 
-  const handleNodeTextChanges = (text: string) => {
-    if (text.slice(-1) === "\n") {
-      outInputting();
-      return;
-    }
-
-    replaceNodes(text);
-  };
-
-  // TODO Move to useCase and responds Shift + Enter to new line.
-  // Do not use value of element. (ex. innerHeight, offsetHeight)
-  // Because getting process ends before dom rendered. and the value of the previous text is acquired.
-  // So, get previous value
-  const replaceNodes = (text: string) => {
+  const updateWidth = (text: string): number => {
     const textWidth =
       // TODO Set Prettier config
       elementSizeCalculator.measureLongestLineWidth(text) < minWidth
@@ -47,9 +36,27 @@ const Node: VFC<Props> = (props) => {
         : elementSizeCalculator.measureLongestLineWidth(text);
     const width =
       horizontalMargin * 2 + borderWidth * 2 + padding * 2 + textWidth;
+
+    setWidth(width);
+    return width;
+  };
+
+  const updateHeight = (text: string): number => {
     const textHeight = lineHeight * numberOfLines(text);
     const height =
       verticalMargin * 2 + borderWidth * 2 + padding * 2 + textHeight;
+
+    setHeight(height);
+    return height;
+  };
+
+  // TODO Move to useCase and responds Shift + Enter to new line.
+  // Do not use value of element. (ex. innerHeight, offsetHeight)
+  // Because getting process ends before dom rendered. and the value of the previous text is acquired.
+  // So, get previous value
+  const replaceNodes = (text: string) => {
+    const width = updateWidth(text);
+    const height = updateHeight(text);
 
     dispatchMindMapData({
       type: actionType.processNodeTextChanges,
@@ -60,6 +67,15 @@ const Node: VFC<Props> = (props) => {
         height,
       },
     });
+  };
+
+  const handleNodeTextChanges = (text: string) => {
+    if (text.slice(-1) === "\n") {
+      outInputting();
+      return;
+    }
+
+    replaceNodes(text);
   };
 
   const handleClick = () => {
