@@ -5,6 +5,7 @@ import Node from "~/components/organisms/Node";
 import Nodes from "~/components/organisms/Nodes";
 import { MindMapStateCtx } from "~/store/context/MindMapDataCtx";
 import KeydownManager from "~/components/organisms/KeydownManager";
+import SVG from "~/components/organisms/SVG";
 
 const MindMap: VFC = () => {
   const mindMapData = useContext(MindMapStateCtx);
@@ -12,6 +13,10 @@ const MindMap: VFC = () => {
   // TODO Why is display smaller on monitor?
   return (
     <>
+      <SVG
+        rootNode={mindMapData.rootNode}
+        children={mindMapData.rightMap.children}
+      />
       <KeydownManager />
       <DroppableArea>
         <Origin>

@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useRef, VFC} from "react";
+import React, {useContext, useEffect, useRef, useState, VFC} from "react";
 import {styled} from "@linaria/react";
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import DraggableElement from "~/components/organisms/DraggableElement";
@@ -12,13 +12,14 @@ import {numberOfLines} from "~/util/StringUtil";
 // values of below is average of measured values
 const borderWidth = 5;
 // one of vertical margin. unit is px.
-const verticalMargin = 15;
+export const verticalMargin = 15;
 // one of horizontal margin. unit is px.
-const horizontalMargin = 30;
+export const horizontalMargin = 30;
 // padding of css. unit is px.
 const padding = 20;
 
 type Props = {
+  // parentNode: NodeModel.default;
   node: NodeData;
 };
 

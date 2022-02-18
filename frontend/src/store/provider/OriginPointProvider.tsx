@@ -10,7 +10,7 @@ type Props = {
   children?: ReactNode;
 };
 
-const initState = newOriginPoint(0, 0);
+const initState = newOriginPoint(0, 0, 0, 0);
 
 const OriginPointProvider: FC<Props> = (props) => {
   const [originPoint, dispatchOriginPoint] = useReducer(

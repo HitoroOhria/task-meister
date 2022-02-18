@@ -17,9 +17,9 @@ type Props = {
 
 const Origin: FC<Props> = (props) => {
   const originElement = useRef<HTMLDivElement>(null);
+  const dispatchOriginPoint = useContext(OriginPointDispatchCtx);
   const [top, setTop] = useState<number>(window.innerHeight / 2);
   const [left, setLeft] = useState<number>(window.innerWidth / 2);
-  const dispatchOriginPoint = useContext(OriginPointDispatchCtx);
 
   const resetPosition = () => {
     setTop(window.innerHeight / 2);
@@ -30,12 +30,14 @@ const Origin: FC<Props> = (props) => {
     if (originElement.current == null) return;
 
     const rect = originElement.current.getBoundingClientRect();
+    const clientX = window.innerWidth / 2;
+    const clientY = window.innerHeight / 2;
     const pageX = window.scrollX + rect.left;
     const pageY = window.scrollY + rect.top;
 
     dispatchOriginPoint({
       type: actionType.setValue,
-      payload: newOriginPoint(pageX, pageY),
+      payload: newOriginPoint(clientX, clientY, pageX, pageY),
     });
   };
 
