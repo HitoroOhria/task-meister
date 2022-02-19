@@ -184,7 +184,6 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
       child.group.updateHeight(child.isHidden, child.height, child.children)
     );
 
-    // TODO Return 0 when list is empty?
     this.children.height = total(
       this.children.nodes.map((child) => child.group.height)
     );

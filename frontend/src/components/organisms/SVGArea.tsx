@@ -47,7 +47,6 @@ const SVGArea: VFC<Props> = (props) => {
 
   return (
     <svg
-      // TODO Control Scroll Area
       width={svgAreaWidth}
       height={svgAreaHeight}
     >

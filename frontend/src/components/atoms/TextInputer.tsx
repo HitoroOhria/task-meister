@@ -56,7 +56,6 @@ const TextInputer: VFC<Props> = (props) => {
     setTextHeight(textHeight);
   };
 
-  // TODO Refactor around focus and blur.
   const handleIsInputting = () => {
     if (!textareaElement.current) return;
     if (!props.isInputting) return;
@@ -77,7 +76,6 @@ const TextInputer: VFC<Props> = (props) => {
   useEffect(handleIsInputting, [props.isInputting]);
 
   return (
-    // TODO Eliminate range selection after double-clicking
     <TopDiv width={textWidth} height={textHeight}>
       {props.isInputting ? (
         <Textarea
@@ -87,7 +85,6 @@ const TextInputer: VFC<Props> = (props) => {
           onBlur={props.handleBlur}
         />
       ) : (
-        // TODO Why text is out of Node when expanded?
         <SpanInlineBlock>{props.text}</SpanInlineBlock>
       )}
     </TopDiv>

@@ -79,7 +79,7 @@ class ShortcutUseCase {
       return mindMapData;
     }
 
-    // TODO Whey set left? There is top?
+    // TODO Why set only left? There is top?
     const addedNode = newAddNode(selectedNode.left + selectedNode.width);
     selectedNode.children.nodes.push(addedNode);
 

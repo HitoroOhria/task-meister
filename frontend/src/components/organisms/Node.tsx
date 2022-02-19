@@ -43,8 +43,6 @@ const Node: VFC<Props> = (props) => {
     processNodeTextChanges(text);
   };
 
-  // TODO Is this unnecessary?
-  //   - Maybe can implement only selectNode
   const outInputting = () => {
     // When added Node by Enter.
     if (!props.node.isSelected) return;
