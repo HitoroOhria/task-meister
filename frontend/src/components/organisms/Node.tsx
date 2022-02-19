@@ -99,10 +99,6 @@ const Node: VFC<Props> = (props) => {
         isInputting: true,
       },
     });
-    dispatchMindMapData({
-      type: actionType.setGlobalIsInputting,
-      payload: { isInputting: true },
-    });
   };
 
   // TODO Is this unnecessary?
@@ -117,10 +113,6 @@ const Node: VFC<Props> = (props) => {
         id: props.node.id,
         isInputting: false,
       },
-    });
-    dispatchMindMapData({
-      type: actionType.setGlobalIsInputting,
-      payload: { isInputting: false },
     });
   };
 

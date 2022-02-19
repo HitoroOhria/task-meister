@@ -8,6 +8,8 @@ import { total } from "~/util/NumberUtil";
 interface RecursivelyChildren {
   children: Children;
 
+  isInputting(): boolean;
+
   findNodeById(id: string): Node | undefined;
 
   findNodeByPosition(position: DropPosition): Node | undefined;
@@ -45,8 +47,20 @@ export const newRecursivelyChildren = (
 };
 
 export const recursivelyChildrenImpl: RecursivelyChildren = {
-  // TODO Can implement using spread operator?
   children: {} as Children,
+
+  isInputting(): boolean {
+    const isInputtingChild = this.children.nodes.find(
+      (child) => child.isInputting
+    );
+    if (isInputtingChild) {
+      return true;
+    }
+
+    return !!this.children.nodes.find((child) =>
+      child.children.recursively.isInputting()
+    );
+  },
 
   findNodeById(id: string): Node | undefined {
     const child = this.children.nodes.find((child) => child.id === id);

@@ -72,7 +72,6 @@ class ShortcutUseCase {
     selectedNode: RootNode | Node
   ): MindMapData {
     mindMapData.deselectNode();
-    mindMapData.isInputting = true;
 
     if (selectedNode.type === rootNodeType) {
       const addedNode = newAddNode(mindMapData.rootNode.width / 2);
@@ -96,7 +95,6 @@ class ShortcutUseCase {
     }
 
     mindMapData.deselectNode();
-    mindMapData.isInputting = true;
 
     const parentChildren =
       mindMapData.rightMap.children.recursively.findChildrenContainsId(
@@ -156,7 +154,6 @@ class ShortcutUseCase {
     mindMapData: MindMapData,
     selectedNode: RootNode | Node
   ): MindMapData {
-    mindMapData.isInputting = true;
     selectedNode.isInputting = true;
 
     return mindMapData;

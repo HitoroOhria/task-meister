@@ -3,11 +3,11 @@ import RootNode, { rootNodeImpl } from "~/domain/model/RootNode";
 import Node from "~/domain/model/Node";
 
 type MindMapData = {
-  // TODO Control readonly, get, set
-  isInputting: boolean;
   rootNode: RootNode;
   rightMap: RightMap;
   leftMap: RightMap;
+
+  isInputting(): boolean;
 
   isFirstLayerNode(id: string): boolean;
 
@@ -42,10 +42,13 @@ export const newMindMapData = (
 };
 
 export const mindMapDataImpl: MindMapData = {
-  isInputting: false,
   rootNode: rootNodeImpl,
   rightMap: rightMapImpl,
   leftMap: rightMapImpl,
+
+  isInputting(): boolean {
+    return this.rightMap.children.recursively.isInputting();
+  },
 
   isFirstLayerNode(id: string): boolean {
     return !!this.rightMap.children.nodes.find((node) => node.id === id);
@@ -111,7 +114,7 @@ export const mindMapDataImpl: MindMapData = {
   },
 
   updateRelationshipLine() {
-    this.rightMap.children.recursively.updateRelationshipLine(this.rootNode)
+    this.rightMap.children.recursively.updateRelationshipLine(this.rootNode);
   },
 };
 

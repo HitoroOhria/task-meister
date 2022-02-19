@@ -17,7 +17,7 @@ const KeydownManager: VFC = () => {
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
 
   const handleKeydown = (e: KeyboardEvent) => {
-    if (mindMapData.isInputting) return;
+    if (mindMapData.isInputting()) return;
 
     keyCombo.add(e.key);
     const shortcut = keyCombo.getShortcut();

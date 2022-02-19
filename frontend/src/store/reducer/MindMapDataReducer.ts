@@ -8,7 +8,6 @@ import ShortcutUseCase from "~/useCase/ShortcutUseCase";
 import Shortcut from "~/enum/Shortcut";
 
 export const mindMapDataActionType = {
-  setGlobalIsInputting: "MIND_MAP_DATA_SET_GLOBAL_IS_INPUTTING",
   setNodeIsInputting: "MIND_MAP_DATA_SET_NODE_IS_INPUTTING",
   selectNode: "MIND_MAP_DATA_SELECT_NODE",
   processNodeTextChanges: "MIND_MAP_DATA_PROCESS_NODE_TEXT_CHANGES",
@@ -49,8 +48,6 @@ export const mindMapDataReducer = (
 
   // TODO Can rewrite to using Map?
   switch (action.type) {
-    case mindMapDataActionType.setGlobalIsInputting:
-      return setGlobalIsInputting(newState, action.payload.isInputting!);
     case mindMapDataActionType.setNodeIsInputting:
       return mindMapUseCase.setNodeIsInputting(
         newState,
@@ -86,14 +83,6 @@ export const mindMapDataReducer = (
     default:
       throw new Error(`Not defined action type. action = ${action}`);
   }
-};
-
-const setGlobalIsInputting = (
-  mindMapData: MindMapData,
-  isInputting: boolean
-): MindMapData => {
-  mindMapData.isInputting = isInputting;
-  return mindMapData;
 };
 
 export default MindMapDataAction;
