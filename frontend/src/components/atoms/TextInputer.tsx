@@ -31,13 +31,11 @@ const TextInputer: VFC<Props> = (props) => {
   const handleTextChanges = () => {
     // TODO Can refactor to use BoundingClientRect?
     //   - see https://developer.mozilla.org/ja/docs/Web/API/Element/getBoundingClientRect
-    updateTextareaWidth();
-    updateTextareaHeight();
+    updateTextWidth();
+    updateTextHeight();
   };
 
-  const updateTextareaWidth = () => {
-    if (textareaElement.current === null) return;
-
+  const updateTextWidth = () => {
     const textElementWidth = Math.ceil(
       elementSizeCalculator.measureLongestLineWidth(props.text)
     );
@@ -46,13 +44,14 @@ const TextInputer: VFC<Props> = (props) => {
     setTextWidth(textWidth);
   };
 
-  const updateTextareaHeight = () => {
+  const updateTextHeight = () => {
     // TODO Maybe height changes depending on resolution of display
     const textHeight = numberOfLines(props.text) * lineHeight;
+
     setTextHeight(textHeight);
   };
 
-  const handleFocus = () => {
+  const moveCaretToEnd = () => {
     if (!textareaElement.current) return;
 
     textareaElement.current!.selectionStart = props.text.length;
@@ -69,8 +68,8 @@ const TextInputer: VFC<Props> = (props) => {
   };
 
   const componentDidMount = () => {
-    updateTextareaWidth();
-    updateTextareaHeight();
+    updateTextWidth();
+    updateTextHeight();
   };
 
   useEffect(componentDidMount, []);
@@ -83,10 +82,9 @@ const TextInputer: VFC<Props> = (props) => {
       {props.isInputting ? (
         <Textarea
           ref={textareaElement}
-          readOnly={!props.isInputting}
           defaultValue={props.text}
           onChange={(e) => props.setText(e.target.value)}
-          onFocus={handleFocus}
+          onFocus={moveCaretToEnd}
           onBlur={props.handleBlur}
         />
       ) : (
