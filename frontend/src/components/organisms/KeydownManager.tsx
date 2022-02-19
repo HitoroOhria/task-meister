@@ -8,7 +8,7 @@ import {
 
 import KeyCombo from "~/domain/model/KeyCombo";
 
-import { shortcuts } from "~/enum/Shortcut";
+import { isMovingScreen } from "~/enum/Shortcut";
 
 const keyCombo = new KeyCombo();
 
@@ -23,8 +23,7 @@ const KeydownManager: VFC = () => {
     const shortcut = keyCombo.getShortcut();
     if (!shortcut) return;
 
-    if (shortcut === shortcuts.Space) {
-      // Prevent scrolling with space.
+    if (isMovingScreen(shortcut)) {
       e.preventDefault();
     }
 
