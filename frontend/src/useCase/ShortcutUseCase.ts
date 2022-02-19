@@ -147,6 +147,8 @@ class ShortcutUseCase {
       nextSelectedNode,
       nextSelectedNode.height
     );
+    mindMapData.updateRelationshipLine();
+
     return mindMapData;
   }
 

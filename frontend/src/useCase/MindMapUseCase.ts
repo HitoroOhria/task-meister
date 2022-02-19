@@ -105,6 +105,8 @@ class MindMapUseCase {
     }
 
     mindMapData.rightMap.processNodeDrop(movedNodeId, dropPosition);
+    mindMapData.updateRelationshipLine();
+
     return mindMapData;
   }
 }
