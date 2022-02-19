@@ -9,6 +9,8 @@ import { OriginPointStateCtx } from "~/store/context/OriginPointCtx";
 
 import KeyCombo from "~/domain/model/KeyCombo";
 
+import { shortcuts } from "~/enum/Shortcut";
+
 const keyCombo = new KeyCombo();
 
 const KeydownManager: VFC = () => {
@@ -22,6 +24,11 @@ const KeydownManager: VFC = () => {
     keyCombo.add(e.key);
     const shortcut = keyCombo.getShortcut();
     if (!shortcut) return;
+
+    if (shortcut === shortcuts.Space) {
+      // Prevent scrolling with space.
+      e.preventDefault()
+    }
 
     dispatchMindMapData({
       type: actionType.processKeydown,
