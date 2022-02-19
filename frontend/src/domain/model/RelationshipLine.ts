@@ -1,5 +1,5 @@
-import { pathLineRatio } from "~/components/organisms/SVGArea";
 import { horizontalMargin } from "~/components/organisms/Node";
+import { pathLineRatio } from "~/components/atoms/RelationshipPath";
 
 import NodeData from "~/domain/model/NodeData";
 import PathLine, { newPathLine, pathLineImpl } from "~/domain/model/PathLine";

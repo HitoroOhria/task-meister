@@ -19,7 +19,6 @@ const MindMap: VFC = () => {
       <SVGArea children={mindMapData.rightMap.children} />
       <DroppableArea>
         <Origin>
-          {/* TODO Make tail of root node to draggable */}
           <Node node={mindMapData.rootNode} />
           <Nodes nodes={mindMapData.rightMap.children} />
         </Origin>
