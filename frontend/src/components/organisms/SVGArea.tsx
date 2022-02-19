@@ -7,8 +7,8 @@ import { OriginPointStateCtx } from "~/store/context/OriginPointCtx";
 import Node from "~/domain/model/Node";
 import Children from "~/domain/model/Children";
 
-const svgAreaWidth = 1000;
-const svgAreaHeight = 1000;
+export const svgAreaWidth = 100 ** 3;
+export const svgAreaHeight = 100 ** 3;
 
 // ratio of path to line end.
 export const pathLineRatio = 0.2;

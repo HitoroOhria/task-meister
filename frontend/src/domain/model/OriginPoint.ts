@@ -1,29 +1,29 @@
 // OriginPoint is data of Origin.
 type OriginPoint = {
-  clientX: number;
-  clientY: number;
+  svgX: number;
+  svgY: number;
   pageX: number;
   pageY: number;
 };
 
 export const newOriginPoint = (
-  clientX: number,
-  clientY: number,
+  svgX: number,
+  svgY: number,
   pageX: number,
   pageY: number
 ): OriginPoint => {
   return {
     ...originPointImpl,
-    clientX: clientX,
-    clientY: clientY,
+    svgX: svgX,
+    svgY: svgY,
     pageX: pageX,
     pageY: pageY,
   };
 };
 
 const originPointImpl: OriginPoint = {
-  clientX: 0,
-  clientY: 0,
+  svgX: 0,
+  svgY: 0,
   pageX: 0,
   pageY: 0,
 };

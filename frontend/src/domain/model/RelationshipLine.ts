@@ -43,15 +43,15 @@ export const relationshipLineImpl: RelationshipLine = {
   },
 
   updatePoints(originPoint: OriginPoint, parentNode: NodeData, node: NodeData) {
-    const lineStartPointX = parentNode.getElementEndSVGX(originPoint.clientX);
+    const lineStartPointX = parentNode.getElementEndSVGX(originPoint.svgX);
     const lineEndPointX =
       lineStartPointX + horizontalMargin * 2 * pathLineRatio;
-    const lineY = parentNode.getElementCenterSVGY(originPoint.clientY);
+    const lineY = parentNode.getElementCenterSVGY(originPoint.svgY);
 
     const controlPointX =
       lineEndPointX + (horizontalMargin * 2 * (1 - pathLineRatio)) / 2;
     const endPointX = lineStartPointX + horizontalMargin * 2;
-    const endPointY = node.getElementCenterSVGY(originPoint.clientY);
+    const endPointY = node.getElementCenterSVGY(originPoint.svgY);
 
     this.pathLine.setPoints(lineStartPointX, lineEndPointX, lineY);
     this.bezierCurve.setPoints(controlPointX, lineY, endPointX, endPointY);
