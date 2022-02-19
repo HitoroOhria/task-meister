@@ -1,14 +1,18 @@
-import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
-import Group, { groupImpl, newGroup } from "~/domain/model/Group";
-import Children, { childrenImpl, newChildren } from "~/domain/model/Children";
 import _ from "lodash";
 
+import NodeData, {nodeDataImpl} from "~/domain/model/NodeData";
+import Group, {groupImpl, newGroup} from "~/domain/model/Group";
+import Children, {childrenImpl, newChildren} from "~/domain/model/Children";
+import RelationshipLine, {newRelationshipLine, relationshipLineImpl,} from "~/domain/model/RelationshipLine";
+
+// type to distinguish from RootNode.
 const nodeType = "node";
 
 type Node = NodeData & {
   type: typeof nodeType;
   group: Group;
   children: Children;
+  relationshipLine: RelationshipLine;
 
   hasNodeById(childId: string): boolean;
 
@@ -31,6 +35,7 @@ export const newNode = (
     text: text,
     group: group,
     children: children,
+    relationshipLine: newRelationshipLine(),
   };
 };
 
@@ -44,6 +49,7 @@ export const newAddNode = (left: number): Node => {
     isSelected: true,
     group: newGroup(),
     children: newChildren([]),
+    relationshipLine: newRelationshipLine(),
   };
 };
 
@@ -60,6 +66,8 @@ export const nodeImpl: Node = {
 
   // children nodes of this node
   children: childrenImpl,
+
+  relationshipLine: relationshipLineImpl,
 
   hasNodeById(childId: string): boolean {
     return !!this.children.recursively.findNodeById(childId);

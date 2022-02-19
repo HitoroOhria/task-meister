@@ -1,6 +1,9 @@
+import NodeData from "~/domain/model/NodeData";
 import Node from "~/domain/model/Node";
 import Children from "~/domain/model/Children";
 import DropPosition from "~/domain/model/DropPosition";
+import OriginPoint from "~/domain/model/OriginPoint";
+
 import { total } from "~/util/NumberUtil";
 
 interface RecursivelyChildren {
@@ -29,6 +32,8 @@ interface RecursivelyChildren {
   toggleHidden(): void;
 
   deselectNode(): void;
+
+  updateRelationshipLine(originPoint: OriginPoint, parentNode: NodeData): void;
 }
 
 export const newRecursivelyChildren = (
@@ -184,6 +189,15 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     if (!selectedNode) return;
 
     selectedNode.isSelected = false;
+  },
+
+  updateRelationshipLine(originPoint: OriginPoint, parentNode: NodeData) {
+    this.children.nodes.forEach((child) =>
+      child.relationshipLine.updatePoints(originPoint, parentNode, child)
+    );
+    this.children.nodes.forEach((child) =>
+      child.children.recursively.updateRelationshipLine(originPoint, child)
+    );
   },
 };
 

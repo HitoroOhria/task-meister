@@ -1,5 +1,6 @@
-import NodeData, { nodeDataImpl } from "~/domain/model/NodeData";
+import NodeData, {nodeDataImpl} from "~/domain/model/NodeData";
 
+// type to distinguish from Node.
 export const rootNodeType = "rootNode";
 
 type RootNode = NodeData & {

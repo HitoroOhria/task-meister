@@ -1,7 +1,7 @@
-import RootNode, { rootNodeImpl } from "~/domain/model/RootNode";
 import RightMap, { rightMapImpl } from "~/domain/model/RightMap";
-import NodeData from "~/domain/model/NodeData";
+import RootNode, { rootNodeImpl } from "~/domain/model/RootNode";
 import Node from "~/domain/model/Node";
+import OriginPoint from "~/domain/model/OriginPoint";
 
 type MindMapData = {
   // TODO Control readonly, get, set
@@ -12,7 +12,7 @@ type MindMapData = {
 
   isFirstLayerNode(id: string): boolean;
 
-  findNodeById(id: string): NodeData | undefined;
+  findNodeById(id: string): RootNode | Node | undefined;
 
   findNodeIsSelected(): RootNode | Node | undefined;
 
@@ -25,6 +25,8 @@ type MindMapData = {
   updateRootNodePlacement(width: number, height: number): void;
 
   processNodeDropToRight(movedNodeId: string): void;
+
+  updateRelationshipLine(originPoint: OriginPoint): void;
 };
 
 export const newMindMapData = (
@@ -50,7 +52,7 @@ export const mindMapDataImpl: MindMapData = {
     return !!this.rightMap.children.nodes.find((node) => node.id === id);
   },
 
-  findNodeById(id: string): NodeData | undefined {
+  findNodeById(id: string): RootNode | Node | undefined {
     if (this.rootNode.id === id) {
       return this.rootNode;
     }
@@ -107,6 +109,10 @@ export const mindMapDataImpl: MindMapData = {
     const newLeft = this.rootNode.width / 2;
     this.rightMap.updateNodesLateral(movedNode, movedNode.width, newLeft);
     this.rightMap.updateNodesVertical(movedNode, movedNode.height);
+  },
+
+  updateRelationshipLine(originPoint: OriginPoint) {
+    this.rightMap.children.recursively.updateRelationshipLine(originPoint, this.rootNode)
   },
 };
 

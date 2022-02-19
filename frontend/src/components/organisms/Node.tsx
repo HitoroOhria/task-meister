@@ -1,10 +1,14 @@
 import React, {useContext, useEffect, useRef, useState, VFC} from "react";
 import {styled} from "@linaria/react";
+
+import {mindMapDataActionType as actionType} from "~/store/reducer/MindMapDataReducer";
+import {MindMapDispatchCtx} from "~/store/context/MindMapDataCtx";
+import {OriginPointStateCtx} from "~/store/context/OriginPointCtx";
+
 import PositionAdjuster from "~/components/atoms/PositionAdjuster";
 import DraggableElement from "~/components/organisms/DraggableElement";
 import TextInputer, {elementSizeCalculator, lineHeight, minWidth,} from "~/components/atoms/TextInputer";
-import {mindMapDataActionType as actionType} from "~/store/reducer/MindMapDataReducer";
-import {MindMapDispatchCtx} from "~/store/context/MindMapDataCtx";
+
 import NodeData from "~/domain/model/NodeData";
 import {numberOfLines} from "~/util/StringUtil";
 
@@ -25,6 +29,7 @@ type Props = {
 
 const Node: VFC<Props> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
+  const originPoint = useContext(OriginPointStateCtx);
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
   const [width, setWidth] = useState<number>(0);
   const [height, setHeight] = useState<number>(0);
@@ -66,6 +71,7 @@ const Node: VFC<Props> = (props) => {
         text,
         width,
         height,
+        originPoint,
       },
     });
   };

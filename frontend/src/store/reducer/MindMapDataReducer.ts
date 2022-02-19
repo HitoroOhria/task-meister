@@ -1,9 +1,12 @@
 import MindMapData from "~/domain/model/MindMapData";
 import DropPosition from "~/domain/model/DropPosition";
-import Shortcut from "~/enum/Shortcut";
+import OriginPoint from "~/domain/model/OriginPoint";
+
 import MindMapUseCase from "~/useCase/MindMapUseCase";
 import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
 import ShortcutUseCase from "~/useCase/ShortcutUseCase";
+
+import Shortcut from "~/enum/Shortcut";
 
 export const mindMapDataActionType = {
   setGlobalIsInputting: "MIND_MAP_DATA_SET_GLOBAL_IS_INPUTTING",
@@ -11,6 +14,8 @@ export const mindMapDataActionType = {
   selectNode: "MIND_MAP_DATA_SELECT_NODE",
   processNodeTextChanges: "MIND_MAP_DATA_PROCESS_NODE_TEXT_CHANGES",
   processNodeDrop: "MIND_MAP_DATA_PROCESS_NODE_DROP",
+  updateRelationshipLine: "MIND_MAP_DATA_UPDATE_RELATIONSHIP_LINE",
+  updateAllRelationshipLine: "MIND_MAP_DATA_UPDATE_ALL_RELATIONSHIP_LINE",
   processKeydown: "MIND_MAP_DATA_PROCESS_KEYDOWN",
 } as const;
 
@@ -26,6 +31,7 @@ type MindMapDataPayload = Partial<{
   isInputting: boolean;
   dropPosition: DropPosition;
   shortcut: Shortcut;
+  originPoint: OriginPoint;
 }>;
 
 export type MindMapDataAction = {
@@ -61,7 +67,8 @@ export const mindMapDataReducer = (
         action.payload.id!,
         action.payload.text!,
         action.payload.width!,
-        action.payload.height!
+        action.payload.height!,
+        action.payload.originPoint!
       );
     case mindMapDataActionType.processNodeDrop:
       return mindMapUseCase.processNodeDrop(
@@ -69,8 +76,24 @@ export const mindMapDataReducer = (
         action.payload.id!,
         action.payload.dropPosition!
       );
+    case mindMapDataActionType.updateRelationshipLine:
+      return mindMapUseCase.updateRelationshipLine(
+        newState,
+        action.payload.id!,
+        action.payload.text!,
+        action.payload.originPoint!
+      );
+    case mindMapDataActionType.updateAllRelationshipLine:
+      return mindMapUseCase.updateAllRelationshipLine(
+        newState,
+        action.payload.originPoint!
+      );
     case mindMapDataActionType.processKeydown:
-      return shortcutUseCase.handleKeydown(newState, action.payload.shortcut!);
+      return shortcutUseCase.handleKeydown(
+        newState,
+        action.payload.shortcut!,
+        action.payload.originPoint!
+      );
     default:
       throw new Error(`Not defined action type. action = ${action}`);
   }

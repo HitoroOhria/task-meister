@@ -1,13 +1,17 @@
-import Shortcut, { shortcuts } from "~/enum/Shortcut";
-import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
 import MindMapData from "~/domain/model/MindMapData";
+import RootNode, { rootNodeType } from "~/domain/model/RootNode";
 import Node, { newAddNode } from "~/domain/model/Node";
+import OriginPoint from "~/domain/model/OriginPoint";
+
+import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
+
+import Shortcut, { shortcuts } from "~/enum/Shortcut";
+
 import {
   assertNever,
   newNotFoundChildrenErr,
   newNotFoundNodeErr,
 } from "~/util/ExceptionUtil";
-import RootNode, { rootNodeType } from "~/domain/model/RootNode";
 
 class ShortcutUseCase {
   private arrowKeyUseCase: ArrowKeyUseCase;
@@ -16,7 +20,11 @@ class ShortcutUseCase {
     this.arrowKeyUseCase = arrowKeyUseCase;
   }
 
-  public handleKeydown(mindMapData: MindMapData, key: Shortcut): MindMapData {
+  public handleKeydown(
+    mindMapData: MindMapData,
+    key: Shortcut,
+    originPoint: OriginPoint
+  ): MindMapData {
     const selectedNode = mindMapData.findNodeIsSelected();
     if (!selectedNode) {
       return mindMapData;
@@ -33,7 +41,7 @@ class ShortcutUseCase {
           selectedNode
         );
       case shortcuts.Space:
-        return this.toggleCollapse(mindMapData, selectedNode);
+        return this.toggleCollapse(mindMapData, selectedNode, originPoint);
       case shortcuts.Tab:
         return this.addNodeToTail(mindMapData, selectedNode);
       case shortcuts.Enter:
@@ -53,13 +61,15 @@ class ShortcutUseCase {
 
   public toggleCollapse(
     mindMapData: MindMapData,
-    selectedNode: RootNode | Node
+    selectedNode: RootNode | Node,
+    originPoint: OriginPoint
   ): MindMapData {
     if (mindMapData.rootNode.isSelected) {
       return mindMapData;
     }
 
     mindMapData.rightMap.collapseNodes(selectedNode.id);
+    mindMapData.updateRelationshipLine(originPoint);
     return mindMapData;
   }
 

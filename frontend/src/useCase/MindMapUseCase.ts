@@ -1,5 +1,6 @@
 import MindMapData from "~/domain/model/MindMapData";
 import DropPosition from "~/domain/model/DropPosition";
+import OriginPoint from "~/domain/model/OriginPoint";
 
 class MindMapUseCase {
   public setNodeIsInputting(
@@ -38,10 +39,19 @@ class MindMapUseCase {
     id: string,
     text: string,
     width: number,
-    height: number
+    height: number,
+    originPoint: OriginPoint
   ): MindMapData {
-    const newMindMapData = this.setNodeText(mindMapData, id, text);
-    return this.updatePlacement(newMindMapData, id, width, height);
+    let newMindMapData = this.setNodeText(mindMapData, id, text);
+    newMindMapData = this.updatePlacement(newMindMapData, id, width, height);
+    newMindMapData = this.updateRelationshipLine(
+      newMindMapData,
+      id,
+      text,
+      originPoint
+    );
+
+    return newMindMapData;
   }
 
   private setNodeText(
@@ -70,6 +80,28 @@ class MindMapUseCase {
     }
 
     mindMapData.rightMap.updatePlacement(id, width, height);
+    return mindMapData;
+  }
+
+  public updateRelationshipLine(
+    mindMapData: MindMapData,
+    id: string,
+    text: string,
+    originPoint: OriginPoint
+  ): MindMapData {
+    // TODO Optimize in following cases
+    //   - change text
+    //   - new line
+    //   - add node
+    mindMapData.updateRelationshipLine(originPoint);
+    return mindMapData;
+  }
+
+  public updateAllRelationshipLine(
+    mindMapData: MindMapData,
+    originPoint: OriginPoint
+  ): MindMapData {
+    mindMapData.updateRelationshipLine(originPoint);
     return mindMapData;
   }
 

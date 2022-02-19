@@ -1,9 +1,12 @@
 import React, { useContext, useEffect, VFC } from "react";
+
 import { mindMapDataActionType as actionType } from "~/store/reducer/MindMapDataReducer";
 import {
   MindMapDispatchCtx,
   MindMapStateCtx,
 } from "~/store/context/MindMapDataCtx";
+import { OriginPointStateCtx } from "~/store/context/OriginPointCtx";
+
 import KeyCombo from "~/domain/model/KeyCombo";
 
 const keyCombo = new KeyCombo();
@@ -11,6 +14,7 @@ const keyCombo = new KeyCombo();
 const KeydownManager: VFC = () => {
   const mindMapData = useContext(MindMapStateCtx);
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
+  const originPoint = useContext(OriginPointStateCtx);
 
   const handleKeydown = (e: KeyboardEvent) => {
     if (mindMapData.isInputting) return;
@@ -21,7 +25,7 @@ const KeydownManager: VFC = () => {
 
     dispatchMindMapData({
       type: actionType.processKeydown,
-      payload: { shortcut },
+      payload: { shortcut, originPoint },
     });
   };
 

@@ -1,3 +1,5 @@
+import {horizontalMargin} from "~/components/organisms/Node";
+
 import DropPosition from "~/domain/model/DropPosition";
 
 // Ratio of width representing tail area of node.
@@ -13,6 +15,12 @@ type NodeData = {
   isHidden: boolean;
   isSelected: boolean;
   isInputting: boolean;
+
+  getElementWidth(): number;
+
+  getElementEndSVGX(originSVGX: number): number;
+
+  getElementCenterSVGY(originSGVY: number): number;
 
   onArea(position: DropPosition): boolean;
 
@@ -49,6 +57,18 @@ export const nodeDataImpl: NodeData = {
   isSelected: false,
 
   isInputting: false,
+
+  getElementWidth(): number {
+    return this.width - horizontalMargin * 2;
+  },
+
+  getElementEndSVGX(originSVGX: number): number {
+    return originSVGX + this.left + horizontalMargin + this.getElementWidth();
+  },
+
+  getElementCenterSVGY(originSGVY: number): number {
+    return originSGVY + this.top + this.height / 2;
+  },
 
   onArea(position: DropPosition): boolean {
     return this.inXRange(position.left) && this.inYRange(position.top);

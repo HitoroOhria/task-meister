@@ -6,10 +6,13 @@ import React, {
   useRef,
   useState,
 } from "react";
-import PositionAdjuster from "~/components/atoms/PositionAdjuster";
-import { newOriginPoint } from "~/domain/model/OriginPoint";
+
 import { OriginPointDispatchCtx } from "~/store/context/OriginPointCtx";
 import { originPointActionType as actionType } from "~/store/reducer/OriginPointReducer";
+
+import PositionAdjuster from "~/components/atoms/PositionAdjuster";
+
+import { newOriginPoint } from "~/domain/model/OriginPoint";
 
 type Props = {
   children?: ReactNode;
@@ -41,14 +44,14 @@ const Origin: FC<Props> = (props) => {
     });
   };
 
-  const handleOnResize = () => {
+  const handleResize = () => {
     resetPosition();
     updateOriginPoint();
   };
 
   const componentDidMount = () => {
     updateOriginPoint();
-    window.onresize = handleOnResize;
+    window.onresize = handleResize;
   };
 
   useEffect(componentDidMount, []);
