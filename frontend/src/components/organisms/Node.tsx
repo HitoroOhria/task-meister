@@ -30,27 +30,39 @@ const Node: VFC<Props> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null);
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
 
-  const getWidth = (text: string): number => {
-    const textWidth =
-      // TODO Set Prettier config
-      elementSizeCalculator.measureLongestLineWidth(text) < minWidth
-        ? minWidth
-        : elementSizeCalculator.measureLongestLineWidth(text);
-
-    return horizontalMargin * 2 + borderWidth * 2 + padding * 2 + textWidth;
+  const componentDidMount = () => {
+    processNodeTextChanges(props.node.text);
   };
 
-  const getHeight = (text: string): number => {
-    const textHeight = lineHeight * numberOfLines(text);
+  const handleNodeTextChanges = (text: string) => {
+    if (text.slice(-1) === "\n") {
+      outInputting();
+      return;
+    }
 
-    return verticalMargin * 2 + borderWidth * 2 + padding * 2 + textHeight;
+    processNodeTextChanges(text);
+  };
+
+  // TODO Is this unnecessary?
+  //   - Maybe can implement only selectNode
+  const outInputting = () => {
+    // When added Node by Enter.
+    if (!props.node.isSelected) return;
+
+    dispatchMindMapData({
+      type: actionType.setNodeIsInputting,
+      payload: {
+        id: props.node.id,
+        isInputting: false,
+      },
+    });
   };
 
   // TODO Move to useCase and responds Shift + Enter to new line.
-  // Do not use value of element. (ex. innerHeight, offsetHeight)
+  // Do not use value of element to width and height. (ex. innerHeight, offsetHeight)
   // Because getting process ends before dom rendered. and the value of the previous text is acquired.
   // So, get previous value
-  const replaceNodes = (text: string) => {
+  const processNodeTextChanges = (text: string) => {
     const width = getWidth(text);
     const height = getHeight(text);
 
@@ -65,13 +77,20 @@ const Node: VFC<Props> = (props) => {
     });
   };
 
-  const handleNodeTextChanges = (text: string) => {
-    if (text.slice(-1) === "\n") {
-      outInputting();
-      return;
-    }
+  const getWidth = (text: string): number => {
+    const textWidth =
+      // TODO Set Prettier config
+      elementSizeCalculator.measureLongestLineWidth(text) < minWidth
+        ? minWidth
+        : elementSizeCalculator.measureLongestLineWidth(text);
 
-    replaceNodes(text);
+    return horizontalMargin * 2 + borderWidth * 2 + padding * 2 + textWidth;
+  };
+
+  const getHeight = (text: string): number => {
+    const textHeight = lineHeight * numberOfLines(text);
+
+    return verticalMargin * 2 + borderWidth * 2 + padding * 2 + textHeight;
   };
 
   const handleClick = () => {
@@ -91,25 +110,6 @@ const Node: VFC<Props> = (props) => {
         isInputting: true,
       },
     });
-  };
-
-  // TODO Is this unnecessary?
-  //   - Maybe can implement only selectNode
-  const outInputting = () => {
-    // When added Node by Enter.
-    if (!props.node.isSelected) return;
-
-    dispatchMindMapData({
-      type: actionType.setNodeIsInputting,
-      payload: {
-        id: props.node.id,
-        isInputting: false,
-      },
-    });
-  };
-
-  const componentDidMount = () => {
-    replaceNodes(props.node.text);
   };
 
   useEffect(componentDidMount, []);

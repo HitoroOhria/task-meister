@@ -28,7 +28,12 @@ const TextInputer: VFC<Props> = (props) => {
   const [textWidth, setTextWidth] = useState<number>(0);
   const [textHeight, setTextHeight] = useState<number>(0);
 
-  const handleTextChanges = () => {
+  const componentDidMount = () => {
+    updateTextWidth();
+    updateTextHeight();
+  };
+
+  const updateAreaSize = () => {
     // TODO Can refactor to use BoundingClientRect?
     //   - see https://developer.mozilla.org/ja/docs/Web/API/Element/getBoundingClientRect
     updateTextWidth();
@@ -51,30 +56,25 @@ const TextInputer: VFC<Props> = (props) => {
     setTextHeight(textHeight);
   };
 
+  // TODO Refactor around focus and blur.
+  const handleIsInputting = () => {
+    if (!textareaElement.current) return;
+    if (!props.isInputting) return;
+
+    textareaElement.current.focus();
+    moveCaretToEnd();
+  };
+
   const moveCaretToEnd = () => {
     if (!textareaElement.current) return;
 
-    textareaElement.current!.selectionStart = props.text.length;
-    textareaElement.current!.selectionEnd = props.text.length;
-  };
-
-  // TODO Refactor around focus and blur.
-  const isInputtingEffect = () => {
-    if (!textareaElement.current) return;
-
-    props.isInputting
-      ? textareaElement.current.focus()
-      : textareaElement.current.blur();
-  };
-
-  const componentDidMount = () => {
-    updateTextWidth();
-    updateTextHeight();
+    textareaElement.current.selectionStart = props.text.length;
+    textareaElement.current.selectionEnd = props.text.length;
   };
 
   useEffect(componentDidMount, []);
-  useEffect(handleTextChanges, [props.text]);
-  useEffect(isInputtingEffect, [props.isInputting]);
+  useEffect(updateAreaSize, [props.text]);
+  useEffect(handleIsInputting, [props.isInputting]);
 
   return (
     // TODO Eliminate range selection after double-clicking
@@ -84,7 +84,6 @@ const TextInputer: VFC<Props> = (props) => {
           ref={textareaElement}
           defaultValue={props.text}
           onChange={(e) => props.setText(e.target.value)}
-          onFocus={moveCaretToEnd}
           onBlur={props.handleBlur}
         />
       ) : (
