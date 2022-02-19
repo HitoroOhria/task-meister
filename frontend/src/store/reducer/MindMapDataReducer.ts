@@ -1,6 +1,5 @@
 import MindMapData from "~/domain/model/MindMapData";
 import DropPosition from "~/domain/model/DropPosition";
-import OriginPoint from "~/domain/model/OriginPoint";
 
 import MindMapUseCase from "~/useCase/MindMapUseCase";
 import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
@@ -31,7 +30,6 @@ type MindMapDataPayload = Partial<{
   isInputting: boolean;
   dropPosition: DropPosition;
   shortcut: Shortcut;
-  originPoint: OriginPoint;
 }>;
 
 export type MindMapDataAction = {
@@ -67,8 +65,7 @@ export const mindMapDataReducer = (
         action.payload.id!,
         action.payload.text!,
         action.payload.width!,
-        action.payload.height!,
-        action.payload.originPoint!
+        action.payload.height!
       );
     case mindMapDataActionType.processNodeDrop:
       return mindMapUseCase.processNodeDrop(
@@ -80,20 +77,12 @@ export const mindMapDataReducer = (
       return mindMapUseCase.updateRelationshipLine(
         newState,
         action.payload.id!,
-        action.payload.text!,
-        action.payload.originPoint!
+        action.payload.text!
       );
     case mindMapDataActionType.updateAllRelationshipLine:
-      return mindMapUseCase.updateAllRelationshipLine(
-        newState,
-        action.payload.originPoint!
-      );
+      return mindMapUseCase.updateAllRelationshipLine(newState);
     case mindMapDataActionType.processKeydown:
-      return shortcutUseCase.handleKeydown(
-        newState,
-        action.payload.shortcut!,
-        action.payload.originPoint!
-      );
+      return shortcutUseCase.handleKeydown(newState, action.payload.shortcut!);
     default:
       throw new Error(`Not defined action type. action = ${action}`);
   }

@@ -1,5 +1,6 @@
 import {DragEvent} from "react";
-import OriginPoint from "~/domain/model/OriginPoint";
+
+import {originX, originY} from "~/components/organisms/Origin";
 
 // DropPosition is position where Node fell.
 type DropPosition = {
@@ -10,13 +11,12 @@ type DropPosition = {
 };
 
 export const newDropPosition = (
-  event: DragEvent<HTMLDivElement>,
-  originPoint: OriginPoint
+  event: DragEvent<HTMLDivElement>
 ): DropPosition => {
   return {
     ...dropPositionImpl,
-    top: event.pageY - originPoint.pageY,
-    left: event.pageX - originPoint.pageX,
+    top: event.pageY - originY,
+    left: event.pageX - originX,
   };
 };
 

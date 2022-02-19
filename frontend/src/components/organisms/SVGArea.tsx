@@ -2,7 +2,6 @@ import React, { useContext, useEffect, VFC } from "react";
 
 import { MindMapDispatchCtx } from "~/store/context/MindMapDataCtx";
 import { mindMapDataActionType as actionType } from "~/store/reducer/MindMapDataReducer";
-import { OriginPointStateCtx } from "~/store/context/OriginPointCtx";
 
 import Node from "~/domain/model/Node";
 import Children from "~/domain/model/Children";
@@ -20,7 +19,6 @@ type Props = {
 };
 
 const SVGArea: VFC<Props> = (props) => {
-  const originPoint = useContext(OriginPointStateCtx);
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
 
   // TODO Cut out to RelationshipLine
@@ -48,11 +46,11 @@ const SVGArea: VFC<Props> = (props) => {
   const updateRelationshipLine = () => {
     dispatchMindMapData({
       type: actionType.updateAllRelationshipLine,
-      payload: { originPoint },
+      payload: {},
     });
   };
 
-  useEffect(updateRelationshipLine, [originPoint]);
+  useEffect(updateRelationshipLine, []);
 
   return (
     <svg

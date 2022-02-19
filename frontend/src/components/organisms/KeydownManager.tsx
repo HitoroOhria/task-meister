@@ -5,7 +5,6 @@ import {
   MindMapDispatchCtx,
   MindMapStateCtx,
 } from "~/store/context/MindMapDataCtx";
-import { OriginPointStateCtx } from "~/store/context/OriginPointCtx";
 
 import KeyCombo from "~/domain/model/KeyCombo";
 
@@ -16,7 +15,6 @@ const keyCombo = new KeyCombo();
 const KeydownManager: VFC = () => {
   const mindMapData = useContext(MindMapStateCtx);
   const dispatchMindMapData = useContext(MindMapDispatchCtx);
-  const originPoint = useContext(OriginPointStateCtx);
 
   const handleKeydown = (e: KeyboardEvent) => {
     if (mindMapData.isInputting) return;
@@ -27,12 +25,12 @@ const KeydownManager: VFC = () => {
 
     if (shortcut === shortcuts.Space) {
       // Prevent scrolling with space.
-      e.preventDefault()
+      e.preventDefault();
     }
 
     dispatchMindMapData({
       type: actionType.processKeydown,
-      payload: { shortcut, originPoint },
+      payload: { shortcut },
     });
   };
 

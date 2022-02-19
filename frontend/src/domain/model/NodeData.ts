@@ -1,4 +1,5 @@
 import {horizontalMargin} from "~/components/organisms/Node";
+import {originX, originY} from "~/components/organisms/Origin";
 
 import DropPosition from "~/domain/model/DropPosition";
 
@@ -18,9 +19,9 @@ type NodeData = {
 
   getElementWidth(): number;
 
-  getElementEndSVGX(originSVGX: number): number;
+  getElementEndX(): number;
 
-  getElementCenterSVGY(originSGVY: number): number;
+  getElementCenterY(): number;
 
   onArea(position: DropPosition): boolean;
 
@@ -62,12 +63,12 @@ export const nodeDataImpl: NodeData = {
     return this.width - horizontalMargin * 2;
   },
 
-  getElementEndSVGX(originSVGX: number): number {
-    return originSVGX + this.left + horizontalMargin + this.getElementWidth();
+  getElementEndX(): number {
+    return originX + this.left + horizontalMargin + this.getElementWidth();
   },
 
-  getElementCenterSVGY(originSGVY: number): number {
-    return originSGVY + this.top + this.height / 2;
+  getElementCenterY(): number {
+    return originY + this.top + this.height / 2;
   },
 
   onArea(position: DropPosition): boolean {

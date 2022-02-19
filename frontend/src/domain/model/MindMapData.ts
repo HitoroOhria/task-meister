@@ -1,7 +1,6 @@
 import RightMap, { rightMapImpl } from "~/domain/model/RightMap";
 import RootNode, { rootNodeImpl } from "~/domain/model/RootNode";
 import Node from "~/domain/model/Node";
-import OriginPoint from "~/domain/model/OriginPoint";
 
 type MindMapData = {
   // TODO Control readonly, get, set
@@ -26,7 +25,7 @@ type MindMapData = {
 
   processNodeDropToRight(movedNodeId: string): void;
 
-  updateRelationshipLine(originPoint: OriginPoint): void;
+  updateRelationshipLine(): void;
 };
 
 export const newMindMapData = (
@@ -111,8 +110,8 @@ export const mindMapDataImpl: MindMapData = {
     this.rightMap.updateNodesVertical(movedNode, movedNode.height);
   },
 
-  updateRelationshipLine(originPoint: OriginPoint) {
-    this.rightMap.children.recursively.updateRelationshipLine(originPoint, this.rootNode)
+  updateRelationshipLine() {
+    this.rightMap.children.recursively.updateRelationshipLine(this.rootNode)
   },
 };
 

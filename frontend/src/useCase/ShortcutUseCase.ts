@@ -1,7 +1,6 @@
 import MindMapData from "~/domain/model/MindMapData";
 import RootNode, { rootNodeType } from "~/domain/model/RootNode";
 import Node, { newAddNode } from "~/domain/model/Node";
-import OriginPoint from "~/domain/model/OriginPoint";
 
 import ArrowKeyUseCase from "~/useCase/ArrowKeyUseCase";
 
@@ -20,11 +19,7 @@ class ShortcutUseCase {
     this.arrowKeyUseCase = arrowKeyUseCase;
   }
 
-  public handleKeydown(
-    mindMapData: MindMapData,
-    key: Shortcut,
-    originPoint: OriginPoint
-  ): MindMapData {
+  public handleKeydown(mindMapData: MindMapData, key: Shortcut): MindMapData {
     const selectedNode = mindMapData.findNodeIsSelected();
     if (!selectedNode) {
       return mindMapData;
@@ -41,7 +36,7 @@ class ShortcutUseCase {
           selectedNode
         );
       case shortcuts.Space:
-        return this.toggleCollapse(mindMapData, selectedNode, originPoint);
+        return this.toggleCollapse(mindMapData, selectedNode);
       case shortcuts.Tab:
         return this.addNodeToTail(mindMapData, selectedNode);
       case shortcuts.Enter:
@@ -61,15 +56,14 @@ class ShortcutUseCase {
 
   public toggleCollapse(
     mindMapData: MindMapData,
-    selectedNode: RootNode | Node,
-    originPoint: OriginPoint
+    selectedNode: RootNode | Node
   ): MindMapData {
     if (mindMapData.rootNode.isSelected) {
       return mindMapData;
     }
 
     mindMapData.rightMap.collapseNodes(selectedNode.id);
-    mindMapData.updateRelationshipLine(originPoint);
+    mindMapData.updateRelationshipLine();
     return mindMapData;
   }
 

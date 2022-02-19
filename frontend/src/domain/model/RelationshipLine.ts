@@ -7,7 +7,6 @@ import BezierCurve, {
   bezierCurveImpl,
   newBezierCurve,
 } from "~/domain/model/BezierCurve";
-import OriginPoint from "~/domain/model/OriginPoint";
 
 type RelationshipLine = {
   pathLine: PathLine;
@@ -15,11 +14,7 @@ type RelationshipLine = {
 
   getPathCommand(): string;
 
-  updatePoints(
-    originPoint: OriginPoint,
-    parentNode: NodeData,
-    node: NodeData
-  ): void;
+  updatePoints(parentNode: NodeData, node: NodeData): void;
 };
 
 export const newRelationshipLine = (): RelationshipLine => {
@@ -42,16 +37,16 @@ export const relationshipLineImpl: RelationshipLine = {
     ].join(" ");
   },
 
-  updatePoints(originPoint: OriginPoint, parentNode: NodeData, node: NodeData) {
-    const lineStartPointX = parentNode.getElementEndSVGX(originPoint.svgX);
+  updatePoints(parentNode: NodeData, node: NodeData) {
+    const lineStartPointX = parentNode.getElementEndX();
     const lineEndPointX =
       lineStartPointX + horizontalMargin * 2 * pathLineRatio;
-    const lineY = parentNode.getElementCenterSVGY(originPoint.svgY);
+    const lineY = parentNode.getElementCenterY();
 
     const controlPointX =
       lineEndPointX + (horizontalMargin * 2 * (1 - pathLineRatio)) / 2;
     const endPointX = lineStartPointX + horizontalMargin * 2;
-    const endPointY = node.getElementCenterSVGY(originPoint.svgY);
+    const endPointY = node.getElementCenterY();
 
     this.pathLine.setPoints(lineStartPointX, lineEndPointX, lineY);
     this.bezierCurve.setPoints(controlPointX, lineY, endPointX, endPointY);
