@@ -1,6 +1,8 @@
 import React, { VFC } from "react";
 
 import MindMapDataProvider from "~/store/provider/MindMapDataProvider";
+
+import "~/components/pages/MindMapPage.css";
 import MindMap from "~/components/pages/MindMap";
 
 const MindMapPage: VFC = () => {
