@@ -28,7 +28,6 @@ const SVGArea: VFC<Props> = (props) => {
     return (
       <path
         key={node.id}
-        style={{ position: "absolute", top: 0, left: 0 }}
         d={node.relationshipLine.getPathCommand()}
         stroke={pathColor}
         strokeWidth={pathWidth}
