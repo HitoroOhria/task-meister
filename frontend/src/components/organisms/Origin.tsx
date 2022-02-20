@@ -10,16 +10,16 @@ type Props = {
   children?: ReactNode;
 };
 
+export const scrollToOrigin = () => {
+  // TODO Why not move to origin when reload after scroll window?
+  const windowUpperLeftX = originX - window.innerWidth / 2;
+  const windowUpperLeftY = originY - window.innerHeight / 2;
+
+  window.scrollTo(windowUpperLeftX, windowUpperLeftY);
+};
+
 const Origin: FC<Props> = (props) => {
   const originElement = useRef<HTMLDivElement>(null);
-
-  const scrollToOrigin = () => {
-    // TODO Why not move to origin when reload after scroll window?
-    const windowUpperLeftX = originX - window.innerWidth / 2;
-    const windowUpperLeftY = originY - window.innerHeight / 2;
-
-    window.scrollTo(windowUpperLeftX, windowUpperLeftY);
-  };
 
   const componentDidMount = () => {
     scrollToOrigin();

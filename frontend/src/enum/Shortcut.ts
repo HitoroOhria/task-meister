@@ -8,6 +8,7 @@ export const shortcuts = {
   Backspace: "Backspace",
   ShiftEnter: "ShiftEnter",
   MetaE: "MetaE",
+  F6: "F6",
 } as const;
 
 export type Shortcut = typeof shortcuts[keyof typeof shortcuts];

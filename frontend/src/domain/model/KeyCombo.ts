@@ -41,6 +41,8 @@ class KeyCombo {
         return shortcuts.Enter;
       case shortcuts.Backspace:
         return shortcuts.Backspace;
+      case shortcuts.F6:
+        return shortcuts.F6;
       default:
         return undefined;
     }

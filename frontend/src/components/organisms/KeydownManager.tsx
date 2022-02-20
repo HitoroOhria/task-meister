@@ -8,7 +8,8 @@ import {
 
 import KeyCombo from "~/domain/model/KeyCombo";
 
-import { isMovingScreen, shortcuts } from "~/enum/Shortcut";
+import { isMovingScreen, Shortcut, shortcuts } from "~/enum/Shortcut";
+import { scrollToOrigin } from "~/components/organisms/Origin";
 
 const keyCombo = new KeyCombo();
 
@@ -25,10 +26,18 @@ const KeydownManager: VFC<Props> = (props) => {
     const shortcut = keyCombo.getShortcut();
     if (!shortcut) return;
 
+    handleShortcut(e, shortcut);
+  };
+
+  const handleShortcut = (e: KeyboardEvent, shortcut: Shortcut) => {
     props.setIsShitEnter(shortcut === shortcuts.ShiftEnter);
 
     if (mindMapData.isInputting()) return;
 
+    if (shortcut === shortcuts.F6) {
+      scrollToOrigin();
+      return;
+    }
     if (isMovingScreen(shortcut)) {
       e.preventDefault();
     }

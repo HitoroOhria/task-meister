@@ -43,11 +43,12 @@ class ShortcutUseCase {
         return this.addNodeToBottom(mindMapData, selectedNode);
       case shortcuts.Backspace:
         return this.deleteNode(mindMapData, selectedNode);
-      case shortcuts.ShiftEnter:
-        console.log("ShiftEnter");
-        return mindMapData;
       case shortcuts.MetaE:
         return this.editNode(mindMapData, selectedNode);
+      case shortcuts.ShiftEnter:
+      case shortcuts.F6:
+        // Ignore
+        return mindMapData;
       default:
         assertNever(key, `Not defined key. key = ${key}`);
         return mindMapData;
