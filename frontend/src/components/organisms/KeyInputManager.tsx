@@ -3,24 +3,24 @@ import React, { useContext, useEffect, VFC } from 'react'
 import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
 import { MindMapDispatchCtx, MindMapStateCtx } from '~/store/context/MindMapDataCtx'
 
-import KeyCombo from '~/domain/model/KeyCombo'
+import KeyInput from '~/domain/model/KeyInput'
 
 import { isMovingScreen, Shortcut, shortcuts } from '~/enum/Shortcut'
 import { scrollToOrigin } from '~/components/organisms/Origin'
 
-const keyCombo = new KeyCombo()
+const keyInput = new KeyInput()
 
 type Props = {
   setIsShitEnter: (isShiftEnter: boolean) => void
 }
 
-const KeydownManager: VFC<Props> = (props) => {
+const KeyInputManager: VFC<Props> = (props) => {
   const mindMapData = useContext(MindMapStateCtx)
   const dispatchMindMapData = useContext(MindMapDispatchCtx)
 
   const handleKeydown = (e: KeyboardEvent) => {
-    keyCombo.add(e.key)
-    const shortcut = keyCombo.getShortcut()
+    keyInput.add(e.key)
+    const shortcut = keyInput.getShortcut()
     if (!shortcut) return
 
     handleShortcut(e, shortcut)
@@ -46,7 +46,7 @@ const KeydownManager: VFC<Props> = (props) => {
   }
 
   const handleKeyup = (e: KeyboardEvent) => {
-    keyCombo.up(e.key)
+    keyInput.leave(e.key)
   }
 
   const keydownEffect = (): (() => void) => {
@@ -65,4 +65,4 @@ const KeydownManager: VFC<Props> = (props) => {
   return <></>
 }
 
-export default KeydownManager
+export default KeyInputManager

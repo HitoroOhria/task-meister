@@ -2,7 +2,7 @@ import React, { useContext, useState, VFC } from 'react'
 
 import { MindMapStateCtx } from '~/store/context/MindMapDataCtx'
 
-import KeydownManager from '~/components/organisms/KeydownManager'
+import KeyInputManager from '~/components/organisms/KeyInputManager'
 import SVGArea from '~/components/organisms/SVGArea'
 import DroppableArea from '~/components/organisms/DroppableArea'
 import Origin from '~/components/organisms/Origin'
@@ -16,7 +16,7 @@ const MindMap: VFC = () => {
   // TODO Why is display smaller on monitor?
   return (
     <>
-      <KeydownManager setIsShitEnter={setIsShiftEnter} />
+      <KeyInputManager setIsShitEnter={setIsShiftEnter} />
       <SVGArea children={mindMapData.rightMap.children} />
       <DroppableArea>
         <Origin>

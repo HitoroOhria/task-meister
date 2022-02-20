@@ -1,7 +1,7 @@
 import Shortcut, { shortcuts } from '~/enum/Shortcut'
 import { getArrowKey } from '~/enum/ArrowKeys'
 
-class KeyCombo {
+class KeyInput {
   // Currently pressed key
   public pressKeys: string[]
 
@@ -18,8 +18,8 @@ class KeyCombo {
     this.currentKey = newKey
   }
 
-  public up(upKey: string) {
-    this.pressKeys = this.pressKeys.filter((key) => key !== upKey)
+  public leave(leaveKey: string) {
+    this.pressKeys = this.pressKeys.filter((key) => key !== leaveKey)
   }
 
   public getShortcut = (): Shortcut | undefined => {
@@ -61,4 +61,4 @@ class KeyCombo {
   }
 }
 
-export default KeyCombo
+export default KeyInput
