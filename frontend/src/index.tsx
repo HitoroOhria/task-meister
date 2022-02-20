@@ -1,18 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './index.css'
 import reportWebVitals from './reportWebVitals'
-// import MindMap from "src/components/pages/MindMap";
+import { NextUIProvider } from '@nextui-org/react'
+
+import './index.css'
 import MindMapPage from '~/components/pages/MindMapPage'
 
 ReactDOM.render(
-  // TODO Dispatch twice on Strict Mode.
+  // Dispatch twice on Strict Mode.
   // So, following bugs occur
   //   - Can not collapse (double triggered)
   //   - Two nodes are added
   //   - see https://github.com/facebook/react/issues/16295
   // <React.StrictMode>
-  <MindMapPage />,
+  <NextUIProvider>
+    <MindMapPage />
+  </NextUIProvider>,
   // </React.StrictMode>,
   document.getElementById('root')
 )
