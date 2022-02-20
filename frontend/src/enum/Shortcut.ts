@@ -1,17 +1,17 @@
-import { arrowKeys } from "~/enum/ArrowKeys";
+import { arrowKeys } from '~/enum/ArrowKeys'
 
 export const shortcuts = {
   ...arrowKeys,
-  Space: " ",
-  Tab: "Tab",
-  Enter: "Enter",
-  Backspace: "Backspace",
-  ShiftEnter: "ShiftEnter",
-  MetaE: "MetaE",
-  F6: "F6",
-} as const;
+  Space: ' ',
+  Tab: 'Tab',
+  Enter: 'Enter',
+  Backspace: 'Backspace',
+  ShiftEnter: 'ShiftEnter',
+  MetaE: 'MetaE',
+  F6: 'F6',
+} as const
 
-export type Shortcut = typeof shortcuts[keyof typeof shortcuts];
+export type Shortcut = typeof shortcuts[keyof typeof shortcuts]
 
 export const isMovingScreen = (key: Shortcut): boolean => {
   switch (key) {
@@ -20,10 +20,10 @@ export const isMovingScreen = (key: Shortcut): boolean => {
     case shortcuts.Down:
     case shortcuts.Right:
     case shortcuts.Left:
-      return true;
+      return true
     default:
-      return false;
+      return false
   }
-};
+}
 
-export default Shortcut;
+export default Shortcut

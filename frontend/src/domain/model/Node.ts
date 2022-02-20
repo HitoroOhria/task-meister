@@ -1,34 +1,32 @@
-import _ from "lodash";
+import _ from 'lodash'
 
-import NodeData, {nodeDataImpl} from "~/domain/model/NodeData";
-import Group, {groupImpl, newGroup} from "~/domain/model/Group";
-import Children, {childrenImpl, newChildren} from "~/domain/model/Children";
-import RelationshipLine, {newRelationshipLine, relationshipLineImpl,} from "~/domain/model/RelationshipLine";
+import NodeData, { nodeDataImpl } from '~/domain/model/NodeData'
+import Group, { groupImpl, newGroup } from '~/domain/model/Group'
+import Children, { childrenImpl, newChildren } from '~/domain/model/Children'
+import RelationshipLine, {
+  newRelationshipLine,
+  relationshipLineImpl,
+} from '~/domain/model/RelationshipLine'
 
 // type to distinguish from RootNode.
-const nodeType = "node";
+const nodeType = 'node'
 
 type Node = NodeData & {
-  type: typeof nodeType;
-  group: Group;
-  children: Children;
-  relationshipLine: RelationshipLine;
-
-  hasNodeById(childId: string): boolean;
-
-  updateTop(): void;
-
-  setLeft(parentLeft: number, parentWidth: number): void;
-
-  toggleCollapse(): void;
-};
-
-export const newNode = (
-  id: string,
-  text: string,
-  group: Group,
+  type: typeof nodeType
+  group: Group
   children: Children
-): Node => {
+  relationshipLine: RelationshipLine
+
+  hasNodeById(childId: string): boolean
+
+  updateTop(): void
+
+  setLeft(parentLeft: number, parentWidth: number): void
+
+  toggleCollapse(): void
+}
+
+export const newNode = (id: string, text: string, group: Group, children: Children): Node => {
   return {
     ...nodeImpl,
     id: id,
@@ -36,22 +34,22 @@ export const newNode = (
     group: group,
     children: children,
     relationshipLine: newRelationshipLine(),
-  };
-};
+  }
+}
 
 export const newAddNode = (left: number): Node => {
   return {
     ...nodeImpl,
-    id: _.uniqueId("node_"),
-    text: "",
+    id: _.uniqueId('node_'),
+    text: '',
     left: left,
     isInputting: true,
     isSelected: true,
     group: newGroup(),
     children: newChildren([]),
     relationshipLine: newRelationshipLine(),
-  };
-};
+  }
+}
 
 // Data of node to be placed on MindMap.
 // NodeData consists of a node and children's nodes.
@@ -70,28 +68,26 @@ export const nodeImpl: Node = {
   relationshipLine: relationshipLineImpl,
 
   hasNodeById(childId: string): boolean {
-    return !!this.children.recursively.findNodeById(childId);
+    return !!this.children.recursively.findNodeById(childId)
   },
 
   // Update node top of self
   updateTop() {
     const fromGroupTop =
-      this.children.height < this.height
-        ? 0
-        : (this.children.height - this.height) / 2;
-    this.top = this.group.top + fromGroupTop;
+      this.children.height < this.height ? 0 : (this.children.height - this.height) / 2
+    this.top = this.group.top + fromGroupTop
   },
 
   setLeft(parentLeft: number, parentWidth: number) {
-    this.left = parentLeft + parentWidth;
+    this.left = parentLeft + parentWidth
   },
 
   toggleCollapse() {
-    this.group.isHidden = !this.group.isHidden;
-    this.children.recursively.toggleHidden();
+    this.group.isHidden = !this.group.isHidden
+    this.children.recursively.toggleHidden()
   },
-};
+}
 
-Object.freeze(nodeImpl);
+Object.freeze(nodeImpl)
 
-export default Node;
+export default Node

@@ -1,8 +1,8 @@
-import ArrowKey, { arrowKeys } from "~/enum/ArrowKeys";
-import MindMapData from "~/domain/model/MindMapData";
-import { assertNever, newNotFoundNodeErr } from "~/util/ExceptionUtil";
-import RootNode from "~/domain/model/RootNode";
-import Node from "~/domain/model/Node";
+import ArrowKey, { arrowKeys } from '~/enum/ArrowKeys'
+import MindMapData from '~/domain/model/MindMapData'
+import { assertNever, newNotFoundNodeErr } from '~/util/ExceptionUtil'
+import RootNode from '~/domain/model/RootNode'
+import Node from '~/domain/model/Node'
 
 class ArrowKeyUseCase {
   handleArrowKeyDown(
@@ -12,97 +12,85 @@ class ArrowKeyUseCase {
   ): MindMapData {
     switch (arrowKey) {
       case arrowKeys.Up:
-        return this.selectTopNode(mindMapData, selectedNode);
+        return this.selectTopNode(mindMapData, selectedNode)
       case arrowKeys.Down:
-        return this.selectBottomNode(mindMapData, selectedNode);
+        return this.selectBottomNode(mindMapData, selectedNode)
       case arrowKeys.Right:
-        return this.selectTailNode(mindMapData, selectedNode);
+        return this.selectTailNode(mindMapData, selectedNode)
       case arrowKeys.Left:
-        return this.selectHeadNode(mindMapData, selectedNode);
+        return this.selectHeadNode(mindMapData, selectedNode)
       default:
-        assertNever(arrowKey, `Not defined arrow key. arrow key = ${arrowKey}`);
-        return mindMapData;
+        assertNever(arrowKey, `Not defined arrow key. arrow key = ${arrowKey}`)
+        return mindMapData
     }
   }
 
-  selectTopNode(
-    mindMapData: MindMapData,
-    selectedNode: RootNode | Node
-  ): MindMapData {
+  selectTopNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
     if (mindMapData.rootNode.isSelected) {
-      return mindMapData;
+      return mindMapData
     }
 
-    mindMapData.deselectNode();
+    mindMapData.deselectNode()
 
     const topNode = mindMapData.rightMap.children.recursively
       .findChildrenContainsId(selectedNode.id)
-      ?.findTopNodeOf(selectedNode.id);
+      ?.findTopNodeOf(selectedNode.id)
     if (!topNode) {
-      throw newNotFoundNodeErr(selectedNode.id);
+      throw newNotFoundNodeErr(selectedNode.id)
     }
 
-    topNode.isSelected = true;
-    return mindMapData;
+    topNode.isSelected = true
+    return mindMapData
   }
 
-  selectBottomNode(
-    mindMapData: MindMapData,
-    selectedNode: RootNode | Node
-  ): MindMapData {
-    mindMapData.deselectNode();
+  selectBottomNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
+    mindMapData.deselectNode()
 
     const bottomNode = mindMapData.rightMap.children.recursively
       .findChildrenContainsId(selectedNode.id)
-      ?.findBottomNodeOf(selectedNode.id);
+      ?.findBottomNodeOf(selectedNode.id)
     if (!bottomNode) {
-      throw newNotFoundNodeErr(selectedNode.id);
+      throw newNotFoundNodeErr(selectedNode.id)
     }
 
-    bottomNode.isSelected = true;
-    return mindMapData;
+    bottomNode.isSelected = true
+    return mindMapData
   }
 
-  selectHeadNode(
-    mindMapData: MindMapData,
-    selectedNode: RootNode | Node
-  ): MindMapData {
+  selectHeadNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
     if (mindMapData.rootNode.isSelected) {
-      return mindMapData;
+      return mindMapData
     }
 
-    const headNode = mindMapData.findHeadNode(selectedNode.id);
+    const headNode = mindMapData.findHeadNode(selectedNode.id)
     if (!headNode) {
-      return mindMapData;
+      return mindMapData
     }
 
-    mindMapData.deselectNode();
-    headNode.isSelected = true;
+    mindMapData.deselectNode()
+    headNode.isSelected = true
 
-    return mindMapData;
+    return mindMapData
   }
 
-  selectTailNode(
-    mindMapData: MindMapData,
-    selectedNode: RootNode | Node
-  ): MindMapData {
+  selectTailNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
     if (mindMapData.rootNode.isSelected) {
-      mindMapData.selectTail();
-      return mindMapData;
+      mindMapData.selectTail()
+      return mindMapData
     }
 
     const tailNode = mindMapData.rightMap.children.recursively
       .findChildrenContainsId(selectedNode.id)
-      ?.findTailNodeOf(selectedNode.id);
+      ?.findTailNodeOf(selectedNode.id)
     if (!tailNode) {
-      return mindMapData;
+      return mindMapData
     }
 
-    mindMapData.deselectNode();
-    tailNode.isSelected = true;
+    mindMapData.deselectNode()
+    tailNode.isSelected = true
 
-    return mindMapData;
+    return mindMapData
   }
 }
 
-export default ArrowKeyUseCase;
+export default ArrowKeyUseCase

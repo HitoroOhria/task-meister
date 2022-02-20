@@ -1,7 +1,7 @@
 export {}
 
-test("dummy", () => {
-  expect(1).toBe(1);
+test('dummy', () => {
+  expect(1).toBe(1)
 })
 
 // import NodeData from "~/domain/model/NodeData";

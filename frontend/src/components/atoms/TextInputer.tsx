@@ -1,79 +1,77 @@
-import React, {useEffect, useRef, useState, VFC} from "react";
-import {styled} from "@linaria/react";
-import ElementSizeCalculator from "~/util/ElementSizeCalculator";
-import {numberOfLines} from "~/util/StringUtil";
+import React, { useEffect, useRef, useState, VFC } from 'react'
+import { styled } from '@linaria/react'
+import ElementSizeCalculator from '~/util/ElementSizeCalculator'
+import { numberOfLines } from '~/util/StringUtil'
 
 // minimum width of css. unit is px.
-export const minWidth = 50;
+export const minWidth = 50
 // line height of css. unit is px.
-export const lineHeight = 18;
+export const lineHeight = 18
 // font size of css. unit is px.
-const fontSize = 15;
-const fontFamily = "monospace";
-const font = `${fontSize}px ${fontFamily}`;
+const fontSize = 15
+const fontFamily = 'monospace'
+const font = `${fontSize}px ${fontFamily}`
 
 // const
 // For measure text width
-export const elementSizeCalculator = new ElementSizeCalculator(font);
+export const elementSizeCalculator = new ElementSizeCalculator(font)
 
 type Props = {
-  text: string;
-  isInputting: boolean;
-  setText: (text: string) => void;
-  handleBlur: () => void;
-};
+  text: string
+  isInputting: boolean
+  setText: (text: string) => void
+  handleBlur: () => void
+}
 
 const TextInputer: VFC<Props> = (props) => {
-  const textareaElement = useRef<HTMLTextAreaElement>(null);
-  const [textWidth, setTextWidth] = useState<number>(0);
-  const [textHeight, setTextHeight] = useState<number>(0);
+  const textareaElement = useRef<HTMLTextAreaElement>(null)
+  const [textWidth, setTextWidth] = useState<number>(0)
+  const [textHeight, setTextHeight] = useState<number>(0)
 
   const componentDidMount = () => {
-    updateTextWidth();
-    updateTextHeight();
-  };
+    updateTextWidth()
+    updateTextHeight()
+  }
 
   const updateAreaSize = () => {
     // TODO Can refactor to use BoundingClientRect?
     //   - see https://developer.mozilla.org/ja/docs/Web/API/Element/getBoundingClientRect
-    updateTextWidth();
-    updateTextHeight();
-  };
+    updateTextWidth()
+    updateTextHeight()
+  }
 
   const updateTextWidth = () => {
-    const textElementWidth = Math.ceil(
-      elementSizeCalculator.measureLongestLineWidth(props.text)
-    );
-    const textWidth = minWidth < textElementWidth ? textElementWidth : minWidth;
+    const textElementWidth = Math.ceil(elementSizeCalculator.measureLongestLineWidth(props.text))
+    const textWidth = minWidth < textElementWidth ? textElementWidth : minWidth
 
-    setTextWidth(textWidth);
-  };
+    setTextWidth(textWidth)
+  }
 
   const updateTextHeight = () => {
     // TODO Maybe height changes depending on resolution of display
-    const textHeight = numberOfLines(props.text) * lineHeight;
+    const textHeight = numberOfLines(props.text) * lineHeight
 
-    setTextHeight(textHeight);
-  };
+    setTextHeight(textHeight)
+  }
 
   const handleIsInputting = () => {
-    if (!textareaElement.current) return;
-    if (!props.isInputting) return;
+    if (!textareaElement.current) return
+    if (!props.isInputting) return
 
-    textareaElement.current.focus();
-    moveCaretToEnd();
-  };
+    textareaElement.current.focus()
+    moveCaretToEnd()
+  }
 
   const moveCaretToEnd = () => {
-    if (!textareaElement.current) return;
+    if (!textareaElement.current) return
 
-    textareaElement.current.selectionStart = props.text.length;
-    textareaElement.current.selectionEnd = props.text.length;
-  };
+    textareaElement.current.selectionStart = props.text.length
+    textareaElement.current.selectionEnd = props.text.length
+  }
 
-  useEffect(componentDidMount, []);
-  useEffect(updateAreaSize, [props.text]);
-  useEffect(handleIsInputting, [props.isInputting]);
+  useEffect(componentDidMount, [])
+  useEffect(updateAreaSize, [props.text])
+  useEffect(handleIsInputting, [props.isInputting])
 
   return (
     <TopDiv width={textWidth} height={textHeight}>
@@ -88,17 +86,17 @@ const TextInputer: VFC<Props> = (props) => {
         <SpanInlineBlock>{props.text}</SpanInlineBlock>
       )}
     </TopDiv>
-  );
-};
+  )
+}
 
-export default TextInputer;
+export default TextInputer
 
 type TopDivProps = {
   // unit is px.
-  width: number;
+  width: number
   // unit is px.
-  height: number;
-};
+  height: number
+}
 
 const TopDiv = styled.div<TopDivProps>`
   min-width: ${minWidth}px;
@@ -106,7 +104,7 @@ const TopDiv = styled.div<TopDivProps>`
   height: ${(props) => props.height}px;
   font: ${font};
   line-height: ${lineHeight}px;
-`;
+`
 
 const Textarea = styled.textarea`
   padding: 0px;
@@ -119,7 +117,7 @@ const Textarea = styled.textarea`
   outline: none;
   resize: none;
   overflow: hidden;
-`;
+`
 
 const SpanInlineBlock = styled.span`
   min-width: inherit;
@@ -127,4 +125,4 @@ const SpanInlineBlock = styled.span`
   height: inherit;
   font: inherit;
   display: inline-block;
-`;
+`

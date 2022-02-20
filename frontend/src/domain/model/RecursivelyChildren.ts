@@ -1,218 +1,200 @@
-import NodeData from "~/domain/model/NodeData";
-import Node from "~/domain/model/Node";
-import Children from "~/domain/model/Children";
-import DropPosition from "~/domain/model/DropPosition";
+import NodeData from '~/domain/model/NodeData'
+import Node from '~/domain/model/Node'
+import Children from '~/domain/model/Children'
+import DropPosition from '~/domain/model/DropPosition'
 
-import { total } from "~/util/NumberUtil";
+import { total } from '~/util/NumberUtil'
 
 interface RecursivelyChildren {
-  children: Children;
+  children: Children
 
-  isInputting(): boolean;
+  isInputting(): boolean
 
-  findNodeById(id: string): Node | undefined;
+  findNodeById(id: string): Node | undefined
 
-  findNodeByPosition(position: DropPosition): Node | undefined;
+  findNodeByPosition(position: DropPosition): Node | undefined
 
-  findHeadNode(id: string): Node | undefined;
+  findHeadNode(id: string): Node | undefined
 
-  findNodeIsSelected(): Node | undefined;
+  findNodeIsSelected(): Node | undefined
 
-  findChildrenContainsId(id: string): Children | undefined;
+  findChildrenContainsId(id: string): Children | undefined
 
-  removeNodeById(id: string): Node;
+  removeNodeById(id: string): Node
 
-  updateNodeTop(): void;
+  updateNodeTop(): void
 
-  setNodeLeft(parentNodeLeft: number, parentNodeWidth: number): void;
+  setNodeLeft(parentNodeLeft: number, parentNodeWidth: number): void
 
-  setGroupTop(parentHeight: number, parentGroupTop: number): void;
+  setGroupTop(parentHeight: number, parentGroupTop: number): void
 
-  updateGroupAndChildrenHeight(): void;
+  updateGroupAndChildrenHeight(): void
 
-  toggleHidden(): void;
+  toggleHidden(): void
 
-  deselectNode(): void;
+  deselectNode(): void
 
-  updateRelationshipLine(parentNode: NodeData): void;
+  updateRelationshipLine(parentNode: NodeData): void
 }
 
-export const newRecursivelyChildren = (
-  children: Children
-): RecursivelyChildren => {
+export const newRecursivelyChildren = (children: Children): RecursivelyChildren => {
   return {
     ...recursivelyChildrenImpl,
     children: children,
-  };
-};
+  }
+}
 
 export const recursivelyChildrenImpl: RecursivelyChildren = {
   children: {} as Children,
 
   isInputting(): boolean {
-    const isInputtingChild = this.children.nodes.find(
-      (child) => child.isInputting
-    );
+    const isInputtingChild = this.children.nodes.find((child) => child.isInputting)
     if (isInputtingChild) {
-      return true;
+      return true
     }
 
-    return !!this.children.nodes.find((child) =>
-      child.children.recursively.isInputting()
-    );
+    return !!this.children.nodes.find((child) => child.children.recursively.isInputting())
   },
 
   findNodeById(id: string): Node | undefined {
-    const child = this.children.nodes.find((child) => child.id === id);
+    const child = this.children.nodes.find((child) => child.id === id)
     if (child) {
-      return child;
+      return child
     }
 
     for (const child of this.children.nodes) {
-      const target = child.children.recursively.findNodeById(id);
+      const target = child.children.recursively.findNodeById(id)
 
       if (target) {
-        return target;
+        return target
       }
     }
 
-    return undefined;
+    return undefined
   },
 
   findNodeByPosition(position: DropPosition): Node | undefined {
-    const child = this.children.nodes.find((child) => child.onArea(position));
+    const child = this.children.nodes.find((child) => child.onArea(position))
     if (child) {
-      return child;
+      return child
     }
 
     for (const child of this.children.nodes) {
-      const target = child.children.recursively.findNodeByPosition(position);
+      const target = child.children.recursively.findNodeByPosition(position)
 
       if (target) {
-        return target;
+        return target
       }
     }
 
-    return undefined;
+    return undefined
   },
 
   findHeadNode(id: string): Node | undefined {
-    const node = this.children.findNodeHasChildId(id);
+    const node = this.children.findNodeHasChildId(id)
     if (node !== undefined) {
-      return node;
+      return node
     }
 
     for (const child of this.children.nodes) {
-      const targetNode = child.children.recursively.findHeadNode(id);
+      const targetNode = child.children.recursively.findHeadNode(id)
 
       if (targetNode !== undefined) {
-        return targetNode;
+        return targetNode
       }
     }
 
-    return undefined;
+    return undefined
   },
 
   findNodeIsSelected(): Node | undefined {
-    const selectedNode = this.children.nodes.find((child) => child.isSelected);
+    const selectedNode = this.children.nodes.find((child) => child.isSelected)
     if (selectedNode) {
-      return selectedNode;
+      return selectedNode
     }
 
     for (const child of this.children.nodes) {
-      const foundNode = child.children.recursively.findNodeIsSelected();
+      const foundNode = child.children.recursively.findNodeIsSelected()
 
       if (foundNode) {
-        return foundNode;
+        return foundNode
       }
     }
 
-    return undefined;
+    return undefined
   },
 
   findChildrenContainsId(id: string): Children | undefined {
-    const include = this.children.nodes.map((child) => child.id).includes(id);
+    const include = this.children.nodes.map((child) => child.id).includes(id)
     if (include) {
-      return this.children;
+      return this.children
     }
 
     for (const child of this.children.nodes) {
-      const children = child.children.recursively.findChildrenContainsId(id);
+      const children = child.children.recursively.findChildrenContainsId(id)
 
       if (children) {
-        return children;
+        return children
       }
     }
 
-    return undefined;
+    return undefined
   },
 
   removeNodeById(id: string): Node {
-    const children = this.children.recursively.findChildrenContainsId(id);
+    const children = this.children.recursively.findChildrenContainsId(id)
     if (!children) {
-      throw new Error(`Can not found children contains id. id = ${id}`);
+      throw new Error(`Can not found children contains id. id = ${id}`)
     }
 
-    return children.removeNode(id);
+    return children.removeNode(id)
   },
 
   updateNodeTop() {
-    this.children.nodes.forEach((child) => child.updateTop());
-    this.children.nodes.forEach((child) =>
-      child.children.recursively.updateNodeTop()
-    );
+    this.children.nodes.forEach((child) => child.updateTop())
+    this.children.nodes.forEach((child) => child.children.recursively.updateNodeTop())
   },
 
   setNodeLeft(parentNodeLeft: number, parentNodeWidth: number) {
-    this.children.nodes.forEach((child) =>
-      child.setLeft(parentNodeLeft, parentNodeWidth)
-    );
+    this.children.nodes.forEach((child) => child.setLeft(parentNodeLeft, parentNodeWidth))
     this.children.nodes.forEach((child) =>
       child.children.recursively.setNodeLeft(child.left, child.width)
-    );
+    )
   },
 
   setGroupTop(parentHeight: number, parentGroupTop: number) {
-    this.children.setGroupTop(parentHeight, parentGroupTop);
+    this.children.setGroupTop(parentHeight, parentGroupTop)
     this.children.nodes.forEach((child) =>
       child.children.recursively.setGroupTop(child.height, child.group.top)
-    );
+    )
   },
 
   updateGroupAndChildrenHeight() {
     this.children.nodes.forEach((child) =>
       child.group.updateHeight(child.isHidden, child.height, child.children)
-    );
+    )
 
-    this.children.height = total(
-      this.children.nodes.map((child) => child.group.height)
-    );
+    this.children.height = total(this.children.nodes.map((child) => child.group.height))
   },
 
   toggleHidden() {
-    this.children.nodes.forEach((child) => (child.isHidden = !child.isHidden));
-    this.children.nodes.forEach((child) =>
-      child.children.recursively.toggleHidden()
-    );
+    this.children.nodes.forEach((child) => (child.isHidden = !child.isHidden))
+    this.children.nodes.forEach((child) => child.children.recursively.toggleHidden())
   },
 
   deselectNode() {
-    const selectedNode = this.findNodeIsSelected();
-    if (!selectedNode) return;
+    const selectedNode = this.findNodeIsSelected()
+    if (!selectedNode) return
 
-    selectedNode.isSelected = false;
+    selectedNode.isSelected = false
   },
 
   updateRelationshipLine(parentNode: NodeData) {
-    this.children.nodes.forEach((child) =>
-      child.relationshipLine.updatePoints(parentNode, child)
-    );
-    this.children.nodes.forEach((child) =>
-      child.children.recursively.updateRelationshipLine(child)
-    );
+    this.children.nodes.forEach((child) => child.relationshipLine.updatePoints(parentNode, child))
+    this.children.nodes.forEach((child) => child.children.recursively.updateRelationshipLine(child))
   },
-};
+}
 
-Object.freeze(recursivelyChildrenImpl);
+Object.freeze(recursivelyChildrenImpl)
 
-export default RecursivelyChildren;
+export default RecursivelyChildren

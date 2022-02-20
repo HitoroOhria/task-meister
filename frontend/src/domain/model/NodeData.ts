@@ -1,45 +1,45 @@
-import {horizontalMargin} from "~/components/organisms/Node";
-import {originX, originY} from "~/components/organisms/Origin";
+import { horizontalMargin } from '~/components/organisms/Node'
+import { originX, originY } from '~/components/organisms/Origin'
 
-import DropPosition from "~/domain/model/DropPosition";
+import DropPosition from '~/domain/model/DropPosition'
 
 // Ratio of width representing tail area of node.
-const tailAreaRatio = 0.2;
+const tailAreaRatio = 0.2
 
 type NodeData = {
-  id: string;
-  text: string;
-  width: number;
-  height: number;
-  top: number;
-  left: number;
-  isHidden: boolean;
-  isSelected: boolean;
-  isInputting: boolean;
+  id: string
+  text: string
+  width: number
+  height: number
+  top: number
+  left: number
+  isHidden: boolean
+  isSelected: boolean
+  isInputting: boolean
 
-  getElementWidth(): number;
+  getElementWidth(): number
 
-  getElementEndX(): number;
+  getElementEndX(): number
 
-  getElementCenterY(): number;
+  getElementCenterY(): number
 
-  onArea(position: DropPosition): boolean;
+  onArea(position: DropPosition): boolean
 
-  inXRange(left: number): boolean;
+  inXRange(left: number): boolean
 
-  inYRange(top: number): boolean;
+  inYRange(top: number): boolean
 
-  onUpper(top: number): boolean;
+  onUpper(top: number): boolean
 
-  onTail(left: number): boolean;
-};
+  onTail(left: number): boolean
+}
 
 export const nodeDataImpl: NodeData = {
   // an id for identify when updating node
-  id: "",
+  id: '',
 
   // an text of node
-  text: "",
+  text: '',
 
   // width including margin
   width: 0,
@@ -60,46 +60,46 @@ export const nodeDataImpl: NodeData = {
   isInputting: false,
 
   getElementWidth(): number {
-    return this.width - horizontalMargin * 2;
+    return this.width - horizontalMargin * 2
   },
 
   getElementEndX(): number {
-    return originX + this.left + horizontalMargin + this.getElementWidth();
+    return originX + this.left + horizontalMargin + this.getElementWidth()
   },
 
   getElementCenterY(): number {
-    return originY + this.top + this.height / 2;
+    return originY + this.top + this.height / 2
   },
 
   onArea(position: DropPosition): boolean {
-    return this.inXRange(position.left) && this.inYRange(position.top);
+    return this.inXRange(position.left) && this.inYRange(position.top)
   },
 
   // TODO Respond to left map.
   //   - Maybe invert width when left map
   inXRange(left: number): boolean {
-    return this.left < left && left < this.left + this.width;
+    return this.left < left && left < this.left + this.width
   },
 
   inYRange(top: number): boolean {
-    return this.top < top && top < this.top + this.height;
+    return this.top < top && top < this.top + this.height
   },
 
   onUpper(top: number): boolean {
-    const center = this.top + this.height / 2;
+    const center = this.top + this.height / 2
 
-    return this.top < top && top < center;
+    return this.top < top && top < center
   },
 
   // TODO Respond to left map.
   //   - Maybe invert width when left map
   onTail(left: number): boolean {
-    const borderLeft = this.left + this.width * (1 - tailAreaRatio);
-    const tailLeft = this.left + this.width;
+    const borderLeft = this.left + this.width * (1 - tailAreaRatio)
+    const tailLeft = this.left + this.width
 
-    return borderLeft < left && left < tailLeft;
+    return borderLeft < left && left < tailLeft
   },
-};
-Object.freeze(nodeDataImpl);
+}
+Object.freeze(nodeDataImpl)
 
-export default NodeData;
+export default NodeData

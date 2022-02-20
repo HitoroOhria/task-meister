@@ -1,5 +1,5 @@
-import MindMapData from "~/domain/model/MindMapData";
-import DropPosition from "~/domain/model/DropPosition";
+import MindMapData from '~/domain/model/MindMapData'
+import DropPosition from '~/domain/model/DropPosition'
 
 class MindMapUseCase {
   public setNodeIsInputting(
@@ -7,30 +7,25 @@ class MindMapUseCase {
     id: string,
     isInputting: boolean
   ): MindMapData {
-    const targetNode = mindMapData.findNodeById(id);
+    const targetNode = mindMapData.findNodeById(id)
     if (!targetNode) {
-      throw new Error(`Can not found Node by id. id = ${id}`);
+      throw new Error(`Can not found Node by id. id = ${id}`)
     }
-    targetNode.isInputting = isInputting;
+    targetNode.isInputting = isInputting
 
-    return mindMapData;
+    return mindMapData
   }
 
-  public selectNode(
-    mindMapData: MindMapData,
-    selectedNodeId: string
-  ): MindMapData {
-    mindMapData.deselectNode();
+  public selectNode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
+    mindMapData.deselectNode()
 
-    const selectedNode = mindMapData.findNodeById(selectedNodeId);
+    const selectedNode = mindMapData.findNodeById(selectedNodeId)
     if (!selectedNode) {
-      throw new Error(
-        `Can not found selected node by id. id = ${selectedNodeId}`
-      );
+      throw new Error(`Can not found selected node by id. id = ${selectedNodeId}`)
     }
-    selectedNode.isSelected = true;
+    selectedNode.isSelected = true
 
-    return mindMapData;
+    return mindMapData
   }
 
   public processNodeTextChanges(
@@ -40,25 +35,21 @@ class MindMapUseCase {
     width: number,
     height: number
   ): MindMapData {
-    let newMindMapData = this.setNodeText(mindMapData, id, text);
-    newMindMapData = this.updatePlacement(newMindMapData, id, width, height);
-    newMindMapData = this.updateRelationshipLine(newMindMapData, id, text);
+    let newMindMapData = this.setNodeText(mindMapData, id, text)
+    newMindMapData = this.updatePlacement(newMindMapData, id, width, height)
+    newMindMapData = this.updateRelationshipLine(newMindMapData, id, text)
 
-    return newMindMapData;
+    return newMindMapData
   }
 
-  private setNodeText(
-    mindMapData: MindMapData,
-    id: string,
-    text: string
-  ): MindMapData {
+  private setNodeText(mindMapData: MindMapData, id: string, text: string): MindMapData {
     if (mindMapData.rootNode.id === id) {
-      mindMapData.rootNode.text = text;
-      return mindMapData;
+      mindMapData.rootNode.text = text
+      return mindMapData
     }
 
-    mindMapData.rightMap.setTextById(id, text);
-    return mindMapData;
+    mindMapData.rightMap.setTextById(id, text)
+    return mindMapData
   }
 
   private updatePlacement(
@@ -68,30 +59,26 @@ class MindMapUseCase {
     height: number
   ): MindMapData {
     if (id === mindMapData.rootNode.id) {
-      mindMapData.updateRootNodePlacement(width, height);
-      return mindMapData;
+      mindMapData.updateRootNodePlacement(width, height)
+      return mindMapData
     }
 
-    mindMapData.rightMap.updatePlacement(id, width, height);
-    return mindMapData;
+    mindMapData.rightMap.updatePlacement(id, width, height)
+    return mindMapData
   }
 
-  public updateRelationshipLine(
-    mindMapData: MindMapData,
-    id: string,
-    text: string
-  ): MindMapData {
+  public updateRelationshipLine(mindMapData: MindMapData, id: string, text: string): MindMapData {
     // TODO Optimize in following cases
     //   - change text
     //   - new line
     //   - add node
-    mindMapData.updateRelationshipLine();
-    return mindMapData;
+    mindMapData.updateRelationshipLine()
+    return mindMapData
   }
 
   public updateAllRelationshipLine(mindMapData: MindMapData): MindMapData {
-    mindMapData.updateRelationshipLine();
-    return mindMapData;
+    mindMapData.updateRelationshipLine()
+    return mindMapData
   }
 
   public processNodeDrop(
@@ -100,15 +87,15 @@ class MindMapUseCase {
     dropPosition: DropPosition
   ): MindMapData {
     if (mindMapData.rootNode.onTail(dropPosition.left)) {
-      mindMapData.processNodeDropToRight(movedNodeId);
-      return mindMapData;
+      mindMapData.processNodeDropToRight(movedNodeId)
+      return mindMapData
     }
 
-    mindMapData.rightMap.processNodeDrop(movedNodeId, dropPosition);
-    mindMapData.updateRelationshipLine();
+    mindMapData.rightMap.processNodeDrop(movedNodeId, dropPosition)
+    mindMapData.updateRelationshipLine()
 
-    return mindMapData;
+    return mindMapData
   }
 }
 
-export default MindMapUseCase;
+export default MindMapUseCase
