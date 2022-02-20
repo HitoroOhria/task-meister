@@ -2,17 +2,24 @@ import Shortcut, { shortcuts } from "~/enum/Shortcut";
 import { getArrowKey } from "~/enum/ArrowKeys";
 
 class KeyCombo {
-  private preKey: string;
-  private curKey: string;
+  // Currently pressed key
+  public pressKeys: string[];
+
+  // Last pressed key
+  private currentKey: string;
 
   constructor() {
-    this.preKey = "";
-    this.curKey = "";
+    this.pressKeys = [];
+    this.currentKey = "";
   }
 
   public add(newKey: string) {
-    this.preKey = this.curKey;
-    this.curKey = newKey;
+    this.pressKeys.push(newKey);
+    this.currentKey = newKey;
+  }
+
+  public up(upKey: string) {
+    this.pressKeys = this.pressKeys.filter((key) => key !== upKey);
   }
 
   public getShortcut = (): Shortcut | undefined => {
@@ -23,9 +30,9 @@ class KeyCombo {
         return shortcuts.MetaE;
     }
 
-    switch (this.curKey) {
-      case getArrowKey(this.curKey):
-        return getArrowKey(this.curKey);
+    switch (this.currentKey) {
+      case getArrowKey(this.currentKey):
+        return getArrowKey(this.currentKey);
       case shortcuts.Space:
         return shortcuts.Space;
       case shortcuts.Tab:
@@ -40,11 +47,15 @@ class KeyCombo {
   };
 
   private isShiftEnter(): boolean {
-    return this.preKey === "Shift" && this.curKey === "Enter";
+    return this.currentKey === "Enter" && this.isPressKey("Shift");
   }
 
   private isMetaE(): boolean {
-    return this.preKey === "Meta" && this.curKey === "e";
+    return this.currentKey === "e" && this.isPressKey("Meta");
+  }
+
+  private isPressKey(key: string): boolean {
+    return this.pressKeys.includes(key);
   }
 }
 

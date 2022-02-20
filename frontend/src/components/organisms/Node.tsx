@@ -22,8 +22,8 @@ export const horizontalMargin = 30;
 const padding = 20;
 
 type Props = {
-  // parentNode: NodeModel.default;
   node: NodeData;
+  isShiftEnter: boolean;
 };
 
 const Node: VFC<Props> = (props) => {
@@ -35,7 +35,7 @@ const Node: VFC<Props> = (props) => {
   };
 
   const handleNodeTextChanges = (text: string) => {
-    if (text.slice(-1) === "\n") {
+    if (text.slice(-1) === "\n" && !props.isShiftEnter) {
       outInputting();
       return;
     }

@@ -5,11 +5,12 @@ import Children from "~/domain/model/Children";
 
 type NodesProps = {
   nodes: Children;
+  isShiftEnter: boolean;
 };
 
 const Nodes: VFC<NodesProps> = (props) => {
   const renderNode = (node: NodeModel.default): JSX.Element => {
-    return <Node key={node.id} node={node} />;
+    return <Node key={node.id} node={node} isShiftEnter={props.isShiftEnter} />;
   };
 
   const renderNodeAndChildren = (node: NodeModel.default): JSX.Element[] => {

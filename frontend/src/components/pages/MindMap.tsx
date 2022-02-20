@@ -1,4 +1,4 @@
-import React, { useContext, VFC } from "react";
+import React, { useContext, useState, VFC } from "react";
 
 import { MindMapStateCtx } from "~/store/context/MindMapDataCtx";
 
@@ -11,16 +11,20 @@ import Nodes from "~/components/organisms/Nodes";
 
 const MindMap: VFC = () => {
   const mindMapData = useContext(MindMapStateCtx);
+  const [isShiftEnter, setIsShiftEnter] = useState<boolean>(false);
 
   // TODO Why is display smaller on monitor?
   return (
     <>
-      <KeydownManager />
+      <KeydownManager setIsShitEnter={setIsShiftEnter} />
       <SVGArea children={mindMapData.rightMap.children} />
       <DroppableArea>
         <Origin>
-          <Node node={mindMapData.rootNode} />
-          <Nodes nodes={mindMapData.rightMap.children} />
+          <Node node={mindMapData.rootNode} isShiftEnter={isShiftEnter} />
+          <Nodes
+            nodes={mindMapData.rightMap.children}
+            isShiftEnter={isShiftEnter}
+          />
         </Origin>
       </DroppableArea>
     </>
