@@ -1,29 +1,29 @@
 import React, { FC, ReactNode } from 'react'
 import { styled } from '@linaria/react'
 
-type PositionAdjusterProps = {
+type Props = {
   top: number
   left: number
   children?: ReactNode
 }
 
-type PositionAdjusterDivProps = {
-  top: number
-  left: number
-}
-
-const PositionAdjusterDiv = styled.div<PositionAdjusterDivProps>`
-  position: absolute;
-  top: ${(props) => props.top}px;
-  left: ${(props) => props.left}px;
-`
-
-const PositionAdjuster: FC<PositionAdjusterProps> = (props) => {
+const PositionAdjuster: FC<Props> = (props) => {
   return (
-    <PositionAdjusterDiv top={props.top} left={props.left}>
+    <Div top={props.top} left={props.left}>
       {props.children}
-    </PositionAdjusterDiv>
+    </Div>
   )
 }
 
 export default PositionAdjuster
+
+type DivProps = {
+  top: number
+  left: number
+}
+
+const Div = styled.div<DivProps>`
+  position: absolute;
+  top: ${(props) => props.top}px;
+  left: ${(props) => props.left}px;
+`
