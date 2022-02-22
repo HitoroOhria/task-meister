@@ -1,15 +1,16 @@
-import React, { FC, ReactNode } from 'react'
+import React, { CSSProperties, FC, ReactNode } from 'react'
 import { styled } from '@linaria/react'
 
 type Props = {
   top: number
   left: number
+  style?: CSSProperties
   children?: ReactNode
 }
 
 const PositionAdjuster: FC<Props> = (props) => {
   return (
-    <Div top={props.top} left={props.left}>
+    <Div top={props.top} left={props.left} style={props.style}>
       {props.children}
     </Div>
   )
