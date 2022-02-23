@@ -1,7 +1,7 @@
 import ArrowKey, { arrowKeys } from '~/enum/ArrowKeys'
 import MindMapData from '~/domain/model/MindMapData'
 import { assertNever, newNotFoundNodeErr } from '~/util/ExceptionUtil'
-import RootNode from '~/domain/model/RootNode'
+import RootNode, { rootNodeType } from '~/domain/model/RootNode'
 import Node from '~/domain/model/Node'
 
 class ArrowKeyUseCase {
@@ -74,8 +74,11 @@ class ArrowKeyUseCase {
   }
 
   selectTailNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
+    if (selectedNode.type === rootNodeType) {
       mindMapData.selectTail()
+      return mindMapData
+    }
+    if (selectedNode.group.isHidden) {
       return mindMapData
     }
 
