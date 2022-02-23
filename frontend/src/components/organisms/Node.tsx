@@ -31,7 +31,7 @@ const Node: VFC<Props> = (props) => {
 
   const handleNodeTextChanges = (text: string) => {
     if (text.slice(-1) === '\n' && !props.isShiftEnter) {
-      outInputting()
+      exitEditMode()
       return
     }
 
@@ -48,14 +48,11 @@ const Node: VFC<Props> = (props) => {
     })
   }
 
-  const outInputting = () => {
+  const exitEditMode = () => {
     // When added Node by Enter.
     if (!props.node.isSelected) return
 
-    dispatchMindMapData({
-      type: actionType.setNodeIsInputting,
-      payload: { id: props.node.id, isInputting: false },
-    })
+    dispatchMindMapData({ type: actionType.exitNodeEditMode, payload: { id: props.node.id } })
   }
 
   const handleClick = () => {
@@ -68,10 +65,7 @@ const Node: VFC<Props> = (props) => {
   }
 
   const handleDoubleClick = () => {
-    dispatchMindMapData({
-      type: actionType.setNodeIsInputting,
-      payload: { id: props.node.id, isInputting: true },
-    })
+    dispatchMindMapData({ type: actionType.enterNodeEditMode, payload: { id: props.node.id } })
   }
 
   return (
@@ -88,7 +82,7 @@ const Node: VFC<Props> = (props) => {
             text={props.node.text}
             setText={(text) => handleNodeTextChanges(text)}
             isInputting={props.node.isInputting}
-            handleBlur={outInputting}
+            handleBlur={exitEditMode}
           />
         </NodeDiv>
       </DraggableElement>

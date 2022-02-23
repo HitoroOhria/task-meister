@@ -129,9 +129,7 @@ class ShortcutUseCase {
   }
 
   public editNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
-    selectedNode.isInputting = true
-
-    return mindMapData
+    return this.mindMapUseCase.enterNodeEditMode(mindMapData, selectedNode.id)
   }
 }
 

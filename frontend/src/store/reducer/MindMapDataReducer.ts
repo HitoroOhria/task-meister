@@ -9,8 +9,9 @@ import Shortcut from '~/enum/Shortcut'
 
 export const mindMapDataActionType = {
   init: 'MIND_MAP_DATA_INIT',
-  setNodeIsInputting: 'MIND_MAP_DATA_SET_NODE_IS_INPUTTING',
   selectNode: 'MIND_MAP_DATA_SELECT_NODE',
+  enterNodeEditMode: 'MIND_MAP_DATA_ENTER_NODE_EDIT_MODE',
+  exitNodeEditMode: 'MIND_MAP_DATA_EXIT_NODE_EDIT_MODE',
   processNodeTextChanges: 'MIND_MAP_DATA_PROCESS_NODE_TEXT_CHANGES',
   processNodeDrop: 'MIND_MAP_DATA_PROCESS_NODE_DROP',
   updateRelationshipLine: 'MIND_MAP_DATA_UPDATE_RELATIONSHIP_LINE',
@@ -48,14 +49,12 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
   switch (action.type) {
     case mindMapDataActionType.init:
       return mindMapUseCase.init(newState)
-    case mindMapDataActionType.setNodeIsInputting:
-      return mindMapUseCase.setNodeIsInputting(
-        newState,
-        action.payload.id!,
-        action.payload.isInputting!
-      )
     case mindMapDataActionType.selectNode:
       return mindMapUseCase.selectNode(newState, action.payload.id!)
+    case mindMapDataActionType.enterNodeEditMode:
+      return mindMapUseCase.enterNodeEditMode(newState, action.payload.id!)
+    case mindMapDataActionType.exitNodeEditMode:
+      return mindMapUseCase.exitNodeEditMode(newState, action.payload.id!)
     case mindMapDataActionType.processNodeTextChanges:
       return mindMapUseCase.processNodeTextChanges(
         newState,

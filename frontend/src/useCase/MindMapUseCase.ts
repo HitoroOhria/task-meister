@@ -1,6 +1,8 @@
 import MindMapData from '~/domain/model/MindMapData'
 import DropPosition from '~/domain/model/DropPosition'
 
+import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
+
 class MindMapUseCase {
   public init(mindMapData: MindMapData): MindMapData {
     mindMapData.setNodeSize()
@@ -15,20 +17,6 @@ class MindMapUseCase {
     return mindMapData
   }
 
-  public setNodeIsInputting(
-    mindMapData: MindMapData,
-    id: string,
-    isInputting: boolean
-  ): MindMapData {
-    const targetNode = mindMapData.findNodeById(id)
-    if (!targetNode) {
-      throw new Error(`Can not found Node by id. id = ${id}`)
-    }
-    targetNode.isInputting = isInputting
-
-    return mindMapData
-  }
-
   public selectNode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
     mindMapData.deselectNode()
 
@@ -37,6 +25,28 @@ class MindMapUseCase {
       throw new Error(`Can not found selected node by id. id = ${selectedNodeId}`)
     }
     selectedNode.isSelected = true
+
+    return mindMapData
+  }
+
+  public enterNodeEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
+    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+    if (!selectedNode) {
+      throw newNotFoundNodeErr(selectedNodeId)
+    }
+
+    selectedNode.isInputting = true
+
+    return mindMapData
+  }
+
+  public exitNodeEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
+    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+    if (!selectedNode) {
+      throw newNotFoundNodeErr(selectedNodeId)
+    }
+
+    selectedNode.isInputting = false
 
     return mindMapData
   }
