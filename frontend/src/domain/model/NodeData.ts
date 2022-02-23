@@ -4,6 +4,7 @@ import { originX, originY } from '~/components/organisms/Origin'
 
 import DropPosition from '~/domain/model/DropPosition'
 import { numberOfLines } from '~/util/StringUtil'
+import { pathLineRatio } from '~/components/atoms/Path'
 
 // Ratio of width representing tail area of node.
 const tailAreaRatio = 0.2
@@ -27,7 +28,9 @@ type NodeData = {
 
   getElementWidth(): number
 
-  getElementEndX(): number
+  getElementTailX(): number
+
+  getElementCollapseX(): number
 
   getElementCenterY(): number
 
@@ -91,8 +94,12 @@ export const nodeDataImpl: NodeData = {
     return this.width - horizontalMargin * 2
   },
 
-  getElementEndX(): number {
+  getElementTailX(): number {
     return originX + this.left + horizontalMargin + this.getElementWidth()
+  },
+
+  getElementCollapseX(): number {
+    return this.getElementTailX() + horizontalMargin * 2 * pathLineRatio
   },
 
   getElementCenterY(): number {

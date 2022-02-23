@@ -22,18 +22,18 @@ const DrawingArea: VFC<Props> = (props) => {
     return (
       <CollapseButton
         key={node.id}
-        top={node.collapseButton.point.y}
-        left={node.collapseButton.point.x}
+        top={node.accessory.collapseButton.point.y}
+        left={node.accessory.collapseButton.point.x}
         onClick={() => dispatchToggleCollapse(node.id)}
       />
     )
   }
 
   const renderCollapseButtons = (children: Children): JSX.Element[] => {
-    const nodesHasChild = children.nodes.filter((child) => child.children.nodes.length !== 0)
+    const nodesHasChild = children.filterHasChild()
     const collapseButtons = nodesHasChild.map((child) => renderCollapseButton(child))
     const grandChildrenCollapseButtons = nodesHasChild.flatMap((child) =>
-      renderCollapseButtons(child.children)
+      child.group.isHidden ? [] : renderCollapseButtons(child.children)
     )
 
     return collapseButtons.concat(grandChildrenCollapseButtons)

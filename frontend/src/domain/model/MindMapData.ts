@@ -29,13 +29,9 @@ type MindMapData = {
 
   updateRootNodePlacement(): void
 
-  updateNonNodePlacement(): void
+  updateAccessoryPlacement(): void
 
   processNodeDropToRight(movedNodeId: string): void
-
-  updateRelationshipLine(): void
-
-  updateCollapseButton(): void
 }
 
 export const newMindMapData = (
@@ -111,7 +107,7 @@ export const mindMapDataImpl: MindMapData = {
 
   updateAllPlacement(id: string) {
     this.updateNodePlacement(id)
-    this.updateNonNodePlacement()
+    this.updateAccessoryPlacement()
   },
 
   updateNodePlacement(id: string) {
@@ -119,7 +115,7 @@ export const mindMapDataImpl: MindMapData = {
       this.updateRootNodePlacement()
     }
 
-    this.rightMap.updatePlacement(id)
+    this.rightMap.updateNodePlacement(id)
   },
 
   updateRootNodePlacement() {
@@ -127,9 +123,9 @@ export const mindMapDataImpl: MindMapData = {
     this.rightMap.children.recursively.setNodeLeft(this.rootNode.left, this.rootNode.width)
   },
 
-  updateNonNodePlacement() {
-    this.updateRelationshipLine()
-    this.updateCollapseButton()
+  updateAccessoryPlacement() {
+    this.rootNode.updatePathLine()
+    this.rightMap.children.recursively.updateAccessoryPlacement(this.rootNode)
   },
 
   processNodeDropToRight(movedNodeId: string) {
@@ -139,14 +135,6 @@ export const mindMapDataImpl: MindMapData = {
     const newLeft = this.rootNode.width / 2
     this.rightMap.updateNodesLateral(movedNode, newLeft)
     this.rightMap.updateNodesVertical(movedNode)
-  },
-
-  updateRelationshipLine() {
-    this.rightMap.children.recursively.updateRelationshipLine(this.rootNode)
-  },
-
-  updateCollapseButton() {
-    this.rightMap.children.recursively.updateCollapseButton()
   },
 }
 

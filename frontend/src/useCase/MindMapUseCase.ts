@@ -8,9 +8,9 @@ class MindMapUseCase {
     mindMapData.updateRootNodePlacement()
     if (mindMapData.rightMap.children.nodes.length !== 0) {
       const firstNode = mindMapData.rightMap.children.nodes[0]
-      mindMapData.rightMap.updatePlacement(firstNode.id)
+      mindMapData.rightMap.updateNodePlacement(firstNode.id)
     }
-    mindMapData.updateNonNodePlacement()
+    mindMapData.updateAccessoryPlacement()
 
     return mindMapData
   }
@@ -57,7 +57,7 @@ class MindMapUseCase {
     }
 
     mindMapData.rightMap.collapseNodes(selectedNodeId)
-    mindMapData.updateNonNodePlacement()
+    mindMapData.updateAccessoryPlacement()
 
     return mindMapData
   }
@@ -67,12 +67,12 @@ class MindMapUseCase {
     //   - change text
     //   - new line
     //   - add node
-    mindMapData.updateRelationshipLine()
+    mindMapData.updateAccessoryPlacement()
     return mindMapData
   }
 
   public updateAllRelationshipLine(mindMapData: MindMapData): MindMapData {
-    mindMapData.updateRelationshipLine()
+    mindMapData.updateAccessoryPlacement()
     return mindMapData
   }
 
@@ -87,7 +87,7 @@ class MindMapUseCase {
     }
 
     mindMapData.rightMap.processNodeDrop(movedNodeId, dropPosition)
-    mindMapData.updateNonNodePlacement()
+    mindMapData.updateAccessoryPlacement()
 
     return mindMapData
   }

@@ -21,7 +21,7 @@ const MindMap: VFC = () => {
   return (
     <>
       <KeyInputManager setIsShitEnter={setIsShiftEnter} />
-      <SVGArea children={mindMapData.rightMap.children} />
+      <SVGArea rootNode={mindMapData.rootNode} children={mindMapData.rightMap.children} />
       <DrawingArea children={mindMapData.rightMap.children} />
       <DroppableArea>
         <Origin>

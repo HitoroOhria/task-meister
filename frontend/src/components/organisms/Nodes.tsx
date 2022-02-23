@@ -9,19 +9,18 @@ type NodesProps = {
 }
 
 const Nodes: VFC<NodesProps> = (props) => {
+  const renderNodes = (children: Children): JSX.Element[] => {
+    const nodes = children.nodes.map((child) => renderNode(child))
+    const grandChildrenNodes = children.nodes.flatMap((child) =>
+      child.group.isHidden ? [] : renderNodes(child.children)
+    )
+
+    return nodes.concat(grandChildrenNodes)
+  }
+
   const renderNode = (node: NodeModel.default): JSX.Element => {
     return <Node key={node.id} node={node} isShiftEnter={props.isShiftEnter} />
   }
-
-  const renderNodeAndChildren = (node: NodeModel.default): JSX.Element[] => {
-    const selfNode = renderNode(node)
-    const childrenNodes = node.group.isHidden ? [] : renderNodes(node.children)
-
-    return [selfNode, ...childrenNodes]
-  }
-
-  const renderNodes = (children: Children): JSX.Element[] =>
-    children.nodes.flatMap((child) => renderNodeAndChildren(child))
 
   return <>{renderNodes(props.nodes)}</>
 }

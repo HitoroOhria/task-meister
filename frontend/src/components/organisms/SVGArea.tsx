@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, VFC } from 'react'
+import React, { VFC } from 'react'
 
-import { MindMapDispatchCtx } from '~/store/context/MindMapDataCtx'
-import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
+import Path from '~/components/atoms/Path'
 
-import RelationshipPath from '~/components/atoms/RelationshipPath'
-
+import RootNode from '~/domain/model/RootNode'
 import Node from '~/domain/model/Node'
 import Children from '~/domain/model/Children'
 
@@ -12,37 +10,49 @@ export const svgAreaWidth = 100 ** 3
 export const svgAreaHeight = 100 ** 3
 
 type Props = {
+  rootNode: RootNode
   children: Children
 }
 
 const SVGArea: VFC<Props> = (props) => {
-  const dispatchMindMapData = useContext(MindMapDispatchCtx)
+  const renderBezierCurves = (children: Children): JSX.Element[] => {
+    const childrenCurves = children.nodes.map((child) => renderBezierCurve(child))
+    const grandChildrenCurves = children
+      .filterHasChild()
+      .flatMap((child) => (child.group.isHidden ? [] : renderBezierCurves(child.children)))
 
-  const renderPath = (node: Node): JSX.Element => {
-    return <RelationshipPath key={node.id} pathCommand={node.relationshipLine.getPathCommand()} />
+    return childrenCurves.concat(grandChildrenCurves)
   }
 
-  const renderPaths = (children: Children): JSX.Element[] => {
-    const childrenPaths = children.nodes.flatMap((child) => renderPath(child))
-    const grandChildrenPaths = children.nodes.flatMap((child) =>
-      child.group.isHidden ? [] : renderPaths(child.children)
+  const renderBezierCurve = (node: Node): JSX.Element => {
+    return <Path key={node.id} pathCommand={node.accessory.bezierCurve.pathCommand()} />
+  }
+
+  const renderLines = (children: Children): JSX.Element[] => {
+    const nodesHasChild = children.filterHasChild()
+    const childrenLines = nodesHasChild.map((child) => renderLine(child))
+    const grandChildrenLines = nodesHasChild.flatMap((child) =>
+      child.group.isHidden ? [] : renderLines(child.children)
     )
 
-    return childrenPaths.concat(grandChildrenPaths)
+    return childrenLines.concat(grandChildrenLines)
   }
 
-  const updateRelationshipLine = () => {
-    dispatchMindMapData({
-      type: actionType.updateAllRelationshipLine,
-      payload: {},
-    })
+  const renderLine = (node: Node): JSX.Element => {
+    return <Path key={node.id} pathCommand={node.accessory.pathLine.pathCommand()} />
   }
 
-  useEffect(updateRelationshipLine, [])
+  const renderRootNodeLine = (rootNode: RootNode): JSX.Element => {
+    return <Path pathCommand={rootNode.pathLine.pathCommand()} />
+  }
 
   return (
     <svg width={svgAreaWidth} height={svgAreaHeight}>
-      {renderPaths(props.children)}
+      <g>{renderBezierCurves(props.children)}</g>
+      <g>
+        {props.children.nodes.length !== 0 && renderRootNodeLine(props.rootNode)}
+        {renderLines(props.children)}
+      </g>
     </svg>
   )
 }

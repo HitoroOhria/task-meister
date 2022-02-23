@@ -24,6 +24,8 @@ type Children = {
 
   findTailNodeOf(childId: string): Node | undefined
 
+  filterHasChild(): Node[]
+
   removeNode(id: string): Node
 
   insertNode(target: Node, dropTop: number, lowerNode: Node): void
@@ -76,6 +78,10 @@ export const childrenImpl: Children = {
 
   findTailNodeOf(childId: string): Node | undefined {
     return this.nodes.find((child) => child.id === childId)?.children.nodes[0]
+  },
+
+  filterHasChild(): Node[] {
+    return this.nodes.filter((child) => child.children.nodes.length !== 0)
   },
 
   removeNode(id: string): Node {

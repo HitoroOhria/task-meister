@@ -3,14 +3,7 @@ import _ from 'lodash'
 import NodeData, { nodeDataImpl } from '~/domain/model/NodeData'
 import Group, { groupImpl, newGroup } from '~/domain/model/Group'
 import Children, { childrenImpl, newChildren } from '~/domain/model/Children'
-import RelationshipLine, {
-  newRelationshipLine,
-  relationshipLineImpl,
-} from '~/domain/model/RelationshipLine'
-import CollapseButton, {
-  collapseButtonImpl,
-  newCollapseButton,
-} from '~/domain/model/CollapseButton'
+import NodeAccessory, { newNodeAccessory, nodeAccessoryImpl } from '~/domain/model/NodeAccessory'
 
 // type to distinguish from RootNode.
 const nodeType = 'node'
@@ -19,8 +12,7 @@ type Node = NodeData & {
   type: typeof nodeType
   group: Group
   children: Children
-  relationshipLine: RelationshipLine
-  collapseButton: CollapseButton
+  accessory: NodeAccessory
 
   hasNodeById(childId: string): boolean
 
@@ -38,8 +30,7 @@ export const newNode = (id: string, text: string, group: Group, children: Childr
     text: text,
     group: group,
     children: children,
-    relationshipLine: newRelationshipLine(),
-    collapseButton: newCollapseButton(),
+    accessory: newNodeAccessory(),
   }
 }
 
@@ -53,8 +44,7 @@ export const newAddNode = (left: number): Node => {
     isSelected: true,
     group: newGroup(),
     children: newChildren([]),
-    relationshipLine: newRelationshipLine(),
-    collapseButton: newCollapseButton(),
+    accessory: newNodeAccessory(),
   }
 }
 
@@ -72,9 +62,7 @@ export const nodeImpl: Node = {
   // children nodes of this node
   children: childrenImpl,
 
-  relationshipLine: relationshipLineImpl,
-
-  collapseButton: collapseButtonImpl,
+  accessory: nodeAccessoryImpl,
 
   hasNodeById(childId: string): boolean {
     return !!this.children.recursively.findNodeById(childId)

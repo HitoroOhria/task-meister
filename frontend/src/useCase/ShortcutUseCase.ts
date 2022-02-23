@@ -56,6 +56,9 @@ class ShortcutUseCase {
     if (selectedNode.type === rootNodeType) {
       const addedNode = newAddNode(mindMapData.rootNode.width / 2)
       mindMapData.rightMap.children.nodes.push(addedNode)
+
+      mindMapData.updateAllPlacement(addedNode.id)
+
       return mindMapData
     }
 
@@ -120,7 +123,7 @@ class ShortcutUseCase {
     }
 
     mindMapData.rightMap.updateNodesVertical(nextSelectedNode)
-    mindMapData.updateNonNodePlacement()
+    mindMapData.updateAccessoryPlacement()
 
     return mindMapData
   }

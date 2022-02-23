@@ -1,5 +1,6 @@
-import React, {CSSProperties, VFC} from 'react'
-import {styled} from '@linaria/react'
+import React, { CSSProperties, VFC } from 'react'
+import { styled } from '@linaria/react'
+
 import PositionAdjuster from '~/components/atoms/PositionAdjuster'
 
 // unit is px.
