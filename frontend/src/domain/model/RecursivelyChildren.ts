@@ -35,6 +35,8 @@ interface RecursivelyChildren {
   deselectNode(): void
 
   updateRelationshipLine(parentNode: NodeData): void
+
+  updateCollapseButton(): void
 }
 
 export const newRecursivelyChildren = (children: Children): RecursivelyChildren => {
@@ -192,6 +194,11 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   updateRelationshipLine(parentNode: NodeData) {
     this.children.nodes.forEach((child) => child.relationshipLine.updatePoints(parentNode, child))
     this.children.nodes.forEach((child) => child.children.recursively.updateRelationshipLine(child))
+  },
+
+  updateCollapseButton() {
+    this.children.nodes.forEach((child) => child.collapseButton.setPoint(child))
+    this.children.nodes.forEach((child) => child.children.recursively.updateCollapseButton())
   },
 }
 

@@ -8,6 +8,7 @@ import DroppableArea from '~/components/organisms/DroppableArea'
 import Origin from '~/components/organisms/Origin'
 import Node from '~/components/organisms/Node'
 import Nodes from '~/components/organisms/Nodes'
+import DrawingArea from '~/components/organisms/DrawingArea'
 
 const MindMap: VFC = () => {
   const mindMapData = useContext(MindMapStateCtx)
@@ -18,6 +19,7 @@ const MindMap: VFC = () => {
     <>
       <KeyInputManager setIsShitEnter={setIsShiftEnter} />
       <SVGArea children={mindMapData.rightMap.children} />
+      <DrawingArea children={mindMapData.rightMap.children} />
       <DroppableArea>
         <Origin>
           <Node node={mindMapData.rootNode} isShiftEnter={isShiftEnter} />

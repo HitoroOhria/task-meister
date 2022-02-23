@@ -26,6 +26,8 @@ type MindMapData = {
   processNodeDropToRight(movedNodeId: string): void
 
   updateRelationshipLine(): void
+
+  updateCollapseButton(): void
 }
 
 export const newMindMapData = (
@@ -111,6 +113,10 @@ export const mindMapDataImpl: MindMapData = {
 
   updateRelationshipLine() {
     this.rightMap.children.recursively.updateRelationshipLine(this.rootNode)
+  },
+
+  updateCollapseButton() {
+    this.rightMap.children.recursively.updateCollapseButton()
   },
 }
 

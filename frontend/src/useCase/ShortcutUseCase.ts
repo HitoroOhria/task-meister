@@ -7,11 +7,14 @@ import ArrowKeyUseCase from '~/useCase/ArrowKeyUseCase'
 import Shortcut, { shortcuts } from '~/enum/Shortcut'
 
 import { assertNever, newNotFoundChildrenErr, newNotFoundNodeErr } from '~/util/ExceptionUtil'
+import MindMapUseCase from '~/useCase/MindMapUseCase'
 
 class ShortcutUseCase {
+  private mindMapUseCase: MindMapUseCase
   private arrowKeyUseCase: ArrowKeyUseCase
 
-  constructor(arrowKeyUseCase: ArrowKeyUseCase) {
+  constructor(mindMapUseCase: MindMapUseCase, arrowKeyUseCase: ArrowKeyUseCase) {
+    this.mindMapUseCase = mindMapUseCase
     this.arrowKeyUseCase = arrowKeyUseCase
   }
 
@@ -28,7 +31,7 @@ class ShortcutUseCase {
       case shortcuts.Left:
         return this.arrowKeyUseCase.handleArrowKeyDown(mindMapData, key, selectedNode)
       case shortcuts.Space:
-        return this.toggleCollapse(mindMapData, selectedNode)
+        return this.mindMapUseCase.toggleCollapse(mindMapData, selectedNode.id)
       case shortcuts.Tab:
         return this.addNodeToTail(mindMapData, selectedNode)
       case shortcuts.Enter:
@@ -45,16 +48,6 @@ class ShortcutUseCase {
         assertNever(key, `Not defined key. key = ${key}`)
         return mindMapData
     }
-  }
-
-  public toggleCollapse(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
-    }
-
-    mindMapData.rightMap.collapseNodes(selectedNode.id)
-    mindMapData.updateRelationshipLine()
-    return mindMapData
   }
 
   public addNodeToTail(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
@@ -124,6 +117,7 @@ class ShortcutUseCase {
 
     mindMapData.rightMap.updateNodesVertical(nextSelectedNode, nextSelectedNode.height)
     mindMapData.updateRelationshipLine()
+    mindMapData.updateCollapseButton()
 
     return mindMapData
   }

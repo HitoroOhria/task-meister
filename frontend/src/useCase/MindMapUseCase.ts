@@ -38,6 +38,7 @@ class MindMapUseCase {
     let newMindMapData = this.setNodeText(mindMapData, id, text)
     newMindMapData = this.updatePlacement(newMindMapData, id, width, height)
     newMindMapData = this.updateRelationshipLine(newMindMapData, id, text)
+    newMindMapData.updateCollapseButton()
 
     return newMindMapData
   }
@@ -67,6 +68,18 @@ class MindMapUseCase {
     return mindMapData
   }
 
+  public toggleCollapse(mindMapData: MindMapData, selectedNodeId: string) {
+    if (mindMapData.rootNode.isSelected) {
+      return mindMapData
+    }
+
+    mindMapData.rightMap.collapseNodes(selectedNodeId)
+    mindMapData.updateRelationshipLine()
+    mindMapData.updateCollapseButton()
+
+    return mindMapData
+  }
+
   public updateRelationshipLine(mindMapData: MindMapData, id: string, text: string): MindMapData {
     // TODO Optimize in following cases
     //   - change text
@@ -93,6 +106,7 @@ class MindMapUseCase {
 
     mindMapData.rightMap.processNodeDrop(movedNodeId, dropPosition)
     mindMapData.updateRelationshipLine()
+    mindMapData.updateCollapseButton()
 
     return mindMapData
   }

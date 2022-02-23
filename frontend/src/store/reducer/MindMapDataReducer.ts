@@ -14,6 +14,7 @@ export const mindMapDataActionType = {
   processNodeDrop: 'MIND_MAP_DATA_PROCESS_NODE_DROP',
   updateRelationshipLine: 'MIND_MAP_DATA_UPDATE_RELATIONSHIP_LINE',
   updateAllRelationshipLine: 'MIND_MAP_DATA_UPDATE_ALL_RELATIONSHIP_LINE',
+  toggleCollapse: 'MIND_MAP_DATA_TOGGLE_COLLAPSE',
   processKeydown: 'MIND_MAP_DATA_PROCESS_KEYDOWN',
 } as const
 
@@ -37,7 +38,7 @@ export type MindMapDataAction = {
 
 const mindMapUseCase = new MindMapUseCase()
 const arrowKeyUseCase = new ArrowKeyUseCase()
-const shortcutUseCase = new ShortcutUseCase(arrowKeyUseCase)
+const shortcutUseCase = new ShortcutUseCase(mindMapUseCase, arrowKeyUseCase)
 
 export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction): MindMapData => {
   const newState = { ...state }
@@ -66,6 +67,8 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
         action.payload.id!,
         action.payload.dropPosition!
       )
+    case mindMapDataActionType.toggleCollapse:
+      return mindMapUseCase.toggleCollapse(newState, action.payload.id!)
     case mindMapDataActionType.updateRelationshipLine:
       return mindMapUseCase.updateRelationshipLine(
         newState,
