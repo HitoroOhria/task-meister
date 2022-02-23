@@ -4,7 +4,7 @@ import { styled } from '@linaria/react'
 import PositionAdjuster from '~/components/atoms/PositionAdjuster'
 
 // unit is px.
-export const diameter = 20
+export const diameter = 18
 const color = 'blue'
 
 type Props = {
