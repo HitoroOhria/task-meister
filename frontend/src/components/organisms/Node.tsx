@@ -80,9 +80,9 @@ const Node: VFC<Props> = (props) => {
         >
           <TextInputer
             text={props.node.text}
-            setText={(text) => handleNodeTextChanges(text)}
+            onChange={(text) => handleNodeTextChanges(text)}
             isInputting={props.node.isInputting}
-            handleBlur={exitEditMode}
+            onBlur={exitEditMode}
           />
         </NodeDiv>
       </DraggableElement>

@@ -19,8 +19,8 @@ export const elementSizeCalculator = new ElementSizeCalculator(font)
 type Props = {
   text: string
   isInputting: boolean
-  setText: (text: string) => void
-  handleBlur: () => void
+  onChange: (text: string) => void
+  onBlur: () => void
 }
 
 const TextInputer: VFC<Props> = (props) => {
@@ -79,8 +79,8 @@ const TextInputer: VFC<Props> = (props) => {
         <Textarea
           ref={textareaElement}
           defaultValue={props.text}
-          onChange={(e) => props.setText(e.target.value)}
-          onBlur={props.handleBlur}
+          onChange={(e) => props.onChange(e.target.value)}
+          onBlur={props.onBlur}
         />
       ) : (
         <SpanInlineBlock>{props.text}</SpanInlineBlock>
