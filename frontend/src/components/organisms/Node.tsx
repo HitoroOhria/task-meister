@@ -80,8 +80,8 @@ const Node: VFC<Props> = (props) => {
         >
           <TextInputer
             text={props.node.text}
-            onChange={(text) => handleNodeTextChanges(text)}
             isInputting={props.node.isInputting}
+            onChange={(text) => handleNodeTextChanges(text)}
             onBlur={exitEditMode}
           />
         </NodeDiv>
@@ -102,6 +102,6 @@ const NodeDiv = styled.div<NodeDivProps>`
   margin: ${verticalMargin}px ${horizontalMargin}px;
   padding: ${padding}px;
   border: thick solid ${(props) => props.borderColor};
-  border-radius: 10px;
-  background-color: gray;
+  border-radius: 10px
+  background-color: gray
 `

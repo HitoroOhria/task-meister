@@ -39,6 +39,7 @@ const DrawingArea: VFC<Props> = (props) => {
     return collapseButtons.concat(grandChildrenCollapseButtons)
   }
 
+  // Enclose in div to make dom tree easier to see
   return <div>{renderCollapseButtons(props.children)}</div>
 }
 

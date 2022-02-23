@@ -5,11 +5,11 @@ import { MindMapDispatchCtx, MindMapStateCtx } from '~/store/context/MindMapData
 
 import KeyInputManager from '~/components/organisms/KeyInputManager'
 import SVGArea from '~/components/organisms/SVGArea'
+import DrawingArea from '~/components/organisms/DrawingArea'
 import DroppableArea from '~/components/organisms/DroppableArea'
 import Origin from '~/components/organisms/Origin'
 import Node from '~/components/organisms/Node'
 import Nodes from '~/components/organisms/Nodes'
-import DrawingArea from '~/components/organisms/DrawingArea'
 
 const MindMap: VFC = () => {
   const mindMapData = useContext(MindMapStateCtx)
