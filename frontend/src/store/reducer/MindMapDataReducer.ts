@@ -8,6 +8,7 @@ import ShortcutUseCase from '~/useCase/ShortcutUseCase'
 import Shortcut from '~/enum/Shortcut'
 
 export const mindMapDataActionType = {
+  init: 'MIND_MAP_DATA_INIT',
   setNodeIsInputting: 'MIND_MAP_DATA_SET_NODE_IS_INPUTTING',
   selectNode: 'MIND_MAP_DATA_SELECT_NODE',
   processNodeTextChanges: 'MIND_MAP_DATA_PROCESS_NODE_TEXT_CHANGES',
@@ -45,6 +46,8 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
 
   // TODO Can rewrite to using Map?
   switch (action.type) {
+    case mindMapDataActionType.init:
+      return mindMapUseCase.init(newState)
     case mindMapDataActionType.setNodeIsInputting:
       return mindMapUseCase.setNodeIsInputting(
         newState,
@@ -57,9 +60,7 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
       return mindMapUseCase.processNodeTextChanges(
         newState,
         action.payload.id!,
-        action.payload.text!,
-        action.payload.width!,
-        action.payload.height!
+        action.payload.text!
       )
     case mindMapDataActionType.processNodeDrop:
       return mindMapUseCase.processNodeDrop(

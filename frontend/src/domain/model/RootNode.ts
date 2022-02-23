@@ -6,9 +6,11 @@ export const rootNodeType = 'rootNode'
 type RootNode = NodeData & {
   type: typeof rootNodeType
 
-  updateLateral(width: number): void
+  updatePlacement(): void
 
-  updateVertical(height: number): void
+  updateLateral(): void
+
+  updateVertical(): void
 }
 
 export const newRootNode = (id: string, text: string): RootNode => {
@@ -24,14 +26,19 @@ export const rootNodeImpl: RootNode = {
 
   type: rootNodeType,
 
-  updateLateral(width: number) {
-    this.width = width
-    this.left = -width / 2
+  updatePlacement() {
+    this.updateLateral()
+    this.updateVertical()
   },
 
-  updateVertical(height: number) {
-    this.height = height
-    this.top = -height / 2
+  updateLateral() {
+    this.setWith()
+    this.left = -this.width / 2
+  },
+
+  updateVertical() {
+    this.setHeight()
+    this.top = -this.height / 2
   },
 }
 Object.freeze(rootNodeImpl)

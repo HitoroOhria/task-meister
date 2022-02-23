@@ -8,11 +8,11 @@ type RightMap = {
 
   setTextById(id: string, text: string): void
 
-  updatePlacement(id: string, width: number, height: number): void
+  updatePlacement(id: string): void
 
-  updateNodesLateral(updatedNode: Node, width: number, left: number): void
+  updateNodesLateral(updatedNode: Node, left: number): void
 
-  updateNodesVertical(updatedNode: Node, height: number): void
+  updateNodesVertical(updatedNode: Node): void
 
   processNodeDrop(movedNodeId: string, dropPosition: DropPosition): void
 
@@ -40,24 +40,24 @@ export const rightMapImpl: RightMap = {
     targetNode.text = text
   },
 
-  updatePlacement(id: string, width: number, height: number) {
+  updatePlacement(id: string) {
     const target = this.children.recursively.findNodeById(id)
     if (!target) {
       throw new Error(`Can not found nodeData by id. id = ${id}`)
     }
 
-    this.updateNodesLateral(target, width, target.left)
-    this.updateNodesVertical(target, height)
+    this.updateNodesLateral(target, target.left)
+    this.updateNodesVertical(target)
   },
 
-  updateNodesLateral(updatedNode: Node, width: number, left: number) {
-    updatedNode.width = width
+  updateNodesLateral(updatedNode: Node, left: number) {
+    updatedNode.setWith()
     updatedNode.left = left
-    updatedNode.children.recursively.setNodeLeft(left, width)
+    updatedNode.children.recursively.setNodeLeft(left, updatedNode.width)
   },
 
-  updateNodesVertical(updatedNode: Node, height: number) {
-    updatedNode.height = height
+  updateNodesVertical(updatedNode: Node) {
+    updatedNode.setHeight()
     this.children.recursively.updateGroupAndChildrenHeight()
 
     const totalOfGroupHeights = total(this.children.nodes.map((nodeData) => nodeData.group.height))
@@ -80,8 +80,8 @@ export const rightMapImpl: RightMap = {
     const newLeft = lowerNode.onTail(dropPosition.left)
       ? lowerNode.left + lowerNode.width
       : lowerNode.left
-    this.updateNodesLateral(movedNode, movedNode.width, newLeft)
-    this.updateNodesVertical(movedNode, movedNode.height)
+    this.updateNodesLateral(movedNode, newLeft)
+    this.updateNodesVertical(movedNode)
   },
 
   insertNode(target: Node, dropPosition: DropPosition, lowerNode: Node) {
@@ -105,7 +105,7 @@ export const rightMapImpl: RightMap = {
     }
 
     selectedNode.toggleCollapse()
-    this.updateNodesVertical(selectedNode, selectedNode.height)
+    this.updateNodesVertical(selectedNode)
   },
 }
 

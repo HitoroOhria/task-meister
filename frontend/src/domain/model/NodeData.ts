@@ -1,7 +1,9 @@
-import { horizontalMargin } from '~/components/organisms/Node'
+import { borderWidth, horizontalMargin, padding, verticalMargin } from '~/components/organisms/Node'
+import { elementSizeCalculator, lineHeight, minWidth } from '~/components/atoms/TextInputer'
 import { originX, originY } from '~/components/organisms/Origin'
 
 import DropPosition from '~/domain/model/DropPosition'
+import { numberOfLines } from '~/util/StringUtil'
 
 // Ratio of width representing tail area of node.
 const tailAreaRatio = 0.2
@@ -16,6 +18,12 @@ type NodeData = {
   isHidden: boolean
   isSelected: boolean
   isInputting: boolean
+
+  setSize(): void
+
+  setWith(): void
+
+  setHeight(): void
 
   getElementWidth(): number
 
@@ -58,6 +66,26 @@ export const nodeDataImpl: NodeData = {
   isSelected: false,
 
   isInputting: false,
+
+  setSize() {
+    this.setWith()
+    this.setHeight()
+  },
+
+  setWith() {
+    const textWidth =
+      elementSizeCalculator.measureLongestLineWidth(this.text) < minWidth
+        ? minWidth
+        : elementSizeCalculator.measureLongestLineWidth(this.text)
+
+    this.width = horizontalMargin * 2 + borderWidth * 2 + padding * 2 + textWidth
+  },
+
+  setHeight() {
+    const textHeight = lineHeight * numberOfLines(this.text)
+
+    this.height = verticalMargin * 2 + borderWidth * 2 + padding * 2 + textHeight
+  },
 
   getElementWidth(): number {
     return this.width - horizontalMargin * 2

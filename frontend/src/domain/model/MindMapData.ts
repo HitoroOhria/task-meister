@@ -17,11 +17,19 @@ type MindMapData = {
 
   findHeadNode(id: string): RootNode | Node | undefined
 
+  setNodeSize(): void
+
   deselectNode(): void
 
   selectTail(): void
 
-  updateRootNodePlacement(width: number, height: number): void
+  updateAllPlacement(id: string): void
+
+  updateNodePlacement(id: string): void
+
+  updateRootNodePlacement(): void
+
+  updateNonNodePlacement(): void
 
   processNodeDropToRight(movedNodeId: string): void
 
@@ -80,6 +88,11 @@ export const mindMapDataImpl: MindMapData = {
     return this.rightMap.children.recursively.findHeadNode(id)
   },
 
+  setNodeSize() {
+    this.rootNode.setSize()
+    this.rightMap.children.recursively.setNodeSize()
+  },
+
   deselectNode() {
     if (this.rootNode.isSelected) {
       this.rootNode.isSelected = false
@@ -96,10 +109,27 @@ export const mindMapDataImpl: MindMapData = {
     this.rightMap.children.nodes[0].isSelected = true
   },
 
-  updateRootNodePlacement(width: number, height: number) {
-    this.rootNode.updateLateral(width)
-    this.rootNode.updateVertical(height)
+  updateAllPlacement(id: string) {
+    this.updateNodePlacement(id)
+    this.updateNonNodePlacement()
+  },
+
+  updateNodePlacement(id: string) {
+    if (id === this.rootNode.id) {
+      this.updateRootNodePlacement()
+    }
+
+    this.rightMap.updatePlacement(id)
+  },
+
+  updateRootNodePlacement() {
+    this.rootNode.updatePlacement()
     this.rightMap.children.recursively.setNodeLeft(this.rootNode.left, this.rootNode.width)
+  },
+
+  updateNonNodePlacement() {
+    this.updateRelationshipLine()
+    this.updateCollapseButton()
   },
 
   processNodeDropToRight(movedNodeId: string) {
@@ -107,8 +137,8 @@ export const mindMapDataImpl: MindMapData = {
     this.rightMap.children.nodes.push(movedNode)
 
     const newLeft = this.rootNode.width / 2
-    this.rightMap.updateNodesLateral(movedNode, movedNode.width, newLeft)
-    this.rightMap.updateNodesVertical(movedNode, movedNode.height)
+    this.rightMap.updateNodesLateral(movedNode, newLeft)
+    this.rightMap.updateNodesVertical(movedNode)
   },
 
   updateRelationshipLine() {

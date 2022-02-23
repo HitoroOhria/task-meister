@@ -2,6 +2,19 @@ import MindMapData from '~/domain/model/MindMapData'
 import DropPosition from '~/domain/model/DropPosition'
 
 class MindMapUseCase {
+  public init(mindMapData: MindMapData): MindMapData {
+    mindMapData.setNodeSize()
+
+    mindMapData.updateRootNodePlacement()
+    if (mindMapData.rightMap.children.nodes.length !== 0) {
+      const firstNode = mindMapData.rightMap.children.nodes[0]
+      mindMapData.rightMap.updatePlacement(firstNode.id)
+    }
+    mindMapData.updateNonNodePlacement()
+
+    return mindMapData
+  }
+
   public setNodeIsInputting(
     mindMapData: MindMapData,
     id: string,
@@ -28,43 +41,13 @@ class MindMapUseCase {
     return mindMapData
   }
 
-  public processNodeTextChanges(
-    mindMapData: MindMapData,
-    id: string,
-    text: string,
-    width: number,
-    height: number
-  ): MindMapData {
-    let newMindMapData = this.setNodeText(mindMapData, id, text)
-    newMindMapData = this.updatePlacement(newMindMapData, id, width, height)
-    newMindMapData = this.updateRelationshipLine(newMindMapData, id, text)
-    newMindMapData.updateCollapseButton()
+  public processNodeTextChanges(mindMapData: MindMapData, id: string, text: string): MindMapData {
+    id === mindMapData.rootNode.id
+      ? (mindMapData.rootNode.text = text)
+      : mindMapData.rightMap.setTextById(id, text)
 
-    return newMindMapData
-  }
+    mindMapData.updateAllPlacement(id)
 
-  private setNodeText(mindMapData: MindMapData, id: string, text: string): MindMapData {
-    if (mindMapData.rootNode.id === id) {
-      mindMapData.rootNode.text = text
-      return mindMapData
-    }
-
-    mindMapData.rightMap.setTextById(id, text)
-    return mindMapData
-  }
-
-  private updatePlacement(
-    mindMapData: MindMapData,
-    id: string,
-    width: number,
-    height: number
-  ): MindMapData {
-    if (id === mindMapData.rootNode.id) {
-      mindMapData.updateRootNodePlacement(width, height)
-      return mindMapData
-    }
-
-    mindMapData.rightMap.updatePlacement(id, width, height)
     return mindMapData
   }
 
@@ -74,8 +57,7 @@ class MindMapUseCase {
     }
 
     mindMapData.rightMap.collapseNodes(selectedNodeId)
-    mindMapData.updateRelationshipLine()
-    mindMapData.updateCollapseButton()
+    mindMapData.updateNonNodePlacement()
 
     return mindMapData
   }
@@ -105,8 +87,7 @@ class MindMapUseCase {
     }
 
     mindMapData.rightMap.processNodeDrop(movedNodeId, dropPosition)
-    mindMapData.updateRelationshipLine()
-    mindMapData.updateCollapseButton()
+    mindMapData.updateNonNodePlacement()
 
     return mindMapData
   }

@@ -63,6 +63,8 @@ class ShortcutUseCase {
     const addedNode = newAddNode(selectedNode.left + selectedNode.width)
     selectedNode.children.nodes.push(addedNode)
 
+    mindMapData.updateAllPlacement(addedNode.id)
+
     return mindMapData
   }
 
@@ -84,6 +86,8 @@ class ShortcutUseCase {
       ? newAddNode(mindMapData.rootNode.width / 2)
       : newAddNode(selectedNode.left)
     parentChildren.insertNodeToBottomOf(selectedNode.id, addedNode)
+
+    mindMapData.updateAllPlacement(addedNode.id)
 
     return mindMapData
   }
@@ -115,9 +119,8 @@ class ShortcutUseCase {
       return mindMapData
     }
 
-    mindMapData.rightMap.updateNodesVertical(nextSelectedNode, nextSelectedNode.height)
-    mindMapData.updateRelationshipLine()
-    mindMapData.updateCollapseButton()
+    mindMapData.rightMap.updateNodesVertical(nextSelectedNode)
+    mindMapData.updateNonNodePlacement()
 
     return mindMapData
   }

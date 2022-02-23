@@ -1,6 +1,7 @@
-import React, { useContext, useState, VFC } from 'react'
+import React, { useContext, useEffect, useState, VFC } from 'react'
 
-import { MindMapStateCtx } from '~/store/context/MindMapDataCtx'
+import { mindMapDataActionType } from '~/store/reducer/MindMapDataReducer'
+import { MindMapDispatchCtx, MindMapStateCtx } from '~/store/context/MindMapDataCtx'
 
 import KeyInputManager from '~/components/organisms/KeyInputManager'
 import SVGArea from '~/components/organisms/SVGArea'
@@ -12,9 +13,11 @@ import DrawingArea from '~/components/organisms/DrawingArea'
 
 const MindMap: VFC = () => {
   const mindMapData = useContext(MindMapStateCtx)
+  const dispatchMindMapData = useContext(MindMapDispatchCtx)
   const [isShiftEnter, setIsShiftEnter] = useState<boolean>(false)
 
-  // TODO Why is display smaller on monitor?
+  useEffect(() => dispatchMindMapData({ type: mindMapDataActionType.init, payload: {} }), [])
+
   return (
     <>
       <KeyInputManager setIsShitEnter={setIsShiftEnter} />
