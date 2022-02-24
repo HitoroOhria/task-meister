@@ -39,7 +39,7 @@ class ShortcutUseCase {
       case shortcuts.Backspace:
         return this.deleteNode(mindMapData, selectedNode)
       case shortcuts.MetaE:
-        return this.editNode(mindMapData, selectedNode)
+        return this.mindMapUseCase.enterNodeEditMode(mindMapData, selectedNode.id)
       case shortcuts.ShiftEnter:
       case shortcuts.F6:
         // Ignore
@@ -126,10 +126,6 @@ class ShortcutUseCase {
     mindMapData.updateAccessoryPlacement()
 
     return mindMapData
-  }
-
-  public editNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
-    return this.mindMapUseCase.enterNodeEditMode(mindMapData, selectedNode.id)
   }
 }
 
