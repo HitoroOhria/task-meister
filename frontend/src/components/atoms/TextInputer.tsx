@@ -136,6 +136,8 @@ type TextProps = {
   height: number
 }
 
+// TODO Let's animate!!
+// see https://qiita.com/bouzuya/items/cacdab4f9989efe245ca
 const Textarea = styled.textarea<TextProps>`
   padding: 0px
   min-width: inherit
