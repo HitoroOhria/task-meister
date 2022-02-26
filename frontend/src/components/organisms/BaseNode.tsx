@@ -109,7 +109,7 @@ const NodeDiv = styled.div<NodeDivProps>`
   display: ${(props) => (props.hidden ? 'none' : 'block')};
   margin: ${verticalMargin}px ${horizontalMargin}px;
   padding: ${padding}px;
-  border: thick solid ${(props) => (props.selected ? 'yellow' : 'blue')};
+  border: thick solid ${(props) => (props.selected ? 'greenyellow' : 'blue')};
   border-radius: 10px
   background-color: ${backgroundColor}
   display: flex
