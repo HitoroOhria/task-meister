@@ -64,6 +64,8 @@ export const bezierCurveImpl: BezierCurve = {
     const startPointX = parentNode.getTailBranchX()
     const startPointY = parentNode.getElementCenterY()
     const controlPointX = startPointX + (horizontalMargin * 2 * (1 - pathLineRatio)) / 2
+    // Right is startPointX + (horizontalMargin * 2 * (1 - pathLineRatio))
+    // But, end point x is head of Node because it is more beautiful.
     const endPointX = startPointX + horizontalMargin * 2
     const endPointY = node.getElementCenterY()
 

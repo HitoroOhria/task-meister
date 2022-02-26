@@ -25,6 +25,7 @@ const CollapseButton: VFC<Props> = (props) => {
 export default CollapseButton
 
 const UpperPositionAdjuster = styled(PositionAdjusterDiv)`
+  // To make button clickable.
   z-index: 1;
 `
 

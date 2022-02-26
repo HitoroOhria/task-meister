@@ -1,4 +1,5 @@
 import React, { VFC } from 'react'
+import { styled } from '@linaria/react'
 
 // ratio of path to line end.
 export const pathLineRatio = 0.35
@@ -11,7 +12,13 @@ type Props = {
 }
 
 const Path: VFC<Props> = (props) => {
-  return <path d={props.pathCommand} stroke={pathColor} strokeWidth={pathWidth} fill="none" />
+  return <SVGPath d={props.pathCommand} stroke={pathColor} strokeWidth={pathWidth} fill="none" />
 }
 
 export default Path
+
+const SVGPath = styled.path`
+  // To be behind Node.
+  // Path in Node is hidden.
+  z-index: -1;
+`
