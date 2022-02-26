@@ -5,6 +5,7 @@ import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
 
 class MindMapUseCase {
   public init(mindMapData: MindMapData): MindMapData {
+    mindMapData.rootNode.isSelected = true
     mindMapData.setNodeSize()
 
     mindMapData.updateRootNodePlacement()
