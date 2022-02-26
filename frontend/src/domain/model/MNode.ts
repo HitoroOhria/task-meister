@@ -10,9 +10,10 @@ import { spacerWidth } from '~/components/organisms/Node'
 import {
   elementSizeCalculator,
   lineHeight,
+  minHeight as textMinHeight,
   minWidth as textMinWidth,
 } from '~/components/atoms/TextInputer'
-import { height as checkboxHeight, width as checkboxWidth } from '~/components/atoms/Checkbox'
+import { width as checkboxWidth } from '~/components/atoms/Checkbox'
 
 import { pickBiggerNumber } from '~/util/NumberUtil'
 import { numberOfLines } from '~/util/StringUtil'
@@ -88,7 +89,7 @@ export const nodeImpl: MNode = {
 
   setHeight() {
     const textHeight = lineHeight * numberOfLines(this.text)
-    const elementHeight = pickBiggerNumber(checkboxHeight, textHeight)
+    const elementHeight = pickBiggerNumber(textMinHeight, textHeight)
 
     this.height = this.getAroundAreaHeight() + elementHeight
   },

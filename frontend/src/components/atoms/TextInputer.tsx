@@ -1,10 +1,17 @@
 import React, { useEffect, useRef, useState, VFC } from 'react'
+
 import { styled } from '@linaria/react'
+
+import { height as checkboxHeight } from '~/components/atoms/Checkbox'
+
 import ElementSizeCalculator from '~/util/ElementSizeCalculator'
 import { numberOfLines } from '~/util/StringUtil'
+import { pickBiggerNumber } from '~/util/NumberUtil'
 
 // minimum width of css. unit is px.
 export const minWidth = 50
+export const minHeight = checkboxHeight
+
 // line height of css. unit is px.
 export const lineHeight = 18
 // font size of css. unit is px.
@@ -25,30 +32,39 @@ type Props = {
 
 const TextInputer: VFC<Props> = (props) => {
   const textareaElement = useRef<HTMLTextAreaElement>(null)
-  const [textWidth, setTextWidth] = useState<number>(0)
+  const [divWidth, setDivWidth] = useState<number>(0)
+  const [divHeight, setDivHeight] = useState<number>(0)
+  // For centering text vertically.
   const [textHeight, setTextHeight] = useState<number>(0)
 
   const componentDidMount = () => {
-    updateTextWidth()
-    updateTextHeight()
+    updateAreaSize()
   }
 
   const updateAreaSize = () => {
     // TODO Can refactor to use BoundingClientRect?
     //   - see https://developer.mozilla.org/ja/docs/Web/API/Element/getBoundingClientRect
-    updateTextWidth()
+    updateDivWidth()
+    updateDivHeight()
     updateTextHeight()
   }
 
-  const updateTextWidth = () => {
-    const textElementWidth = Math.ceil(elementSizeCalculator.measureLongestLineWidth(props.text))
-    const textWidth = minWidth < textElementWidth ? textElementWidth : minWidth
+  const updateDivWidth = () => {
+    const textWidth = Math.ceil(elementSizeCalculator.measureLongestLineWidth(props.text))
+    const width = pickBiggerNumber(minWidth, textWidth)
 
-    setTextWidth(textWidth)
+    setDivWidth(width)
+  }
+
+  const updateDivHeight = () => {
+    // TODO Maybe height changes depending on resolution of display
+    const textHeight = numberOfLines(props.text) * lineHeight
+    const height = pickBiggerNumber(minHeight, textHeight)
+
+    setDivHeight(height)
   }
 
   const updateTextHeight = () => {
-    // TODO Maybe height changes depending on resolution of display
     const textHeight = numberOfLines(props.text) * lineHeight
 
     setTextHeight(textHeight)
@@ -74,16 +90,17 @@ const TextInputer: VFC<Props> = (props) => {
   useEffect(handleIsInputting, [props.isInputting])
 
   return (
-    <TopDiv width={textWidth} height={textHeight}>
+    <TopDiv width={divWidth} height={divHeight}>
       {props.isInputting ? (
         <Textarea
           ref={textareaElement}
+          height={textHeight}
           defaultValue={props.text}
           onChange={(e) => props.onChange(e.target.value)}
           onBlur={props.onBlur}
         />
       ) : (
-        <SpanInlineBlock>{props.text}</SpanInlineBlock>
+        <SpanInlineBlock height={textHeight}>{props.text}</SpanInlineBlock>
       )}
     </TopDiv>
   )
@@ -99,30 +116,37 @@ type TopDivProps = {
 }
 
 const TopDiv = styled.div<TopDivProps>`
-  min-width: ${minWidth}px;
+  min-width: ${minWidth}px
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
-  font: ${font};
-  line-height: ${lineHeight}px;
+  font: ${font}
+  line-height: ${lineHeight}px
+  display: flex
+  align-items: center
 `
 
-const Textarea = styled.textarea`
-  padding: 0px;
-  min-width: inherit;
-  width: inherit;
-  height: inherit;
-  font: inherit;
-  border-width: 0px;
-  background-color: gray;
-  outline: none;
-  resize: none;
-  overflow: hidden;
+type TextProps = {
+  // unit is px.
+  height: number
+}
+
+const Textarea = styled.textarea<TextProps>`
+  padding: 0px
+  min-width: inherit
+  width: inherit
+  height: ${(props) => props.height}px;
+  font: inherit
+  border-width: 0px
+  background-color: gray
+  outline: none
+  resize: none
+  overflow: hidden
 `
 
-const SpanInlineBlock = styled.span`
-  min-width: inherit;
-  width: inherit;
-  height: inherit;
-  font: inherit;
-  display: inline-block;
+const SpanInlineBlock = styled.span<TextProps>`
+  min-width: inherit
+  width: inherit
+  height: ${(props) => props.height}px;
+  font: inherit
+  display: inline-block
 `
