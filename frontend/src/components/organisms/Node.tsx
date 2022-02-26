@@ -10,14 +10,17 @@ import TextInputer from '~/components/atoms/TextInputer'
 
 import NodeData from '~/domain/model/NodeData'
 
-// width of textarea from border to text
-// values of below is average of measured values
+// Ratio of width representing tail area of node.
+export const tailAreaRatio = 0.2
+
+// Width of textarea from border to text.
+// Values of below is average of measured values.
 export const borderWidth = 5
-// one of vertical margin. unit is px.
+// One of vertical margin. unit is px.
 export const verticalMargin = 15
-// one of horizontal margin. unit is px.
+// One of horizontal margin. unit is px.
 export const horizontalMargin = 30
-// padding of css. unit is px.
+// Padding of css. unit is px.
 export const padding = 20
 
 type Props = {

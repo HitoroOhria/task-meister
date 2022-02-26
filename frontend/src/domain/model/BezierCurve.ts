@@ -61,7 +61,7 @@ export const bezierCurveImpl: BezierCurve = {
   },
 
   updatePoints(parentNode: NodeData, node: NodeData) {
-    const startPointX = parentNode.getElementCollapseX()
+    const startPointX = parentNode.getTailBranchX()
     const startPointY = parentNode.getElementCenterY()
     const controlPointX = startPointX + (horizontalMargin * 2 * (1 - pathLineRatio)) / 2
     const endPointX = startPointX + horizontalMargin * 2

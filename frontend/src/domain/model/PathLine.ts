@@ -42,7 +42,7 @@ export const pathLineImpl: PathLine = {
 
   updatePoints(node: NodeData) {
     const startPointX = node.getElementTailX()
-    const endPointX = node.getElementCollapseX()
+    const endPointX = node.getTailBranchX()
     const lineY = node.getElementCenterY()
 
     this.setPoints(startPointX, endPointX, lineY)
