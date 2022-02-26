@@ -118,6 +118,8 @@ class MindMapUseCase {
       selectedNode.checkbox.checked = false
     }
 
+    mindMapData.updateAllPlacement(selectedNodeId)
+
     return mindMapData
   }
 
