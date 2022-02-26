@@ -23,24 +23,30 @@ class KeyInput {
   }
 
   public getShortcut = (): Shortcut | undefined => {
+    // Sort in desc order of probability.
+
     switch (true) {
-      case this.isShiftEnter():
-        return shortcuts.ShiftEnter
       case this.isMetaE():
         return shortcuts.MetaE
+      case this.isMetaEnter():
+        return shortcuts.MetaEnter
+      case this.isShiftEnter():
+        return shortcuts.ShiftEnter
     }
 
     switch (this.currentKey) {
       case getArrowKey(this.currentKey):
         return getArrowKey(this.currentKey)
-      case shortcuts.Space:
-        return shortcuts.Space
       case shortcuts.Tab:
         return shortcuts.Tab
       case shortcuts.Enter:
         return shortcuts.Enter
       case shortcuts.Backspace:
         return shortcuts.Backspace
+      case shortcuts.C:
+        return shortcuts.C
+      case shortcuts.Space:
+        return shortcuts.Space
       case shortcuts.F6:
         return shortcuts.F6
       default:
@@ -54,6 +60,10 @@ class KeyInput {
 
   private isMetaE(): boolean {
     return this.currentKey === 'e' && this.isPressKey('Meta')
+  }
+
+  private isMetaEnter(): boolean {
+    return this.currentKey === 'Enter' && this.isPressKey('Meta')
   }
 
   private isPressKey(key: string): boolean {

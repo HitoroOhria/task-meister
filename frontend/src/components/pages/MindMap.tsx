@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, VFC } from 'react'
 
-import { mindMapDataActionType } from '~/store/reducer/MindMapDataReducer'
+import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
 import { MindMapDispatchCtx, MindMapStateCtx } from '~/store/context/MindMapDataCtx'
 
 import KeyInputManager from '~/components/organisms/KeyInputManager'
@@ -16,7 +16,7 @@ const MindMap: VFC = () => {
   const dispatchMindMapData = useContext(MindMapDispatchCtx)
   const [isShiftEnter, setIsShiftEnter] = useState<boolean>(false)
 
-  useEffect(() => dispatchMindMapData({ type: mindMapDataActionType.init, payload: {} }), [])
+  useEffect(() => dispatchMindMapData({ type: actionType.init, payload: {} }), [])
 
   return (
     <>

@@ -17,6 +17,9 @@ export const mindMapDataActionType = {
   updateRelationshipLine: 'MIND_MAP_DATA_UPDATE_RELATIONSHIP_LINE',
   updateAllRelationshipLine: 'MIND_MAP_DATA_UPDATE_ALL_RELATIONSHIP_LINE',
   toggleCollapse: 'MIND_MAP_DATA_TOGGLE_COLLAPSE',
+  displayCheckbox: 'MIND_MAP_DATA_DISPLAY_CHECKBOX',
+  hiddenCheckbox: 'MIND_MAP_DATA_HIDDEN_CHECKBOX',
+  toggleCheckbox: 'MIND_MAP_DATA_TOGGLE_CHECKBOX',
   processKeydown: 'MIND_MAP_DATA_PROCESS_KEYDOWN',
 } as const
 
@@ -77,6 +80,8 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
       )
     case mindMapDataActionType.updateAllRelationshipLine:
       return mindMapUseCase.updateAllRelationshipLine(newState)
+    case mindMapDataActionType.toggleCheckbox:
+      return mindMapUseCase.toggleCheckbox(newState, action.payload.id!)
     case mindMapDataActionType.processKeydown:
       return shortcutUseCase.handleKeydown(newState, action.payload.shortcut!)
     default:

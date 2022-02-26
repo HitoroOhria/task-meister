@@ -101,6 +101,34 @@ class MindMapUseCase {
 
     return mindMapData
   }
+
+  public toggleCheckboxHidden(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
+    const selectedNode = mindMapData.rightMap.children.recursively.findNodeById(selectedNodeId)
+    if (!selectedNode) {
+      throw newNotFoundNodeErr(selectedNode)
+    }
+
+    selectedNode.checkbox.hidden = !selectedNode.checkbox.hidden
+    if (selectedNode.checkbox.hidden) {
+      selectedNode.checkbox.checked = false
+    }
+
+    return mindMapData
+  }
+
+  public toggleCheckbox(mindMapData: MindMapData, checkedNodeId: string): MindMapData {
+    const checkedNode = mindMapData.rightMap.children.recursively.findNodeById(checkedNodeId)
+    if (!checkedNode) {
+      throw newNotFoundNodeErr(checkedNode)
+    }
+    if (checkedNode.checkbox.hidden) {
+      return mindMapData
+    }
+
+    checkedNode.checkbox.checked = !checkedNode.checkbox.checked
+
+    return mindMapData
+  }
 }
 
 export default MindMapUseCase

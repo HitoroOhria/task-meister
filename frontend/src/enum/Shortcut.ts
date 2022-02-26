@@ -2,12 +2,14 @@ import { arrowKeys } from '~/enum/ArrowKeys'
 
 export const shortcuts = {
   ...arrowKeys,
+  C: 'c',
   Space: ' ',
   Tab: 'Tab',
   Enter: 'Enter',
   Backspace: 'Backspace',
   ShiftEnter: 'ShiftEnter',
   MetaE: 'MetaE',
+  MetaEnter: 'MetaEnter',
   F6: 'F6',
 } as const
 

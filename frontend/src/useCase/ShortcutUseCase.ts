@@ -24,14 +24,13 @@ class ShortcutUseCase {
       return mindMapData
     }
 
+    // Sort in desc order of probability.
     switch (key) {
       case shortcuts.Up:
       case shortcuts.Down:
       case shortcuts.Right:
       case shortcuts.Left:
         return this.arrowKeyUseCase.handleArrowKeyDown(mindMapData, key, selectedNode)
-      case shortcuts.Space:
-        return this.mindMapUseCase.toggleCollapse(mindMapData, selectedNode.id)
       case shortcuts.Tab:
         return this.addNodeToTail(mindMapData, selectedNode)
       case shortcuts.Enter:
@@ -40,9 +39,14 @@ class ShortcutUseCase {
         return this.deleteNode(mindMapData, selectedNode)
       case shortcuts.MetaE:
         return this.mindMapUseCase.enterNodeEditMode(mindMapData, selectedNode.id)
-      case shortcuts.ShiftEnter:
-      case shortcuts.F6:
-        // Ignore
+      case shortcuts.C:
+        return this.mindMapUseCase.toggleCheckboxHidden(mindMapData, selectedNode.id)
+      case shortcuts.MetaEnter:
+        return this.mindMapUseCase.toggleCheckbox(mindMapData, selectedNode.id)
+      case shortcuts.Space:
+        return this.mindMapUseCase.toggleCollapse(mindMapData, selectedNode.id)
+      case shortcuts.ShiftEnter: // Ignore
+      case shortcuts.F6: // Ignore
         return mindMapData
       default:
         assertNever(key, `Not defined key. key = ${key}`)
