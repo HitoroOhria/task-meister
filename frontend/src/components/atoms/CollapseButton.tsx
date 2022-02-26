@@ -1,7 +1,8 @@
-import React, { CSSProperties, VFC } from 'react'
+import React, { VFC } from 'react'
+
 import { styled } from '@linaria/react'
 
-import PositionAdjuster from '~/components/atoms/PositionAdjuster'
+import { Div as PositionAdjusterDiv } from '~/components/atoms/PositionAdjuster'
 
 // unit is px.
 export const diameter = 18
@@ -15,17 +16,17 @@ type Props = {
 
 const CollapseButton: VFC<Props> = (props) => {
   return (
-    <PositionAdjuster top={props.top} left={props.left} style={positionAdjusterStyle}>
+    <UpperPositionAdjuster top={props.top} left={props.left}>
       <Button type="button" onClick={props.onClick} />
-    </PositionAdjuster>
+    </UpperPositionAdjuster>
   )
 }
 
 export default CollapseButton
 
-const positionAdjusterStyle: CSSProperties = {
-  zIndex: 1,
-}
+const UpperPositionAdjuster = styled(PositionAdjusterDiv)`
+  z-index: 1;
+`
 
 const Button = styled.button`
   width: ${diameter}px

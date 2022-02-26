@@ -23,7 +23,7 @@ type DivProps = {
   left: number
 }
 
-const Div = styled.div<DivProps>`
+export const Div = styled.div<DivProps>`
   position: absolute;
   top: ${(props) => props.top}px;
   left: ${(props) => props.left}px;
