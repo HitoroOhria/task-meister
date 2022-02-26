@@ -1,15 +1,15 @@
 import MBaseNode from '~/domain/model/MBaseNode'
 import BezierCurve, { bezierCurveImpl, newBezierCurve } from '~/domain/model/BezierCurve'
 import PathLine, { newPathLine, pathLineImpl } from '~/domain/model/PathLine'
-import CollapseButton, {
+import MCollapseButton, {
   collapseButtonImpl,
   newCollapseButton,
-} from '~/domain/model/CollapseButton'
+} from '~/domain/model/MCollapseButton'
 
 type NodeAccessory = {
   bezierCurve: BezierCurve
   pathLine: PathLine
-  collapseButton: CollapseButton
+  collapseButton: MCollapseButton
 
   updatePoints(parentNode: MBaseNode, node: MBaseNode): void
 }
