@@ -104,6 +104,10 @@ class MindMapUseCase {
   }
 
   public toggleCheckboxHidden(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
+    if (mindMapData.rootNode.isSelected) {
+      return mindMapData
+    }
+
     const selectedNode = mindMapData.rightMap.children.recursively.findNodeById(selectedNodeId)
     if (!selectedNode) {
       throw newNotFoundNodeErr(selectedNode)
@@ -118,6 +122,10 @@ class MindMapUseCase {
   }
 
   public toggleCheckbox(mindMapData: MindMapData, checkedNodeId: string): MindMapData {
+    if (mindMapData.rootNode.isSelected) {
+      return mindMapData
+    }
+
     const checkedNode = mindMapData.rightMap.children.recursively.findNodeById(checkedNodeId)
     if (!checkedNode) {
       throw newNotFoundNodeErr(checkedNode)
