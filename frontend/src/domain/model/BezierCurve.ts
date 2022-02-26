@@ -2,7 +2,7 @@ import { horizontalMargin } from '~/components/organisms/BaseNode'
 import { pathLineRatio } from '~/components/atoms/Path'
 
 import Point, { newPoint, pointImpl } from '~/domain/model/Point'
-import NodeData from '~/domain/model/NodeData'
+import MBaseNode from '~/domain/model/MBaseNode'
 
 type BezierCurve = {
   startPoint: Point
@@ -16,7 +16,7 @@ type BezierCurve = {
 
   curveTo(): string
 
-  updatePoints(parentNode: NodeData, node: NodeData): void
+  updatePoints(parentNode: MBaseNode, node: MBaseNode): void
 
   setPoints(
     startPointX: number,
@@ -60,7 +60,7 @@ export const bezierCurveImpl: BezierCurve = {
     ].join(' ')
   },
 
-  updatePoints(parentNode: NodeData, node: NodeData) {
+  updatePoints(parentNode: MBaseNode, node: MBaseNode) {
     const startPointX = parentNode.getTailBranchX()
     const startPointY = parentNode.getElementCenterY()
     const controlPointX = startPointX + (horizontalMargin * 2 * (1 - pathLineRatio)) / 2

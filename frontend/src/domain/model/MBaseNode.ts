@@ -11,11 +11,9 @@ import { pathLineRatio } from '~/components/atoms/Path'
 import DropPosition from '~/domain/model/DropPosition'
 import { newOverrideErr } from '~/util/ExceptionUtil'
 
-export const nodeDataType = 'nodeData'
-
 // Data of Node.
 // Hold value of Node.
-type NodeData = {
+type MBaseNode = {
   // An id.
   id: string
 
@@ -94,7 +92,7 @@ type NodeData = {
   onTail(left: number): boolean
 }
 
-export const nodeDataImpl: NodeData = {
+export const baseNodeImpl: MBaseNode = {
   // an id for identify when updating node
   id: '',
 
@@ -185,6 +183,6 @@ export const nodeDataImpl: NodeData = {
     return borderLeft < left && left < tailLeft
   },
 }
-Object.freeze(nodeDataImpl)
+Object.freeze(baseNodeImpl)
 
-export default NodeData
+export default MBaseNode

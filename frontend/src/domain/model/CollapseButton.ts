@@ -1,12 +1,12 @@
 import { diameter } from '~/components/atoms/CollapseButton'
 
-import NodeData from '~/domain/model/NodeData'
+import MBaseNode from '~/domain/model/MBaseNode'
 import Point, { newPoint, pointImpl } from '~/domain/model/Point'
 
 type CollapseButton = {
   point: Point
 
-  updatePoint(node: NodeData): void
+  updatePoint(node: MBaseNode): void
 }
 
 export const newCollapseButton = (): CollapseButton => {
@@ -19,7 +19,7 @@ export const newCollapseButton = (): CollapseButton => {
 export const collapseButtonImpl: CollapseButton = {
   point: pointImpl,
 
-  updatePoint(node: NodeData) {
+  updatePoint(node: MBaseNode) {
     this.point.x = node.getTailBranchX() - diameter / 2
     this.point.y = node.getElementCenterY() - diameter / 2
   },

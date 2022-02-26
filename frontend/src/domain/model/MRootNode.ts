@@ -1,4 +1,4 @@
-import NodeData, { nodeDataImpl } from '~/domain/model/NodeData'
+import MBaseNode, { baseNodeImpl } from '~/domain/model/MBaseNode'
 import PathLine, { newPathLine, pathLineImpl } from '~/domain/model/PathLine'
 import {
   elementSizeCalculator,
@@ -11,7 +11,7 @@ import { numberOfLines } from '~/util/StringUtil'
 // type to distinguish from Node.
 export const rootNodeType = 'rootNode'
 
-type MRootNode = NodeData & {
+type MRootNode = MBaseNode & {
   type: typeof rootNodeType
   pathLine: PathLine
 
@@ -34,7 +34,7 @@ export const newRootNode = (id: string, text: string): MRootNode => {
 }
 
 export const rootNodeImpl: MRootNode = {
-  ...nodeDataImpl,
+  ...baseNodeImpl,
 
   type: rootNodeType,
   pathLine: pathLineImpl,

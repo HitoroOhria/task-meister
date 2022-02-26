@@ -1,4 +1,4 @@
-import NodeData from '~/domain/model/NodeData'
+import MBaseNode from '~/domain/model/MBaseNode'
 import BezierCurve, { bezierCurveImpl, newBezierCurve } from '~/domain/model/BezierCurve'
 import PathLine, { newPathLine, pathLineImpl } from '~/domain/model/PathLine'
 import CollapseButton, {
@@ -11,7 +11,7 @@ type NodeAccessory = {
   pathLine: PathLine
   collapseButton: CollapseButton
 
-  updatePoints(parentNode: NodeData, node: NodeData): void
+  updatePoints(parentNode: MBaseNode, node: MBaseNode): void
 }
 
 export const newNodeAccessory = (): NodeAccessory => {
@@ -28,7 +28,7 @@ export const nodeAccessoryImpl: NodeAccessory = {
   pathLine: pathLineImpl,
   collapseButton: collapseButtonImpl,
 
-  updatePoints(parentNode: NodeData, node: NodeData) {
+  updatePoints(parentNode: MBaseNode, node: MBaseNode) {
     this.bezierCurve.updatePoints(parentNode, node)
     this.pathLine.updatePoints(node)
     this.collapseButton.updatePoint(node)

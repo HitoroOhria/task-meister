@@ -1,4 +1,4 @@
-import NodeData from '~/domain/model/NodeData'
+import MBaseNode from '~/domain/model/MBaseNode'
 import MNode from '~/domain/model/MNode'
 import Children from '~/domain/model/Children'
 import DropPosition from '~/domain/model/DropPosition'
@@ -36,7 +36,7 @@ interface RecursivelyChildren {
 
   deselectNode(): void
 
-  updateAccessoryPlacement(parentNode: NodeData): void
+  updateAccessoryPlacement(parentNode: MBaseNode): void
 }
 
 export const newRecursivelyChildren = (children: Children): RecursivelyChildren => {
@@ -196,7 +196,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     selectedNode.isSelected = false
   },
 
-  updateAccessoryPlacement(parentNode: NodeData) {
+  updateAccessoryPlacement(parentNode: MBaseNode) {
     this.children.nodes.forEach((child) => child.accessory.updatePoints(parentNode, child))
     this.children.nodes.forEach((child) =>
       child.children.recursively.updateAccessoryPlacement(child)

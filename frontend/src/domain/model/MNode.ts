@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-import NodeData, { nodeDataImpl } from '~/domain/model/NodeData'
+import MBaseNode, { baseNodeImpl } from '~/domain/model/MBaseNode'
 import Group, { groupImpl, newGroup } from '~/domain/model/Group'
 import Children, { childrenImpl, newChildren } from '~/domain/model/Children'
 import NodeAccessory, { newNodeAccessory, nodeAccessoryImpl } from '~/domain/model/NodeAccessory'
@@ -21,7 +21,7 @@ import { numberOfLines } from '~/util/StringUtil'
 // type to distinguish from RootNode.
 export const nodeType = 'node'
 
-type MNode = NodeData & {
+type MNode = MBaseNode & {
   type: typeof nodeType
   group: Group
   children: Children
@@ -66,7 +66,7 @@ export const newAddNode = (left: number): MNode => {
 // Whole group is called a group.
 // NodeData is not group, but holds value of group to calculate placement.
 export const nodeImpl: MNode = {
-  ...nodeDataImpl,
+  ...baseNodeImpl,
 
   type: nodeType,
 

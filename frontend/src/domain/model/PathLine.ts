@@ -1,4 +1,4 @@
-import NodeData from '~/domain/model/NodeData'
+import MBaseNode from '~/domain/model/MBaseNode'
 import Point, { newPoint, pointImpl } from '~/domain/model/Point'
 
 type PathLine = {
@@ -11,7 +11,7 @@ type PathLine = {
 
   lineTo(): string
 
-  updatePoints(node: NodeData): void
+  updatePoints(node: MBaseNode): void
 
   setPoints(startPointX: number, endPointX: number, lineY: number): void
 }
@@ -40,7 +40,7 @@ export const pathLineImpl: PathLine = {
     return ['L', this.endPoint.toSpaceSeparated()].join(' ')
   },
 
-  updatePoints(node: NodeData) {
+  updatePoints(node: MBaseNode) {
     const startPointX = node.getElementTailX()
     const endPointX = node.getTailBranchX()
     const lineY = node.getElementCenterY()

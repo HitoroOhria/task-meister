@@ -5,7 +5,7 @@ import PositionAdjuster from '~/components/atoms/PositionAdjuster'
 import DraggableElement from '~/components/organisms/DraggableElement'
 import TextInputer from '~/components/atoms/TextInputer'
 import { styled } from '@linaria/react'
-import NodeData from '~/domain/model/NodeData'
+import MBaseNode from '~/domain/model/MBaseNode'
 
 // Ratio of width representing tail area of node.
 export const tailAreaRatio = 0.2
@@ -21,7 +21,7 @@ export const horizontalMargin = 30
 export const padding = 20
 
 type Props = {
-  node: NodeData
+  node: MBaseNode
   isShiftEnter: boolean
   // TODO This is not elegant
   //   - adding type to MBaseNode is failed.
