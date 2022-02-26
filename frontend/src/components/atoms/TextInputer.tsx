@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, VFC } from 'react'
 
 import { styled } from '@linaria/react'
 
+import { backgroundColor } from '~/components/organisms/BaseNode'
 import { height as checkboxHeight } from '~/components/atoms/Checkbox'
 
 import ElementSizeCalculator from '~/util/ElementSizeCalculator'
@@ -18,6 +19,7 @@ export const lineHeight = 18
 const fontSize = 15
 const fontFamily = 'monospace'
 const font = `${fontSize}px ${fontFamily}`
+const disableColor = 'gray'
 
 // const
 // For measure text width
@@ -26,6 +28,7 @@ export const elementSizeCalculator = new ElementSizeCalculator(font)
 type Props = {
   text: string
   isInputting: boolean
+  disable: boolean
   onChange: (text: string) => void
   onBlur: () => void
 }
@@ -90,7 +93,7 @@ const TextInputer: VFC<Props> = (props) => {
   useEffect(handleIsInputting, [props.isInputting])
 
   return (
-    <TopDiv width={divWidth} height={divHeight}>
+    <TopDiv width={divWidth} height={divHeight} disable={props.disable}>
       {props.isInputting ? (
         <Textarea
           ref={textareaElement}
@@ -113,6 +116,7 @@ type TopDivProps = {
   width: number
   // unit is px.
   height: number
+  disable: boolean
 }
 
 const TopDiv = styled.div<TopDivProps>`
@@ -120,7 +124,9 @@ const TopDiv = styled.div<TopDivProps>`
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
   font: ${font}
+  color: ${(props) => (props.disable ? disableColor : 'black')};
   line-height: ${lineHeight}px
+  text-decoration: ${(props) => (props.disable ? `${disableColor} line-through` : 'none')};   
   display: flex
   align-items: center
 `
@@ -136,8 +142,9 @@ const Textarea = styled.textarea<TextProps>`
   width: inherit
   height: ${(props) => props.height}px;
   font: inherit
+  color: inherit
+  background-color: ${backgroundColor}
   border-width: 0px
-  background-color: gray
   outline: none
   resize: none
   overflow: hidden
@@ -148,5 +155,6 @@ const SpanInlineBlock = styled.span<TextProps>`
   width: inherit
   height: ${(props) => props.height}px;
   font: inherit
+  color: inherit
   display: inline-block
 `

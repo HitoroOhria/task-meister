@@ -19,6 +19,7 @@ export const verticalMargin = 15
 export const horizontalMargin = 30
 // Padding of css. unit is px.
 export const padding = 20
+export const backgroundColor = 'white'
 
 type Props = {
   node: MBaseNode
@@ -87,6 +88,7 @@ const BaseNode: FC<Props> = (props) => {
           <TextInputer
             text={props.node.text}
             isInputting={props.node.isInputting}
+            disable={props.node.disable()}
             onChange={(text) => handleNodeTextChanges(text)}
             onBlur={exitEditMode}
           />
@@ -109,7 +111,7 @@ const NodeDiv = styled.div<NodeDivProps>`
   padding: ${padding}px;
   border: thick solid ${(props) => (props.selected ? 'yellow' : 'blue')};
   border-radius: 10px
-  background-color: gray
+  background-color: ${backgroundColor}
   display: flex
   align-items: center
 `

@@ -39,6 +39,10 @@ export const rootNodeImpl: MRootNode = {
   type: rootNodeType,
   pathLine: pathLineImpl,
 
+  disable(): boolean {
+    return false
+  },
+
   setWidth() {
     const textWidth = elementSizeCalculator.measureLongestLineWidth(this.text)
 

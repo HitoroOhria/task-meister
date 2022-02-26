@@ -79,6 +79,10 @@ export const nodeImpl: MNode = {
 
   accessory: nodeAccessoryImpl,
 
+  disable(): boolean {
+    return this.checkbox.checked
+  },
+
   setWidth() {
     const textWidth = elementSizeCalculator.measureLongestLineWidth(this.text)
     const checkboxAreaWidth = this.checkbox.hidden ? 0 : checkboxWidth + spacerWidth

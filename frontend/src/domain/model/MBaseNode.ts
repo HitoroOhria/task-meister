@@ -44,6 +44,9 @@ type MBaseNode = {
   // Flag of node is edit mode.
   isInputting: boolean
 
+  // To responds TextInputterProps in BaseNode.
+  disable(): boolean
+
   // set width and height from text.
   setSize(): void
 
@@ -116,6 +119,10 @@ export const baseNodeImpl: MBaseNode = {
   isSelected: false,
 
   isInputting: false,
+
+  disable(): boolean {
+    throw newOverrideErr(this.disable.name)
+  },
 
   setSize() {
     this.setWidth()
