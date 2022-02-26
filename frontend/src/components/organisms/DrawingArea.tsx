@@ -22,8 +22,7 @@ const DrawingArea: VFC<Props> = (props) => {
     return (
       <CollapseButton
         key={node.id}
-        top={node.accessory.collapseButton.point.y}
-        left={node.accessory.collapseButton.point.x}
+        collapseButton={node.accessory.collapseButton}
         onClick={() => dispatchToggleCollapse(node.id)}
       />
     )
