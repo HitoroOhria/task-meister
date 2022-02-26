@@ -4,14 +4,27 @@ import NodeData, { nodeDataImpl } from '~/domain/model/NodeData'
 import Group, { groupImpl, newGroup } from '~/domain/model/Group'
 import Children, { childrenImpl, newChildren } from '~/domain/model/Children'
 import NodeAccessory, { newNodeAccessory, nodeAccessoryImpl } from '~/domain/model/NodeAccessory'
+import MCheckbox, { checkboxImpl, newCheckbox } from '~/domain/model/MCheckbox'
+
+import { spacerWidth } from '~/components/organisms/Node'
+import {
+  elementSizeCalculator,
+  lineHeight,
+  minWidth as textMinWidth,
+} from '~/components/atoms/TextInputer'
+import { height as checkboxHeight, width as checkboxWidth } from '~/components/atoms/Checkbox'
+
+import { pickBiggerNumber } from '~/util/NumberUtil'
+import { numberOfLines } from '~/util/StringUtil'
 
 // type to distinguish from RootNode.
-const nodeType = 'node'
+export const nodeType = 'node'
 
-type Node = NodeData & {
+type MNode = NodeData & {
   type: typeof nodeType
   group: Group
   children: Children
+  checkbox: MCheckbox
   accessory: NodeAccessory
 
   hasNodeById(childId: string): boolean
@@ -23,28 +36,27 @@ type Node = NodeData & {
   toggleCollapse(): void
 }
 
-export const newNode = (id: string, text: string, group: Group, children: Children): Node => {
+// TODO Group and Children to inline.
+export const newNode = (id: string, text: string, group: Group, children: Children): MNode => {
   return {
     ...nodeImpl,
     id: id,
     text: text,
     group: group,
     children: children,
+    checkbox: newCheckbox(),
     accessory: newNodeAccessory(),
   }
 }
 
-export const newAddNode = (left: number): Node => {
+export const newAddNode = (left: number): MNode => {
+  const id = _.uniqueId('node_')
+
   return {
-    ...nodeImpl,
-    id: _.uniqueId('node_'),
-    text: '',
+    ...newNode(id, '', newGroup(), newChildren([])),
     left: left,
     isInputting: true,
     isSelected: true,
-    group: newGroup(),
-    children: newChildren([]),
-    accessory: newNodeAccessory(),
   }
 }
 
@@ -52,7 +64,7 @@ export const newAddNode = (left: number): Node => {
 // NodeData consists of a node and children's nodes.
 // Whole group is called a group.
 // NodeData is not group, but holds value of group to calculate placement.
-export const nodeImpl: Node = {
+export const nodeImpl: MNode = {
   ...nodeDataImpl,
 
   type: nodeType,
@@ -62,7 +74,24 @@ export const nodeImpl: Node = {
   // children nodes of this node
   children: childrenImpl,
 
+  checkbox: checkboxImpl,
+
   accessory: nodeAccessoryImpl,
+
+  setWidth() {
+    const textWidth = elementSizeCalculator.measureLongestLineWidth(this.text)
+    const checkboxAreaWidth = this.checkbox.hidden ? 0 : checkboxWidth + spacerWidth
+    const elementWidth = checkboxAreaWidth + pickBiggerNumber(textWidth, textMinWidth)
+
+    this.width = this.getAroundAreaWidth() + elementWidth
+  },
+
+  setHeight() {
+    const textHeight = lineHeight * numberOfLines(this.text)
+    const elementHeight = pickBiggerNumber(checkboxHeight, textHeight)
+
+    this.height = this.getAroundAreaHeight() + elementHeight
+  },
 
   hasNodeById(childId: string): boolean {
     return !!this.children.recursively.findNodeById(childId)
@@ -87,4 +116,4 @@ export const nodeImpl: Node = {
 
 Object.freeze(nodeImpl)
 
-export default Node
+export default MNode

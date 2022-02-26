@@ -1,7 +1,7 @@
-import { newNode } from '~/domain/model/Node'
+import { newNode } from '~/domain/model/MNode'
 import { newChildren } from '~/domain/model/Children'
 import { newMindMapData } from '~/domain/model/MindMapData'
-import { newRootNode } from '~/domain/model/RootNode'
+import { newRootNode } from '~/domain/model/MRootNode'
 import { newRightMap } from '~/domain/model/RightMap'
 import { newGroup } from '~/domain/model/Group'
 

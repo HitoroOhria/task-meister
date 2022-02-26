@@ -1,4 +1,4 @@
-import Node from '~/domain/model/Node'
+import MNode from '~/domain/model/MNode'
 import Children, { childrenImpl } from '~/domain/model/Children'
 import DropPosition from '~/domain/model/DropPosition'
 import { total } from '~/util/NumberUtil'
@@ -10,13 +10,13 @@ type RightMap = {
 
   updateNodePlacement(id: string): void
 
-  updateNodesLateral(updatedNode: Node, left: number): void
+  updateNodesLateral(updatedNode: MNode, left: number): void
 
-  updateNodesVertical(updatedNode: Node): void
+  updateNodesVertical(updatedNode: MNode): void
 
   processNodeDrop(movedNodeId: string, dropPosition: DropPosition): void
 
-  insertNode(target: Node, dropPosition: DropPosition, lowerNode: Node): void
+  insertNode(target: MNode, dropPosition: DropPosition, lowerNode: MNode): void
 
   collapseNodes(selectedId: string): void
 }
@@ -50,13 +50,13 @@ export const rightMapImpl: RightMap = {
     this.updateNodesVertical(target)
   },
 
-  updateNodesLateral(updatedNode: Node, left: number) {
-    updatedNode.setWith()
+  updateNodesLateral(updatedNode: MNode, left: number) {
+    updatedNode.setWidth()
     updatedNode.left = left
     updatedNode.children.recursively.setNodeLeft(left, updatedNode.width)
   },
 
-  updateNodesVertical(updatedNode: Node) {
+  updateNodesVertical(updatedNode: MNode) {
     updatedNode.setHeight()
     this.children.recursively.updateGroupAndChildrenHeight()
 
@@ -84,7 +84,7 @@ export const rightMapImpl: RightMap = {
     this.updateNodesVertical(movedNode)
   },
 
-  insertNode(target: Node, dropPosition: DropPosition, lowerNode: Node) {
+  insertNode(target: MNode, dropPosition: DropPosition, lowerNode: MNode) {
     if (lowerNode.onTail(dropPosition.left)) {
       lowerNode.children.nodes.push(target)
       return

@@ -1,6 +1,6 @@
 import React, { VFC } from 'react'
 import Node from '~/components/organisms/Node'
-import * as NodeModel from '~/domain/model/Node'
+import MNode from '~/domain/model/MNode'
 import Children from '~/domain/model/Children'
 
 type NodesProps = {
@@ -18,7 +18,7 @@ const Nodes: VFC<NodesProps> = (props) => {
     return nodes.concat(grandChildrenNodes)
   }
 
-  const renderNode = (node: NodeModel.default): JSX.Element => {
+  const renderNode = (node: MNode): JSX.Element => {
     return <Node key={node.id} node={node} isShiftEnter={props.isShiftEnter} />
   }
 

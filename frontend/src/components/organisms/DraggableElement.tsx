@@ -2,6 +2,7 @@ import React, { FC, ReactNode, useEffect, useRef } from 'react'
 
 type Props = {
   textData: string
+  preventDefault?: boolean
   children?: ReactNode
 }
 
@@ -17,13 +18,13 @@ const DraggableElement: FC<Props> = (props) => {
   }
 
   const componentDidMount = () => {
-    addDragEventListener()
+    props.preventDefault || addDragEventListener()
   }
 
   useEffect(componentDidMount, [])
 
   return (
-    <div ref={draggableDivElement} draggable="true">
+    <div id="draggable-element" ref={draggableDivElement} draggable={!props.preventDefault}>
       {props.children}
     </div>
   )

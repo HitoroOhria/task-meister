@@ -2,15 +2,15 @@ import React, { VFC } from 'react'
 
 import Path from '~/components/atoms/Path'
 
-import RootNode from '~/domain/model/RootNode'
-import Node from '~/domain/model/Node'
+import MRootNode from '~/domain/model/MRootNode'
+import MNode from '~/domain/model/MNode'
 import Children from '~/domain/model/Children'
 
 export const svgAreaWidth = 100 ** 3
 export const svgAreaHeight = 100 ** 3
 
 type Props = {
-  rootNode: RootNode
+  rootNode: MRootNode
   children: Children
 }
 
@@ -24,7 +24,7 @@ const SVGArea: VFC<Props> = (props) => {
     return childrenCurves.concat(grandChildrenCurves)
   }
 
-  const renderBezierCurve = (node: Node): JSX.Element => {
+  const renderBezierCurve = (node: MNode): JSX.Element => {
     return <Path key={node.id} pathCommand={node.accessory.bezierCurve.pathCommand()} />
   }
 
@@ -38,11 +38,11 @@ const SVGArea: VFC<Props> = (props) => {
     return childrenLines.concat(grandChildrenLines)
   }
 
-  const renderLine = (node: Node): JSX.Element => {
+  const renderLine = (node: MNode): JSX.Element => {
     return <Path key={node.id} pathCommand={node.accessory.pathLine.pathCommand()} />
   }
 
-  const renderRootNodeLine = (rootNode: RootNode): JSX.Element => {
+  const renderRootNodeLine = (rootNode: MRootNode): JSX.Element => {
     return <Path pathCommand={rootNode.pathLine.pathCommand()} />
   }
 

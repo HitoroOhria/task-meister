@@ -1,9 +1,9 @@
 import RightMap, { rightMapImpl } from '~/domain/model/RightMap'
-import RootNode, { rootNodeImpl } from '~/domain/model/RootNode'
-import Node from '~/domain/model/Node'
+import MRootNode, { rootNodeImpl } from '~/domain/model/MRootNode'
+import MNode from '~/domain/model/MNode'
 
 type MindMapData = {
-  rootNode: RootNode
+  rootNode: MRootNode
   rightMap: RightMap
   leftMap: RightMap
 
@@ -11,11 +11,11 @@ type MindMapData = {
 
   isFirstLayerNode(id: string): boolean
 
-  findNodeById(id: string): RootNode | Node | undefined
+  findNodeById(id: string): MRootNode | MNode | undefined
 
-  findNodeIsSelected(): RootNode | Node | undefined
+  findNodeIsSelected(): MRootNode | MNode | undefined
 
-  findHeadNode(id: string): RootNode | Node | undefined
+  findHeadNode(id: string): MRootNode | MNode | undefined
 
   setNodeSize(): void
 
@@ -35,7 +35,7 @@ type MindMapData = {
 }
 
 export const newMindMapData = (
-  rootNode: RootNode,
+  rootNode: MRootNode,
   rightMap: RightMap,
   leftMap: RightMap
 ): MindMapData => {
@@ -60,7 +60,7 @@ export const mindMapDataImpl: MindMapData = {
     return !!this.rightMap.children.nodes.find((node) => node.id === id)
   },
 
-  findNodeById(id: string): RootNode | Node | undefined {
+  findNodeById(id: string): MRootNode | MNode | undefined {
     if (this.rootNode.id === id) {
       return this.rootNode
     }
@@ -68,7 +68,7 @@ export const mindMapDataImpl: MindMapData = {
     return this.rightMap.children.recursively.findNodeById(id)
   },
 
-  findNodeIsSelected(): RootNode | Node | undefined {
+  findNodeIsSelected(): MRootNode | MNode | undefined {
     if (this.rootNode.isSelected) {
       return this.rootNode
     }
@@ -76,7 +76,7 @@ export const mindMapDataImpl: MindMapData = {
     return this.rightMap.children.recursively.findNodeIsSelected()
   },
 
-  findHeadNode(id: string): RootNode | Node | undefined {
+  findHeadNode(id: string): MRootNode | MNode | undefined {
     if (this.isFirstLayerNode(id)) {
       return this.rootNode
     }
@@ -113,6 +113,7 @@ export const mindMapDataImpl: MindMapData = {
   updateNodePlacement(id: string) {
     if (id === this.rootNode.id) {
       this.updateRootNodePlacement()
+      return
     }
 
     this.rightMap.updateNodePlacement(id)

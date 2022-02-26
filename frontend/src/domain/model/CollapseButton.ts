@@ -20,7 +20,7 @@ export const collapseButtonImpl: CollapseButton = {
   point: pointImpl,
 
   updatePoint(node: NodeData) {
-    this.point.x = node.getElementCollapseX() - diameter / 2
+    this.point.x = node.getTailBranchX() - diameter / 2
     this.point.y = node.getElementCenterY() - diameter / 2
   },
 }

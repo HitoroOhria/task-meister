@@ -1,5 +1,5 @@
 import NodeData from '~/domain/model/NodeData'
-import Node from '~/domain/model/Node'
+import MNode from '~/domain/model/MNode'
 import Children from '~/domain/model/Children'
 import DropPosition from '~/domain/model/DropPosition'
 
@@ -10,17 +10,17 @@ interface RecursivelyChildren {
 
   isInputting(): boolean
 
-  findNodeById(id: string): Node | undefined
+  findNodeById(id: string): MNode | undefined
 
-  findNodeByPosition(position: DropPosition): Node | undefined
+  findNodeByPosition(position: DropPosition): MNode | undefined
 
-  findHeadNode(id: string): Node | undefined
+  findHeadNode(id: string): MNode | undefined
 
-  findNodeIsSelected(): Node | undefined
+  findNodeIsSelected(): MNode | undefined
 
   findChildrenContainsId(id: string): Children | undefined
 
-  removeNodeById(id: string): Node
+  removeNodeById(id: string): MNode
 
   updateNodeTop(): void
 
@@ -58,7 +58,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return !!this.children.nodes.find((child) => child.children.recursively.isInputting())
   },
 
-  findNodeById(id: string): Node | undefined {
+  findNodeById(id: string): MNode | undefined {
     const child = this.children.nodes.find((child) => child.id === id)
     if (child) {
       return child
@@ -75,7 +75,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined
   },
 
-  findNodeByPosition(position: DropPosition): Node | undefined {
+  findNodeByPosition(position: DropPosition): MNode | undefined {
     const child = this.children.nodes.find((child) => child.onArea(position))
     if (child) {
       return child
@@ -92,7 +92,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined
   },
 
-  findHeadNode(id: string): Node | undefined {
+  findHeadNode(id: string): MNode | undefined {
     const node = this.children.findNodeHasChildId(id)
     if (node !== undefined) {
       return node
@@ -109,7 +109,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined
   },
 
-  findNodeIsSelected(): Node | undefined {
+  findNodeIsSelected(): MNode | undefined {
     const selectedNode = this.children.nodes.find((child) => child.isSelected)
     if (selectedNode) {
       return selectedNode
@@ -143,7 +143,7 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     return undefined
   },
 
-  removeNodeById(id: string): Node {
+  removeNodeById(id: string): MNode {
     const children = this.children.recursively.findChildrenContainsId(id)
     if (!children) {
       throw new Error(`Can not found children contains id. id = ${id}`)

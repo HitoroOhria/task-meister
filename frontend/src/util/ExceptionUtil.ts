@@ -1,3 +1,7 @@
+export const newOverrideErr = (methodName: string) => {
+  return new Error(`Should override ${methodName}. Cannot call method of inhering class.`)
+}
+
 export const newNotFoundNodeErr = (id?: string): Error => {
   const idInfo = id ? `id = ${id}` : ''
   return new Error(`Can not found Node by id. ${idInfo}`)

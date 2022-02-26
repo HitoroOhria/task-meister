@@ -2,7 +2,7 @@ import React, { useContext, VFC } from 'react'
 
 import CollapseButton from '~/components/atoms/CollapseButton'
 
-import Node from '~/domain/model/Node'
+import MNode from '~/domain/model/MNode'
 import Children from '~/domain/model/Children'
 import { MindMapDispatchCtx } from '~/store/context/MindMapDataCtx'
 import { mindMapDataActionType } from '~/store/reducer/MindMapDataReducer'
@@ -18,7 +18,7 @@ const DrawingArea: VFC<Props> = (props) => {
     dispatchMindMapData({ type: mindMapDataActionType.toggleCollapse, payload: { id: nodeId } })
   }
 
-  const renderCollapseButton = (node: Node): JSX.Element => {
+  const renderCollapseButton = (node: MNode): JSX.Element => {
     return (
       <CollapseButton
         key={node.id}

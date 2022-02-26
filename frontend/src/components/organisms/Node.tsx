@@ -1,110 +1,26 @@
-import React, { useContext, useRef, VFC } from 'react'
-import { styled } from '@linaria/react'
+import React, { VFC } from 'react'
 
-import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
-import { MindMapDispatchCtx } from '~/store/context/MindMapDataCtx'
+import BaseNode from '~/components/organisms/BaseNode'
+import Checkbox from '~/components/atoms/Checkbox'
 
-import PositionAdjuster from '~/components/atoms/PositionAdjuster'
-import DraggableElement from '~/components/organisms/DraggableElement'
-import TextInputer from '~/components/atoms/TextInputer'
+import Spacer from '~/components/atoms/Spacer'
+import MNode from '~/domain/model/MNode'
 
-import NodeData from '~/domain/model/NodeData'
-
-// Ratio of width representing tail area of node.
-export const tailAreaRatio = 0.2
-
-// Width of textarea from border to text.
-// Values of below is average of measured values.
-export const borderWidth = 5
-// One of vertical margin. unit is px.
-export const verticalMargin = 15
-// One of horizontal margin. unit is px.
-export const horizontalMargin = 30
-// Padding of css. unit is px.
-export const padding = 20
+// unit is px.
+export const spacerWidth = 12
 
 type Props = {
-  node: NodeData
+  node: MNode
   isShiftEnter: boolean
 }
 
 const Node: VFC<Props> = (props) => {
-  const nodeDivElement = useRef<HTMLDivElement>(null)
-  const dispatchMindMapData = useContext(MindMapDispatchCtx)
-
-  const handleNodeTextChanges = (text: string) => {
-    if (text.slice(-1) === '\n' && !props.isShiftEnter) {
-      exitEditMode()
-      return
-    }
-
-    processNodeTextChanges(text)
-  }
-
-  // Do not use value of element to width and height. (ex. innerHeight, offsetHeight)
-  // Because getting process ends before dom rendered. and the value of the previous text is acquired.
-  // So, get previous value
-  const processNodeTextChanges = (text: string) => {
-    dispatchMindMapData({
-      type: actionType.processNodeTextChanges,
-      payload: { id: props.node.id, text },
-    })
-  }
-
-  const exitEditMode = () => {
-    // When added Node by Enter.
-    if (!props.node.isSelected) return
-
-    dispatchMindMapData({ type: actionType.exitNodeEditMode, payload: { id: props.node.id } })
-  }
-
-  const handleClick = () => {
-    if (props.node.isSelected) return
-
-    dispatchMindMapData({
-      type: actionType.selectNode,
-      payload: { id: props.node.id },
-    })
-  }
-
-  const handleDoubleClick = () => {
-    dispatchMindMapData({ type: actionType.enterNodeEditMode, payload: { id: props.node.id } })
-  }
-
   return (
-    <PositionAdjuster top={props.node.top} left={props.node.left}>
-      <DraggableElement textData={props.node.id}>
-        <NodeDiv
-          ref={nodeDivElement}
-          hidden={props.node.isHidden}
-          borderColor={props.node.isSelected ? 'yellow' : 'blue'}
-          onClick={handleClick}
-          onDoubleClick={handleDoubleClick}
-        >
-          <TextInputer
-            text={props.node.text}
-            isInputting={props.node.isInputting}
-            onChange={(text) => handleNodeTextChanges(text)}
-            onBlur={exitEditMode}
-          />
-        </NodeDiv>
-      </DraggableElement>
-    </PositionAdjuster>
+    <BaseNode node={props.node} isShiftEnter={props.isShiftEnter}>
+      <Checkbox checkbox={props.node.checkbox} onClick={() => console.log('clicked!!')} />
+      <Spacer width={spacerWidth} hidden={props.node.checkbox.hidden} />
+    </BaseNode>
   )
 }
 
 export default Node
-
-type NodeDivProps = {
-  hidden: boolean
-  borderColor: string
-}
-
-const NodeDiv = styled.div<NodeDivProps>`
-  display: ${(props) => (props.hidden ? 'none' : 'block')};
-  margin: ${verticalMargin}px ${horizontalMargin}px;
-  padding: ${padding}px;
-  border: thick solid ${(props) => props.borderColor};
-  border-radius: 10px
-  background-color: gray
-`

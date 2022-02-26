@@ -1,4 +1,4 @@
-import { horizontalMargin } from '~/components/organisms/Node'
+import { horizontalMargin } from '~/components/organisms/BaseNode'
 import { pathLineRatio } from '~/components/atoms/Path'
 
 import Point, { newPoint, pointImpl } from '~/domain/model/Point'

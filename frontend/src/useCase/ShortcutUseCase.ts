@@ -1,6 +1,6 @@
 import MindMapData from '~/domain/model/MindMapData'
-import RootNode, { rootNodeType } from '~/domain/model/RootNode'
-import Node, { newAddNode } from '~/domain/model/Node'
+import MRootNode, { rootNodeType } from '~/domain/model/MRootNode'
+import MNode, { newAddNode } from '~/domain/model/MNode'
 
 import ArrowKeyUseCase from '~/useCase/ArrowKeyUseCase'
 
@@ -50,7 +50,7 @@ class ShortcutUseCase {
     }
   }
 
-  public addNodeToTail(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
+  public addNodeToTail(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     mindMapData.deselectNode()
 
     if (selectedNode.type === rootNodeType) {
@@ -71,7 +71,7 @@ class ShortcutUseCase {
     return mindMapData
   }
 
-  public addNodeToBottom(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
+  public addNodeToBottom(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (mindMapData.rootNode.isSelected) {
       return mindMapData
     }
@@ -95,7 +95,7 @@ class ShortcutUseCase {
     return mindMapData
   }
 
-  public deleteNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
+  public deleteNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (mindMapData.rootNode.isSelected) {
       return mindMapData
     }

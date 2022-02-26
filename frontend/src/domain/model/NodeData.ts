@@ -4,13 +4,14 @@ import {
   padding,
   tailAreaRatio,
   verticalMargin,
-} from '~/components/organisms/Node'
-import { elementSizeCalculator, lineHeight, minWidth } from '~/components/atoms/TextInputer'
+} from '~/components/organisms/BaseNode'
 import { originX, originY } from '~/components/organisms/Origin'
+import { pathLineRatio } from '~/components/atoms/Path'
 
 import DropPosition from '~/domain/model/DropPosition'
-import { numberOfLines } from '~/util/StringUtil'
-import { pathLineRatio } from '~/components/atoms/Path'
+import { newOverrideErr } from '~/util/ExceptionUtil'
+
+export const nodeDataType = 'nodeData'
 
 // Data of Node.
 // Hold value of Node.
@@ -49,7 +50,7 @@ type NodeData = {
   setSize(): void
 
   // set width from text.
-  setWith(): void
+  setWidth(): void
 
   // set height from text.
   setHeight(): void
@@ -67,6 +68,10 @@ type NodeData = {
 
   // Get branch X of tails from Origin.
   getTailBranchX(): number
+
+  getAroundAreaWidth(): number
+
+  getAroundAreaHeight(): number
 
   // Judge dropPosition in Node area.
   // Node area includes margin, border, padding, element.
@@ -115,23 +120,16 @@ export const nodeDataImpl: NodeData = {
   isInputting: false,
 
   setSize() {
-    this.setWith()
+    this.setWidth()
     this.setHeight()
   },
 
-  setWith() {
-    const textWidth =
-      elementSizeCalculator.measureLongestLineWidth(this.text) < minWidth
-        ? minWidth
-        : elementSizeCalculator.measureLongestLineWidth(this.text)
-
-    this.width = horizontalMargin * 2 + borderWidth * 2 + padding * 2 + textWidth
+  setWidth() {
+    throw newOverrideErr(this.setWidth.name)
   },
 
   setHeight() {
-    const textHeight = lineHeight * numberOfLines(this.text)
-
-    this.height = verticalMargin * 2 + borderWidth * 2 + padding * 2 + textHeight
+    throw newOverrideErr(this.setHeight.name)
   },
 
   getElementWidth(): number {
@@ -148,6 +146,14 @@ export const nodeDataImpl: NodeData = {
 
   getTailBranchX(): number {
     return this.getElementTailX() + horizontalMargin * 2 * pathLineRatio
+  },
+
+  getAroundAreaWidth(): number {
+    return horizontalMargin * 2 + borderWidth * 2 + padding * 2
+  },
+
+  getAroundAreaHeight(): number {
+    return verticalMargin * 2 + borderWidth * 2 + padding * 2
   },
 
   onArea(position: DropPosition): boolean {

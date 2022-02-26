@@ -1,14 +1,14 @@
 import ArrowKey, { arrowKeys } from '~/enum/ArrowKeys'
 import MindMapData from '~/domain/model/MindMapData'
 import { assertNever, newNotFoundNodeErr } from '~/util/ExceptionUtil'
-import RootNode, { rootNodeType } from '~/domain/model/RootNode'
-import Node from '~/domain/model/Node'
+import MRootNode, { rootNodeType } from '~/domain/model/MRootNode'
+import MNode from '~/domain/model/MNode'
 
 class ArrowKeyUseCase {
   handleArrowKeyDown(
     mindMapData: MindMapData,
     arrowKey: ArrowKey,
-    selectedNode: RootNode | Node
+    selectedNode: MRootNode | MNode
   ): MindMapData {
     switch (arrowKey) {
       case arrowKeys.Up:
@@ -25,7 +25,7 @@ class ArrowKeyUseCase {
     }
   }
 
-  selectTopNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
+  selectTopNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (mindMapData.rootNode.isSelected) {
       return mindMapData
     }
@@ -43,7 +43,7 @@ class ArrowKeyUseCase {
     return mindMapData
   }
 
-  selectBottomNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
+  selectBottomNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     mindMapData.deselectNode()
 
     const bottomNode = mindMapData.rightMap.children.recursively
@@ -57,7 +57,7 @@ class ArrowKeyUseCase {
     return mindMapData
   }
 
-  selectHeadNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
+  selectHeadNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (mindMapData.rootNode.isSelected) {
       return mindMapData
     }
@@ -73,7 +73,7 @@ class ArrowKeyUseCase {
     return mindMapData
   }
 
-  selectTailNode(mindMapData: MindMapData, selectedNode: RootNode | Node): MindMapData {
+  selectTailNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (selectedNode.type === rootNodeType) {
       mindMapData.selectTail()
       return mindMapData
