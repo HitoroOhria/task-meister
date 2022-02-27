@@ -13,6 +13,9 @@ ReactDOM.render(
   //   - Two nodes are added
   //   - see https://github.com/facebook/react/issues/16295
   // <React.StrictMode>
+  // TODO Reason why side-scrolling does not work is NextUIProvider.
+  // But, no workaround found.
+  //   - Try wrapping only NextUI components, but not resolved.
   <NextUIProvider>
     <MindMapPage />
   </NextUIProvider>,
