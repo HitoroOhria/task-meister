@@ -3,6 +3,7 @@ import { arrowKeys } from '~/enum/ArrowKeys'
 export const shortcuts = {
   ...arrowKeys,
   C: 'c',
+  T: 't',
   Space: ' ',
   Tab: 'Tab',
   Enter: 'Enter',

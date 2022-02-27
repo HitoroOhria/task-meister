@@ -39,7 +39,11 @@ const Node: VFC<Props> = (props) => {
         tail: props.node.checkbox.hidden || (
           <>
             <Spacer width={estimateTimeSpacerWidth} />
-            <EstimateTime nodeId={props.node.id} estimateTime={props.node.estimateTime} />
+            <EstimateTime
+              nodeId={props.node.id}
+              estimateTime={props.node.estimateTime}
+              disable={props.node.checkbox.checked}
+            />
           </>
         ),
       }}

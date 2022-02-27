@@ -45,6 +45,8 @@ class KeyInput {
         return shortcuts.Backspace
       case shortcuts.C:
         return shortcuts.C
+      case shortcuts.T:
+        return shortcuts.T
       case shortcuts.Space:
         return shortcuts.Space
       case shortcuts.F6:

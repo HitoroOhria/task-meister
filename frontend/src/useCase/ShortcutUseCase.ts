@@ -41,6 +41,8 @@ class ShortcutUseCase {
         return this.mindMapUseCase.enterNodeEditMode(mindMapData, selectedNode.id)
       case shortcuts.C:
         return this.mindMapUseCase.toggleCheckboxHidden(mindMapData, selectedNode.id)
+      case shortcuts.T:
+        return this.mindMapUseCase.enterEstimateTimeEditMode(mindMapData, selectedNode.id)
       case shortcuts.MetaEnter:
         return this.mindMapUseCase.toggleCheckbox(mindMapData, selectedNode.id)
       case shortcuts.Space:
