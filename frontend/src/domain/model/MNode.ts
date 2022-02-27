@@ -6,7 +6,7 @@ import Children, { childrenImpl, newChildren } from '~/domain/model/Children'
 import NodeAccessory, { newNodeAccessory, nodeAccessoryImpl } from '~/domain/model/NodeAccessory'
 import MCheckbox, { checkboxImpl, newCheckbox } from '~/domain/model/MCheckbox'
 
-import { spacerWidth } from '~/components/organisms/Node'
+import { checkboxSpacerWidth } from '~/components/organisms/Node'
 import {
   elementSizeCalculator,
   lineHeight,
@@ -17,6 +17,7 @@ import { width as checkboxWidth } from '~/components/atoms/Checkbox'
 
 import { pickBiggerNumber } from '~/util/NumberUtil'
 import { numberOfLines } from '~/util/StringUtil'
+import MEstimateTime, { estimateTimeImpl, newEstimateTime } from '~/domain/model/MEstimateTime'
 
 // type to distinguish from RootNode.
 export const nodeType = 'node'
@@ -27,6 +28,7 @@ type MNode = MBaseNode & {
   children: Children
   checkbox: MCheckbox
   accessory: NodeAccessory
+  estimateTime: MEstimateTime
 
   hasNodeById(childId: string): boolean
 
@@ -46,6 +48,7 @@ export const newNode = (id: string, text: string, group: Group, children: Childr
     group: group,
     children: children,
     checkbox: newCheckbox(),
+    estimateTime: newEstimateTime(),
     accessory: newNodeAccessory(),
   }
 }
@@ -65,7 +68,7 @@ export const newAddNode = (left: number): MNode => {
 // NodeData consists of a node and children's nodes.
 // Whole group is called a group.
 // NodeData is not group, but holds value of group to calculate placement.
-export const nodeImpl: MNode = {
+export const nodeImpl: MNode = Object.freeze({
   ...baseNodeImpl,
 
   type: nodeType,
@@ -77,6 +80,8 @@ export const nodeImpl: MNode = {
 
   checkbox: checkboxImpl,
 
+  estimateTime: estimateTimeImpl,
+
   accessory: nodeAccessoryImpl,
 
   disable(): boolean {
@@ -85,15 +90,17 @@ export const nodeImpl: MNode = {
 
   setWidth() {
     const textWidth = elementSizeCalculator.measureLongestLineWidth(this.text)
-    const checkboxAreaWidth = this.checkbox.hidden ? 0 : checkboxWidth + spacerWidth
-    const elementWidth = checkboxAreaWidth + pickBiggerNumber(textWidth, textMinWidth)
+    const checkboxAreaWidth = this.checkbox.hidden ? 0 : checkboxWidth + checkboxSpacerWidth
+    const estimateTimeAreaWidth = this.checkbox.hidden ? 0 : this.estimateTime.getWidth()
+    const elementWidth =
+      checkboxAreaWidth + pickBiggerNumber(textWidth, textMinWidth) + estimateTimeAreaWidth
 
     this.width = this.getAroundAreaWidth() + elementWidth
   },
 
   setHeight() {
     const textHeight = lineHeight * numberOfLines(this.text)
-    const elementHeight = pickBiggerNumber(textMinHeight, textHeight)
+    const elementHeight = Math.max(textMinHeight, textHeight, this.estimateTime.getHeight())
 
     this.height = this.getAroundAreaHeight() + elementHeight
   },
@@ -117,8 +124,6 @@ export const nodeImpl: MNode = {
     this.group.isHidden = !this.group.isHidden
     this.children.recursively.toggleHidden()
   },
-}
-
-Object.freeze(nodeImpl)
+})
 
 export default MNode

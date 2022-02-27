@@ -61,6 +61,8 @@ type MBaseNode = {
   // Not Includes margin, border, padding.
   getElementWidth(): number
 
+  getElementHeight(): number
+
   // Get element tail X from Origin.
   getElementTailX(): number
 
@@ -139,6 +141,10 @@ export const baseNodeImpl: MBaseNode = {
 
   getElementWidth(): number {
     return this.width - horizontalMargin * 2
+  },
+
+  getElementHeight(): number {
+    return this.height - verticalMargin * 2
   },
 
   getElementTailX(): number {

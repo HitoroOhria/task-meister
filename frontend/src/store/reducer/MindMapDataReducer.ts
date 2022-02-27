@@ -20,6 +20,9 @@ export const mindMapDataActionType = {
   displayCheckbox: 'MIND_MAP_DATA_DISPLAY_CHECKBOX',
   hiddenCheckbox: 'MIND_MAP_DATA_HIDDEN_CHECKBOX',
   toggleCheckbox: 'MIND_MAP_DATA_TOGGLE_CHECKBOX',
+  setEstimateTime: 'MIND_MAP_DATA_SET_ESTIMATE_TIME',
+  enterEstimateTimeEditMode: 'MIND_MAP_DATA_ENTER_ESTIMATE_TIME_EDIT_MODE',
+  exitEstimateTimeEditMode: 'MIND_MAP_DATA_EXIT_ESTIMATE_TIME_EDIT_MODE',
   processKeydown: 'MIND_MAP_DATA_PROCESS_KEYDOWN',
 } as const
 
@@ -34,6 +37,7 @@ type MindMapDataPayload = Partial<{
   isInputting: boolean
   dropPosition: DropPosition
   shortcut: Shortcut
+  estimateTime: number
 }>
 
 export type MindMapDataAction = {
@@ -82,6 +86,16 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
       return mindMapUseCase.updateAllRelationshipLine(newState)
     case mindMapDataActionType.toggleCheckbox:
       return mindMapUseCase.toggleCheckbox(newState, action.payload.id!)
+    case mindMapDataActionType.setEstimateTime:
+      return mindMapUseCase.setEstimateTime(
+        newState,
+        action.payload.id!,
+        action.payload.estimateTime!
+      )
+    case mindMapDataActionType.enterEstimateTimeEditMode:
+      return mindMapUseCase.enterEstimateTimeEditMode(newState, action.payload.id!)
+    case mindMapDataActionType.exitEstimateTimeEditMode:
+      return mindMapUseCase.exitEstimateTimeEditMode(newState, action.payload.id!)
     case mindMapDataActionType.processKeydown:
       return shortcutUseCase.handleKeydown(newState, action.payload.shortcut!)
     default:

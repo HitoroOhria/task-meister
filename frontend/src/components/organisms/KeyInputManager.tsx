@@ -29,7 +29,13 @@ const KeyInputManager: VFC<Props> = (props) => {
   const handleShortcut = (e: KeyboardEvent, shortcut: Shortcut) => {
     props.setIsShitEnter(shortcut === shortcuts.ShiftEnter)
 
-    if (mindMapData.isInputting()) return
+    if (mindMapData.isInputting()) {
+      if (shortcut === shortcuts.Enter) {
+        exitEstimateEditMode()
+      }
+
+      return
+    }
 
     if (shortcut === shortcuts.F6) {
       scrollToOrigin()
@@ -42,6 +48,13 @@ const KeyInputManager: VFC<Props> = (props) => {
     dispatchMindMapData({
       type: actionType.processKeydown,
       payload: { shortcut },
+    })
+  }
+
+  const exitEstimateEditMode = () => {
+    dispatchMindMapData({
+      type: actionType.exitEstimateTimeEditMode,
+      payload: { id: mindMapData.findNodeIsSelected()?.id },
     })
   }
 

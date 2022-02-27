@@ -10,6 +10,10 @@ interface RecursivelyChildren {
 
   isInputting(): boolean
 
+  nodeTextIsEditing(): boolean
+
+  estimateTimeIsInputting(): boolean
+
   findNodeById(id: string): MNode | undefined
 
   findNodeByPosition(position: DropPosition): MNode | undefined
@@ -50,12 +54,27 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   children: {} as Children,
 
   isInputting(): boolean {
-    const isInputtingChild = this.children.nodes.find((child) => child.isInputting)
-    if (isInputtingChild) {
+    return this.nodeTextIsEditing() || this.estimateTimeIsInputting()
+  },
+
+  nodeTextIsEditing(): boolean {
+    const editingChild = this.children.nodes.find((child) => child.isInputting)
+    if (editingChild) {
       return true
     }
 
-    return !!this.children.nodes.find((child) => child.children.recursively.isInputting())
+    return !!this.children.nodes.find((child) => child.children.recursively.nodeTextIsEditing())
+  },
+
+  estimateTimeIsInputting(): boolean {
+    const editingChild = this.children.nodes.find((child) => child.estimateTime.isEditing)
+    if (editingChild) {
+      return true
+    }
+
+    return !!this.children.nodes.find((child) =>
+      child.children.recursively.estimateTimeIsInputting()
+    )
   },
 
   findNodeById(id: string): MNode | undefined {

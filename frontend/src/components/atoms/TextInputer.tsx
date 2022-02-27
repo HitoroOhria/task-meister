@@ -29,6 +29,7 @@ type Props = {
   text: string
   isInputting: boolean
   disable: boolean
+  onClick: () => void
   onChange: (text: string) => void
   onBlur: () => void
 }
@@ -93,7 +94,7 @@ const TextInputer: VFC<Props> = (props) => {
   useEffect(handleIsInputting, [props.isInputting])
 
   return (
-    <TopDiv width={divWidth} height={divHeight} disable={props.disable}>
+    <TopDiv width={divWidth} height={divHeight} disable={props.disable} onClick={props.onClick}>
       {props.isInputting ? (
         <Textarea
           ref={textareaElement}

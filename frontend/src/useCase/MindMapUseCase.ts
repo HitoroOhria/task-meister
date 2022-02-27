@@ -2,6 +2,7 @@ import MindMapData from '~/domain/model/MindMapData'
 import DropPosition from '~/domain/model/DropPosition'
 
 import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
+import { rootNodeType } from '~/domain/model/MRootNode'
 
 class MindMapUseCase {
   public init(mindMapData: MindMapData): MindMapData {
@@ -137,6 +138,52 @@ class MindMapUseCase {
     }
 
     checkedNode.checkbox.checked = !checkedNode.checkbox.checked
+
+    return mindMapData
+  }
+
+  public setEstimateTime(
+    mindMapData: MindMapData,
+    selectedNodeId: string,
+    minute: number
+  ): MindMapData {
+    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+    if (!selectedNode) {
+      throw newNotFoundNodeErr(selectedNodeId)
+    }
+    if (selectedNode.type === rootNodeType) {
+      return mindMapData
+    }
+
+    selectedNode.estimateTime.minute = minute
+
+    return mindMapData
+  }
+
+  public enterEstimateTimeEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
+    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+    if (!selectedNode) {
+      throw newNotFoundNodeErr(selectedNodeId)
+    }
+    if (selectedNode.type === rootNodeType) {
+      return mindMapData
+    }
+
+    selectedNode.estimateTime.isEditing = true
+
+    return mindMapData
+  }
+
+  public exitEstimateTimeEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
+    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+    if (!selectedNode) {
+      throw newNotFoundNodeErr(selectedNodeId)
+    }
+    if (selectedNode.type === rootNodeType) {
+      return mindMapData
+    }
+
+    selectedNode.estimateTime.isEditing = false
 
     return mindMapData
   }

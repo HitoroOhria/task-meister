@@ -8,9 +8,12 @@ import Checkbox from '~/components/atoms/Checkbox'
 
 import Spacer from '~/components/atoms/Spacer'
 import MNode from '~/domain/model/MNode'
+import EstimateTime from '~/components/atoms/EstimateTime'
 
 // unit is px.
-export const spacerWidth = 12
+export const checkboxSpacerWidth = 12
+// unit is px.
+export const estimateTimeSpacerWidth = 12
 
 type Props = {
   node: MNode
@@ -26,8 +29,20 @@ const Node: VFC<Props> = (props) => {
 
   return (
     <BaseNode node={props.node} isShiftEnter={props.isShiftEnter}>
-      <Checkbox checkbox={props.node.checkbox} onClick={toggleCheckbox} />
-      <Spacer width={spacerWidth} hidden={props.node.checkbox.hidden} />
+      {{
+        head: (
+          <>
+            <Checkbox checkbox={props.node.checkbox} onClick={toggleCheckbox} />
+            <Spacer width={checkboxSpacerWidth} hidden={props.node.checkbox.hidden} />
+          </>
+        ),
+        tail: props.node.checkbox.hidden || (
+          <>
+            <Spacer width={estimateTimeSpacerWidth} />
+            <EstimateTime nodeId={props.node.id} estimateTime={props.node.estimateTime} />
+          </>
+        ),
+      }}
     </BaseNode>
   )
 }

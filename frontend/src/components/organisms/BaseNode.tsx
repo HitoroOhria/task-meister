@@ -28,7 +28,10 @@ type Props = {
   //   - adding type to MBaseNode is failed.
   //     - Typescript completion does not work
   isRootNode?: boolean
-  children?: ReactNode
+  children?: {
+    head: ReactNode
+    tail: ReactNode
+  }
 }
 
 const BaseNode: FC<Props> = (props) => {
@@ -70,7 +73,7 @@ const BaseNode: FC<Props> = (props) => {
     })
   }
 
-  const handleDoubleClick = () => {
+  const handleNodeTextClick = () => {
     dispatchMindMapData({ type: actionType.enterNodeEditMode, payload: { id: props.node.id } })
   }
 
@@ -79,19 +82,22 @@ const BaseNode: FC<Props> = (props) => {
       <DraggableElement textData={props.node.id} preventDefault={props.isRootNode}>
         <NodeDiv
           ref={nodeDivElement}
+          width={props.node.getElementWidth()}
+          height={props.node.getElementHeight()}
           hidden={props.node.isHidden}
           selected={props.node.isSelected}
           onClick={handleClick}
-          onDoubleClick={handleDoubleClick}
         >
-          {props.children}
+          {props.children?.head}
           <TextInputer
             text={props.node.text}
             isInputting={props.node.isInputting}
             disable={props.node.disable()}
+            onClick={handleNodeTextClick}
             onChange={(text) => handleNodeTextChanges(text)}
             onBlur={exitEditMode}
           />
+          {props.children?.tail}
         </NodeDiv>
       </DraggableElement>
     </PositionAdjuster>
@@ -101,11 +107,15 @@ const BaseNode: FC<Props> = (props) => {
 export default BaseNode
 
 type NodeDivProps = {
+  width: number
+  height: number
   hidden: boolean
   selected: boolean
 }
 
 const NodeDiv = styled.div<NodeDivProps>`
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
   display: ${(props) => (props.hidden ? 'none' : 'block')};
   margin: ${verticalMargin}px ${horizontalMargin}px;
   padding: ${padding}px;
