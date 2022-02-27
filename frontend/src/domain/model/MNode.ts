@@ -90,6 +90,7 @@ export const nodeImpl: MNode = Object.freeze({
 
   setWidth() {
     const textWidth = elementSizeCalculator.measureLongestLineWidth(this.text)
+    // TODO Add getWidth/Height to MCheckbox.
     const checkboxAreaWidth = this.checkbox.hidden ? 0 : checkboxWidth + checkboxSpacerWidth
     const estimateTimeAreaWidth = this.checkbox.hidden ? 0 : this.estimateTime.getWidth()
     const elementWidth =

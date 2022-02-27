@@ -8,6 +8,7 @@ import ShortcutUseCase from '~/useCase/ShortcutUseCase'
 import Shortcut from '~/enum/Shortcut'
 
 export const mindMapDataActionType = {
+  // TODO Separate every Components.
   init: 'MIND_MAP_DATA_INIT',
   selectNode: 'MIND_MAP_DATA_SELECT_NODE',
   enterNodeEditMode: 'MIND_MAP_DATA_ENTER_NODE_EDIT_MODE',
