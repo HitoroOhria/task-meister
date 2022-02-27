@@ -77,6 +77,7 @@ const EstimateTime: VFC<Props> = (props) => {
       ref={inputElement}
       aria-label="EstimateTime"
       width={`${width}px`}
+      // Change text color.
       css={{ '.nextui-c-jeuecp': { color: props.disable ? color : 'black' } }}
       value={props.estimateTime.toString()}
       readOnly={!props.estimateTime.isEditing}

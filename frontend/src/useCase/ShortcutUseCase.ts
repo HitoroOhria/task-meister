@@ -1,6 +1,6 @@
 import MindMapData from '~/domain/model/MindMapData'
 import MRootNode, { rootNodeType } from '~/domain/model/MRootNode'
-import MNode, { newAddNode } from '~/domain/model/MNode'
+import MNode, { newAddNode, newAddNodeWithCheckbox } from '~/domain/model/MNode'
 
 import ArrowKeyUseCase from '~/useCase/ArrowKeyUseCase'
 
@@ -78,7 +78,7 @@ class ShortcutUseCase {
   }
 
   public addNodeToBottom(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
+    if (selectedNode.type === rootNodeType) {
       return mindMapData
     }
 
@@ -91,9 +91,10 @@ class ShortcutUseCase {
       throw newNotFoundChildrenErr(selectedNode.id)
     }
 
-    const addedNode = mindMapData.isFirstLayerNode(selectedNode.id)
-      ? newAddNode(mindMapData.rootNode.width / 2)
-      : newAddNode(selectedNode.left)
+    const left = mindMapData.isFirstLayerNode(selectedNode.id)
+      ? mindMapData.rootNode.width / 2
+      : selectedNode.left
+    const addedNode = selectedNode.checkbox.hidden ? newAddNode(left) : newAddNodeWithCheckbox(left)
     parentChildren.insertNodeToBottomOf(selectedNode.id, addedNode)
 
     mindMapData.updateAllPlacement(addedNode.id)

@@ -64,6 +64,13 @@ export const newAddNode = (left: number): MNode => {
   }
 }
 
+export const newAddNodeWithCheckbox = (left: number): MNode => {
+  const node = { ...newAddNode(left) }
+  node.checkbox.hidden = false
+
+  return node
+}
+
 // Data of node to be placed on MindMap.
 // NodeData consists of a node and children's nodes.
 // Whole group is called a group.
