@@ -71,8 +71,6 @@ const EstimateTime: VFC<Props> = (props) => {
   useEffect(handleFocusAndBlur, [props.estimateTime.isEditing])
 
   return (
-    // TODO Blur when editing and press Enter.
-    //   - KeyInput to Store.
     <Input
       ref={inputElement}
       aria-label="EstimateTime"
