@@ -55,6 +55,8 @@ const EstimateTime: VFC<Props> = (props) => {
   }
 
   return (
+    // TODO Blur when editing and press Enter.
+    //   - KeyInput to Store.
     <Input
       ref={inputElement}
       aria-label={'EstimateTime'}
