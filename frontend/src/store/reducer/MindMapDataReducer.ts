@@ -53,7 +53,6 @@ const shortcutUseCase = new ShortcutUseCase(mindMapUseCase, arrowKeyUseCase)
 export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction): MindMapData => {
   const newState = { ...state }
 
-  // TODO Can rewrite to using Map?
   switch (action.type) {
     case mindMapDataActionType.init:
       return mindMapUseCase.init(newState)
