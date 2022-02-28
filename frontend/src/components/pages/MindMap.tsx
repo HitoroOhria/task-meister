@@ -25,6 +25,7 @@ const MindMap: VFC = () => {
       <DrawingArea children={mindMapData.rightMap.children} />
       <DroppableArea>
         <Origin>
+          <span style={{ position: 'absolute', top: -200 }}>A B C</span>
           <RootNode rootNode={mindMapData.rootNode} isShiftEnter={isShiftEnter} />
           <Nodes nodes={mindMapData.rightMap.children} isShiftEnter={isShiftEnter} />
         </Origin>
