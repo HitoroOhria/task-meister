@@ -10,7 +10,7 @@ import MEstimateTime from '~/domain/model/MEstimateTime'
 
 const iconSize = 30
 // Unit is px.
-export const width = 132
+export const width = 118
 // Unit is px.
 // Measured value.
 export const height = 40
@@ -75,12 +75,17 @@ const EstimateTime: VFC<Props> = (props) => {
       ref={inputElement}
       aria-label="EstimateTime"
       width={`${width}px`}
-      // Change text color.
-      css={{ '.nextui-c-jeuecp': { color: props.disable ? color : 'black' } }}
+      css={{
+        // Change text color.
+        '.nextui-c-jeuecp': { color: props.disable ? color : 'black' },
+        // Change padding of content and text.
+        '.nextui-c-PJLV-dBGXHd-applyStyles-true': { padding: '0px 5px' },
+      }}
       value={props.estimateTime.toString()}
       readOnly={!props.estimateTime.isEditing}
       underlined
       labelRight="Min"
+      // TODO Really need icon?
       contentLeft={<AiOutlineHourglass color={color} size={iconSize} />}
       onClick={enterEditMode}
       onChange={(e) => handleChange(e.target.value)}
