@@ -53,7 +53,7 @@ export const mindMapDataImpl: MindMapData = {
   leftMap: rightMapImpl,
 
   isInputting(): boolean {
-    return this.rightMap.children.recursively.isInputting()
+    return this.rightMap.children.recursively.isInputting() || this.rootNode.isInputting
   },
 
   isFirstLayerNode(id: string): boolean {
