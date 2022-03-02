@@ -104,6 +104,7 @@ const TextInputer: VFC<Props> = (props) => {
           onBlur={props.onBlur}
         />
       ) : (
+        // TODO Why aren't line breaks?
         <SpanInlineBlock height={textHeight}>{props.text}</SpanInlineBlock>
       )}
     </TopDiv>
