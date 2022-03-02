@@ -3,7 +3,7 @@ import { MindMapDispatchCtx } from '~/store/context/MindMapDataCtx'
 import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
 import PositionAdjuster from '~/components/atoms/PositionAdjuster'
 import DraggableElement from '~/components/organisms/DraggableElement'
-import TextInputer from '~/components/atoms/TextInputer'
+import NodeText from '~/components/atoms/NodeText'
 import { styled } from '@linaria/react'
 import MBaseNode from '~/domain/model/MBaseNode'
 
@@ -89,7 +89,7 @@ const BaseNode: FC<Props> = (props) => {
           onClick={handleClick}
         >
           {props.children?.head}
-          <TextInputer
+          <NodeText
             text={props.node.text}
             isInputting={props.node.isInputting}
             disable={props.node.disable()}

@@ -34,7 +34,7 @@ type Props = {
   onBlur: () => void
 }
 
-const TextInputer: VFC<Props> = (props) => {
+const NodeText: VFC<Props> = (props) => {
   const textareaElement = useRef<HTMLTextAreaElement>(null)
   const [divWidth, setDivWidth] = useState<number>(0)
   const [divHeight, setDivHeight] = useState<number>(0)
@@ -111,7 +111,7 @@ const TextInputer: VFC<Props> = (props) => {
   )
 }
 
-export default TextInputer
+export default NodeText
 
 type TopDivProps = {
   // unit is px.

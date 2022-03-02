@@ -4,7 +4,7 @@ import {
   elementSizeCalculator,
   lineHeight,
   minWidth as textMinWidth,
-} from '~/components/atoms/TextInputer'
+} from '~/components/atoms/NodeText'
 import { pickBiggerNumber } from '~/util/NumberUtil'
 import { numberOfLines } from '~/util/StringUtil'
 

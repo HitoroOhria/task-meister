@@ -12,7 +12,7 @@ import {
   lineHeight,
   minHeight as textMinHeight,
   minWidth as textMinWidth,
-} from '~/components/atoms/TextInputer'
+} from '~/components/atoms/NodeText'
 import { width as checkboxWidth } from '~/components/atoms/Checkbox'
 
 import { pickBiggerNumber } from '~/util/NumberUtil'
