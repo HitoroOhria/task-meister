@@ -43,7 +43,7 @@ I'm posting development status on [Twitter](https://twitter.com/HitoroOhira).
 
 ### Infrastructure
 
-- GCP を採用し、個人開発者にありがちな金欠問題をなんとでも回避しようともがいている点
+- GCP を採用し、個人開発者にありがちな金欠問題をなんとしてでも回避しようともがいている点
 
 ### Myself
 
