@@ -3,7 +3,7 @@ import { getArrowKey } from '~/enum/ArrowKeys'
 
 class KeyInput {
   // Currently pressed key
-  public pressKeys: string[]
+  private pressKeys: string[]
 
   // Last pressed key
   private currentKey: string
