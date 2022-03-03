@@ -18,117 +18,56 @@
 
 # Overview
 
-TaskMeister is a task management application for all business person.
+TaskMeister is a task management application for all business person. But under development, please wait for release!
+I'm posting development status on [Twitter](https://twitter.com/HitoroOhira).
 
-# View
+# For Recruiters
 
-### Theme
+## Technical Features
 
-- モノクロ
-- アニメ調
-- iOS
-- グラスモーフィズム
-- 3D
-- 遊び心
+### Frontend
 
-### Implement
+- TypeScript にて型安全なコードを記述している点
+- Atomic Design を採用し、再利用性を高めている点
+- Clean Architecture を採用し、マインドマップ計算の複雑なロジックを保守性高く実装している点
+- [Future] モダンそうなので、GraphQL を採用予定である点
 
-- キャンバス
-- ノード
-    - position: absolute ?
-- 関連線
-    - 3次ベジュ曲線
-- ショートカットキー
-    - 全体管理？
-    - 個別管理？ 
-- ノード選択
-- ノード移動
+### Backend
 
-# Database
+- Clean Architecture を採用し、保守性を高めている点
 
-- ノードをどのように保持するか？
-    - テーブル単位（カラムをたくさん持つ）
-        - MySQL
-            - クエリ
-                - 実現可能か？
-            - フロントエンド
-                - 表示
-                - 作成
-                - 更新
-                - 入れ替え
-    - カラム単位（JSON型カラムにすべてを持つ）
-        - MySQL or NoSQL
-            - クエリ
-                - id 指定
-            - フロントエンド
-                - 表示
-                    - バックエンドで整形
-                    - 配列 or 番号付きJSON
-                - 作成
-                    - メンバーの部分追加が可能か？
-                - 更新
-                    - メンバーの部分更新が可能か？
-                - 入れ替え
-                    - 配列: 削除 & 途中に挿入
-                    - 番号付きJSON: 番号の書き換え
+### Infrastructure
 
-- user
-    - id: auto generate
-    - name: string
-    - email: string
-    -
-- folder
-    - id: auto generate
-    - parent_folder_id: string
-    - name: string
-- mind_map
-    - id: auto generate
-    - folder_id: string
-    - name: string
-- root_node
-    - id: auto generate
-    - mind_map_id: string
-    - nodes: map
-        - [node1, node2, ...]
-- node
-    - text: string
-    - estimate_minute: int
-    - checked: boolean
-    - children: array
-        - [node3, node4, ...]
+- GCP を採用し、個人開発者にありがちな金欠問題をなんとでも回避しようともがいている点
 
-below is sample json of node.
+### Myself
 
-```json
-[
-  {
-    "id": "random_id1",
-    "text": "目的",
-    "estimate_minute": null,
-    "checked": false,
-    "children": [
-      {
-        "id": "random_id1_child1",
-        "text": "ゴールは何か？",
-        "estimate_minute": 20,
-        "checked": false,
-        "children": null
-      }
-    ]
-  },
-  {
-    "id": "random_id2",
-    "text": "やること",
-    "estimate_minute": 20,
-    "checked": false,
-    "children": null
-  }
-]
-```
+- 毎日1コミットを継続している点💪
+- 平日の朝活・土日のコワーキングスペースを習慣化し、週20時間以上コードを書いている点
+    - しかし、リリースへの道のりは遠く、、、不屈の精神が鍛え上げられている点
 
-# Infrastructure
+## Technology used
 
-# Application Structure
+### Frontend
+
+- JavaScript / TypeScript
+- React / [Future] Next.js
+- Jest
+- Linaria / NextUI
+
+### Backend
+
+- Go
+- Echo
+
+### DB
+
+- Firestore
+
+### Infrastructure
+
+- Docker
+- GCP (GCS / [Future] GCE)
 
 # Setup Development Environment
 
