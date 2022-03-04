@@ -34,12 +34,12 @@ I'm posting development status on [Twitter](https://twitter.com/HitoroOhira).
 
 - TypeScript にて型安全なコードを記述している点
 - Atomic Design を採用し、再利用性を高めている点
-- Clean Architecture を採用し、マインドマップ計算の複雑なロジックを保守性高く実装している点
-- [Future] モダンそうなので、GraphQL を採用予定である点
+- DDD / Clean Architecture を採用し、マインドマップ計算の複雑なロジックを保守性高く実装している点
+- [future] モダンそうなので、GraphQL を採用予定である点
 
 ### Backend
 
-- Clean Architecture を採用し、保守性を高めている点
+- DDD / Clean Architecture を採用し、保守性を高めている点
 
 ### Infrastructure
 
@@ -56,7 +56,7 @@ I'm posting development status on [Twitter](https://twitter.com/HitoroOhira).
 ### Frontend
 
 - JavaScript / TypeScript
-- React / [Future] Next.js
+- React / [future] Next.js
 - Jest
 - Linaria / NextUI
 
@@ -72,7 +72,7 @@ I'm posting development status on [Twitter](https://twitter.com/HitoroOhira).
 ### Infrastructure
 
 - Docker
-- GCP (GCS / [Future] GCE)
+- GCP (GCS / [future] GCE)
 
 # Setup Development Environment
 
