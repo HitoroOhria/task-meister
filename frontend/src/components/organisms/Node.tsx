@@ -32,6 +32,7 @@ const Node: VFC<Props> = (props) => {
       {{
         head: (
           <>
+            {/*TODO Control hidden on this place.*/}
             <Checkbox checkbox={props.node.checkbox} onClick={toggleCheckbox} />
             <Spacer width={checkboxSpacerWidth} hidden={props.node.checkbox.hidden} />
           </>
