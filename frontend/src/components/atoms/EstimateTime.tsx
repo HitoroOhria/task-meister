@@ -1,16 +1,14 @@
 import React, { useContext, useEffect, useRef, VFC } from 'react'
 
 import { Input } from '@nextui-org/react'
-import { AiOutlineHourglass } from 'react-icons/ai'
 
 import { MindMapDispatchCtx } from '~/store/context/MindMapDataCtx'
 import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
 
 import MEstimateTime from '~/domain/model/MEstimateTime'
 
-const iconSize = 30
 // Unit is px.
-export const width = 118
+export const width = 90
 // Unit is px.
 // Measured value.
 export const height = 40
@@ -20,7 +18,8 @@ const color = '#C1C1C1'
 type Props = {
   nodeId: string
   estimateTime: MEstimateTime
-  disable: boolean
+  disabled: boolean
+  readOnly: boolean
 }
 
 const EstimateTime: VFC<Props> = (props) => {
@@ -77,16 +76,17 @@ const EstimateTime: VFC<Props> = (props) => {
       width={`${width}px`}
       css={{
         // Change text color.
-        '.nextui-c-jeuecp': { color: props.disable ? color : 'black' },
+        '.nextui-c-jeuecp': { color: props.readOnly ? color : 'black' },
         // Change padding of content and text.
         '.nextui-c-PJLV-dBGXHd-applyStyles-true': { padding: '0px 5px' },
+        // Change cursor when disabled.
+        '.nextui-c-eXOOPO-gvlAwB-disabled-true': { cursor: 'default' },
       }}
       value={props.estimateTime.toString()}
+      disabled={props.disabled}
       readOnly={!props.estimateTime.isEditing}
       underlined
       labelRight="Min"
-      // TODO Really need icon?
-      contentLeft={<AiOutlineHourglass color={color} size={iconSize} />}
       onClick={enterEditMode}
       onChange={(e) => handleChange(e.target.value)}
       onBlur={exitEditMode}

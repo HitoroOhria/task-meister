@@ -42,7 +42,8 @@ const Node: VFC<Props> = (props) => {
             <EstimateTime
               nodeId={props.node.id}
               estimateTime={props.node.estimateTime}
-              disable={props.node.checkbox.checked}
+              disabled={props.node.checkbox.hidden}
+              readOnly={props.node.checkbox.checked}
             />
           </>
         ),
