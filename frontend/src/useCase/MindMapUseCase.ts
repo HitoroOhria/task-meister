@@ -104,50 +104,6 @@ class MindMapUseCase {
     return mindMapData
   }
 
-  public toggleCheckboxHidden(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
-    }
-
-    const selectedNode = mindMapData.rightMap.children.recursively.findNodeById(selectedNodeId)
-    if (!selectedNode) {
-      throw newNotFoundNodeErr(selectedNode)
-    }
-    const cannotShowCheckbox =
-      mindMapData.hasDisplayedCheckboxAncestorNode(selectedNode.id) ||
-      selectedNode.children.recursively.displayedCheckbox()
-    if (cannotShowCheckbox) {
-      return mindMapData
-    }
-
-    selectedNode.checkbox.hidden = !selectedNode.checkbox.hidden
-    if (selectedNode.checkbox.hidden) {
-      selectedNode.checkbox.checked = false
-    }
-
-    mindMapData.updateAllPlacement(selectedNodeId)
-
-    return mindMapData
-  }
-
-  public toggleCheckbox(mindMapData: MindMapData, checkedNodeId: string): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
-    }
-
-    const checkedNode = mindMapData.rightMap.children.recursively.findNodeById(checkedNodeId)
-    if (!checkedNode) {
-      throw newNotFoundNodeErr(checkedNode)
-    }
-    if (checkedNode.checkbox.hidden) {
-      return mindMapData
-    }
-
-    checkedNode.checkbox.checked = !checkedNode.checkbox.checked
-
-    return mindMapData
-  }
-
   public setEstimateTime(
     mindMapData: MindMapData,
     selectedNodeId: string,

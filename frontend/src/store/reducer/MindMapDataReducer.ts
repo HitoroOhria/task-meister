@@ -4,6 +4,7 @@ import DropPosition from '~/domain/model/DropPosition'
 import MindMapUseCase from '~/useCase/MindMapUseCase'
 import ArrowKeyUseCase from '~/useCase/ArrowKeyUseCase'
 import ShortcutUseCase from '~/useCase/ShortcutUseCase'
+import CheckboxUseCase from '~/useCase/CheckboxUseCase'
 
 import Shortcut from '~/enum/Shortcut'
 
@@ -46,9 +47,11 @@ export type MindMapDataAction = {
   payload: MindMapDataPayload
 }
 
+// TODO Refactor to use injector.
 const mindMapUseCase = new MindMapUseCase()
 const arrowKeyUseCase = new ArrowKeyUseCase()
-const shortcutUseCase = new ShortcutUseCase(mindMapUseCase, arrowKeyUseCase)
+const checkboxUseCase = new CheckboxUseCase()
+const shortcutUseCase = new ShortcutUseCase(mindMapUseCase, arrowKeyUseCase, checkboxUseCase)
 
 export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction): MindMapData => {
   const newState = { ...state }
@@ -85,7 +88,7 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
     case mindMapDataActionType.updateAllRelationshipLine:
       return mindMapUseCase.updateAllRelationshipLine(newState)
     case mindMapDataActionType.toggleCheckbox:
-      return mindMapUseCase.toggleCheckbox(newState, action.payload.id!)
+      return checkboxUseCase.toggleCheck(newState, action.payload.id!)
     case mindMapDataActionType.setEstimateTime:
       return mindMapUseCase.setEstimateTime(
         newState,
