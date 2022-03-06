@@ -30,6 +30,10 @@ type MNode = MBaseNode & {
   accessory: NodeAccessory
   estimateTime: MEstimateTime
 
+  showEstimateTime(): boolean
+
+  estimated(): boolean
+
   hasNodeById(childId: string): boolean
 
   updateTop(): void
@@ -95,11 +99,19 @@ export const nodeImpl: MNode = Object.freeze({
     return this.checkbox.checked
   },
 
+  showEstimateTime(): boolean {
+    return !this.checkbox.hidden || this.children.estimated()
+  },
+
+  estimated(): boolean {
+    return !this.checkbox.hidden && !this.estimateTime.inputted()
+  },
+
   setWidth() {
     const textWidth = elementSizeCalculator.measureLongestLineWidth(this.text)
     // TODO Add getWidth/Height to MCheckbox.
     const checkboxAreaWidth = this.checkbox.hidden ? 0 : checkboxWidth + checkboxSpacerWidth
-    const estimateTimeAreaWidth = this.checkbox.hidden ? 0 : this.estimateTime.getWidth()
+    const estimateTimeAreaWidth = this.showEstimateTime() ? this.estimateTime.getWidth() : 0
     const elementWidth =
       checkboxAreaWidth + pickBiggerNumber(textWidth, textMinWidth) + estimateTimeAreaWidth
 

@@ -41,6 +41,8 @@ interface RecursivelyChildren {
   deselectNode(): void
 
   updateAccessoryPlacement(parentNode: MBaseNode): void
+
+  updateEstimateTimeMinute(): void
 }
 
 export const newRecursivelyChildren = (children: Children): RecursivelyChildren => {
@@ -220,6 +222,13 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     this.children.nodes.forEach((child) =>
       child.children.recursively.updateAccessoryPlacement(child)
     )
+  },
+
+  updateEstimateTimeMinute() {
+    this.children.nodes.forEach((node) => node.children.recursively.updateEstimateTimeMinute())
+    this.children.nodes
+      .filter((node) => node.children.nodes.length !== 0)
+      .forEach((node) => node.estimateTime.updateMinute(node.children))
   },
 }
 

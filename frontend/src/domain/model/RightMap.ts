@@ -2,6 +2,7 @@ import MNode from '~/domain/model/MNode'
 import Children, { childrenImpl } from '~/domain/model/Children'
 import DropPosition from '~/domain/model/DropPosition'
 import { total } from '~/util/NumberUtil'
+import MRootNode from '~/domain/model/MRootNode'
 
 type RightMap = {
   children: Children
@@ -11,6 +12,8 @@ type RightMap = {
   updateNodePlacement(id: string): void
 
   updateNodesLateral(updatedNode: MNode, left: number): void
+
+  updateNodesLateralWhenEstimated(rootNode: MRootNode): void
 
   updateNodesVertical(updatedNode: MNode): void
 
@@ -54,6 +57,12 @@ export const rightMapImpl: RightMap = {
     updatedNode.setWidth()
     updatedNode.left = left
     updatedNode.children.recursively.setNodeLeft(left, updatedNode.width)
+  },
+
+  // TODO Refactor.
+  updateNodesLateralWhenEstimated(rootNode: MRootNode) {
+    this.children.recursively.setNodeSize()
+    this.children.recursively.setNodeLeft(rootNode.left, rootNode.width)
   },
 
   updateNodesVertical(updatedNode: MNode) {

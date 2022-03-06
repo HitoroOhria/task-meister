@@ -1,15 +1,25 @@
 import { height, width } from '~/components/atoms/EstimateTime'
 import { estimateTimeSpacerWidth as spacerWidth } from '~/components/organisms/Node'
 
+import Children from '~/domain/model/Children'
+
+import { sum } from '~/util/NumberUtil'
+
+export const initMinute = -1
+
 type MEstimateTime = {
   minute: number
   isEditing: boolean
+
+  inputted(): boolean
 
   toString(): string
 
   getWidth(): number
 
   getHeight(): number
+
+  updateMinute(children: Children): void
 }
 
 export const newEstimateTime = (): MEstimateTime => {
@@ -19,11 +29,15 @@ export const newEstimateTime = (): MEstimateTime => {
 }
 
 export const estimateTimeImpl: MEstimateTime = Object.freeze({
-  minute: -1,
+  minute: initMinute,
   isEditing: false,
 
+  inputted(): boolean {
+    return this.minute === initMinute
+  },
+
   toString(): string {
-    return this.minute < 0 ? '' : this.minute.toString()
+    return this.minute <= 0 ? '' : this.minute.toString()
   },
 
   getWidth(): number {
@@ -32,6 +46,10 @@ export const estimateTimeImpl: MEstimateTime = Object.freeze({
 
   getHeight(): number {
     return height
+  },
+
+  updateMinute(children: Children) {
+    this.minute = children.nodes.map((node) => node.estimateTime.minute).reduce(sum, 0)
   },
 })
 

@@ -27,14 +27,7 @@ const EstimateTime: VFC<Props> = (props) => {
   const inputElement = useRef<HTMLInputElement>(null)
 
   const handleChange = (text: string) => {
-    if (text === '') {
-      dispatchMindMapData({
-        type: actionType.setEstimateTime,
-        payload: { id: props.nodeId, estimateTime: -1 },
-      })
-      return
-    }
-    const minute = parseInt(text)
+    const minute = text === '' ? 0 : parseInt(text)
     if (text.length >= 4 || !Number.isInteger(minute) || minute < 0) {
       return
     }
@@ -76,7 +69,7 @@ const EstimateTime: VFC<Props> = (props) => {
       width={`${width}px`}
       css={{
         // Change text color.
-        '.nextui-c-jeuecp': { color: props.readOnly ? color : 'black' },
+        '.nextui-c-jeuecp': { color: props.disabled || props.readOnly ? color : 'black' },
         // Change padding of content and text.
         '.nextui-c-PJLV-dBGXHd-applyStyles-true': { padding: '0px 5px' },
         // Change cursor when disabled.
