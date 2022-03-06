@@ -1,4 +1,4 @@
-import MindMapData from '~/domain/model/MindMapData'
+import MMindMap from '~/domain/model/MMindMap'
 import MRootNode, { rootNodeType } from '~/domain/model/MRootNode'
 import MNode, { newAddNode, newAddNodeWithCheckbox } from '~/domain/model/MNode'
 
@@ -34,36 +34,36 @@ class ShortcutUseCase {
     this.estimateTimeUseCase = estimateTimeUseCase
   }
 
-  public handleKeydown(mindMapData: MindMapData, key: Shortcut): MindMapData {
-    const selectedNode = mindMapData.findNodeIsSelected()
+  public handleKeydown(mindMap: MMindMap, key: Shortcut): MMindMap {
+    const selectedNode = mindMap.findNodeIsSelected()
     if (!selectedNode) {
-      return mindMapData
+      return mindMap
     }
 
     // Sort in desc order of probability.
     switch (key) {
       case shortcuts.Tab:
-        return this.addNodeToTail(mindMapData, selectedNode)
+        return this.addNodeToTail(mindMap, selectedNode)
       case shortcuts.Enter:
-        return this.addNodeToBottom(mindMapData, selectedNode)
+        return this.addNodeToBottom(mindMap, selectedNode)
       case shortcuts.Backspace:
-        return this.deleteNode(mindMapData, selectedNode)
+        return this.deleteNode(mindMap, selectedNode)
       case shortcuts.MetaE:
-        return this.nodeUseCase.enterEditMode(mindMapData, selectedNode.id)
+        return this.nodeUseCase.enterEditMode(mindMap, selectedNode.id)
       case shortcuts.C:
-        return this.checkboxUseCase.toggleHidden(mindMapData, selectedNode.id)
+        return this.checkboxUseCase.toggleHidden(mindMap, selectedNode.id)
       case shortcuts.T:
-        return this.estimateTimeUseCase.enterEditMode(mindMapData, selectedNode.id)
+        return this.estimateTimeUseCase.enterEditMode(mindMap, selectedNode.id)
       case shortcuts.MetaEnter:
-        return this.checkboxUseCase.toggleCheck(mindMapData, selectedNode.id)
+        return this.checkboxUseCase.toggleCheck(mindMap, selectedNode.id)
       case shortcuts.Space:
-        return this.nodeUseCase.toggleCollapse(mindMapData, selectedNode.id)
+        return this.nodeUseCase.toggleCollapse(mindMap, selectedNode.id)
       case shortcuts.ShiftEnter: // Ignore
       case shortcuts.F6: // Ignore
-        return mindMapData
+        return mindMap
       default:
         assertNever(key, `Not defined key. key = ${key}`)
-        return mindMapData
+        return mindMap
     }
   }
 
@@ -71,84 +71,82 @@ class ShortcutUseCase {
   // And select that node.
   // And update placement of all mind map parts.
   // Not add if selected node is collapsed.
-  public addNodeToTail(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
+  public addNodeToTail(mindMap: MMindMap, selectedNode: MRootNode | MNode): MMindMap {
     if (selectedNode.type !== rootNodeType && selectedNode.collapsed) {
-      return mindMapData
+      return mindMap
     }
 
-    mindMapData.deselectNode()
+    mindMap.deselectNode()
 
     const [addedNodeLeft, children] =
       selectedNode.type === rootNodeType
-        ? [mindMapData.rootNode.width / 2, mindMapData.rightMap.children]
+        ? [mindMap.rootNode.width / 2, mindMap.rightMap.children]
         : [selectedNode.left + selectedNode.width, selectedNode.children]
     // TODO Why set only left? There is top?
     const addedNode = newAddNode(addedNodeLeft)
     children.nodes.push(addedNode)
 
-    mindMapData.updateAllPlacement(addedNode.id)
+    mindMap.updateAllPlacement(addedNode.id)
 
-    return mindMapData
+    return mindMap
   }
 
   // Add node to bottom of selected node in MindMap.
   // And select that node.
   // And update placement of all mind map parts.
   // Not add if selected node is root node.
-  public addNodeToBottom(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
+  public addNodeToBottom(mindMap: MMindMap, selectedNode: MRootNode | MNode): MMindMap {
     if (selectedNode.type === rootNodeType) {
-      return mindMapData
+      return mindMap
     }
 
-    mindMapData.deselectNode()
+    mindMap.deselectNode()
 
-    const left = mindMapData.isFirstLayerNode(selectedNode.id)
-      ? mindMapData.rootNode.width / 2
+    const left = mindMap.isFirstLayerNode(selectedNode.id)
+      ? mindMap.rootNode.width / 2
       : selectedNode.left
     const addedNode = selectedNode.checkbox.hidden ? newAddNode(left) : newAddNodeWithCheckbox(left)
-    mindMapData.rightMap.children.recursively
+    mindMap.rightMap.children.recursively
       .findChildrenContainsId(selectedNode.id)
       ?.insertNodeToBottomOf(selectedNode.id, addedNode)
 
-    mindMapData.updateAllPlacement(addedNode.id)
+    mindMap.updateAllPlacement(addedNode.id)
 
-    return mindMapData
+    return mindMap
   }
 
   // Delete node from MindMap.
   // And update placement of all mind map parts.
   // Cannot delete if selected node is root node.
-  public deleteNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
+  public deleteNode(mindMap: MMindMap, selectedNode: MRootNode | MNode): MMindMap {
+    if (mindMap.rootNode.isSelected) {
+      return mindMap
     }
 
-    const children = mindMapData.rightMap.children.recursively.findChildrenContainsId(
-      selectedNode.id
-    )
+    const children = mindMap.rightMap.children.recursively.findChildrenContainsId(selectedNode.id)
     if (!children) {
       throw newNotFoundChildrenErr(selectedNode.id)
     }
 
     const nextSelectedNode =
       children.nodes.length === 1
-        ? mindMapData.findHeadNode(selectedNode.id)
+        ? mindMap.findHeadNode(selectedNode.id)
         : children.findTopNodeOf(selectedNode.id)
     if (!nextSelectedNode) {
       throw newNotFoundNodeErr(selectedNode.id)
     }
 
     nextSelectedNode.isSelected = true
-    mindMapData.rightMap.children.recursively.removeNodeById(selectedNode.id)
+    mindMap.rightMap.children.recursively.removeNodeById(selectedNode.id)
 
     if (nextSelectedNode.type === rootNodeType) {
-      return mindMapData
+      return mindMap
     }
 
-    mindMapData.rightMap.updateNodesVertical(nextSelectedNode)
-    mindMapData.updateAccessoryPlacement()
+    mindMap.rightMap.updateNodesVertical(nextSelectedNode)
+    mindMap.updateAccessoryPlacement()
 
-    return mindMapData
+    return mindMap
   }
 }
 

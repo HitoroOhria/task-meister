@@ -1,41 +1,41 @@
 import ArrowKey, { arrowKeys } from '~/enum/ArrowKeys'
-import MindMapData from '~/domain/model/MindMapData'
+import MMindMap from '~/domain/model/MMindMap'
 import { assertNever, newNotFoundNodeErr } from '~/util/ExceptionUtil'
 import MRootNode, { rootNodeType } from '~/domain/model/MRootNode'
 import MNode from '~/domain/model/MNode'
 
 // UseCase of arrow key.
 class ArrowKeyUseCase {
-  handleKeydown(mindMapData: MindMapData, arrowKey: ArrowKey): MindMapData {
-    const selectedNode = mindMapData.findNodeIsSelected()
+  handleKeydown(mindMap: MMindMap, arrowKey: ArrowKey): MMindMap {
+    const selectedNode = mindMap.findNodeIsSelected()
     if (!selectedNode) {
-      return mindMapData
+      return mindMap
     }
 
     switch (arrowKey) {
       case arrowKeys.Up:
-        return this.selectTopNode(mindMapData, selectedNode)
+        return this.selectTopNode(mindMap, selectedNode)
       case arrowKeys.Down:
-        return this.selectBottomNode(mindMapData, selectedNode)
+        return this.selectBottomNode(mindMap, selectedNode)
       case arrowKeys.Right:
-        return this.selectTailNode(mindMapData, selectedNode)
+        return this.selectTailNode(mindMap, selectedNode)
       case arrowKeys.Left:
-        return this.selectHeadNode(mindMapData, selectedNode)
+        return this.selectHeadNode(mindMap, selectedNode)
       default:
         assertNever(arrowKey, `Not defined arrow key. arrow key = ${arrowKey}`)
-        return mindMapData
+        return mindMap
     }
   }
 
   // Select top node of currently selected node in MindMap.
-  selectTopNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
+  selectTopNode(mindMap: MMindMap, selectedNode: MRootNode | MNode): MMindMap {
+    if (mindMap.rootNode.isSelected) {
+      return mindMap
     }
 
-    mindMapData.deselectNode()
+    mindMap.deselectNode()
 
-    const topNode = mindMapData.rightMap.children.recursively
+    const topNode = mindMap.rightMap.children.recursively
       .findChildrenContainsId(selectedNode.id)
       ?.findTopNodeOf(selectedNode.id)
     if (!topNode) {
@@ -43,18 +43,18 @@ class ArrowKeyUseCase {
     }
 
     topNode.isSelected = true
-    return mindMapData
+    return mindMap
   }
 
   // Select bottom node of currently selected node in MindMap.
-  selectBottomNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
+  selectBottomNode(mindMap: MMindMap, selectedNode: MRootNode | MNode): MMindMap {
+    if (mindMap.rootNode.isSelected) {
+      return mindMap
     }
 
-    mindMapData.deselectNode()
+    mindMap.deselectNode()
 
-    const bottomNode = mindMapData.rightMap.children.recursively
+    const bottomNode = mindMap.rightMap.children.recursively
       .findChildrenContainsId(selectedNode.id)
       ?.findBottomNodeOf(selectedNode.id)
     if (!bottomNode) {
@@ -62,47 +62,47 @@ class ArrowKeyUseCase {
     }
 
     bottomNode.isSelected = true
-    return mindMapData
+    return mindMap
   }
 
   // Select head node of currently selected node in MindMap.
-  selectHeadNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
+  selectHeadNode(mindMap: MMindMap, selectedNode: MRootNode | MNode): MMindMap {
+    if (mindMap.rootNode.isSelected) {
+      return mindMap
     }
 
-    const headNode = mindMapData.findHeadNode(selectedNode.id)
+    const headNode = mindMap.findHeadNode(selectedNode.id)
     if (!headNode) {
-      return mindMapData
+      return mindMap
     }
 
-    mindMapData.deselectNode()
+    mindMap.deselectNode()
     headNode.isSelected = true
 
-    return mindMapData
+    return mindMap
   }
 
   // Select tail node of currently selected node in MindMap.
-  selectTailNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
+  selectTailNode(mindMap: MMindMap, selectedNode: MRootNode | MNode): MMindMap {
     if (selectedNode.type === rootNodeType) {
-      mindMapData.selectTail()
-      return mindMapData
+      mindMap.selectTail()
+      return mindMap
     }
     if (selectedNode.collapsed) {
-      return mindMapData
+      return mindMap
     }
 
-    const tailNode = mindMapData.rightMap.children.recursively
+    const tailNode = mindMap.rightMap.children.recursively
       .findChildrenContainsId(selectedNode.id)
       ?.findTailNodeOf(selectedNode.id)
     if (!tailNode) {
-      return mindMapData
+      return mindMap
     }
 
-    mindMapData.deselectNode()
+    mindMap.deselectNode()
     tailNode.isSelected = true
 
-    return mindMapData
+    return mindMap
   }
 }
 

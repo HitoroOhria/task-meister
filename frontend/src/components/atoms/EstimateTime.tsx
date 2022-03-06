@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useRef, VFC } from 'react'
 
 import { Input } from '@nextui-org/react'
 
-import { MindMapDispatchCtx } from '~/store/context/MindMapDataCtx'
-import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
+import { MindMapDispatchCtx } from '~/store/context/MindMapCtx'
+import { mindMapActionType as actionType } from '~/store/reducer/MindMapReducer'
 
 import MEstimateTime from '~/domain/model/MEstimateTime'
 
@@ -23,7 +23,7 @@ type Props = {
 }
 
 const EstimateTime: VFC<Props> = (props) => {
-  const dispatchMindMapData = useContext(MindMapDispatchCtx)
+  const dispatchMindMap = useContext(MindMapDispatchCtx)
   const inputElement = useRef<HTMLInputElement>(null)
 
   const handleChange = (text: string) => {
@@ -32,21 +32,21 @@ const EstimateTime: VFC<Props> = (props) => {
       return
     }
 
-    dispatchMindMapData({
+    dispatchMindMap({
       type: actionType.setEstimateTime,
       payload: { id: props.nodeId, estimateTime: minute },
     })
   }
 
   const enterEditMode = () => {
-    dispatchMindMapData({
+    dispatchMindMap({
       type: actionType.enterEstimateTimeEditMode,
       payload: { id: props.nodeId },
     })
   }
 
   const exitEditMode = () => {
-    dispatchMindMapData({
+    dispatchMindMap({
       type: actionType.exitEstimateTimeEditMode,
       payload: { id: props.nodeId },
     })

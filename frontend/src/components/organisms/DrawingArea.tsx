@@ -4,18 +4,18 @@ import CollapseButton from '~/components/atoms/CollapseButton'
 
 import MNode from '~/domain/model/MNode'
 import Children from '~/domain/model/Children'
-import { MindMapDispatchCtx } from '~/store/context/MindMapDataCtx'
-import { mindMapDataActionType } from '~/store/reducer/MindMapDataReducer'
+import { MindMapDispatchCtx } from '~/store/context/MindMapCtx'
+import { mindMapActionType } from '~/store/reducer/MindMapReducer'
 
 type Props = {
   children: Children
 }
 
 const DrawingArea: VFC<Props> = (props) => {
-  const dispatchMindMapData = useContext(MindMapDispatchCtx)
+  const dispatchMindMap = useContext(MindMapDispatchCtx)
 
   const dispatchToggleCollapse = (nodeId: string) => {
-    dispatchMindMapData({ type: mindMapDataActionType.toggleCollapse, payload: { id: nodeId } })
+    dispatchMindMap({ type: mindMapActionType.toggleCollapse, payload: { id: nodeId } })
   }
 
   const renderCollapseButton = (node: MNode): JSX.Element => {

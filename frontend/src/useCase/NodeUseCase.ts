@@ -1,4 +1,4 @@
-import MindMapData from '~/domain/model/MindMapData'
+import MMindMap from '~/domain/model/MMindMap'
 import DropPosition from '~/domain/model/DropPosition'
 
 import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
@@ -7,83 +7,79 @@ import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
 class NodeUseCase {
   // Set text to node in MindMap.
   // And update placement of all ind map parts.
-  public setText(mindMapData: MindMapData, selectedNodeId: string, text: string): MindMapData {
-    selectedNodeId === mindMapData.rootNode.id
-      ? (mindMapData.rootNode.text = text)
-      : mindMapData.rightMap.setTextById(selectedNodeId, text)
+  public setText(mindMap: MMindMap, selectedNodeId: string, text: string): MMindMap {
+    selectedNodeId === mindMap.rootNode.id
+      ? (mindMap.rootNode.text = text)
+      : mindMap.rightMap.setTextById(selectedNodeId, text)
 
-    mindMapData.updateAllPlacement(selectedNodeId)
+    mindMap.updateAllPlacement(selectedNodeId)
 
-    return mindMapData
+    return mindMap
   }
 
   // Enter node to edit mode in MindMap.
-  public enterEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+  public enterEditMode(mindMap: MMindMap, selectedNodeId: string): MMindMap {
+    const selectedNode = mindMap.findNodeById(selectedNodeId)
     if (!selectedNode) {
       throw newNotFoundNodeErr(selectedNodeId)
     }
 
     selectedNode.isInputting = true
 
-    return mindMapData
+    return mindMap
   }
 
   // Exit node from edit mode in MindMap.
-  public exitEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+  public exitEditMode(mindMap: MMindMap, selectedNodeId: string): MMindMap {
+    const selectedNode = mindMap.findNodeById(selectedNodeId)
     if (!selectedNode) {
       throw newNotFoundNodeErr(selectedNodeId)
     }
 
     selectedNode.isInputting = false
 
-    return mindMapData
+    return mindMap
   }
 
   // Select node in MindMap.
   // Currently selected node is deselected.
-  public select(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    mindMapData.deselectNode()
+  public select(mindMap: MMindMap, selectedNodeId: string): MMindMap {
+    mindMap.deselectNode()
 
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+    const selectedNode = mindMap.findNodeById(selectedNodeId)
     if (!selectedNode) {
       throw new Error(`Can not found selected node by id. id = ${selectedNodeId}`)
     }
     selectedNode.isSelected = true
 
-    return mindMapData
+    return mindMap
   }
 
   // Drop dragged node on MindMap.
   // And update placement of all mind map parts.
-  public dragAndDrop(
-    mindMapData: MindMapData,
-    movedNodeId: string,
-    dropPosition: DropPosition
-  ): MindMapData {
-    if (mindMapData.rootNode.onTail(dropPosition.left)) {
-      mindMapData.processNodeDropToRight(movedNodeId)
-      return mindMapData
+  public dragAndDrop(mindMap: MMindMap, movedNodeId: string, dropPosition: DropPosition): MMindMap {
+    if (mindMap.rootNode.onTail(dropPosition.left)) {
+      mindMap.processNodeDropToRight(movedNodeId)
+      return mindMap
     }
 
-    mindMapData.rightMap.dragAndDropNode(movedNodeId, dropPosition)
-    mindMapData.updateAccessoryPlacement()
+    mindMap.rightMap.dragAndDropNode(movedNodeId, dropPosition)
+    mindMap.updateAccessoryPlacement()
 
-    return mindMapData
+    return mindMap
   }
 
   // Toggle Collapse of node in MindMap.
   // And update placement of all mind map parts.
-  public toggleCollapse(mindMapData: MindMapData, selectedNodeId: string) {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
+  public toggleCollapse(mindMap: MMindMap, selectedNodeId: string) {
+    if (mindMap.rootNode.isSelected) {
+      return mindMap
     }
 
-    mindMapData.rightMap.collapseNodes(selectedNodeId)
-    mindMapData.updateAccessoryPlacement()
+    mindMap.rightMap.collapseNodes(selectedNodeId)
+    mindMap.updateAccessoryPlacement()
 
-    return mindMapData
+    return mindMap
   }
 }
 

@@ -1,4 +1,4 @@
-import MindMapData from '~/domain/model/MindMapData'
+import MMindMap from '~/domain/model/MMindMap'
 import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
 
 // UseCase of Checkbox.
@@ -6,20 +6,20 @@ class CheckboxUseCase {
   // Toggle hidden of checkbox in MindMap.
   // And update placement of all mind map parts.
   // Not display checkbox if there is checkbox that already displayed in ancestor or children.
-  public toggleHidden(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
+  public toggleHidden(mindMap: MMindMap, selectedNodeId: string): MMindMap {
+    if (mindMap.rootNode.isSelected) {
+      return mindMap
     }
 
-    const selectedNode = mindMapData.rightMap.children.recursively.findNodeById(selectedNodeId)
+    const selectedNode = mindMap.rightMap.children.recursively.findNodeById(selectedNodeId)
     if (!selectedNode) {
       throw newNotFoundNodeErr(selectedNode)
     }
     const cannotShowCheckbox =
-      mindMapData.hasDisplayedCheckboxAncestorNode(selectedNode.id) ||
+      mindMap.hasDisplayedCheckboxAncestorNode(selectedNode.id) ||
       selectedNode.children.recursively.displayedCheckbox()
     if (cannotShowCheckbox) {
-      return mindMapData
+      return mindMap
     }
 
     selectedNode.checkbox.hidden = !selectedNode.checkbox.hidden
@@ -27,28 +27,28 @@ class CheckboxUseCase {
       selectedNode.checkbox.checked = false
     }
 
-    mindMapData.updateAllPlacement(selectedNodeId)
+    mindMap.updateAllPlacement(selectedNodeId)
 
-    return mindMapData
+    return mindMap
   }
 
   // Toggle check of checkbox in MindMap.
-  public toggleCheck(mindMapData: MindMapData, checkedNodeId: string): MindMapData {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
+  public toggleCheck(mindMap: MMindMap, checkedNodeId: string): MMindMap {
+    if (mindMap.rootNode.isSelected) {
+      return mindMap
     }
 
-    const checkedNode = mindMapData.rightMap.children.recursively.findNodeById(checkedNodeId)
+    const checkedNode = mindMap.rightMap.children.recursively.findNodeById(checkedNodeId)
     if (!checkedNode) {
       throw newNotFoundNodeErr(checkedNode)
     }
     if (checkedNode.checkbox.hidden) {
-      return mindMapData
+      return mindMap
     }
 
     checkedNode.checkbox.checked = !checkedNode.checkbox.checked
 
-    return mindMapData
+    return mindMap
   }
 }
 

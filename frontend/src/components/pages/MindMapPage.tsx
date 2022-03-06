@@ -1,15 +1,15 @@
 import React, { VFC } from 'react'
 
-import MindMapDataProvider from '~/store/provider/MindMapDataProvider'
+import MindMapProvider from '~/store/provider/MindMapProvider'
 
 import '~/components/pages/MindMapPage.css'
 import MindMap from '~/components/pages/MindMap'
 
 const MindMapPage: VFC = () => {
   return (
-    <MindMapDataProvider>
+    <MindMapProvider>
       <MindMap />
-    </MindMapDataProvider>
+    </MindMapProvider>
   )
 }
 

@@ -1,6 +1,6 @@
 import { newNode } from '~/domain/model/MNode'
 import { newChildren } from '~/domain/model/Children'
-import { newMindMapData } from '~/domain/model/MindMapData'
+import { newMindMap } from '~/domain/model/MMindMap'
 import { newRootNode } from '~/domain/model/MRootNode'
 import { newRightMap } from '~/domain/model/RightMap'
 import { newGroup } from '~/domain/model/Group'
@@ -21,10 +21,10 @@ import { newGroup } from '~/domain/model/Group'
 const node1 = newNode('A', 'A', newGroup(), newChildren([]))
 const node2 = newNode('B', 'B', newGroup(), newChildren([]))
 
-const initMindMapData = newMindMapData(
+const initMindMap = newMindMap(
   newRootNode('Root', 'Root'),
   newRightMap(newChildren([node1, node2])),
   newRightMap(newChildren([]))
 )
 
-export default initMindMapData
+export default initMindMap

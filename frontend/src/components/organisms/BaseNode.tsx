@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useContext, useRef } from 'react'
-import { MindMapDispatchCtx } from '~/store/context/MindMapDataCtx'
-import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
+import { MindMapDispatchCtx } from '~/store/context/MindMapCtx'
+import { mindMapActionType as actionType } from '~/store/reducer/MindMapReducer'
 import PositionAdjuster from '~/components/atoms/PositionAdjuster'
 import DraggableElement from '~/components/organisms/DraggableElement'
 import NodeText from '~/components/atoms/NodeText'
@@ -36,7 +36,7 @@ type Props = {
 
 const BaseNode: FC<Props> = (props) => {
   const nodeDivElement = useRef<HTMLDivElement>(null)
-  const dispatchMindMapData = useContext(MindMapDispatchCtx)
+  const dispatchMindMap = useContext(MindMapDispatchCtx)
 
   const handleNodeTextChanges = (text: string) => {
     if (text.slice(-1) === '\n' && !props.isShiftEnter) {
@@ -51,7 +51,7 @@ const BaseNode: FC<Props> = (props) => {
   // Because getting process ends before dom rendered. and the value of the previous text is acquired.
   // So, get previous value.
   const setNodeText = (text: string) => {
-    dispatchMindMapData({
+    dispatchMindMap({
       type: actionType.setNodeText,
       payload: { id: props.node.id, text },
     })
@@ -61,20 +61,20 @@ const BaseNode: FC<Props> = (props) => {
     // When added Node by Enter.
     if (!props.node.isSelected) return
 
-    dispatchMindMapData({ type: actionType.exitNodeEditMode, payload: { id: props.node.id } })
+    dispatchMindMap({ type: actionType.exitNodeEditMode, payload: { id: props.node.id } })
   }
 
   const handleClick = () => {
     if (props.node.isSelected) return
 
-    dispatchMindMapData({
+    dispatchMindMap({
       type: actionType.selectNode,
       payload: { id: props.node.id },
     })
   }
 
   const handleNodeTextClick = () => {
-    dispatchMindMapData({ type: actionType.enterNodeEditMode, payload: { id: props.node.id } })
+    dispatchMindMap({ type: actionType.enterNodeEditMode, payload: { id: props.node.id } })
   }
 
   return (

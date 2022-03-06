@@ -1,7 +1,7 @@
 import React, { useContext, VFC } from 'react'
 
-import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
-import { MindMapDispatchCtx } from '~/store/context/MindMapDataCtx'
+import { mindMapActionType as actionType } from '~/store/reducer/MindMapReducer'
+import { MindMapDispatchCtx } from '~/store/context/MindMapCtx'
 
 import BaseNode from '~/components/organisms/BaseNode'
 import Checkbox from '~/components/atoms/Checkbox'
@@ -21,10 +21,10 @@ type Props = {
 }
 
 const Node: VFC<Props> = (props) => {
-  const dispatchMindMapData = useContext(MindMapDispatchCtx)
+  const dispatchMindMap = useContext(MindMapDispatchCtx)
 
   const toggleCheckbox = () => {
-    dispatchMindMapData({ type: actionType.toggleCheckbox, payload: { id: props.node.id } })
+    dispatchMindMap({ type: actionType.toggleCheckbox, payload: { id: props.node.id } })
   }
 
   return (

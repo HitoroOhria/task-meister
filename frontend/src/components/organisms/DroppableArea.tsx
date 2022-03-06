@@ -1,6 +1,6 @@
 import React, { DragEvent, FC, ReactNode, useContext } from 'react'
-import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
-import { MindMapDispatchCtx } from '~/store/context/MindMapDataCtx'
+import { mindMapActionType as actionType } from '~/store/reducer/MindMapReducer'
+import { MindMapDispatchCtx } from '~/store/context/MindMapCtx'
 import { newDropPosition } from '~/domain/model/DropPosition'
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 }
 
 const DroppableArea: FC<Props> = (props) => {
-  const dispatchMindMapData = useContext(MindMapDispatchCtx)
+  const dispatchMindMap = useContext(MindMapDispatchCtx)
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault()
@@ -21,7 +21,7 @@ const DroppableArea: FC<Props> = (props) => {
     const nodeId = e.dataTransfer!.getData('text/plain')
     const dropPosition = newDropPosition(e)
 
-    dispatchMindMapData({
+    dispatchMindMap({
       type: actionType.dragAndDropNode,
       payload: { id: nodeId, dropPosition },
     })

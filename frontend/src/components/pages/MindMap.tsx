@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, VFC } from 'react'
 
-import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
-import { MindMapDispatchCtx, MindMapStateCtx } from '~/store/context/MindMapDataCtx'
+import { mindMapActionType as actionType } from '~/store/reducer/MindMapReducer'
+import { MindMapDispatchCtx, MindMapStateCtx } from '~/store/context/MindMapCtx'
 
 import KeyInputManager from '~/components/organisms/KeyInputManager'
 import SVGArea from '~/components/organisms/SVGArea'
@@ -12,22 +12,22 @@ import Nodes from '~/components/organisms/Nodes'
 import RootNode from '~/components/organisms/RootNode'
 
 const MindMap: VFC = () => {
-  const mindMapData = useContext(MindMapStateCtx)
-  const dispatchMindMapData = useContext(MindMapDispatchCtx)
+  const mindMap = useContext(MindMapStateCtx)
+  const dispatchMindMap = useContext(MindMapDispatchCtx)
   const [isShiftEnter, setIsShiftEnter] = useState<boolean>(false)
 
-  useEffect(() => dispatchMindMapData({ type: actionType.init, payload: {} }), [])
+  useEffect(() => dispatchMindMap({ type: actionType.init, payload: {} }), [])
 
   return (
     <>
       <KeyInputManager setIsShitEnter={setIsShiftEnter} />
-      <SVGArea rootNode={mindMapData.rootNode} children={mindMapData.rightMap.children} />
-      <DrawingArea children={mindMapData.rightMap.children} />
+      <SVGArea rootNode={mindMap.rootNode} children={mindMap.rightMap.children} />
+      <DrawingArea children={mindMap.rightMap.children} />
       <DroppableArea>
         <Origin>
           <span style={{ position: 'absolute', top: -200, width: 100 }}>A B C</span>
-          <RootNode rootNode={mindMapData.rootNode} isShiftEnter={isShiftEnter} />
-          <Nodes nodes={mindMapData.rightMap.children} isShiftEnter={isShiftEnter} />
+          <RootNode rootNode={mindMap.rootNode} isShiftEnter={isShiftEnter} />
+          <Nodes nodes={mindMap.rightMap.children} isShiftEnter={isShiftEnter} />
         </Origin>
       </DroppableArea>
     </>

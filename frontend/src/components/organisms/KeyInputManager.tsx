@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, VFC } from 'react'
 
-import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
-import { MindMapDispatchCtx, MindMapStateCtx } from '~/store/context/MindMapDataCtx'
+import { mindMapActionType as actionType } from '~/store/reducer/MindMapReducer'
+import { MindMapDispatchCtx, MindMapStateCtx } from '~/store/context/MindMapCtx'
 
 import { scrollToOrigin } from '~/components/organisms/Origin'
 
@@ -17,8 +17,8 @@ type Props = {
 }
 
 const KeyInputManager: VFC<Props> = (props) => {
-  const mindMapData = useContext(MindMapStateCtx)
-  const dispatchMindMapData = useContext(MindMapDispatchCtx)
+  const mindMap = useContext(MindMapStateCtx)
+  const dispatchMindMap = useContext(MindMapDispatchCtx)
 
   const handleKeydown = (e: KeyboardEvent) => {
     keyInput.add(e.key)
@@ -34,7 +34,7 @@ const KeyInputManager: VFC<Props> = (props) => {
     // Prevent moving screen
     e.preventDefault()
 
-    dispatchMindMapData({
+    dispatchMindMap({
       type: actionType.processArrowKey,
       payload: { arrowKey },
     })
@@ -43,7 +43,7 @@ const KeyInputManager: VFC<Props> = (props) => {
   const handleShortcut = (e: KeyboardEvent, shortcut: Shortcut) => {
     props.setIsShitEnter(shortcut === shortcuts.ShiftEnter)
 
-    if (mindMapData.isInputting()) {
+    if (mindMap.isInputting()) {
       if (shortcut === shortcuts.Enter) {
         exitEstimateEditMode()
       }
@@ -59,16 +59,16 @@ const KeyInputManager: VFC<Props> = (props) => {
       return
     }
 
-    dispatchMindMapData({
+    dispatchMindMap({
       type: actionType.processShortcut,
       payload: { shortcut },
     })
   }
 
   const exitEstimateEditMode = () => {
-    dispatchMindMapData({
+    dispatchMindMap({
       type: actionType.exitEstimateTimeEditMode,
-      payload: { id: mindMapData.findNodeIsSelected()?.id },
+      payload: { id: mindMap.findNodeIsSelected()?.id },
     })
   }
 

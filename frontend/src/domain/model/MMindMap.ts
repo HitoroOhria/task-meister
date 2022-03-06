@@ -2,7 +2,7 @@ import RightMap, { rightMapImpl } from '~/domain/model/RightMap'
 import MRootNode, { rootNodeImpl, rootNodeType } from '~/domain/model/MRootNode'
 import MNode from '~/domain/model/MNode'
 
-type MindMapData = {
+type MMindMap = {
   rootNode: MRootNode
   rightMap: RightMap
   leftMap: RightMap
@@ -36,20 +36,20 @@ type MindMapData = {
   processNodeDropToRight(movedNodeId: string): void
 }
 
-export const newMindMapData = (
+export const newMindMap = (
   rootNode: MRootNode,
   rightMap: RightMap,
   leftMap: RightMap
-): MindMapData => {
+): MMindMap => {
   return {
-    ...mindMapDataImpl,
+    ...mindMapImpl,
     rootNode: rootNode,
     rightMap: rightMap,
     leftMap: leftMap,
   }
 }
 
-export const mindMapDataImpl: MindMapData = {
+export const mindMapImpl: MMindMap = Object.freeze({
   rootNode: rootNodeImpl,
   rightMap: rightMapImpl,
   leftMap: rightMapImpl,
@@ -152,8 +152,6 @@ export const mindMapDataImpl: MindMapData = {
     this.rightMap.updateNodesLateral(movedNode, newLeft)
     this.rightMap.updateNodesVertical(movedNode)
   },
-}
+})
 
-Object.freeze(mindMapDataImpl)
-
-export default MindMapData
+export default MMindMap

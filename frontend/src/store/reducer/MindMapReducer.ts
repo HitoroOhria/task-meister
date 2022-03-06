@@ -1,4 +1,4 @@
-import MindMapData from '~/domain/model/MindMapData'
+import MMindMap from '~/domain/model/MMindMap'
 import DropPosition from '~/domain/model/DropPosition'
 
 import MindMapUseCase from '~/useCase/MindMapUseCase'
@@ -11,8 +11,9 @@ import EstimateTimeUseCase from '~/useCase/EstimateTimeUseCase'
 import Shortcut from '~/enum/Shortcut'
 import ArrowKey from '~/enum/ArrowKeys'
 
-export const mindMapDataActionType = {
-  // TODO Separate every Components.
+type MindMapActionType = typeof mindMapActionType[keyof typeof mindMapActionType]
+
+export const mindMapActionType = {
   init: 'MIND_MAP_DATA_INIT',
   selectNode: 'MIND_MAP_DATA_SELECT_NODE',
   enterNodeEditMode: 'MIND_MAP_DATA_ENTER_NODE_EDIT_MODE',
@@ -28,10 +29,8 @@ export const mindMapDataActionType = {
   processArrowKey: 'MIND_MAP_DATA_PROCESS_ARROW_KEY',
 } as const
 
-type MindMapDataActionType = typeof mindMapDataActionType[keyof typeof mindMapDataActionType]
-
 // TODO Write validator?
-type MindMapDataPayload = Partial<{
+type MindMapPayload = Partial<{
   id: string
   width: number
   height: number
@@ -43,9 +42,9 @@ type MindMapDataPayload = Partial<{
   estimateTime: number
 }>
 
-export type MindMapDataAction = {
-  type: MindMapDataActionType
-  payload: MindMapDataPayload
+export type MindMapAction = {
+  type: MindMapActionType
+  payload: MindMapPayload
 }
 
 // TODO Refactor to use injector.
@@ -62,43 +61,43 @@ const shortcutUseCase = new ShortcutUseCase(
   estimateTimeUseCase
 )
 
-export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction): MindMapData => {
+export const mindMapReducer = (state: MMindMap, action: MindMapAction): MMindMap => {
   const newState = { ...state }
 
   switch (action.type) {
-    case mindMapDataActionType.init:
+    case mindMapActionType.init:
       return mindMapUseCase.init(newState)
-    case mindMapDataActionType.selectNode:
+    case mindMapActionType.selectNode:
       return nodeUseCase.select(newState, action.payload.id!)
-    case mindMapDataActionType.enterNodeEditMode:
+    case mindMapActionType.enterNodeEditMode:
       return nodeUseCase.enterEditMode(newState, action.payload.id!)
-    case mindMapDataActionType.exitNodeEditMode:
+    case mindMapActionType.exitNodeEditMode:
       return nodeUseCase.exitEditMode(newState, action.payload.id!)
-    case mindMapDataActionType.setNodeText:
+    case mindMapActionType.setNodeText:
       return nodeUseCase.setText(newState, action.payload.id!, action.payload.text!)
-    case mindMapDataActionType.dragAndDropNode:
+    case mindMapActionType.dragAndDropNode:
       return nodeUseCase.dragAndDrop(newState, action.payload.id!, action.payload.dropPosition!)
-    case mindMapDataActionType.toggleCollapse:
+    case mindMapActionType.toggleCollapse:
       return nodeUseCase.toggleCollapse(newState, action.payload.id!)
-    case mindMapDataActionType.toggleCheckbox:
+    case mindMapActionType.toggleCheckbox:
       return checkboxUseCase.toggleCheck(newState, action.payload.id!)
-    case mindMapDataActionType.setEstimateTime:
+    case mindMapActionType.setEstimateTime:
       return estimateTimeUseCase.setMinute(
         newState,
         action.payload.id!,
         action.payload.estimateTime!
       )
-    case mindMapDataActionType.enterEstimateTimeEditMode:
+    case mindMapActionType.enterEstimateTimeEditMode:
       return estimateTimeUseCase.enterEditMode(newState, action.payload.id!)
-    case mindMapDataActionType.exitEstimateTimeEditMode:
+    case mindMapActionType.exitEstimateTimeEditMode:
       return estimateTimeUseCase.exitEditMode(newState, action.payload.id!)
-    case mindMapDataActionType.processShortcut:
+    case mindMapActionType.processShortcut:
       return shortcutUseCase.handleKeydown(newState, action.payload.shortcut!)
-    case mindMapDataActionType.processArrowKey:
+    case mindMapActionType.processArrowKey:
       return arrowKeyUseCase.handleKeydown(newState, action.payload.arrowKey!)
     default:
       throw new Error(`Not defined action type. action = ${action}`)
   }
 }
 
-export default MindMapDataAction
+export default MindMapAction

@@ -1,4 +1,4 @@
-import MindMapData from '~/domain/model/MindMapData'
+import MMindMap from '~/domain/model/MMindMap'
 import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
 import { rootNodeType } from '~/domain/model/MRootNode'
 
@@ -7,52 +7,52 @@ class EstimateTimeUseCase {
   // Set minute of EstimateTime in MindMap.
   // And update all minute of ancestor EstimateTime.
   // And Update accessory placement.
-  public setMinute(mindMapData: MindMapData, selectedNodeId: string, minute: number): MindMapData {
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+  public setMinute(mindMap: MMindMap, selectedNodeId: string, minute: number): MMindMap {
+    const selectedNode = mindMap.findNodeById(selectedNodeId)
     if (!selectedNode) {
       throw newNotFoundNodeErr(selectedNodeId)
     }
     if (selectedNode.type === rootNodeType) {
-      return mindMapData
+      return mindMap
     }
 
     selectedNode.estimateTime.minute = minute
-    mindMapData.rightMap.children.recursively.updateEstimateTimeMinute()
+    mindMap.rightMap.children.recursively.updateEstimateTimeMinute()
 
-    mindMapData.rightMap.updateNodesLateralWhenEstimated(mindMapData.rootNode)
-    mindMapData.updateAccessoryPlacement()
+    mindMap.rightMap.updateNodesLateralWhenEstimated(mindMap.rootNode)
+    mindMap.updateAccessoryPlacement()
 
-    return mindMapData
+    return mindMap
   }
 
   // Enter selected node to edit mode in MindMap.
-  public enterEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+  public enterEditMode(mindMap: MMindMap, selectedNodeId: string): MMindMap {
+    const selectedNode = mindMap.findNodeById(selectedNodeId)
     if (!selectedNode) {
       throw newNotFoundNodeErr(selectedNodeId)
     }
     if (selectedNode.type === rootNodeType) {
-      return mindMapData
+      return mindMap
     }
 
     selectedNode.estimateTime.isEditing = true
 
-    return mindMapData
+    return mindMap
   }
 
   // Exit selected node from edit mode in MindMap.
-  public exitEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
+  public exitEditMode(mindMap: MMindMap, selectedNodeId: string): MMindMap {
+    const selectedNode = mindMap.findNodeById(selectedNodeId)
     if (!selectedNode) {
       throw newNotFoundNodeErr(selectedNodeId)
     }
     if (selectedNode.type === rootNodeType) {
-      return mindMapData
+      return mindMap
     }
 
     selectedNode.estimateTime.isEditing = false
 
-    return mindMapData
+    return mindMap
   }
 }
 
