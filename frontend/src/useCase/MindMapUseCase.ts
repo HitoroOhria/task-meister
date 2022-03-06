@@ -73,20 +73,6 @@ class MindMapUseCase {
     return mindMapData
   }
 
-  public updateRelationshipLine(mindMapData: MindMapData, id: string, text: string): MindMapData {
-    // TODO Optimize in following cases
-    //   - change text
-    //   - new line
-    //   - add node
-    mindMapData.updateAccessoryPlacement()
-    return mindMapData
-  }
-
-  public updateAllRelationshipLine(mindMapData: MindMapData): MindMapData {
-    mindMapData.updateAccessoryPlacement()
-    return mindMapData
-  }
-
   public processNodeDrop(
     mindMapData: MindMapData,
     movedNodeId: string,

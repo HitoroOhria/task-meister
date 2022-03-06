@@ -17,8 +17,6 @@ export const mindMapDataActionType = {
   exitNodeEditMode: 'MIND_MAP_DATA_EXIT_NODE_EDIT_MODE',
   processNodeTextChanges: 'MIND_MAP_DATA_PROCESS_NODE_TEXT_CHANGES',
   processNodeDrop: 'MIND_MAP_DATA_PROCESS_NODE_DROP',
-  updateRelationshipLine: 'MIND_MAP_DATA_UPDATE_RELATIONSHIP_LINE',
-  updateAllRelationshipLine: 'MIND_MAP_DATA_UPDATE_ALL_RELATIONSHIP_LINE',
   toggleCollapse: 'MIND_MAP_DATA_TOGGLE_COLLAPSE',
   toggleCheckbox: 'MIND_MAP_DATA_TOGGLE_CHECKBOX',
   setEstimateTime: 'MIND_MAP_DATA_SET_ESTIMATE_TIME',
@@ -84,14 +82,6 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
       )
     case mindMapDataActionType.toggleCollapse:
       return mindMapUseCase.toggleCollapse(newState, action.payload.id!)
-    case mindMapDataActionType.updateRelationshipLine:
-      return mindMapUseCase.updateRelationshipLine(
-        newState,
-        action.payload.id!,
-        action.payload.text!
-      )
-    case mindMapDataActionType.updateAllRelationshipLine:
-      return mindMapUseCase.updateAllRelationshipLine(newState)
     case mindMapDataActionType.toggleCheckbox:
       return checkboxUseCase.toggleCheck(newState, action.payload.id!)
     case mindMapDataActionType.setEstimateTime:
