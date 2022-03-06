@@ -51,7 +51,7 @@ export const estimateTimeImpl: MEstimateTime = Object.freeze({
 
   updateMinute(children: Children) {
     this.minute = children.nodes
-      .filter((node) => node.showEstimateTime())
+      .filter((node) => node.showEstimateTime() && node.content.estimateTime.inputted())
       .map((node) => node.content.estimateTime.minute)
       .reduce(sum, 0)
   },
