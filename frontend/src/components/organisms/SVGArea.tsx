@@ -19,7 +19,7 @@ const SVGArea: VFC<Props> = (props) => {
     const childrenCurves = children.nodes.map((child) => renderBezierCurve(child))
     const grandChildrenCurves = children
       .filterHasChild()
-      .flatMap((child) => (child.group.isHidden ? [] : renderBezierCurves(child.children)))
+      .flatMap((child) => (child.collapsed ? [] : renderBezierCurves(child.children)))
 
     return childrenCurves.concat(grandChildrenCurves)
   }
@@ -32,7 +32,7 @@ const SVGArea: VFC<Props> = (props) => {
     const nodesHasChild = children.filterHasChild()
     const childrenLines = nodesHasChild.map((child) => renderLine(child))
     const grandChildrenLines = nodesHasChild.flatMap((child) =>
-      child.group.isHidden ? [] : renderLines(child.children)
+      child.collapsed ? [] : renderLines(child.children)
     )
 
     return childrenLines.concat(grandChildrenLines)

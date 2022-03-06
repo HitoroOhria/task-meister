@@ -24,6 +24,7 @@ export const nodeType = 'node'
 
 type MNode = MBaseNode & {
   type: typeof nodeType
+  collapsed: boolean
   group: Group
   children: Children
   checkbox: MCheckbox
@@ -84,6 +85,8 @@ export const nodeImpl: MNode = Object.freeze({
 
   type: nodeType,
 
+  collapsed: false as boolean,
+
   group: groupImpl,
 
   // children nodes of this node
@@ -141,7 +144,7 @@ export const nodeImpl: MNode = Object.freeze({
   },
 
   toggleCollapse() {
-    this.group.isHidden = !this.group.isHidden
+    this.collapsed = !this.collapsed
     this.children.recursively.toggleHidden()
   },
 })

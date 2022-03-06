@@ -32,7 +32,7 @@ const DrawingArea: VFC<Props> = (props) => {
     const nodesHasChild = children.filterHasChild()
     const collapseButtons = nodesHasChild.map((child) => renderCollapseButton(child))
     const grandChildrenCollapseButtons = nodesHasChild.flatMap((child) =>
-      child.group.isHidden ? [] : renderCollapseButtons(child.children)
+      child.collapsed ? [] : renderCollapseButtons(child.children)
     )
 
     return collapseButtons.concat(grandChildrenCollapseButtons)

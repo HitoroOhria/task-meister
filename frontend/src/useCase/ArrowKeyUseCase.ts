@@ -80,7 +80,7 @@ class ArrowKeyUseCase {
       mindMapData.selectTail()
       return mindMapData
     }
-    if (selectedNode.group.isHidden) {
+    if (selectedNode.collapsed) {
       return mindMapData
     }
 

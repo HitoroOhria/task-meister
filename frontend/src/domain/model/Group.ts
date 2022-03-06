@@ -9,8 +9,6 @@ type Group = {
   // group top value of style.
   top: number
 
-  isHidden: boolean
-
   updateHeight(isHidden: boolean, nodeHeight: number, children: Children): void
 
   setTop(parentGroupTop: number, fromGroupHeight: number): void
@@ -25,7 +23,6 @@ export const newGroup = (): Group => {
 export const groupImpl: Group = {
   height: 0,
   top: 0,
-  isHidden: false,
 
   updateHeight(nodeIsHidden: boolean, nodeHeight: number, children: Children) {
     if (nodeIsHidden) {

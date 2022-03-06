@@ -12,7 +12,7 @@ const Nodes: VFC<NodesProps> = (props) => {
   const renderNodes = (children: Children): JSX.Element[] => {
     const nodes = children.nodes.map((child) => renderNode(child))
     const grandChildrenNodes = children.nodes.flatMap((child) =>
-      child.group.isHidden ? [] : renderNodes(child.children)
+      child.collapsed ? [] : renderNodes(child.children)
     )
 
     return nodes.concat(grandChildrenNodes)

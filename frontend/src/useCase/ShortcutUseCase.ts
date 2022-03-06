@@ -68,20 +68,19 @@ class ShortcutUseCase {
   }
 
   public addNodeToTail(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
-    mindMapData.deselectNode()
-
-    if (selectedNode.type === rootNodeType) {
-      const addedNode = newAddNode(mindMapData.rootNode.width / 2)
-      mindMapData.rightMap.children.nodes.push(addedNode)
-
-      mindMapData.updateAllPlacement(addedNode.id)
-
+    if (selectedNode.type !== rootNodeType && selectedNode.collapsed) {
       return mindMapData
     }
 
+    mindMapData.deselectNode()
+
+    const [addedNodeLeft, children] =
+      selectedNode.type === rootNodeType
+        ? [mindMapData.rootNode.width / 2, mindMapData.rightMap.children]
+        : [selectedNode.left + selectedNode.width, selectedNode.children]
     // TODO Why set only left? There is top?
-    const addedNode = newAddNode(selectedNode.left + selectedNode.width)
-    selectedNode.children.nodes.push(addedNode)
+    const addedNode = newAddNode(addedNodeLeft)
+    children.nodes.push(addedNode)
 
     mindMapData.updateAllPlacement(addedNode.id)
 
