@@ -16,8 +16,8 @@ export const mindMapDataActionType = {
   selectNode: 'MIND_MAP_DATA_SELECT_NODE',
   enterNodeEditMode: 'MIND_MAP_DATA_ENTER_NODE_EDIT_MODE',
   exitNodeEditMode: 'MIND_MAP_DATA_EXIT_NODE_EDIT_MODE',
-  processNodeTextChanges: 'MIND_MAP_DATA_PROCESS_NODE_TEXT_CHANGES',
-  processNodeDrop: 'MIND_MAP_DATA_PROCESS_NODE_DROP',
+  setNodeText: 'MIND_MAP_DATA_SET_NODE_TEXT',
+  dragAndDropNode: 'MIND_MAP_DATA_DROP_AND_DROP_NODE',
   toggleCollapse: 'MIND_MAP_DATA_TOGGLE_COLLAPSE',
   toggleCheckbox: 'MIND_MAP_DATA_TOGGLE_CHECKBOX',
   setEstimateTime: 'MIND_MAP_DATA_SET_ESTIMATE_TIME',
@@ -71,18 +71,10 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
       return nodeUseCase.enterEditMode(newState, action.payload.id!)
     case mindMapDataActionType.exitNodeEditMode:
       return nodeUseCase.exitEditMode(newState, action.payload.id!)
-    case mindMapDataActionType.processNodeTextChanges:
-      return mindMapUseCase.processNodeTextChanges(
-        newState,
-        action.payload.id!,
-        action.payload.text!
-      )
-    case mindMapDataActionType.processNodeDrop:
-      return mindMapUseCase.processNodeDrop(
-        newState,
-        action.payload.id!,
-        action.payload.dropPosition!
-      )
+    case mindMapDataActionType.setNodeText:
+      return nodeUseCase.setText(newState, action.payload.id!, action.payload.text!)
+    case mindMapDataActionType.dragAndDropNode:
+      return nodeUseCase.dragAndDrop(newState, action.payload.id!, action.payload.dropPosition!)
     case mindMapDataActionType.toggleCollapse:
       return mindMapUseCase.toggleCollapse(newState, action.payload.id!)
     case mindMapDataActionType.toggleCheckbox:

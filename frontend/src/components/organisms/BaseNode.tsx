@@ -44,15 +44,15 @@ const BaseNode: FC<Props> = (props) => {
       return
     }
 
-    processNodeTextChanges(text)
+    setNodeText(text)
   }
 
   // Do not use value of element to width and height. (ex. innerHeight, offsetHeight)
   // Because getting process ends before dom rendered. and the value of the previous text is acquired.
-  // So, get previous value
-  const processNodeTextChanges = (text: string) => {
+  // So, get previous value.
+  const setNodeText = (text: string) => {
     dispatchMindMapData({
-      type: actionType.processNodeTextChanges,
+      type: actionType.setNodeText,
       payload: { id: props.node.id, text },
     })
   }

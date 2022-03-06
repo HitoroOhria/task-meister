@@ -17,7 +17,7 @@ type RightMap = {
 
   updateNodesVertical(updatedNode: MNode): void
 
-  processNodeDrop(movedNodeId: string, dropPosition: DropPosition): void
+  dragAndDropNode(movedNodeId: string, dropPosition: DropPosition): void
 
   insertNode(target: MNode, dropPosition: DropPosition, lowerNode: MNode): void
 
@@ -76,7 +76,7 @@ export const rightMapImpl: RightMap = {
     this.children.recursively.updateNodeTop()
   },
 
-  processNodeDrop(movedNodeId: string, dropPosition: DropPosition) {
+  dragAndDropNode(movedNodeId: string, dropPosition: DropPosition) {
     const movedNode = this.children.recursively.findNodeById(movedNodeId)
     const lowerNode = this.children.recursively.findNodeByPosition(dropPosition)
     if (!movedNode || !lowerNode) return

@@ -22,7 +22,7 @@ const DroppableArea: FC<Props> = (props) => {
     const dropPosition = newDropPosition(e)
 
     dispatchMindMapData({
-      type: actionType.processNodeDrop,
+      type: actionType.dragAndDropNode,
       payload: { id: nodeId, dropPosition },
     })
   }
