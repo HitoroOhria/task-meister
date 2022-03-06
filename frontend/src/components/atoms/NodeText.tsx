@@ -7,7 +7,6 @@ import { height as checkboxHeight } from '~/components/atoms/Checkbox'
 
 import ElementSizeCalculator from '~/util/ElementSizeCalculator'
 import { numberOfLines } from '~/util/StringUtil'
-import { pickBiggerNumber } from '~/util/NumberUtil'
 
 // minimum width of css. unit is px.
 export const minWidth = 50
@@ -55,7 +54,7 @@ const NodeText: VFC<Props> = (props) => {
 
   const updateDivWidth = () => {
     const textWidth = Math.ceil(elementSizeCalculator.measureLongestLineWidth(props.text))
-    const width = pickBiggerNumber(minWidth, textWidth)
+    const width = Math.max(minWidth, textWidth)
 
     setDivWidth(width)
   }
@@ -63,7 +62,7 @@ const NodeText: VFC<Props> = (props) => {
   const updateDivHeight = () => {
     // TODO Maybe height changes depending on resolution of display
     const textHeight = numberOfLines(props.text) * lineHeight
-    const height = pickBiggerNumber(minHeight, textHeight)
+    const height = Math.max(minHeight, textHeight)
 
     setDivHeight(height)
   }

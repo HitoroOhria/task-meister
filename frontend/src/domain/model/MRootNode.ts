@@ -5,7 +5,6 @@ import {
   lineHeight,
   minWidth as textMinWidth,
 } from '~/components/atoms/NodeText'
-import { pickBiggerNumber } from '~/util/NumberUtil'
 import { numberOfLines } from '~/util/StringUtil'
 
 // type to distinguish from Node.
@@ -57,7 +56,7 @@ export const rootNodeImpl: MRootNode = Object.freeze({
   setWidth() {
     const textWidth = elementSizeCalculator.measureLongestLineWidth(this.text)
 
-    this.width = this.getAroundAreaWidth() + pickBiggerNumber(textWidth, textMinWidth)
+    this.width = this.getAroundAreaWidth() + Math.max(textWidth, textMinWidth)
   },
 
   setHeight() {

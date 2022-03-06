@@ -5,8 +5,3 @@ export const total = (list: number[]): number => {
 export const sum = (first: number, second: number): number => {
   return first + second
 }
-
-// TODO Rewrite to Math.max.
-export const pickBiggerNumber = (first: number, second: number): number => {
-  return first > second ? first : second
-}
