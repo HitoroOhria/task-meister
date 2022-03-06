@@ -1,8 +1,6 @@
 import MindMapData from '~/domain/model/MindMapData'
 import DropPosition from '~/domain/model/DropPosition'
 
-import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
-
 class MindMapUseCase {
   public init(mindMapData: MindMapData): MindMapData {
     mindMapData.rootNode.isSelected = true
@@ -14,40 +12,6 @@ class MindMapUseCase {
       mindMapData.rightMap.updateNodePlacement(firstNode.id)
     }
     mindMapData.updateAccessoryPlacement()
-
-    return mindMapData
-  }
-
-  public selectNode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    mindMapData.deselectNode()
-
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
-    if (!selectedNode) {
-      throw new Error(`Can not found selected node by id. id = ${selectedNodeId}`)
-    }
-    selectedNode.isSelected = true
-
-    return mindMapData
-  }
-
-  public enterNodeEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
-    if (!selectedNode) {
-      throw newNotFoundNodeErr(selectedNodeId)
-    }
-
-    selectedNode.isInputting = true
-
-    return mindMapData
-  }
-
-  public exitNodeEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
-    if (!selectedNode) {
-      throw newNotFoundNodeErr(selectedNodeId)
-    }
-
-    selectedNode.isInputting = false
 
     return mindMapData
   }

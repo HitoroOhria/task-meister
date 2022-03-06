@@ -3,28 +3,32 @@ import MRootNode, { rootNodeType } from '~/domain/model/MRootNode'
 import MNode, { newAddNode, newAddNodeWithCheckbox } from '~/domain/model/MNode'
 
 import ArrowKeyUseCase from '~/useCase/ArrowKeyUseCase'
+import MindMapUseCase from '~/useCase/MindMapUseCase'
+import NodeUseCase from '~/useCase/NodeUseCase'
+import CheckboxUseCase from '~/useCase/CheckboxUseCase'
+import EstimateTimeUseCase from '~/useCase/EstimateTimeUseCase'
 
 import Shortcut, { shortcuts } from '~/enum/Shortcut'
 
 import { assertNever, newNotFoundChildrenErr, newNotFoundNodeErr } from '~/util/ExceptionUtil'
-import MindMapUseCase from '~/useCase/MindMapUseCase'
-import CheckboxUseCase from '~/useCase/CheckboxUseCase'
-import EstimateTimeUseCase from '~/useCase/EstimateTimeUseCase'
 
 class ShortcutUseCase {
   private mindMapUseCase: MindMapUseCase
   private arrowKeyUseCase: ArrowKeyUseCase
+  private nodeUseCase: NodeUseCase
   private checkboxUseCase: CheckboxUseCase
   private estimateTimeUseCase: EstimateTimeUseCase
 
   constructor(
     mindMapUseCase: MindMapUseCase,
     arrowKeyUseCase: ArrowKeyUseCase,
+    nodeUseCase: NodeUseCase,
     checkboxUseCase: CheckboxUseCase,
     estimateTimeUseCase: EstimateTimeUseCase
   ) {
     this.mindMapUseCase = mindMapUseCase
     this.arrowKeyUseCase = arrowKeyUseCase
+    this.nodeUseCase = nodeUseCase
     this.checkboxUseCase = checkboxUseCase
     this.estimateTimeUseCase = estimateTimeUseCase
   }
@@ -49,7 +53,7 @@ class ShortcutUseCase {
       case shortcuts.Backspace:
         return this.deleteNode(mindMapData, selectedNode)
       case shortcuts.MetaE:
-        return this.mindMapUseCase.enterNodeEditMode(mindMapData, selectedNode.id)
+        return this.nodeUseCase.enterEditMode(mindMapData, selectedNode.id)
       case shortcuts.C:
         return this.checkboxUseCase.toggleHidden(mindMapData, selectedNode.id)
       case shortcuts.T:

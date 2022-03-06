@@ -3,6 +3,7 @@ import DropPosition from '~/domain/model/DropPosition'
 
 import MindMapUseCase from '~/useCase/MindMapUseCase'
 import ArrowKeyUseCase from '~/useCase/ArrowKeyUseCase'
+import NodeUseCase from '~/useCase/NodeUseCase'
 import ShortcutUseCase from '~/useCase/ShortcutUseCase'
 import CheckboxUseCase from '~/useCase/CheckboxUseCase'
 import EstimateTimeUseCase from '~/useCase/EstimateTimeUseCase'
@@ -47,11 +48,13 @@ export type MindMapDataAction = {
 // TODO Refactor to use injector.
 const mindMapUseCase = new MindMapUseCase()
 const arrowKeyUseCase = new ArrowKeyUseCase()
+const nodeUseCase = new NodeUseCase()
 const checkboxUseCase = new CheckboxUseCase()
 const estimateTimeUseCase = new EstimateTimeUseCase()
 const shortcutUseCase = new ShortcutUseCase(
   mindMapUseCase,
   arrowKeyUseCase,
+  nodeUseCase,
   checkboxUseCase,
   estimateTimeUseCase
 )
@@ -63,11 +66,11 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
     case mindMapDataActionType.init:
       return mindMapUseCase.init(newState)
     case mindMapDataActionType.selectNode:
-      return mindMapUseCase.selectNode(newState, action.payload.id!)
+      return nodeUseCase.select(newState, action.payload.id!)
     case mindMapDataActionType.enterNodeEditMode:
-      return mindMapUseCase.enterNodeEditMode(newState, action.payload.id!)
+      return nodeUseCase.enterEditMode(newState, action.payload.id!)
     case mindMapDataActionType.exitNodeEditMode:
-      return mindMapUseCase.exitNodeEditMode(newState, action.payload.id!)
+      return nodeUseCase.exitEditMode(newState, action.payload.id!)
     case mindMapDataActionType.processNodeTextChanges:
       return mindMapUseCase.processNodeTextChanges(
         newState,

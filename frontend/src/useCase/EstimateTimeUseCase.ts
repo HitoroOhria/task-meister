@@ -4,7 +4,7 @@ import { rootNodeType } from '~/domain/model/MRootNode'
 
 // UseCase of EstimateTime.
 class EstimateTimeUseCase {
-  // Set minute of EstimateTime.
+  // Set minute of EstimateTime in MindMap.
   // And update all minute of ancestor EstimateTime.
   // And Update accessory placement.
   public setMinute(mindMapData: MindMapData, selectedNodeId: string, minute: number): MindMapData {
@@ -25,7 +25,7 @@ class EstimateTimeUseCase {
     return mindMapData
   }
 
-  // Enter selected node to edit mode.
+  // Enter selected node to edit mode in MindMap.
   public enterEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
     const selectedNode = mindMapData.findNodeById(selectedNodeId)
     if (!selectedNode) {
@@ -40,7 +40,7 @@ class EstimateTimeUseCase {
     return mindMapData
   }
 
-  // Exit selected node from edit mode.
+  // Exit selected node from edit mode in MindMap.
   public exitEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
     const selectedNode = mindMapData.findNodeById(selectedNodeId)
     if (!selectedNode) {

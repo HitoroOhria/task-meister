@@ -3,7 +3,7 @@ import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
 
 // UseCase of Checkbox.
 class CheckboxUseCase {
-  // Toggle checkbox hidden.
+  // Toggle hidden of checkbox in MindMap.
   // And update placement of all mind map parts.
   // Not display checkbox if there is checkbox that already displayed in ancestor or children.
   public toggleHidden(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
@@ -32,7 +32,7 @@ class CheckboxUseCase {
     return mindMapData
   }
 
-  // Toggle check.
+  // Toggle check of checkbox in MindMap.
   public toggleCheck(mindMapData: MindMapData, checkedNodeId: string): MindMapData {
     if (mindMapData.rootNode.isSelected) {
       return mindMapData
