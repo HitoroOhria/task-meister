@@ -5,6 +5,7 @@ import MindMapUseCase from '~/useCase/MindMapUseCase'
 import ArrowKeyUseCase from '~/useCase/ArrowKeyUseCase'
 import ShortcutUseCase from '~/useCase/ShortcutUseCase'
 import CheckboxUseCase from '~/useCase/CheckboxUseCase'
+import EstimateTimeUseCase from '~/useCase/EstimateTimeUseCase'
 
 import Shortcut from '~/enum/Shortcut'
 
@@ -49,7 +50,13 @@ export type MindMapDataAction = {
 const mindMapUseCase = new MindMapUseCase()
 const arrowKeyUseCase = new ArrowKeyUseCase()
 const checkboxUseCase = new CheckboxUseCase()
-const shortcutUseCase = new ShortcutUseCase(mindMapUseCase, arrowKeyUseCase, checkboxUseCase)
+const estimateTimeUseCase = new EstimateTimeUseCase()
+const shortcutUseCase = new ShortcutUseCase(
+  mindMapUseCase,
+  arrowKeyUseCase,
+  checkboxUseCase,
+  estimateTimeUseCase
+)
 
 export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction): MindMapData => {
   const newState = { ...state }
@@ -88,15 +95,15 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
     case mindMapDataActionType.toggleCheckbox:
       return checkboxUseCase.toggleCheck(newState, action.payload.id!)
     case mindMapDataActionType.setEstimateTime:
-      return mindMapUseCase.setEstimateTime(
+      return estimateTimeUseCase.setMinute(
         newState,
         action.payload.id!,
         action.payload.estimateTime!
       )
     case mindMapDataActionType.enterEstimateTimeEditMode:
-      return mindMapUseCase.enterEstimateTimeEditMode(newState, action.payload.id!)
+      return estimateTimeUseCase.enterEditMode(newState, action.payload.id!)
     case mindMapDataActionType.exitEstimateTimeEditMode:
-      return mindMapUseCase.exitEstimateTimeEditMode(newState, action.payload.id!)
+      return estimateTimeUseCase.exitEditMode(newState, action.payload.id!)
     case mindMapDataActionType.processKeydown:
       return shortcutUseCase.handleKeydown(newState, action.payload.shortcut!)
     default:

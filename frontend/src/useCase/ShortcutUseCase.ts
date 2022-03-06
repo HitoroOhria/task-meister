@@ -9,20 +9,24 @@ import Shortcut, { shortcuts } from '~/enum/Shortcut'
 import { assertNever, newNotFoundChildrenErr, newNotFoundNodeErr } from '~/util/ExceptionUtil'
 import MindMapUseCase from '~/useCase/MindMapUseCase'
 import CheckboxUseCase from '~/useCase/CheckboxUseCase'
+import EstimateTimeUseCase from '~/useCase/EstimateTimeUseCase'
 
 class ShortcutUseCase {
   private mindMapUseCase: MindMapUseCase
   private arrowKeyUseCase: ArrowKeyUseCase
   private checkboxUseCase: CheckboxUseCase
+  private estimateTimeUseCase: EstimateTimeUseCase
 
   constructor(
     mindMapUseCase: MindMapUseCase,
     arrowKeyUseCase: ArrowKeyUseCase,
-    checkboxUseCase: CheckboxUseCase
+    checkboxUseCase: CheckboxUseCase,
+    estimateTimeUseCase: EstimateTimeUseCase
   ) {
     this.mindMapUseCase = mindMapUseCase
     this.arrowKeyUseCase = arrowKeyUseCase
     this.checkboxUseCase = checkboxUseCase
+    this.estimateTimeUseCase = estimateTimeUseCase
   }
 
   public handleKeydown(mindMapData: MindMapData, key: Shortcut): MindMapData {
@@ -49,7 +53,7 @@ class ShortcutUseCase {
       case shortcuts.C:
         return this.checkboxUseCase.toggleHidden(mindMapData, selectedNode.id)
       case shortcuts.T:
-        return this.mindMapUseCase.enterEstimateTimeEditMode(mindMapData, selectedNode.id)
+        return this.estimateTimeUseCase.enterEditMode(mindMapData, selectedNode.id)
       case shortcuts.MetaEnter:
         return this.checkboxUseCase.toggleCheck(mindMapData, selectedNode.id)
       case shortcuts.Space:

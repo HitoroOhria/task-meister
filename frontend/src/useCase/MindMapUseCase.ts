@@ -2,7 +2,6 @@ import MindMapData from '~/domain/model/MindMapData'
 import DropPosition from '~/domain/model/DropPosition'
 
 import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
-import { rootNodeType } from '~/domain/model/MRootNode'
 
 class MindMapUseCase {
   public init(mindMapData: MindMapData): MindMapData {
@@ -100,56 +99,6 @@ class MindMapUseCase {
 
     mindMapData.rightMap.processNodeDrop(movedNodeId, dropPosition)
     mindMapData.updateAccessoryPlacement()
-
-    return mindMapData
-  }
-
-  public setEstimateTime(
-    mindMapData: MindMapData,
-    selectedNodeId: string,
-    minute: number
-  ): MindMapData {
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
-    if (!selectedNode) {
-      throw newNotFoundNodeErr(selectedNodeId)
-    }
-    if (selectedNode.type === rootNodeType) {
-      return mindMapData
-    }
-
-    selectedNode.estimateTime.minute = minute
-    mindMapData.rightMap.children.recursively.updateEstimateTimeMinute()
-
-    mindMapData.rightMap.updateNodesLateralWhenEstimated(mindMapData.rootNode)
-    mindMapData.updateAccessoryPlacement()
-
-    return mindMapData
-  }
-
-  public enterEstimateTimeEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
-    if (!selectedNode) {
-      throw newNotFoundNodeErr(selectedNodeId)
-    }
-    if (selectedNode.type === rootNodeType) {
-      return mindMapData
-    }
-
-    selectedNode.estimateTime.isEditing = true
-
-    return mindMapData
-  }
-
-  public exitEstimateTimeEditMode(mindMapData: MindMapData, selectedNodeId: string): MindMapData {
-    const selectedNode = mindMapData.findNodeById(selectedNodeId)
-    if (!selectedNode) {
-      throw newNotFoundNodeErr(selectedNodeId)
-    }
-    if (selectedNode.type === rootNodeType) {
-      return mindMapData
-    }
-
-    selectedNode.estimateTime.isEditing = false
 
     return mindMapData
   }
