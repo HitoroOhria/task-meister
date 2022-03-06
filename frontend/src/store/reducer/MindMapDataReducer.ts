@@ -9,6 +9,7 @@ import CheckboxUseCase from '~/useCase/CheckboxUseCase'
 import EstimateTimeUseCase from '~/useCase/EstimateTimeUseCase'
 
 import Shortcut from '~/enum/Shortcut'
+import ArrowKey from '~/enum/ArrowKeys'
 
 export const mindMapDataActionType = {
   // TODO Separate every Components.
@@ -23,7 +24,8 @@ export const mindMapDataActionType = {
   setEstimateTime: 'MIND_MAP_DATA_SET_ESTIMATE_TIME',
   enterEstimateTimeEditMode: 'MIND_MAP_DATA_ENTER_ESTIMATE_TIME_EDIT_MODE',
   exitEstimateTimeEditMode: 'MIND_MAP_DATA_EXIT_ESTIMATE_TIME_EDIT_MODE',
-  processKeydown: 'MIND_MAP_DATA_PROCESS_KEYDOWN',
+  processShortcut: 'MIND_MAP_DATA_PROCESS_SHORTCUT',
+  processArrowKey: 'MIND_MAP_DATA_PROCESS_ARROW_KEY',
 } as const
 
 type MindMapDataActionType = typeof mindMapDataActionType[keyof typeof mindMapDataActionType]
@@ -37,6 +39,7 @@ type MindMapDataPayload = Partial<{
   isInputting: boolean
   dropPosition: DropPosition
   shortcut: Shortcut
+  arrowKey: ArrowKey
   estimateTime: number
 }>
 
@@ -89,8 +92,10 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
       return estimateTimeUseCase.enterEditMode(newState, action.payload.id!)
     case mindMapDataActionType.exitEstimateTimeEditMode:
       return estimateTimeUseCase.exitEditMode(newState, action.payload.id!)
-    case mindMapDataActionType.processKeydown:
+    case mindMapDataActionType.processShortcut:
       return shortcutUseCase.handleKeydown(newState, action.payload.shortcut!)
+    case mindMapDataActionType.processArrowKey:
+      return arrowKeyUseCase.handleKeydown(newState, action.payload.arrowKey!)
     default:
       throw new Error(`Not defined action type. action = ${action}`)
   }

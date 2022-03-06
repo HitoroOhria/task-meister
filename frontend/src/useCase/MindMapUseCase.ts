@@ -1,6 +1,8 @@
 import MindMapData from '~/domain/model/MindMapData'
 
+// UseCase of mind map.
 class MindMapUseCase {
+  // Initialize State of MinaMap.
   public init(mindMapData: MindMapData): MindMapData {
     mindMapData.rootNode.isSelected = true
     mindMapData.setNodeSize()

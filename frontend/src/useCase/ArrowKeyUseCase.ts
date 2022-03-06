@@ -4,12 +4,14 @@ import { assertNever, newNotFoundNodeErr } from '~/util/ExceptionUtil'
 import MRootNode, { rootNodeType } from '~/domain/model/MRootNode'
 import MNode from '~/domain/model/MNode'
 
+// UseCase of arrow key.
 class ArrowKeyUseCase {
-  handleArrowKeyDown(
-    mindMapData: MindMapData,
-    arrowKey: ArrowKey,
-    selectedNode: MRootNode | MNode
-  ): MindMapData {
+  handleKeydown(mindMapData: MindMapData, arrowKey: ArrowKey): MindMapData {
+    const selectedNode = mindMapData.findNodeIsSelected()
+    if (!selectedNode) {
+      return mindMapData
+    }
+
     switch (arrowKey) {
       case arrowKeys.Up:
         return this.selectTopNode(mindMapData, selectedNode)

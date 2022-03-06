@@ -1,7 +1,6 @@
-import { arrowKeys } from '~/enum/ArrowKeys'
+export type Shortcut = typeof shortcuts[keyof typeof shortcuts]
 
 export const shortcuts = {
-  ...arrowKeys,
   C: 'c',
   T: 't',
   Space: ' ',
@@ -14,15 +13,10 @@ export const shortcuts = {
   F6: 'F6',
 } as const
 
-export type Shortcut = typeof shortcuts[keyof typeof shortcuts]
-
+// Check key that move screen.
 export const isMovingScreen = (key: Shortcut): boolean => {
   switch (key) {
     case shortcuts.Space:
-    case shortcuts.Up:
-    case shortcuts.Down:
-    case shortcuts.Right:
-    case shortcuts.Left:
       return true
     default:
       return false

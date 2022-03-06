@@ -12,6 +12,7 @@ import Shortcut, { shortcuts } from '~/enum/Shortcut'
 
 import { assertNever, newNotFoundChildrenErr, newNotFoundNodeErr } from '~/util/ExceptionUtil'
 
+// UseCase of shortcut.
 class ShortcutUseCase {
   private mindMapUseCase: MindMapUseCase
   private arrowKeyUseCase: ArrowKeyUseCase
@@ -41,11 +42,6 @@ class ShortcutUseCase {
 
     // Sort in desc order of probability.
     switch (key) {
-      case shortcuts.Up:
-      case shortcuts.Down:
-      case shortcuts.Right:
-      case shortcuts.Left:
-        return this.arrowKeyUseCase.handleArrowKeyDown(mindMapData, key, selectedNode)
       case shortcuts.Tab:
         return this.addNodeToTail(mindMapData, selectedNode)
       case shortcuts.Enter:

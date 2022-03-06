@@ -3,10 +3,12 @@ import React, { useContext, useEffect, VFC } from 'react'
 import { mindMapDataActionType as actionType } from '~/store/reducer/MindMapDataReducer'
 import { MindMapDispatchCtx, MindMapStateCtx } from '~/store/context/MindMapDataCtx'
 
+import { scrollToOrigin } from '~/components/organisms/Origin'
+
 import KeyInput from '~/domain/model/KeyInput'
 
 import { isMovingScreen, Shortcut, shortcuts } from '~/enum/Shortcut'
-import { scrollToOrigin } from '~/components/organisms/Origin'
+import ArrowKey from '~/enum/ArrowKeys'
 
 const keyInput = new KeyInput()
 
@@ -20,10 +22,22 @@ const KeyInputManager: VFC<Props> = (props) => {
 
   const handleKeydown = (e: KeyboardEvent) => {
     keyInput.add(e.key)
-    const shortcut = keyInput.getShortcut()
-    if (!shortcut) return
 
-    handleShortcut(e, shortcut)
+    const arrowKey = keyInput.getArrowKey()
+    arrowKey && handleArrowKey(e, arrowKey)
+
+    const shortcut = keyInput.getShortcut()
+    shortcut && handleShortcut(e, shortcut)
+  }
+
+  const handleArrowKey = (e: KeyboardEvent, arrowKey: ArrowKey) => {
+    // Prevent moving screen
+    e.preventDefault()
+
+    dispatchMindMapData({
+      type: actionType.processArrowKey,
+      payload: { arrowKey },
+    })
   }
 
   const handleShortcut = (e: KeyboardEvent, shortcut: Shortcut) => {
@@ -37,16 +51,16 @@ const KeyInputManager: VFC<Props> = (props) => {
       return
     }
 
+    if (isMovingScreen(shortcut)) {
+      e.preventDefault()
+    }
     if (shortcut === shortcuts.F6) {
       scrollToOrigin()
       return
     }
-    if (isMovingScreen(shortcut)) {
-      e.preventDefault()
-    }
 
     dispatchMindMapData({
-      type: actionType.processKeydown,
+      type: actionType.processShortcut,
       payload: { shortcut },
     })
   }
