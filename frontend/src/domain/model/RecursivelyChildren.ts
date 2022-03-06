@@ -24,6 +24,8 @@ interface RecursivelyChildren {
 
   findChildrenContainsId(id: string): Children | undefined
 
+  estimated(): boolean
+
   removeNodeById(id: string): MNode
 
   updateNodeTop(): void
@@ -162,6 +164,15 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     }
 
     return undefined
+  },
+
+  estimated(): boolean {
+    const estimatedNode = this.children.nodes.find((node) => node.estimated())
+    if (estimatedNode) {
+      return true
+    }
+
+    return !!this.children.nodes.find((node) => node.children.recursively.estimated())
   },
 
   removeNodeById(id: string): MNode {

@@ -26,8 +26,6 @@ type Children = {
 
   filterHasChild(): MNode[]
 
-  estimated(): boolean
-
   removeNode(id: string): MNode
 
   insertNode(target: MNode, dropTop: number, lowerNode: MNode): void
@@ -84,10 +82,6 @@ export const childrenImpl: Children = {
 
   filterHasChild(): MNode[] {
     return this.nodes.filter((child) => child.children.nodes.length !== 0)
-  },
-
-  estimated(): boolean {
-    return !!this.nodes.find((node) => node.estimated())
   },
 
   removeNode(id: string): MNode {

@@ -100,7 +100,7 @@ export const nodeImpl: MNode = Object.freeze({
   },
 
   showEstimateTime(): boolean {
-    return !this.checkbox.hidden || this.children.estimated()
+    return !this.checkbox.hidden || this.children.recursively.estimated()
   },
 
   estimated(): boolean {
