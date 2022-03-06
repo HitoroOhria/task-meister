@@ -113,7 +113,10 @@ class MindMapUseCase {
     if (!selectedNode) {
       throw newNotFoundNodeErr(selectedNode)
     }
-    if (mindMapData.hasDisplayedCheckboxAncestorNode(selectedNode.id)) {
+    const cannotShowCheckbox =
+      mindMapData.hasDisplayedCheckboxAncestorNode(selectedNode.id) ||
+      selectedNode.children.recursively.displayedCheckbox()
+    if (cannotShowCheckbox) {
       return mindMapData
     }
 

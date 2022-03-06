@@ -26,6 +26,8 @@ interface RecursivelyChildren {
 
   estimated(): boolean
 
+  displayedCheckbox(): boolean
+
   removeNodeById(id: string): MNode
 
   updateNodeTop(): void
@@ -173,6 +175,17 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
     }
 
     return !!this.children.nodes.find((node) => node.children.recursively.estimated())
+  },
+
+  displayedCheckbox(): boolean {
+    const displayedCheckbox = this.children.nodes
+      .map((node) => node.checkbox)
+      .find((checkbox) => !checkbox.hidden)
+    if (displayedCheckbox) {
+      return true
+    }
+
+    return !!this.children.nodes.find((node) => node.children.recursively.displayedCheckbox())
   },
 
   removeNodeById(id: string): MNode {
