@@ -34,6 +34,8 @@ interface RecursivelyChildren {
 
   setNodeSize(): void
 
+  setNodeWidth(): void
+
   setNodeLeft(parentNodeLeft: number, parentNodeWidth: number): void
 
   setGroupTop(parentHeight: number, parentGroupTop: number): void
@@ -205,6 +207,11 @@ export const recursivelyChildrenImpl: RecursivelyChildren = {
   setNodeSize() {
     this.children.nodes.forEach((child) => child.setSize())
     this.children.nodes.forEach((child) => child.children.recursively.setNodeSize())
+  },
+
+  setNodeWidth() {
+    this.children.nodes.forEach((node) => node.setWidth())
+    this.children.nodes.forEach((node) => node.children.recursively.setNodeWidth())
   },
 
   setNodeLeft(parentNodeLeft: number, parentNodeWidth: number) {

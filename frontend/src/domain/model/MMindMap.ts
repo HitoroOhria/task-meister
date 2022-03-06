@@ -170,8 +170,8 @@ export const mindMapImpl: MMindMap = Object.freeze({
     this.rightMap.children.nodes.push(movedNode)
 
     const newLeft = this.rootNode.width / 2
-    this.rightMap.updateNodesLateral(movedNode, newLeft)
-    this.rightMap.updateNodesVertical(movedNode)
+    this.rightMap.updateNodesLateralOfGroup(movedNode, newLeft)
+    this.rightMap.updateAllNodesVertical(movedNode)
   },
 })
 

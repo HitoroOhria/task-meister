@@ -19,7 +19,7 @@ class EstimateTimeUseCase {
     selectedNode.estimateTime.minute = minute
     mindMap.rightMap.children.recursively.updateEstimateTimeMinute()
 
-    mindMap.rightMap.updateNodesLateralWhenEstimated(mindMap.rootNode)
+    mindMap.rightMap.updateAllNodesLateral(mindMap.rootNode)
     mindMap.updateAccessoryPlacement()
 
     return mindMap

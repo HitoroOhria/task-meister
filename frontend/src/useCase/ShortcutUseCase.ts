@@ -143,7 +143,7 @@ class ShortcutUseCase {
       return mindMap
     }
 
-    mindMap.rightMap.updateNodesVertical(nextSelectedNode)
+    mindMap.rightMap.updateAllNodesVertical(nextSelectedNode)
     mindMap.updateAccessoryPlacement()
 
     return mindMap

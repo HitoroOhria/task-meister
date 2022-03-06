@@ -18,13 +18,14 @@ type RightMap = {
   // Update placement of all nodes.
   updateNodePlacement(id: string): void
 
-  // Update lateral placement of all nodes.
-  updateNodesLateral(updatedNode: MNode, left: number): void
+  // Update lateral placement of a nodes and that children nodes.
+  updateNodesLateralOfGroup(updatedNode: MNode, left: number): void
 
-  updateNodesLateralWhenEstimated(rootNode: MRootNode): void
+  // Update lateral placement of all node.
+  updateAllNodesLateral(rootNode: MRootNode): void
 
   // Update vertical placement of all nodes.
-  updateNodesVertical(updatedNode: MNode): void
+  updateAllNodesVertical(updatedNode: MNode): void
 
   // Drop dragged node in right map.
   // And update placement of nodes.
@@ -63,23 +64,22 @@ export const rightMapImpl: RightMap = Object.freeze({
       throw new Error(`Can not found nodeData by id. id = ${id}`)
     }
 
-    this.updateNodesLateral(target, target.left)
-    this.updateNodesVertical(target)
+    this.updateNodesLateralOfGroup(target, target.left)
+    this.updateAllNodesVertical(target)
   },
 
-  updateNodesLateral(updatedNode: MNode, left: number) {
+  updateNodesLateralOfGroup(updatedNode: MNode, left: number) {
     updatedNode.setWidth()
     updatedNode.left = left
     updatedNode.children.recursively.setNodeLeft(left, updatedNode.width)
   },
 
-  // TODO Refactor.
-  updateNodesLateralWhenEstimated(rootNode: MRootNode) {
-    this.children.recursively.setNodeSize()
+  updateAllNodesLateral(rootNode: MRootNode) {
+    this.children.recursively.setNodeWidth()
     this.children.recursively.setNodeLeft(rootNode.left, rootNode.width)
   },
 
-  updateNodesVertical(updatedNode: MNode) {
+  updateAllNodesVertical(updatedNode: MNode) {
     updatedNode.setHeight()
     this.children.recursively.updateGroupAndChildrenHeight()
 
@@ -103,8 +103,8 @@ export const rightMapImpl: RightMap = Object.freeze({
     const newLeft = lowerNode.onTail(dropPosition.left)
       ? lowerNode.left + lowerNode.width
       : lowerNode.left
-    this.updateNodesLateral(movedNode, newLeft)
-    this.updateNodesVertical(movedNode)
+    this.updateNodesLateralOfGroup(movedNode, newLeft)
+    this.updateAllNodesVertical(movedNode)
   },
 
   insertNodeToDroppedPlace(target: MNode, dropPosition: DropPosition, lowerNode: MNode) {
@@ -128,7 +128,7 @@ export const rightMapImpl: RightMap = Object.freeze({
     }
 
     selectedNode.toggleCollapse()
-    this.updateNodesVertical(selectedNode)
+    this.updateAllNodesVertical(selectedNode)
   },
 })
 
