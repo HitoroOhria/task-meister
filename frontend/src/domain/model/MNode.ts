@@ -107,7 +107,7 @@ export const nodeImpl: MNode = Object.freeze({
   },
 
   estimated(): boolean {
-    return !this.checkbox.hidden && !this.estimateTime.inputted()
+    return !this.checkbox.hidden && this.estimateTime.inputted()
   },
 
   setWidth() {

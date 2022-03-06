@@ -33,7 +33,7 @@ export const estimateTimeImpl: MEstimateTime = Object.freeze({
   isEditing: false,
 
   inputted(): boolean {
-    return this.minute === initMinute
+    return this.minute !== initMinute
   },
 
   toString(): string {
@@ -49,7 +49,10 @@ export const estimateTimeImpl: MEstimateTime = Object.freeze({
   },
 
   updateMinute(children: Children) {
-    this.minute = children.nodes.map((node) => node.estimateTime.minute).reduce(sum, 0)
+    this.minute = children.nodes
+      .filter((node) => node.showEstimateTime())
+      .map((node) => node.estimateTime.minute)
+      .reduce(sum, 0)
   },
 })
 

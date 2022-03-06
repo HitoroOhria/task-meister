@@ -4,7 +4,7 @@ import RecursivelyChildrenOps, {
   recursivelyChildrenOpsImpl,
 } from '~/domain/model/RecursivelyChildrenOps'
 
-import {newNotFoundNodeErr} from '~/util/ExceptionUtil'
+import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
 
 // Collection of NodeData.
 // Define process to be managed as a whole¬.
