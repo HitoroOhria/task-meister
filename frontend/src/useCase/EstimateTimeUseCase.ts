@@ -16,7 +16,7 @@ class EstimateTimeUseCase {
       return mindMap
     }
 
-    selectedNode.estimateTime.minute = minute
+    selectedNode.content.estimateTime.minute = minute
     mindMap.rightMap.children.recursively.updateEstimateTimeMinute()
 
     mindMap.rightMap.updateAllNodesLateral(mindMap.rootNode)
@@ -35,7 +35,7 @@ class EstimateTimeUseCase {
       return mindMap
     }
 
-    selectedNode.estimateTime.isEditing = true
+    selectedNode.content.estimateTime.isEditing = true
 
     return mindMap
   }
@@ -50,7 +50,7 @@ class EstimateTimeUseCase {
       return mindMap
     }
 
-    selectedNode.estimateTime.isEditing = false
+    selectedNode.content.estimateTime.isEditing = false
 
     return mindMap
   }

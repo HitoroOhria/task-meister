@@ -1,6 +1,13 @@
+import { checkboxSpacerWidth } from '~/components/organisms/Node'
+import { height, width } from '~/components/atoms/Checkbox'
+
 type MCheckbox = {
   checked: boolean
   hidden: boolean
+
+  getWidth(): number
+
+  getHeight(): number
 }
 
 export const newCheckbox = (): MCheckbox => {
@@ -9,10 +16,17 @@ export const newCheckbox = (): MCheckbox => {
   }
 }
 
-export const checkboxImpl: MCheckbox = {
+export const checkboxImpl: MCheckbox = Object.freeze({
   checked: false,
   hidden: true,
-}
-Object.freeze(checkboxImpl)
+
+  getWidth(): number {
+    return this.hidden ? 0 : width + checkboxSpacerWidth
+  },
+
+  getHeight(): number {
+    return height
+  },
+})
 
 export default MCheckbox

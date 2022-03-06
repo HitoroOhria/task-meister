@@ -57,7 +57,7 @@ export const recursivelyChildrenOpsImpl: RecursivelyChildrenOps = Object.freeze(
   },
 
   estimateTimeIsInputting(): boolean {
-    const editingChild = this.children.nodes.find((child) => child.estimateTime.isEditing)
+    const editingChild = this.children.nodes.find((child) => child.content.estimateTime.isEditing)
     if (editingChild) {
       return true
     }
@@ -78,7 +78,7 @@ export const recursivelyChildrenOpsImpl: RecursivelyChildrenOps = Object.freeze(
 
   displayedCheckbox(): boolean {
     const displayedCheckbox = this.children.nodes
-      .map((node) => node.checkbox)
+      .map((node) => node.content.checkbox)
       .find((checkbox) => !checkbox.hidden)
     if (displayedCheckbox) {
       return true

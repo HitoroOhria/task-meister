@@ -71,7 +71,7 @@ export const recursivelyChildrenUpdatableOpsImpl: RecursivelyChildrenUpdatableOp
     this.children.nodes.forEach((node) => node.children.recursively.updateEstimateTimeMinute())
     this.children.nodes
       .filter((node) => node.children.nodes.length !== 0)
-      .forEach((node) => node.estimateTime.updateMinute(node.children))
+      .forEach((node) => node.content.estimateTime.updateMinute(node.children))
   },
 })
 

@@ -22,9 +22,9 @@ class CheckboxUseCase {
       return mindMap
     }
 
-    selectedNode.checkbox.hidden = !selectedNode.checkbox.hidden
-    if (selectedNode.checkbox.hidden) {
-      selectedNode.checkbox.checked = false
+    selectedNode.content.checkbox.hidden = !selectedNode.content.checkbox.hidden
+    if (selectedNode.content.checkbox.hidden) {
+      selectedNode.content.checkbox.checked = false
     }
 
     mindMap.rightMap.children.recursively.updateEstimateTimeMinute()
@@ -43,11 +43,11 @@ class CheckboxUseCase {
     if (!checkedNode) {
       throw newNotFoundNodeErr(checkedNode)
     }
-    if (checkedNode.checkbox.hidden) {
+    if (checkedNode.content.checkbox.hidden) {
       return mindMap
     }
 
-    checkedNode.checkbox.checked = !checkedNode.checkbox.checked
+    checkedNode.content.checkbox.checked = !checkedNode.content.checkbox.checked
 
     return mindMap
   }

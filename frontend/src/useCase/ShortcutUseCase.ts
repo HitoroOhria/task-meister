@@ -105,7 +105,9 @@ class ShortcutUseCase {
     const left = mindMap.isFirstLayerNode(selectedNode.id)
       ? mindMap.rootNode.width / 2
       : selectedNode.left
-    const addedNode = selectedNode.checkbox.hidden ? newAddNode(left) : newAddNodeWithCheckbox(left)
+    const addedNode = selectedNode.content.checkbox.hidden
+      ? newAddNode(left)
+      : newAddNodeWithCheckbox(left)
     mindMap.rightMap.children.recursively
       .findChildrenContainsId(selectedNode.id)
       ?.insertNodeToBottomOf(selectedNode.id, addedNode)

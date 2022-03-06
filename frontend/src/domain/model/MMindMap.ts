@@ -113,7 +113,7 @@ export const mindMapImpl: MMindMap = Object.freeze({
       return false
     }
 
-    if (!headNode.checkbox.hidden) {
+    if (!headNode.content.checkbox.hidden) {
       return true
     }
 

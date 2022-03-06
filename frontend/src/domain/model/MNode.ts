@@ -3,21 +3,17 @@ import _ from 'lodash'
 import MBaseNode, { baseNodeImpl } from '~/domain/model/MBaseNode'
 import Group, { groupImpl, newGroup } from '~/domain/model/Group'
 import Children, { childrenImpl, newChildren } from '~/domain/model/Children'
+import NodeContent, { newNodeContent, nodeContentImpl } from '~/domain/model/NodeContent'
 import NodeAccessory, { newNodeAccessory, nodeAccessoryImpl } from '~/domain/model/NodeAccessory'
-import MCheckbox, { checkboxImpl, newCheckbox } from '~/domain/model/MCheckbox'
-
-import { checkboxSpacerWidth } from '~/components/organisms/Node'
 import {
   elementSizeCalculator,
   lineHeight,
   minHeight as textMinHeight,
   minWidth as textMinWidth,
 } from '~/components/atoms/NodeText'
-import { width as checkboxWidth } from '~/components/atoms/Checkbox'
 
 import { pickBiggerNumber } from '~/util/NumberUtil'
 import { numberOfLines } from '~/util/StringUtil'
-import MEstimateTime, { estimateTimeImpl, newEstimateTime } from '~/domain/model/MEstimateTime'
 
 // type to distinguish from RootNode.
 export const nodeType = 'node'
@@ -27,9 +23,8 @@ type MNode = MBaseNode & {
   collapsed: boolean
   group: Group
   children: Children
-  checkbox: MCheckbox
+  content: NodeContent
   accessory: NodeAccessory
-  estimateTime: MEstimateTime
 
   showEstimateTime(): boolean
 
@@ -52,8 +47,7 @@ export const newNode = (id: string, text: string, group: Group, children: Childr
     text: text,
     group: group,
     children: children,
-    checkbox: newCheckbox(),
-    estimateTime: newEstimateTime(),
+    content: newNodeContent(),
     accessory: newNodeAccessory(),
   }
 }
@@ -71,7 +65,7 @@ export const newAddNode = (left: number): MNode => {
 
 export const newAddNodeWithCheckbox = (left: number): MNode => {
   const node = { ...newAddNode(left) }
-  node.checkbox.hidden = false
+  node.content.checkbox.hidden = false
 
   return node
 }
@@ -92,38 +86,32 @@ export const nodeImpl: MNode = Object.freeze({
   // children nodes of this node
   children: childrenImpl,
 
-  checkbox: checkboxImpl,
-
-  estimateTime: estimateTimeImpl,
+  content: nodeContentImpl,
 
   accessory: nodeAccessoryImpl,
 
   disable(): boolean {
-    return this.checkbox.checked
+    return this.content.checkbox.checked
   },
 
   showEstimateTime(): boolean {
-    return !this.checkbox.hidden || this.children.recursively.estimated()
+    return !this.content.checkbox.hidden || this.children.recursively.estimated()
   },
 
   estimated(): boolean {
-    return !this.checkbox.hidden && this.estimateTime.inputted()
+    return !this.content.checkbox.hidden && this.content.estimateTime.inputted()
   },
 
   setWidth() {
     const textWidth = elementSizeCalculator.measureLongestLineWidth(this.text)
-    // TODO Add getWidth/Height to MCheckbox.
-    const checkboxAreaWidth = this.checkbox.hidden ? 0 : checkboxWidth + checkboxSpacerWidth
-    const estimateTimeAreaWidth = this.showEstimateTime() ? this.estimateTime.getWidth() : 0
-    const elementWidth =
-      checkboxAreaWidth + pickBiggerNumber(textWidth, textMinWidth) + estimateTimeAreaWidth
+    const elementWidth = pickBiggerNumber(textWidth, textMinWidth) + this.content.getWidth(this)
 
     this.width = this.getAroundAreaWidth() + elementWidth
   },
 
   setHeight() {
     const textHeight = lineHeight * numberOfLines(this.text)
-    const elementHeight = Math.max(textMinHeight, textHeight, this.estimateTime.getHeight())
+    const elementHeight = Math.max(textMinHeight, textHeight, this.content.getHeight())
 
     this.height = this.getAroundAreaHeight() + elementHeight
   },

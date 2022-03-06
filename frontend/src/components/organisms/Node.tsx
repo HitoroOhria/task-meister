@@ -33,8 +33,8 @@ const Node: VFC<Props> = (props) => {
         head: (
           <>
             {/*TODO Control hidden on this place.*/}
-            <Checkbox checkbox={props.node.checkbox} onClick={toggleCheckbox} />
-            <Spacer width={checkboxSpacerWidth} hidden={props.node.checkbox.hidden} />
+            <Checkbox checkbox={props.node.content.checkbox} onClick={toggleCheckbox} />
+            <Spacer width={checkboxSpacerWidth} hidden={props.node.content.checkbox.hidden} />
           </>
         ),
         tail: props.node.showEstimateTime() && (
@@ -42,9 +42,9 @@ const Node: VFC<Props> = (props) => {
             <Spacer width={estimateTimeSpacerWidth} />
             <EstimateTime
               nodeId={props.node.id}
-              estimateTime={props.node.estimateTime}
-              disabled={props.node.checkbox.hidden}
-              readOnly={props.node.checkbox.checked}
+              estimateTime={props.node.content.estimateTime}
+              disabled={props.node.content.checkbox.hidden}
+              readOnly={props.node.content.checkbox.checked}
             />
           </>
         ),

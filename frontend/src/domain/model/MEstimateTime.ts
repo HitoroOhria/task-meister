@@ -4,6 +4,7 @@ import { estimateTimeSpacerWidth as spacerWidth } from '~/components/organisms/N
 import Children from '~/domain/model/Children'
 
 import { sum } from '~/util/NumberUtil'
+import MNode from '~/domain/model/MNode'
 
 export const initMinute = -1
 
@@ -15,7 +16,7 @@ type MEstimateTime = {
 
   toString(): string
 
-  getWidth(): number
+  getWidth(node: MNode): number
 
   getHeight(): number
 
@@ -40,8 +41,8 @@ export const estimateTimeImpl: MEstimateTime = Object.freeze({
     return this.minute <= 0 ? '' : this.minute.toString()
   },
 
-  getWidth(): number {
-    return spacerWidth + width
+  getWidth(node: MNode): number {
+    return node.showEstimateTime() ? spacerWidth + width : 0
   },
 
   getHeight(): number {
@@ -51,7 +52,7 @@ export const estimateTimeImpl: MEstimateTime = Object.freeze({
   updateMinute(children: Children) {
     this.minute = children.nodes
       .filter((node) => node.showEstimateTime())
-      .map((node) => node.estimateTime.minute)
+      .map((node) => node.content.estimateTime.minute)
       .reduce(sum, 0)
   },
 })
