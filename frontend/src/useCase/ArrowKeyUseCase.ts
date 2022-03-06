@@ -27,6 +27,7 @@ class ArrowKeyUseCase {
     }
   }
 
+  // Select top node of currently selected node in MindMap.
   selectTopNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (mindMapData.rootNode.isSelected) {
       return mindMapData
@@ -45,7 +46,12 @@ class ArrowKeyUseCase {
     return mindMapData
   }
 
+  // Select bottom node of currently selected node in MindMap.
   selectBottomNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
+    if (mindMapData.rootNode.isSelected) {
+      return mindMapData
+    }
+
     mindMapData.deselectNode()
 
     const bottomNode = mindMapData.rightMap.children.recursively
@@ -59,6 +65,7 @@ class ArrowKeyUseCase {
     return mindMapData
   }
 
+  // Select head node of currently selected node in MindMap.
   selectHeadNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (mindMapData.rootNode.isSelected) {
       return mindMapData
@@ -75,6 +82,7 @@ class ArrowKeyUseCase {
     return mindMapData
   }
 
+  // Select tail node of currently selected node in MindMap.
   selectTailNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (selectedNode.type === rootNodeType) {
       mindMapData.selectTail()

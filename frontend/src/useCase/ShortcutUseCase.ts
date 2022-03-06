@@ -67,6 +67,10 @@ class ShortcutUseCase {
     }
   }
 
+  // Add node to tail of selected node in MindMap.
+  // And select that node.
+  // And update placement of all mind map parts.
+  // Not add if selected node is collapsed.
   public addNodeToTail(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (selectedNode.type !== rootNodeType && selectedNode.collapsed) {
       return mindMapData
@@ -87,6 +91,10 @@ class ShortcutUseCase {
     return mindMapData
   }
 
+  // Add node to bottom of selected node in MindMap.
+  // And select that node.
+  // And update placement of all mind map parts.
+  // Not add if selected node is root node.
   public addNodeToBottom(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (selectedNode.type === rootNodeType) {
       return mindMapData
@@ -94,24 +102,22 @@ class ShortcutUseCase {
 
     mindMapData.deselectNode()
 
-    const parentChildren = mindMapData.rightMap.children.recursively.findChildrenContainsId(
-      selectedNode.id
-    )
-    if (!parentChildren) {
-      throw newNotFoundChildrenErr(selectedNode.id)
-    }
-
     const left = mindMapData.isFirstLayerNode(selectedNode.id)
       ? mindMapData.rootNode.width / 2
       : selectedNode.left
     const addedNode = selectedNode.checkbox.hidden ? newAddNode(left) : newAddNodeWithCheckbox(left)
-    parentChildren.insertNodeToBottomOf(selectedNode.id, addedNode)
+    mindMapData.rightMap.children.recursively
+      .findChildrenContainsId(selectedNode.id)
+      ?.insertNodeToBottomOf(selectedNode.id, addedNode)
 
     mindMapData.updateAllPlacement(addedNode.id)
 
     return mindMapData
   }
 
+  // Delete node from MindMap.
+  // And update placement of all mind map parts.
+  // Cannot delete if selected node is root node.
   public deleteNode(mindMapData: MindMapData, selectedNode: MRootNode | MNode): MindMapData {
     if (mindMapData.rootNode.isSelected) {
       return mindMapData
