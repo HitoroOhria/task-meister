@@ -1,9 +1,10 @@
 import MNode from '~/domain/model/MNode'
-import RecursivelyChildren, {
-  newRecursivelyChildren,
-  recursivelyChildrenImpl,
-} from '~/domain/model/RecursivelyChildren'
-import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
+import RecursivelyChildrenOps, {
+  newRecursivelyChildrenOps,
+  recursivelyChildrenOpsImpl,
+} from '~/domain/model/RecursivelyChildrenOps'
+
+import {newNotFoundNodeErr} from '~/util/ExceptionUtil'
 
 // Collection of NodeData.
 // Define process to be managed as a whole¬.
@@ -14,7 +15,7 @@ type Children = {
   // total height of children node.
   height: number
 
-  recursively: RecursivelyChildren
+  recursively: RecursivelyChildrenOps
 
   findNodeHasChildId(childId: string): MNode | undefined
 
@@ -40,7 +41,7 @@ export const newChildren = (nodes: MNode[]): Children => {
     ...childrenImpl,
     nodes: nodes,
   }
-  children.recursively = newRecursivelyChildren(children)
+  children.recursively = newRecursivelyChildrenOps(children)
 
   return children
 }
@@ -48,7 +49,7 @@ export const newChildren = (nodes: MNode[]): Children => {
 export const childrenImpl: Children = {
   nodes: [],
   height: 0,
-  recursively: recursivelyChildrenImpl,
+  recursively: recursivelyChildrenOpsImpl,
 
   findNodeHasChildId(childId: string): MNode | undefined {
     const childrenIsContainId = (node: MNode, id: string): boolean => {
