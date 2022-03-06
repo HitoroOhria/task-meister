@@ -14,17 +14,6 @@ class MindMapUseCase {
 
     return mindMapData
   }
-
-  public toggleCollapse(mindMapData: MindMapData, selectedNodeId: string) {
-    if (mindMapData.rootNode.isSelected) {
-      return mindMapData
-    }
-
-    mindMapData.rightMap.collapseNodes(selectedNodeId)
-    mindMapData.updateAccessoryPlacement()
-
-    return mindMapData
-  }
 }
 
 export default MindMapUseCase

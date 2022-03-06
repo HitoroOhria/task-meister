@@ -1,7 +1,7 @@
 import MindMapData from '~/domain/model/MindMapData'
 import DropPosition from '~/domain/model/DropPosition'
 
-import {newNotFoundNodeErr} from '~/util/ExceptionUtil'
+import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
 
 // UseCase of Node.
 class NodeUseCase {
@@ -68,6 +68,19 @@ class NodeUseCase {
     }
 
     mindMapData.rightMap.dragAndDropNode(movedNodeId, dropPosition)
+    mindMapData.updateAccessoryPlacement()
+
+    return mindMapData
+  }
+
+  // Toggle Collapse of node in MindMap.
+  // And update placement of all mind map parts.
+  public toggleCollapse(mindMapData: MindMapData, selectedNodeId: string) {
+    if (mindMapData.rootNode.isSelected) {
+      return mindMapData
+    }
+
+    mindMapData.rightMap.collapseNodes(selectedNodeId)
     mindMapData.updateAccessoryPlacement()
 
     return mindMapData

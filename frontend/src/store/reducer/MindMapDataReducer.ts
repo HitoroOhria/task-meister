@@ -76,7 +76,7 @@ export const mindMapDataReducer = (state: MindMapData, action: MindMapDataAction
     case mindMapDataActionType.dragAndDropNode:
       return nodeUseCase.dragAndDrop(newState, action.payload.id!, action.payload.dropPosition!)
     case mindMapDataActionType.toggleCollapse:
-      return mindMapUseCase.toggleCollapse(newState, action.payload.id!)
+      return nodeUseCase.toggleCollapse(newState, action.payload.id!)
     case mindMapDataActionType.toggleCheckbox:
       return checkboxUseCase.toggleCheck(newState, action.payload.id!)
     case mindMapDataActionType.setEstimateTime:

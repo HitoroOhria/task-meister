@@ -61,7 +61,7 @@ class ShortcutUseCase {
       case shortcuts.MetaEnter:
         return this.checkboxUseCase.toggleCheck(mindMapData, selectedNode.id)
       case shortcuts.Space:
-        return this.mindMapUseCase.toggleCollapse(mindMapData, selectedNode.id)
+        return this.nodeUseCase.toggleCollapse(mindMapData, selectedNode.id)
       case shortcuts.ShiftEnter: // Ignore
       case shortcuts.F6: // Ignore
         return mindMapData
