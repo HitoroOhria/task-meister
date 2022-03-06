@@ -1,26 +1,40 @@
 import MNode from '~/domain/model/MNode'
+
 import Children, { childrenImpl } from '~/domain/model/Children'
 import DropPosition from '~/domain/model/DropPosition'
-import { total } from '~/util/NumberUtil'
 import MRootNode from '~/domain/model/MRootNode'
 
+import { total } from '~/util/NumberUtil'
+
+// RightMap is right part of MindMap.
+// RightMap has nodes.
 type RightMap = {
+  // Nodes.
   children: Children
 
+  // Set text to node of id.
   setTextById(id: string, text: string): void
 
+  // Update placement of all nodes.
   updateNodePlacement(id: string): void
 
+  // Update lateral placement of all nodes.
   updateNodesLateral(updatedNode: MNode, left: number): void
 
   updateNodesLateralWhenEstimated(rootNode: MRootNode): void
 
+  // Update vertical placement of all nodes.
   updateNodesVertical(updatedNode: MNode): void
 
+  // Drop dragged node in right map.
+  // And update placement of nodes.
   dragAndDropNode(movedNodeId: string, dropPosition: DropPosition): void
 
-  insertNode(target: MNode, dropPosition: DropPosition, lowerNode: MNode): void
+  // Insert node to dropped place.
+  insertNodeToDroppedPlace(target: MNode, dropPosition: DropPosition, lowerNode: MNode): void
 
+  // Collapse selected node and that children nodes of that.
+  // And update placement of nodes.
   collapseNodes(selectedId: string): void
 }
 
@@ -31,7 +45,7 @@ export const newRightMap = (nodes: Children): RightMap => {
   }
 }
 
-export const rightMapImpl: RightMap = {
+export const rightMapImpl: RightMap = Object.freeze({
   children: childrenImpl,
 
   setTextById(id: string, text: string) {
@@ -84,7 +98,7 @@ export const rightMapImpl: RightMap = {
     if (movedNode.hasNodeById(lowerNode.id)) return
 
     this.children.recursively.removeNodeById(movedNodeId)
-    this.insertNode(movedNode, dropPosition, lowerNode)
+    this.insertNodeToDroppedPlace(movedNode, dropPosition, lowerNode)
 
     const newLeft = lowerNode.onTail(dropPosition.left)
       ? lowerNode.left + lowerNode.width
@@ -93,7 +107,7 @@ export const rightMapImpl: RightMap = {
     this.updateNodesVertical(movedNode)
   },
 
-  insertNode(target: MNode, dropPosition: DropPosition, lowerNode: MNode) {
+  insertNodeToDroppedPlace(target: MNode, dropPosition: DropPosition, lowerNode: MNode) {
     if (lowerNode.onTail(dropPosition.left)) {
       lowerNode.children.nodes.push(target)
       return
@@ -116,8 +130,6 @@ export const rightMapImpl: RightMap = {
     selectedNode.toggleCollapse()
     this.updateNodesVertical(selectedNode)
   },
-}
-
-Object.freeze(rightMapImpl)
+})
 
 export default RightMap

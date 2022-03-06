@@ -1,18 +1,28 @@
 import MBaseNode from '~/domain/model/MBaseNode'
 import Point, { newPoint, pointImpl } from '~/domain/model/Point'
 
+// Path line is part of relationship line.
+// This is straight line.
 type PathLine = {
+  // Start point of line.
   startPoint: Point
+
+  // End point of line.
   endPoint: Point
 
+  // Command for drawing with SVG.
   pathCommand(): string
 
+  // Command of move to for drawing with SVG.
   moveTo(): string
 
+  // Command of line to for drawing with SVG.
   lineTo(): string
 
+  // Update start point and end point from node.
   updatePoints(node: MBaseNode): void
 
+  // Set start point and end point.
   setPoints(startPointX: number, endPointX: number, lineY: number): void
 }
 
@@ -24,7 +34,7 @@ export const newPathLine = (): PathLine => {
   }
 }
 
-export const pathLineImpl: PathLine = {
+export const pathLineImpl: PathLine = Object.freeze({
   startPoint: pointImpl,
   endPoint: pointImpl,
 
@@ -54,7 +64,6 @@ export const pathLineImpl: PathLine = {
     this.endPoint.x = endPointX
     this.endPoint.y = lineY
   },
-}
-Object.freeze(pathLineImpl)
+})
 
 export default PathLine

@@ -11,16 +11,27 @@ import { numberOfLines } from '~/util/StringUtil'
 // type to distinguish from Node.
 export const rootNodeType = 'rootNode'
 
+// This. is RootNode.
+// RootNode placements center of mind map.
+// RootNode has path line to children.
 type MRootNode = MBaseNode & {
+  // Type to identify that is not Node.
   type: typeof rootNodeType
+
+  // Straight line of relationship line to children.
+  // Curve held by children nodes.
   pathLine: PathLine
 
+  // Update placement.
   updatePlacement(): void
 
+  // Update placement of lateral.
   updateLateral(): void
 
+  // Update placement of vertical.
   updateVertical(): void
 
+  // Update points of path line.
   updatePathLine(): void
 }
 
@@ -33,7 +44,7 @@ export const newRootNode = (id: string, text: string): MRootNode => {
   }
 }
 
-export const rootNodeImpl: MRootNode = {
+export const rootNodeImpl: MRootNode = Object.freeze({
   ...baseNodeImpl,
 
   type: rootNodeType,
@@ -73,7 +84,6 @@ export const rootNodeImpl: MRootNode = {
   updatePathLine() {
     this.pathLine.updatePoints(this)
   },
-}
-Object.freeze(rootNodeImpl)
+})
 
 export default MRootNode

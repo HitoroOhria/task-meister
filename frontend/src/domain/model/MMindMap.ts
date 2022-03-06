@@ -2,38 +2,59 @@ import RightMap, { rightMapImpl } from '~/domain/model/RightMap'
 import MRootNode, { rootNodeImpl, rootNodeType } from '~/domain/model/MRootNode'
 import MNode from '~/domain/model/MNode'
 
+// This is MindMap.
+// MindMap has RootNode and RightMap, LeftMap.
+// Operate whole mind map.
 type MMindMap = {
   rootNode: MRootNode
   rightMap: RightMap
+  // Do not implement left map at this time.
   leftMap: RightMap
 
   isInputting(): boolean
 
+  // Check id of node is in first layer of root node children.
   isFirstLayerNode(id: string): boolean
 
+  // Find node by id.
+  // Return undefined if not found.
   findNodeById(id: string): MRootNode | MNode | undefined
 
+  // Find node is selected.
+  // Return undefined if not found.
   findNodeIsSelected(): MRootNode | MNode | undefined
 
+  // find head node of id.
+  // Return undefined if not found.
   findHeadNode(id: string): MRootNode | MNode | undefined
 
+  // Check there is displayed checkbox node in ancestor.
   hasDisplayedCheckboxAncestorNode(id: string): boolean
 
+  // Set size of all node.
   setNodeSize(): void
 
+  // Deselect currently selected node.
   deselectNode(): void
 
+  // Select tail node of currently selected node.
   selectTail(): void
 
+  // Update placement of all mind map parts.
+  // Parts is node, relationship line, collapse button.
   updateAllPlacement(id: string): void
 
+  // Update placement of all nodes.
   updateNodePlacement(id: string): void
 
+  // Update placement of root node.
   updateRootNodePlacement(): void
 
+  // Update placement of all accessory.
   updateAccessoryPlacement(): void
 
-  processNodeDropToRight(movedNodeId: string): void
+  // Drop node to right map.
+  dropNodeToRight(movedNodeId: string): void
 }
 
 export const newMindMap = (
@@ -144,7 +165,7 @@ export const mindMapImpl: MMindMap = Object.freeze({
     this.rightMap.children.recursively.updateAccessoryPlacement(this.rootNode)
   },
 
-  processNodeDropToRight(movedNodeId: string) {
+  dropNodeToRight(movedNodeId: string) {
     const movedNode = this.rightMap.children.recursively.removeNodeById(movedNodeId)
     this.rightMap.children.nodes.push(movedNode)
 

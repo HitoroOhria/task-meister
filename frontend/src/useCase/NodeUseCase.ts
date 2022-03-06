@@ -59,7 +59,7 @@ class NodeUseCase {
   // And update placement of all mind map parts.
   public dragAndDrop(mindMap: MMindMap, movedNodeId: string, dropPosition: DropPosition): MMindMap {
     if (mindMap.rootNode.onTail(dropPosition.left)) {
-      mindMap.processNodeDropToRight(movedNodeId)
+      mindMap.dropNodeToRight(movedNodeId)
       return mindMap
     }
 
