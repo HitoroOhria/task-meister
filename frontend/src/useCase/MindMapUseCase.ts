@@ -113,6 +113,9 @@ class MindMapUseCase {
     if (!selectedNode) {
       throw newNotFoundNodeErr(selectedNode)
     }
+    if (mindMapData.hasDisplayedCheckboxAncestorNode(selectedNode.id)) {
+      return mindMapData
+    }
 
     selectedNode.checkbox.hidden = !selectedNode.checkbox.hidden
     if (selectedNode.checkbox.hidden) {

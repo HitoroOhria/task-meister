@@ -1,5 +1,5 @@
 import RightMap, { rightMapImpl } from '~/domain/model/RightMap'
-import MRootNode, { rootNodeImpl } from '~/domain/model/MRootNode'
+import MRootNode, { rootNodeImpl, rootNodeType } from '~/domain/model/MRootNode'
 import MNode from '~/domain/model/MNode'
 
 type MindMapData = {
@@ -16,6 +16,8 @@ type MindMapData = {
   findNodeIsSelected(): MRootNode | MNode | undefined
 
   findHeadNode(id: string): MRootNode | MNode | undefined
+
+  hasDisplayedCheckboxAncestorNode(id: string): boolean
 
   setNodeSize(): void
 
@@ -82,6 +84,19 @@ export const mindMapDataImpl: MindMapData = {
     }
 
     return this.rightMap.children.recursively.findHeadNode(id)
+  },
+
+  hasDisplayedCheckboxAncestorNode(id: string): boolean {
+    const headNode = this.findHeadNode(id)
+    if (!headNode || headNode.type === rootNodeType) {
+      return false
+    }
+
+    if (!headNode.checkbox.hidden) {
+      return true
+    }
+
+    return this.hasDisplayedCheckboxAncestorNode(headNode.id)
   },
 
   setNodeSize() {
