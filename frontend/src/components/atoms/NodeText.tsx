@@ -103,8 +103,11 @@ const NodeText: VFC<Props> = (props) => {
           onBlur={props.onBlur}
         />
       ) : (
-        // TODO Why aren't line breaks?
-        <SpanInlineBlock height={textHeight}>{props.text}</SpanInlineBlock>
+        <SpanDiv height={textHeight}>
+          {props.text.split('\n').map((line) => (
+            <InlineBlockSpan>{line}</InlineBlockSpan>
+          ))}
+        </SpanDiv>
       )}
     </TopDiv>
   )
@@ -153,10 +156,17 @@ const Textarea = styled.textarea<TextProps>`
   overflow: hidden
 `
 
-const SpanInlineBlock = styled.span<TextProps>`
+const SpanDiv = styled.div<TextProps>`
   min-width: inherit
   width: inherit
   height: ${(props) => props.height}px;
+  font: inherit
+  color: inherit
+`
+
+const InlineBlockSpan = styled.span`
+  min-width: inherit
+  width: inherit
   font: inherit
   color: inherit
   display: inline-block
