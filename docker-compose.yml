@@ -18,6 +18,18 @@ services:
       - ./backend/src:/work
       # For load google application credentials.
       - ~/.gcp:/.gcp
+  front:
+    container_name: tm-front
+    build:
+      context: ./frontend
+      dockerfile: ./docker/Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Bind package directory with volume because speeding up.
+      - node-packages:/app/node
+      - ./frontend:/app
 
 volumes:
   go-packages:
+  node-packages:
