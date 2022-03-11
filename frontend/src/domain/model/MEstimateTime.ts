@@ -2,9 +2,9 @@ import { height, width } from '~/components/atoms/EstimateTime'
 import { estimateTimeSpacerWidth as spacerWidth } from '~/components/organisms/Node'
 
 import Children from '~/domain/model/Children'
+import MNode from '~/domain/model/MNode'
 
 import { sum } from '~/util/NumberUtil'
-import MNode from '~/domain/model/MNode'
 
 export const initMinute = -1
 
