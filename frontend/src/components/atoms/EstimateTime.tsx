@@ -19,7 +19,6 @@ type Props = {
   nodeId: string
   estimateTime: MEstimateTime
   disabled: boolean
-  readOnly: boolean
 }
 
 const EstimateTime: VFC<Props> = (props) => {
@@ -69,7 +68,7 @@ const EstimateTime: VFC<Props> = (props) => {
       width={`${width}px`}
       css={{
         // Change text color.
-        '.nextui-c-jeuecp': { color: props.disabled || props.readOnly ? color : 'black' },
+        '.nextui-c-jeuecp': { color: props.disabled ? color : 'black' },
         // Change padding of content and text.
         '.nextui-c-PJLV-dBGXHd-applyStyles-true': { padding: '0px 5px' },
         // Change cursor when disabled.
@@ -77,7 +76,6 @@ const EstimateTime: VFC<Props> = (props) => {
       }}
       value={props.estimateTime.toString()}
       disabled={props.disabled}
-      readOnly={!props.estimateTime.isEditing}
       underlined
       labelRight="Min"
       onClick={enterEditMode}
