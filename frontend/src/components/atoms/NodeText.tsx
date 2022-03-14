@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState, VFC } from 'react'
 
 import { styled } from '@linaria/react'
-
 import { backgroundColor } from '~/components/organisms/BaseNode'
 import { height as checkboxHeight } from '~/components/atoms/Checkbox'
 
 import ElementSizeCalculator from '~/util/ElementSizeCalculator'
 import { numberOfLines } from '~/util/StringUtil'
+
+import { baseFontFamily } from '~/const/fontConst'
 
 // minimum width of css. unit is px.
 export const minWidth = 50
@@ -16,8 +17,7 @@ export const minHeight = checkboxHeight
 export const lineHeight = 18
 // font size of css. unit is px.
 const fontSize = 15
-const fontFamily = 'monospace'
-const font = `${fontSize}px ${fontFamily}`
+const font = `${fontSize}px ${baseFontFamily}`
 const disableColor = 'gray'
 
 // const

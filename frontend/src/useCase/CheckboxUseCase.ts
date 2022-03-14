@@ -28,6 +28,7 @@ class CheckboxUseCase {
     }
 
     mindMap.rightMap.children.recursively.updateEstimateTimeMinute()
+    mindMap.rightMap.children.recursively.updateEstimateTimeNoSeparator()
     mindMap.updateAllPlacement(selectedNodeId)
 
     return mindMap

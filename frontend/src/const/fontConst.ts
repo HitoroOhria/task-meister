@@ -1,0 +1,1 @@
+export const baseFontFamily = 'monospace'

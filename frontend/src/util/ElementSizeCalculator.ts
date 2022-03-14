@@ -27,6 +27,7 @@ class ElementSizeCalculator {
     return firstLineWidth > secondLineWidth ? firstLine : secondLine
   }
 
+  // Measure text width with all chars on one line.
   // ex. return 13.33333333
   public measureWidth(text: string): number {
     return this.canvasCtx.measureText(text).width

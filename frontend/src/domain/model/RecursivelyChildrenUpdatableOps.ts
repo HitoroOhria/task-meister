@@ -18,6 +18,8 @@ type RecursivelyChildrenUpdatableOps = {
   updateAccessoryPlacement(parentNode: MBaseNode): void
 
   updateEstimateTimeMinute(): void
+
+  updateEstimateTimeNoSeparator(): void
 }
 
 export const recursivelyChildrenUpdatableOpsImpl: RecursivelyChildrenUpdatableOps = Object.freeze({
@@ -72,6 +74,11 @@ export const recursivelyChildrenUpdatableOpsImpl: RecursivelyChildrenUpdatableOp
     this.children.nodes
       .filter((node) => node.children.nodes.length !== 0)
       .forEach((node) => node.content.estimateTime.updateMinute(node.children))
+  },
+
+  updateEstimateTimeNoSeparator() {
+    this.children.nodes.forEach((node) => node.content.estimateTime.setReadOnly(node))
+    this.children.nodes.forEach((node) => node.children.recursively.updateEstimateTimeNoSeparator())
   },
 })
 
