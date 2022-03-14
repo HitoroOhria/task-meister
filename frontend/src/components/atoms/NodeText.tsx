@@ -105,7 +105,7 @@ const NodeText: VFC<Props> = (props) => {
       ) : (
         <SpanDiv height={textHeight}>
           {props.text.split('\n').map((line) => (
-            <InlineBlockSpan>{line}</InlineBlockSpan>
+            <InlineBlockSpan key={line}>{line}</InlineBlockSpan>
           ))}
         </SpanDiv>
       )}
