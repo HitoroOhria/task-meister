@@ -1,4 +1,4 @@
-import { height, width } from '~/components/atoms/EstimateTime'
+import { elementSizeCalculator, height, unit, width } from '~/components/atoms/EstimateTime'
 import { estimateTimeSpacerWidth as spacerWidth } from '~/components/organisms/Node'
 
 import Children from '~/domain/model/Children'
@@ -11,6 +11,7 @@ export const initMinute = -1
 type MEstimateTime = {
   minute: number
   isEditing: boolean
+  noSeparator: boolean
 
   inputted(): boolean
 
@@ -18,9 +19,15 @@ type MEstimateTime = {
 
   getWidth(node: MNode): number
 
+  getElementWidth(): number
+
+  getDisplayOnlyText(): string
+
   getHeight(): number
 
   updateMinute(children: Children): void
+
+  setNoSeparator(node: MNode): void
 }
 
 export const newEstimateTime = (): MEstimateTime => {
@@ -32,6 +39,7 @@ export const newEstimateTime = (): MEstimateTime => {
 export const estimateTimeImpl: MEstimateTime = Object.freeze({
   minute: initMinute,
   isEditing: false,
+  noSeparator: false as boolean,
 
   inputted(): boolean {
     return this.minute !== initMinute
@@ -42,7 +50,15 @@ export const estimateTimeImpl: MEstimateTime = Object.freeze({
   },
 
   getWidth(node: MNode): number {
-    return node.showEstimateTime() ? spacerWidth + width : 0
+    return node.showEstimateTime() ? spacerWidth + this.getElementWidth() : 0
+  },
+
+  getElementWidth(): number {
+    return this.noSeparator ? elementSizeCalculator.measureWidth(this.getDisplayOnlyText()) : width
+  },
+
+  getDisplayOnlyText(): string {
+    return this.minute.toString() + ' ' + unit.toLowerCase()
   },
 
   getHeight(): number {
@@ -54,6 +70,10 @@ export const estimateTimeImpl: MEstimateTime = Object.freeze({
       .filter((node) => node.showEstimateTime() && node.content.estimateTime.inputted())
       .map((node) => node.content.estimateTime.minute)
       .reduce(sum, 0)
+  },
+
+  setNoSeparator(node: MNode) {
+    this.noSeparator = node.content.checkbox.hidden
   },
 })
 

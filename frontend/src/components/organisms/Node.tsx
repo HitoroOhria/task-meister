@@ -1,7 +1,7 @@
-import React, { useContext, VFC } from 'react'
+import React, {useContext, VFC} from 'react'
 
-import { mindMapActionType as actionType } from '~/store/reducer/MindMapReducer'
-import { MindMapDispatchCtx } from '~/store/context/MindMapCtx'
+import {mindMapActionType as actionType} from '~/store/reducer/MindMapReducer'
+import {MindMapDispatchCtx} from '~/store/context/MindMapCtx'
 
 import BaseNode from '~/components/organisms/BaseNode'
 import Checkbox from '~/components/atoms/Checkbox'

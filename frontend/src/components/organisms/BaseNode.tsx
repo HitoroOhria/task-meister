@@ -1,10 +1,10 @@
-import React, { FC, ReactNode, useContext, useRef } from 'react'
-import { MindMapDispatchCtx } from '~/store/context/MindMapCtx'
-import { mindMapActionType as actionType } from '~/store/reducer/MindMapReducer'
+import React, {FC, ReactNode, useContext, useRef} from 'react'
+import {MindMapDispatchCtx} from '~/store/context/MindMapCtx'
+import {mindMapActionType as actionType} from '~/store/reducer/MindMapReducer'
 import PositionAdjuster from '~/components/atoms/PositionAdjuster'
 import DraggableElement from '~/components/organisms/DraggableElement'
 import NodeText from '~/components/atoms/NodeText'
-import { styled } from '@linaria/react'
+import {styled} from '@linaria/react'
 import MBaseNode from '~/domain/model/MBaseNode'
 
 // Ratio of width representing tail area of node.

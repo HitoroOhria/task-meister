@@ -1,5 +1,5 @@
 import MMindMap from '~/domain/model/MMindMap'
-import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
+import {newNotFoundNodeErr} from '~/util/ExceptionUtil'
 
 // UseCase of Checkbox.
 class CheckboxUseCase {
@@ -28,6 +28,7 @@ class CheckboxUseCase {
     }
 
     mindMap.rightMap.children.recursively.updateEstimateTimeMinute()
+    mindMap.rightMap.children.recursively.updateEstimateTimeNoSeparator()
     mindMap.updateAllPlacement(selectedNodeId)
 
     return mindMap

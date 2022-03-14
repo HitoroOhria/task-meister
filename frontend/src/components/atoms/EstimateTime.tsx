@@ -1,11 +1,13 @@
-import React, { useContext, useEffect, useRef, VFC } from 'react'
+import React, {useContext, useEffect, useRef, VFC} from 'react'
 
-import { Input } from '@nextui-org/react'
+import {styled} from '@linaria/react'
+import {Input} from '@nextui-org/react'
 
-import { MindMapDispatchCtx } from '~/store/context/MindMapCtx'
-import { mindMapActionType as actionType } from '~/store/reducer/MindMapReducer'
+import {MindMapDispatchCtx} from '~/store/context/MindMapCtx'
+import {mindMapActionType as actionType} from '~/store/reducer/MindMapReducer'
 
 import MEstimateTime from '~/domain/model/MEstimateTime'
+import ElementSizeCalculator from '~/util/ElementSizeCalculator'
 
 // Unit is px.
 export const width = 90
@@ -13,7 +15,14 @@ export const width = 90
 // Measured value.
 export const height = 40
 
-const color = '#C1C1C1'
+// Font settings.
+const fontSize = 14
+const font = `${fontSize}px monospace`
+export const elementSizeCalculator = new ElementSizeCalculator(font)
+
+const disableColor = '#C1C1C1'
+
+export const unit = 'Min'
 
 type Props = {
   nodeId: string
@@ -62,27 +71,38 @@ const EstimateTime: VFC<Props> = (props) => {
   useEffect(handleFocusAndBlur, [props.estimateTime.isEditing])
 
   return (
-    <Input
-      ref={inputElement}
-      aria-label="EstimateTime"
-      width={`${width}px`}
-      css={{
-        // Change text color.
-        '.nextui-c-jeuecp': { color: props.disabled ? color : 'black' },
-        // Change padding of content and text.
-        '.nextui-c-PJLV-dBGXHd-applyStyles-true': { padding: '0px 5px' },
-        // Change cursor when disabled.
-        '.nextui-c-eXOOPO-gvlAwB-disabled-true': { cursor: 'default' },
-      }}
-      value={props.estimateTime.toString()}
-      disabled={props.disabled}
-      underlined
-      labelRight="Min"
-      onClick={enterEditMode}
-      onChange={(e) => handleChange(e.target.value)}
-      onBlur={exitEditMode}
-    />
+    <>
+      {props.estimateTime.noSeparator ? (
+        <DisplayDiv>{props.estimateTime.minute} min</DisplayDiv>
+      ) : (
+        <Input
+          ref={inputElement}
+          aria-label="EstimateTime"
+          width={`${props.estimateTime.getElementWidth()}px`}
+          css={{
+            // Change text color.
+            '.nextui-c-jeuecp': { color: props.disabled ? disableColor : 'black' },
+            // Change padding of content and text.
+            '.nextui-c-PJLV-dBGXHd-applyStyles-true': { padding: '0px 5px' },
+            // Change cursor when disabled.
+            '.nextui-c-eXOOPO-gvlAwB-disabled-true': { cursor: 'default' },
+          }}
+          value={props.estimateTime.toString()}
+          disabled={props.disabled}
+          underlined
+          labelRight={unit}
+          onClick={enterEditMode}
+          onChange={(e) => handleChange(e.target.value)}
+          onBlur={exitEditMode}
+        />
+      )}
+    </>
   )
 }
 
 export default EstimateTime
+
+const DisplayDiv = styled.div`
+  font: ${font}
+  color: ${disableColor};
+`
