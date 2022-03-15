@@ -12,7 +12,7 @@ import ElementSizeCalculator from '~/util/ElementSizeCalculator'
 import { baseFontFamily } from '~/const/fontConst'
 
 // Unit is px.
-export const width = 90
+export const width = 76
 // Unit is px.
 // Measured value.
 export const height = 40
@@ -88,6 +88,10 @@ const EstimateTime: VFC<Props> = (props) => {
             '.nextui-c-PJLV-dBGXHd-applyStyles-true': { padding: '0px 5px' },
             // Change cursor when disabled.
             '.nextui-c-eXOOPO-gvlAwB-disabled-true': { cursor: 'default' },
+            // Change margin left of right label.
+            '.nextui-c-gieWTI-eJeWMz-cv': { marginLeft: 0 },
+            // Change padding of right label.
+            '.nextui-c-gieWTI': { padding: '0px 6px' },
           }}
           value={props.estimateTime.toString()}
           disabled={props.disabled}
