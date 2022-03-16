@@ -6,6 +6,7 @@ import { MindMapDispatchCtx, MindMapStateCtx } from '~/store/context/MindMapCtx'
 import KeyInputManager from '~/components/organisms/KeyInputManager'
 import SVGArea from '~/components/organisms/SVGArea'
 import DrawingArea from '~/components/organisms/DrawingArea'
+import ExplanationCard from '~/components/organisms/ExplainCard'
 import DroppableArea from '~/components/organisms/DroppableArea'
 import Origin from '~/components/organisms/Origin'
 import Nodes from '~/components/organisms/Nodes'
@@ -23,6 +24,7 @@ const MindMap: VFC = () => {
       <KeyInputManager setIsShitEnter={setIsShiftEnter} />
       <SVGArea rootNode={mindMap.rootNode} children={mindMap.rightMap.children} />
       <DrawingArea children={mindMap.rightMap.children} />
+      <ExplanationCard />
       <DroppableArea>
         <Origin>
           <RootNode rootNode={mindMap.rootNode} isShiftEnter={isShiftEnter} />
