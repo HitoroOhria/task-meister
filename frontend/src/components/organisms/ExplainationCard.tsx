@@ -7,17 +7,24 @@ import { MdKeyboardTab } from 'react-icons/md'
 // Margin from window. Unit is px.
 const margin = 20
 
+// Width of Card. Unit is px.
+const cardWidth = 300
+// Width of shortcut sign. Unit is px.
+const shortcutWidth = 100
+// Width of explain text. Unit is px.
+const explainWidth = 100
+
 type Props = {}
 
 const ExplanationCard: VFC<Props> = (props) => {
   return (
     <PositionFixed>
-      <Card>
+      <Card css={{ width: cardWidth }}>
         <ShortcutRow>
-          <Card shadow={false} css={{ backgroundColor: '#E4E4E4' }}>
+          <Card shadow={false} css={{ width: shortcutWidth, backgroundColor: '#E4E4E4' }}>
             <MdKeyboardTab />
           </Card>
-          <Text>要素を追加</Text>
+          <Text css={{ width: explainWidth }}>要素を追加</Text>
         </ShortcutRow>
       </Card>
     </PositionFixed>
@@ -34,4 +41,6 @@ const PositionFixed = styled.div`
 
 const ShortcutRow = styled.div`
   display: flex;
+  justify-content: space-around
+  align-items: center
 `
