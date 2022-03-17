@@ -16,7 +16,7 @@ const explainWidth = 100
 
 type Props = {}
 
-const ExplanationCard: VFC<Props> = (props) => {
+const ShortcutExplanationCard: VFC<Props> = (props) => {
   return (
     <PositionFixed>
       <Card css={{ width: cardWidth }}>
@@ -31,7 +31,7 @@ const ExplanationCard: VFC<Props> = (props) => {
   )
 }
 
-export default ExplanationCard
+export default ShortcutExplanationCard
 
 const PositionFixed = styled.div`
   position: fixed
