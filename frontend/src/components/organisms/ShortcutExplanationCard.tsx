@@ -2,7 +2,11 @@ import React, { VFC } from 'react'
 
 import { styled } from '@linaria/react'
 import { Card } from '@nextui-org/react'
-import { MdKeyboardTab } from 'react-icons/md'
+import { MdKeyboardReturn, MdKeyboardTab } from 'react-icons/md'
+import { BiCommand } from 'react-icons/bi'
+import { BsPlus } from 'react-icons/bs'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faE } from '@fortawesome/free-solid-svg-icons'
 
 import ShortcutExplanationCardRow from '~/components/organisms/ShortcutExplanationCardRow'
 
@@ -18,8 +22,16 @@ const ShortcutExplanationCard: VFC<Props> = (props) => {
   return (
     <PositionFixed>
       <Card css={{ width: cardWidth }}>
-        <ShortcutExplanationCardRow text={'要素を追加'}>
+        <ShortcutExplanationCardRow text={'ノードを追加'}>
           <MdKeyboardTab />
+        </ShortcutExplanationCardRow>
+        <ShortcutExplanationCardRow text={'ノードを下に追加'}>
+          <MdKeyboardReturn />
+        </ShortcutExplanationCardRow>
+        <ShortcutExplanationCardRow text={'テキストを編集'}>
+          <BiCommand />
+          <BsPlus />
+          <FontAwesomeIcon icon={faE} />
         </ShortcutExplanationCardRow>
       </Card>
     </PositionFixed>
