@@ -6,6 +6,7 @@
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@fortawesome/fontawesome-svg-core": "^6.1.0",
+    "@fortawesome/react-fontawesome": "^0.1.18",
     "@linaria/babel-preset": "^3.0.0-beta.15",
     "@linaria/core": "^3.0.0-beta.15",
     "@linaria/react": "^3.0.0-beta.15",
