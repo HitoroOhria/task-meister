@@ -17,7 +17,7 @@ const ShortcutExplanationCardRow: FC<Props> = (props) => {
   return (
     <ShortcutRow>
       <Card shadow={false} css={{ width: shortcutWidth, backgroundColor: '#E4E4E4' }}>
-        {props.children}
+        <Icons>{props.children}</Icons>
       </Card>
       <Text css={{ width: explainWidth }}>{props.text}</Text>
     </ShortcutRow>
@@ -27,7 +27,14 @@ const ShortcutExplanationCardRow: FC<Props> = (props) => {
 export default ShortcutExplanationCardRow
 
 const ShortcutRow = styled.div`
-  display: flex;
+  display: flex
   justify-content: space-around
   align-items: center
+`
+
+const Icons = styled.div`
+  display: flex
+  justify-content: center
+  align-items: center
+  gap: 3px
 `
