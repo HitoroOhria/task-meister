@@ -2,7 +2,7 @@ import React, { VFC } from 'react'
 
 import { styled } from '@linaria/react'
 
-import { Div as PositionAdjusterDiv } from '~/components/atoms/PositionAdjuster'
+import PositionAdjuster from '~/components/atoms/PositionAdjuster'
 import MCollapseButton from '~/domain/model/MCollapseButton'
 
 // unit is px.
@@ -16,18 +16,18 @@ type Props = {
 
 const CollapseButton: VFC<Props> = (props) => {
   return (
-    <UpperPositionAdjuster top={props.collapseButton.point.y} left={props.collapseButton.point.x}>
+    <PositionAdjuster
+      top={props.collapseButton.point.y}
+      left={props.collapseButton.point.x}
+      // Make button clickable.
+      style={{ zIndex: 1 }}
+    >
       <Button type="button" onClick={props.onClick} />
-    </UpperPositionAdjuster>
+    </PositionAdjuster>
   )
 }
 
 export default CollapseButton
-
-const UpperPositionAdjuster = styled(PositionAdjusterDiv)`
-  // To make button clickable.
-  z-index: 1;
-`
 
 const Button = styled.button`
   width: ${diameter}px
