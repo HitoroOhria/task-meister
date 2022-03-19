@@ -70,7 +70,7 @@ const closeExplanationCardSize = explanationCardPadding * 2 + collapseIconSize
 // Width of Content when open. Unit is px.
 const openContentWidth = shortcutWidth + space + explainWidth + collapseIconSize
 // Height of Content when open. Unit is px.
-const openContentHeight = rowHeight * contents.length + rowMargin * 2 * (contents.length - 1)
+const openContentHeight = (rowHeight + rowMargin * 2) * contents.length
 
 // Width of explanation card when open. Unit is px.
 const openExplanationCardWidth = explanationCardPadding * 2 + openContentWidth
