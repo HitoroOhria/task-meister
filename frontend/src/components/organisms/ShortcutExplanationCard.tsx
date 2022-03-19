@@ -47,7 +47,7 @@ const ShortcutExplanationCard: VFC<Props> = (props) => {
           <BsPlus />
           <MdKeyboardReturn />
         </ShortcutExplanationCardRow>
-        <ShortcutExplanationCardRow text={'見積もり時間を編集'}>
+        <ShortcutExplanationCardRow text={'見積り時間を編集'}>
           <FontAwesomeIcon icon={faT} />
         </ShortcutExplanationCardRow>
       </Card>
