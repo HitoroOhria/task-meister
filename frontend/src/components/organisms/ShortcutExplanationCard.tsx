@@ -17,6 +17,8 @@ import ShortcutExplanationCardRow, {
 } from '~/components/organisms/ShortcutExplanationCardRow'
 import PositionAdjuster from '~/components/atoms/PositionAdjuster'
 
+// Contents of shortcuts.
+// Element of contents has text and icons.
 const contents = [
   {
     text: 'ノードを追加',
