@@ -97,7 +97,7 @@ const ShortcutExplanationCard: VFC = () => {
         >
           {open &&
             contents.map((content) => (
-              <ShortcutExplanationCardRow text={content.text}>
+              <ShortcutExplanationCardRow key={content.text} text={content.text}>
                 {content.icons}
               </ShortcutExplanationCardRow>
             ))}
