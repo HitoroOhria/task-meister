@@ -61,4 +61,5 @@ const PositionFixed = styled.div`
   position: fixed
   top: ${margin}px
   right: ${margin}px
+  z-index: 1
 `
