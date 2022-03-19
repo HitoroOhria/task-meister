@@ -15,7 +15,7 @@ type Props = {
 
 const PositionAdjuster: FC<Props> = (props) => {
   return (
-    <PositionAbsolute
+    <PositionDiv
       position={props.position}
       top={props.top}
       bottom={props.bottom}
@@ -24,13 +24,13 @@ const PositionAdjuster: FC<Props> = (props) => {
       style={props.style}
     >
       {props.children}
-    </PositionAbsolute>
+    </PositionDiv>
   )
 }
 
 export default PositionAdjuster
 
-type DivProps = {
+type PositionDivProps = {
   position: Property.Position
   top?: number
   bottom?: number
@@ -38,7 +38,7 @@ type DivProps = {
   right?: number
 }
 
-export const PositionAbsolute = styled.div<DivProps>`
+export const PositionDiv = styled.div<PositionDivProps>`
   position: ${(props) => props.position};
   top: ${(props) => (typeof props.top === 'undefined' ? 'unset' : `${props.top}px`)};
   bottom: ${(props) => (typeof props.bottom === 'undefined' ? 'unset' : `${props.bottom}px`)};
