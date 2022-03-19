@@ -88,6 +88,7 @@ const ShortcutExplanationCard: VFC = () => {
       style={{ zIndex: 1 }}
     >
       <ExplanationCard
+        // TODO Prevent animation when open browser.
         className={open ? openCard : closeCard}
         width={open ? openExplanationCardWidth : closeExplanationCardSize}
         height={open ? openExplanationCardHeight : closeExplanationCardSize}
