@@ -1,4 +1,5 @@
 import React, { VFC } from 'react'
+
 import { styled } from '@linaria/react'
 
 // ratio of path to line end.

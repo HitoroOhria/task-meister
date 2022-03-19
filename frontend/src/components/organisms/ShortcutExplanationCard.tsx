@@ -194,7 +194,8 @@ const closeCard = css`
 const CollapseButton = styled.button`
   padding: 0
   background-color: transparent
-  border: none
+  border: none;
+  // To remove vertical space in button.
   display: flex
   cursor: pointer
 `
