@@ -96,6 +96,8 @@ const ShortcutExplanationCard: VFC = () => {
         <div
           // Do not write size using styled.
           // Not working overflow hidden.
+          // TODO Whey? What is the different? I'm curious.
+          //   - For example, const Content = styled<Props>`width: ${props => props.width}; height: ${props => props.height}`
           style={{
             width: open ? openContentWidth : closeExplanationCardSize,
             height: open ? openContentHeight : closeExplanationCardSize,
