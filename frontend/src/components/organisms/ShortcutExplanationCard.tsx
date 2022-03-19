@@ -22,8 +22,8 @@ const buttonSize = 20
 // Margin from window. Unit is px.
 const margin = 20
 
-// Width of Card when open. Unit is px.
-const openCardWidth = shortcutWidth + space + explainWidth + buttonAreaSize
+// Width of Content when open. Unit is px.
+const openContentWidth = shortcutWidth + space + explainWidth + buttonAreaSize
 
 type Props = {}
 
@@ -33,7 +33,7 @@ const ShortcutExplanationCard: VFC<Props> = (props) => {
   return (
     <PositionFixed>
       <Card>
-        <Content width={open ? openCardWidth : buttonAreaSize}>
+        <Content width={open ? openContentWidth : buttonAreaSize}>
           {open && (
             <div>
               <ShortcutExplanationCardRow text={'ノードを追加'}>
