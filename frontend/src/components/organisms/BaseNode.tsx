@@ -78,7 +78,7 @@ const BaseNode: FC<Props> = (props) => {
   }
 
   return (
-    <PositionAdjuster top={props.node.top} left={props.node.left}>
+    <PositionAdjuster position={'absolute'} top={props.node.top} left={props.node.left}>
       <DraggableElement textData={props.node.id} preventDefault={props.isRootNode}>
         <NodeDiv
           ref={nodeDivElement}

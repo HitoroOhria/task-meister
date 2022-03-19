@@ -81,7 +81,12 @@ const ShortcutExplanationCard: VFC = () => {
   const [open, setOpen] = useState<boolean>(true)
 
   return (
-    <PositionFixed>
+    <PositionAdjuster
+      position={'fixed'}
+      top={marginFromWindow}
+      right={marginFromWindow}
+      style={{ zIndex: 1 }}
+    >
       <ExplanationCard
         className={open ? openCard : closeCard}
         width={open ? openExplanationCardWidth : closeExplanationCardSize}
@@ -102,24 +107,21 @@ const ShortcutExplanationCard: VFC = () => {
               </ShortcutExplanationCardRow>
             ))}
         </div>
-        <PositionAdjuster top={explanationCardPadding} right={explanationCardPadding}>
+        <PositionAdjuster
+          position={'absolute'}
+          top={explanationCardPadding}
+          right={explanationCardPadding}
+        >
           <CollapseButton id="button" onClick={() => setOpen(!open)}>
             {open ? <MdClose size={collapseIconSize} /> : <MdMenu size={collapseIconSize} />}
           </CollapseButton>
         </PositionAdjuster>
       </ExplanationCard>
-    </PositionFixed>
+    </PositionAdjuster>
   )
 }
 
 export default ShortcutExplanationCard
-
-const PositionFixed = styled.div`
-  position: fixed
-  top: ${marginFromWindow}px
-  right: ${marginFromWindow}px
-  z-index: 1
-`
 
 type ExplanationCardProps = {
   width: number

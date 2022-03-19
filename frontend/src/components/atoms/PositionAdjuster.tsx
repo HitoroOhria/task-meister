@@ -1,7 +1,10 @@
 import React, { CSSProperties, FC, ReactNode } from 'react'
+
+import { Property } from 'csstype'
 import { styled } from '@linaria/react'
 
 type Props = {
+  position: Property.Position
   top?: number
   bottom?: number
   left?: number
@@ -13,6 +16,7 @@ type Props = {
 const PositionAdjuster: FC<Props> = (props) => {
   return (
     <PositionAbsolute
+      position={props.position}
       top={props.top}
       bottom={props.bottom}
       left={props.left}
@@ -27,6 +31,7 @@ const PositionAdjuster: FC<Props> = (props) => {
 export default PositionAdjuster
 
 type DivProps = {
+  position: Property.Position
   top?: number
   bottom?: number
   left?: number
@@ -34,7 +39,7 @@ type DivProps = {
 }
 
 export const PositionAbsolute = styled.div<DivProps>`
-  position: absolute;
+  position: ${(props) => props.position};
   top: ${(props) => (typeof props.top === 'undefined' ? 'unset' : `${props.top}px`)};
   bottom: ${(props) => (typeof props.bottom === 'undefined' ? 'unset' : `${props.bottom}px`)};
   left: ${(props) => (typeof props.left === 'undefined' ? 'unset' : `${props.left}px`)};

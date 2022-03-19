@@ -17,6 +17,7 @@ type Props = {
 const CollapseButton: VFC<Props> = (props) => {
   return (
     <PositionAdjuster
+      position={'absolute'}
       top={props.collapseButton.point.y}
       left={props.collapseButton.point.x}
       // Make button clickable.

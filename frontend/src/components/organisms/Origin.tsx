@@ -28,7 +28,7 @@ const Origin: FC<Props> = (props) => {
   useEffect(componentDidMount, [])
 
   return (
-    <PositionAdjuster top={originX} left={originY}>
+    <PositionAdjuster position={'absolute'} top={originX} left={originY}>
       <div ref={originElement}>{props.children}</div>
     </PositionAdjuster>
   )
