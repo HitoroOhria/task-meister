@@ -6,7 +6,7 @@ import { MdKeyboardReturn, MdKeyboardTab } from 'react-icons/md'
 import { BiCommand } from 'react-icons/bi'
 import { BsPlus } from 'react-icons/bs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faE } from '@fortawesome/free-solid-svg-icons'
+import { faC, faE, faT } from '@fortawesome/free-solid-svg-icons'
 
 import ShortcutExplanationCardRow from '~/components/organisms/ShortcutExplanationCardRow'
 
@@ -32,6 +32,17 @@ const ShortcutExplanationCard: VFC<Props> = (props) => {
           <BiCommand />
           <BsPlus />
           <FontAwesomeIcon icon={faE} />
+        </ShortcutExplanationCardRow>
+        <ShortcutExplanationCardRow text={'✅ 表示の切り替え'}>
+          <FontAwesomeIcon icon={faC} />
+        </ShortcutExplanationCardRow>
+        <ShortcutExplanationCardRow text={'✔️ の切り替え'}>
+          <BiCommand />
+          <BsPlus />
+          <MdKeyboardReturn />
+        </ShortcutExplanationCardRow>
+        <ShortcutExplanationCardRow text={'見積もり時間を編集'}>
+          <FontAwesomeIcon icon={faT} />
         </ShortcutExplanationCardRow>
       </Card>
     </PositionFixed>
