@@ -6,7 +6,7 @@ import { Card, Text } from '@nextui-org/react'
 // Width of shortcut sign. Unit is px.
 export const shortcutWidth = 100
 // Width of explain text. Unit is px.
-export const explainWidth = 150
+export const explainWidth = 140
 // Space between Shortcuts and Explain. Unit is px.
 export const space = 10
 
