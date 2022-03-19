@@ -8,13 +8,19 @@ import { BsPlus } from 'react-icons/bs'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faC, faE, faT } from '@fortawesome/free-solid-svg-icons'
 
-import ShortcutExplanationCardRow from '~/components/organisms/ShortcutExplanationCardRow'
+import ShortcutExplanationCardRow, {
+  explainWidth,
+  shortcutWidth,
+  space,
+} from '~/components/organisms/ShortcutExplanationCardRow'
 
 // Margin from window. Unit is px.
 const margin = 20
 
+// Measured value. Unit is px.
+const cardPadding = 20
 // Width of Card. Unit is px.
-const cardWidth = 300
+const cardWidth = cardPadding * 2 + shortcutWidth + space + explainWidth
 
 type Props = {}
 

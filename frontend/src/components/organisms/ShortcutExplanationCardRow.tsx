@@ -4,9 +4,11 @@ import { styled } from '@linaria/react'
 import { Card, Text } from '@nextui-org/react'
 
 // Width of shortcut sign. Unit is px.
-const shortcutWidth = 100
+export const shortcutWidth = 100
 // Width of explain text. Unit is px.
-const explainWidth = 100
+export const explainWidth = 150
+// Space between Shortcuts and Explain. Unit is px.
+export const space = 10
 
 type Props = {
   text: string
@@ -27,9 +29,11 @@ const ShortcutExplanationCardRow: FC<Props> = (props) => {
 export default ShortcutExplanationCardRow
 
 const ShortcutRow = styled.div`
+  margin: 4px 0
   display: flex
-  justify-content: space-around
+  justify-content: center
   align-items: center
+  gap: ${space}px
 `
 
 const Icons = styled.div`
