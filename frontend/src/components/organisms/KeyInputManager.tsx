@@ -26,7 +26,6 @@ const KeyInputManager: VFC<Props> = (props) => {
     const arrowKey = keyInput.getArrowKey()
     arrowKey && handleArrowKey(e, arrowKey)
 
-    // TODO FIx bug pressing T after press C (when hidden checkbox).
     const shortcut = keyInput.getShortcut()
     shortcut && handleShortcut(e, shortcut)
   }

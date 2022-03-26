@@ -1,6 +1,7 @@
 import MMindMap from '~/domain/model/MMindMap'
-import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
 import { rootNodeType } from '~/domain/model/MRootNode'
+
+import { newNotFoundNodeErr } from '~/util/ExceptionUtil'
 
 // UseCase of EstimateTime.
 class EstimateTimeUseCase {
@@ -26,12 +27,17 @@ class EstimateTimeUseCase {
   }
 
   // Enter selected node to edit mode in MindMap.
+  // Not enter if checkbox is hidden.
   public enterEditMode(mindMap: MMindMap, selectedNodeId: string): MMindMap {
     const selectedNode = mindMap.findNodeById(selectedNodeId)
     if (!selectedNode) {
       throw newNotFoundNodeErr(selectedNodeId)
     }
+
     if (selectedNode.type === rootNodeType) {
+      return mindMap
+    }
+    if (selectedNode.content.checkbox.hidden) {
       return mindMap
     }
 
