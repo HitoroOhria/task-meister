@@ -1,4 +1,4 @@
-import React, { useState, VFC } from 'react'
+import React, { useEffect, useRef, useState, VFC } from 'react'
 
 import { css } from '@linaria/core'
 import { styled } from '@linaria/react'
@@ -79,8 +79,21 @@ const openExplanationCardWidth = explanationCardPadding * 2 + openContentWidth
 // Height of explanation card when open. Unit is px.
 const openExplanationCardHeight = explanationCardPadding * 2 + openContentHeight
 
+const initOpen = false
+
 const ShortcutExplanationCard: VFC = () => {
-  const [open, setOpen] = useState<boolean>(true)
+  const [open, setOpen] = useState<boolean>(initOpen)
+  const explanationCardRef = useRef<HTMLDivElement>(null)
+
+  const preventCollapseAnimation = () => {
+    const removeClass = initOpen ? openCard : closeCard
+    explanationCardRef.current!.className = explanationCardRef.current!.className.replace(
+      removeClass,
+      ''
+    )
+  }
+
+  useEffect(preventCollapseAnimation, [])
 
   return (
     <PositionAdjuster
@@ -90,7 +103,7 @@ const ShortcutExplanationCard: VFC = () => {
       style={{ zIndex: 1 }}
     >
       <ExplanationCard
-        // TODO Prevent animation when open browser.
+        ref={explanationCardRef}
         className={open ? openCard : closeCard}
         width={open ? openExplanationCardWidth : closeExplanationCardSize}
         height={open ? openExplanationCardHeight : closeExplanationCardSize}
