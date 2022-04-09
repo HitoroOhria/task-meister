@@ -85,7 +85,7 @@ const ShortcutExplanationCard: VFC = () => {
   const [open, setOpen] = useState<boolean>(initOpen)
   const explanationCardRef = useRef<HTMLDivElement>(null)
 
-  const preventCollapseAnimation = () => {
+  const removeCollapseClass = () => {
     const removeClass = initOpen ? openCard : closeCard
     explanationCardRef.current!.className = explanationCardRef.current!.className.replace(
       removeClass,
@@ -93,7 +93,8 @@ const ShortcutExplanationCard: VFC = () => {
     )
   }
 
-  useEffect(preventCollapseAnimation, [])
+  // Prevent animation when open browser.
+  useEffect(removeCollapseClass, [])
 
   return (
     <PositionAdjuster
