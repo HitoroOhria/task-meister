@@ -79,7 +79,7 @@ const openExplanationCardWidth = explanationCardPadding * 2 + openContentWidth
 // Height of explanation card when open. Unit is px.
 const openExplanationCardHeight = explanationCardPadding * 2 + openContentHeight
 
-const initOpen = false
+const initOpen = true
 
 const ShortcutExplanationCard: VFC = () => {
   const [open, setOpen] = useState<boolean>(initOpen)
